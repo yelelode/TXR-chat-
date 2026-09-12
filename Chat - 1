@@ -1,0 +1,523 @@
+local sharedEnv = getgenv and getgenv() or _G
+local UI = sharedEnv.TXR_UI
+local State = sharedEnv.TXR_State
+if not UI or not State then return end
+
+local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
+local RunService = game:GetService("RunService")
+local TextChatService = game:GetService("TextChatService")
+local ChatService = game:GetService("Chat")
+local TextService = game:GetService("TextService")
+local TweenService = game:GetService("TweenService")
+local SoundService = game:GetService("SoundService")
+
+local lp = Players.LocalPlayer
+local SERVER_URL = "https://my-roblox-private-chat.onrender.com"
+local req = (syn and syn.request) or (http and http.request) or http_request or request
+local setClip = setclipboard or toclipboard or function() end
+
+local knownUsers, activeUsersTable, userIdCache, activeBadgesList, globalTypers = {}, {}, {}, {}, {}
+local processedServerMessageMap, recentLocalSentMap = {}, {}
+local lastSyncTime, isInitialSync = 0, true
+
+-- =========================================================
+-- 👑 PRESETS & DATA
+-- =========================================================
+local BadgePresets = {
+    ["OWNER"] = { Title = "OWNER", Speed = 1.15, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 45, 95)), ColorSequenceKeypoint.new(0.20, Color3.fromRGB(255, 165, 35)), ColorSequenceKeypoint.new(0.40, Color3.fromRGB(0, 245, 195)), ColorSequenceKeypoint.new(0.60, Color3.fromRGB(50, 155, 255)), ColorSequenceKeypoint.new(0.80, Color3.fromRGB(180, 65, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 45, 95)) } },
+    ["DADDY"] = { Title = "DADDY", Speed = 1.1, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 30, 80)), ColorSequenceKeypoint.new(0.35, Color3.fromRGB(255, 115, 45)), ColorSequenceKeypoint.new(0.70, Color3.fromRGB(255, 220, 50)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 30, 80)) } },
+    ["TITAN"] = { Title = "TITAN", Speed = 1.15, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 240, 255)), ColorSequenceKeypoint.new(0.35, Color3.fromRGB(70, 165, 255)), ColorSequenceKeypoint.new(0.70, Color3.fromRGB(160, 60, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(0, 240, 255)) } },
+    ["OVERLORD"] = { Title = "OVERLORD", Speed = 1.05, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(180, 60, 255)), ColorSequenceKeypoint.new(0.35, Color3.fromRGB(255, 60, 180)), ColorSequenceKeypoint.new(0.70, Color3.fromRGB(95, 110, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(180, 60, 255)) } },
+    ["DEV"] = { Title = "DEV", Speed = 1.25, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 255, 195)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(65, 150, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(0, 255, 195)) } },
+    ["VIP"] = { Title = "VIP", Speed = 1.1, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 140, 25)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 230, 65)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 140, 25)) } },
+    ["GOD"] = { Title = "GOD", Speed = 1.2, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 110, 175)), ColorSequenceKeypoint.new(0.25, Color3.fromRGB(255, 230, 100)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(95, 255, 190)), ColorSequenceKeypoint.new(0.75, Color3.fromRGB(100, 190, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 110, 175)) } },
+    ["CYBER"] = { Title = "CYBER", Speed = 1.2, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 10, 220)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(10, 245, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 10, 220)) } },
+    ["VOID"] = { Title = "VOID", Speed = 0.95, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(85, 90, 145)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(180, 185, 240)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(85, 90, 145)) } },
+    ["ZENITH"] = { Title = "ZENITH", Speed = 1.15, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 255, 215)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(45, 180, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(0, 255, 215)) } },
+    ["APEX"] = { Title = "APEX", Speed = 1.2, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 40, 80)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 160, 35)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 40, 80)) } },
+    ["LUCIFER"] = { Title = "LUCIFER", Speed = 1.2, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 15, 35)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 95, 25)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 15, 35)) } },
+    ["SUPREME"] = { Title = "SUPREME", Speed = 1.1, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 215, 65)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 245, 165)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 215, 65)) } },
+    ["ROYAL"] = { Title = "ROYAL", Speed = 1.0, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(225, 165, 30)), ColorSequenceKeypoint.new(0.40, Color3.fromRGB(255, 230, 110)), ColorSequenceKeypoint.new(0.70, Color3.fromRGB(255, 145, 35)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(225, 165, 30)) } },
+    ["DEMON"] = { Title = "DEMON", Speed = 1.2, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 10, 85)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 75, 40)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 10, 85)) } },
+    ["PHANTOM"] = { Title = "PHANTOM", Speed = 1.15, Colors = { ColorSequenceKeypoint.new(0.00, Color3.fromRGB(5, 255, 160)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(5, 210, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(5, 255, 160)) } }
+}
+
+local MemeLibrary = {
+    { name = "Mewing Shhh", id = 15632128790 }, { name = "Skibidi Toilet", id = 13809623197 }, { name = "Smurf Cat", id = 14757657984 },
+    { name = "Josh Hutcherson", id = 15469032734 }, { name = "The Wok", id = 7872621021 }, { name = "Walter Dog", id = 3698717882 },
+    { name = "Handsome Squidward", id = 6382103444 }, { name = "Sad Hamster", id = 16391456108 }, { name = "Nah I'd Win", id = 15377035543 },
+    { name = "Cat Stare Huh", id = 13838328014 }, { name = "Sigma Face", id = 12271810574 }, { name = "Pedro Raccoon", id = 17290159491 },
+    { name = "GigaChad HD", id = 7192664724 }, { name = "Rock Eyebrow", id = 8011210815 }, { name = "Roblox Man Face", id = 864877007 },
+    { name = "Skull Emoji", id = 9188849503 }, { name = "Clown License", id = 4905389658 }, { name = "Capybara", id = 9811566897 }
+}
+
+-- =========================================================
+-- 🗂️ POPULATE MODALS (EMOJIS, MEMES, BADGES)
+-- =========================================================
+local emojiRaw = "😃😁😆😂🤣😎🫡🔥💀❤️🖤✨💯👑⚡⚠️🔒💬🍜🍕🚀🎉"
+if utf8 and utf8.graphemes then
+    for p, c in utf8.graphemes(emojiRaw) do
+        local em = string.sub(emojiRaw, p, c)
+        local btn = Instance.new("TextButton", UI.emojiScroll)
+        btn.Text = em; btn.TextSize = 15; btn.BackgroundTransparency = 1; btn.ZIndex = 32
+        btn.MouseButton1Click:Connect(function() UI.chatInput.Text = UI.chatInput.Text .. em; UI.chatInput:CaptureFocus() end)
+    end
+end
+
+for _, mData in ipairs(MemeLibrary) do
+    local mItem = Instance.new("ImageButton", UI.memeScroll)
+    mItem.BackgroundColor3 = UI.Colors.Background; mItem.Image = string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", tostring(mData.id)); mItem.ScaleType = Enum.ScaleType.Fit; mItem.ZIndex = 32
+    Instance.new("UICorner", mItem).CornerRadius = UDim.new(0, 8)
+    local is = Instance.new("UIStroke", mItem); is.Color = UI.Colors.PrimaryDark; is.Thickness = 1; is.Transparency = 0.6
+    UI.applySpringHover(mItem)
+    mItem.MouseButton1Click:Connect(function()
+        UI.memeFrame.Visible = false
+        if UI.sendMessageFunc then UI.sendMessageFunc(string.format("[MEME:%d]", mData.id)) end
+    end)
+end
+
+local badgeKeysOrder = {"OWNER", "DADDY", "TITAN", "OVERLORD", "PHANTOM", "DEV", "VIP", "GOD", "CYBER", "VOID", "ZENITH", "APEX", "LUCIFER", "SUPREME", "ROYAL", "DEMON"}
+local modalSelectionIndicators = {}
+
+for _, bKey in ipairs(badgeKeysOrder) do
+    local bData = BadgePresets[bKey]
+    local bBtn = Instance.new("TextButton", UI.badgeScroll)
+    bBtn.Size = UDim2.new(0.95, 0, 0, 30); bBtn.BackgroundColor3 = UI.Colors.Surface; bBtn.BackgroundTransparency = 0.3; bBtn.Text = ""; bBtn.AutoButtonColor = false; bBtn.ZIndex = 72
+    Instance.new("UICorner", bBtn).CornerRadius = UDim.new(0, 6)
+    local btnStroke = Instance.new("UIStroke", bBtn); btnStroke.Color = UI.Colors.PrimaryDark; btnStroke.Thickness = 0.8; btnStroke.Transparency = 0.5
+    
+    local tagWidth = TextService:GetTextSize(bData.Title, 11, Enum.Font.GothamBlack, Vector2.new(1000, 20)).X + 4
+    local badgeHost = Instance.new("Frame", bBtn)
+    badgeHost.Size = UDim2.fromOffset(tagWidth, 18); badgeHost.AnchorPoint = Vector2.new(0, 0.5); badgeHost.Position = UDim2.new(0, 12, 0.5, 0); badgeHost.BackgroundTransparency = 1; badgeHost.ZIndex = 73
+
+    local badgeGlow = Instance.new("TextLabel", badgeHost)
+    badgeGlow.Size = UDim2.fromScale(1, 1); badgeGlow.BackgroundTransparency = 1; badgeGlow.Text = bData.Title; badgeGlow.TextColor3 = Color3.fromRGB(255, 255, 255); badgeGlow.TextTransparency = 0.50; badgeGlow.Font = Enum.Font.GothamBlack; badgeGlow.TextSize = 11; badgeGlow.ZIndex = 73
+    local glowStroke = Instance.new("UIStroke", badgeGlow); glowStroke.Thickness = 1.0; glowStroke.Transparency = 0.55; glowStroke.Color = Color3.fromRGB(255, 255, 255)
+
+    local badgeLabel = Instance.new("TextLabel", badgeHost)
+    badgeLabel.Size = UDim2.fromScale(1, 1); badgeLabel.BackgroundTransparency = 1; badgeLabel.Text = bData.Title; badgeLabel.TextColor3 = Color3.fromRGB(255, 255, 255); badgeLabel.Font = Enum.Font.GothamBlack; badgeLabel.TextSize = 11; badgeLabel.ZIndex = 74
+    local bStroke = Instance.new("UIStroke", badgeLabel); bStroke.Thickness = 0.8; bStroke.Color = Color3.fromRGB(0, 0, 0); bStroke.Transparency = 0.3
+
+    local badgeShine = Instance.new("TextLabel", badgeHost)
+    badgeShine.Size = UDim2.fromScale(1, 1); badgeShine.BackgroundTransparency = 1; badgeShine.Text = bData.Title; badgeShine.TextColor3 = Color3.fromRGB(255, 255, 255); badgeShine.Font = Enum.Font.GothamBlack; badgeShine.TextSize = 11; badgeShine.ZIndex = 75
+
+    local shineGrad = Instance.new("UIGradient", badgeShine)
+    shineGrad.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(0.48, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(0.52, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 255, 255)) })
+    shineGrad.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(0.45, 1), NumberSequenceKeypoint.new(0.5, 0.05), NumberSequenceKeypoint.new(0.55, 1), NumberSequenceKeypoint.new(1.0, 1) })
+
+    local textGrad = Instance.new("UIGradient", badgeLabel); textGrad.Color = ColorSequence.new(bData.Colors)
+    local glowGrad = Instance.new("UIGradient", badgeGlow); glowGrad.Color = ColorSequence.new(bData.Colors)
+    local strokeGradGlow = Instance.new("UIGradient", glowStroke); strokeGradGlow.Color = ColorSequence.new(bData.Colors)
+
+    table.insert(activeBadgesList, { textGrad = textGrad, glowGrad = glowGrad, strokeGradGlow = strokeGradGlow, shineGrad = shineGrad, badgeGlow = badgeGlow, glowStroke = glowStroke, speed = bData.Speed or 1.15 })
+
+    local dotIndicator = Instance.new("Frame", bBtn)
+    dotIndicator.Size = UDim2.fromOffset(8, 8); dotIndicator.AnchorPoint = Vector2.new(1, 0.5); dotIndicator.Position = UDim2.new(1, -12, 0.5, 0); dotIndicator.BackgroundColor3 = Color3.fromRGB(50, 255, 140)
+    dotIndicator.BackgroundTransparency = (State.currentOwnerBadge == bKey) and 0.1 or 1; dotIndicator.ZIndex = 74
+    Instance.new("UICorner", dotIndicator).CornerRadius = UDim.new(1, 0)
+    local dStroke = Instance.new("UIStroke", dotIndicator); dStroke.Color = Color3.fromRGB(0, 0, 0); dStroke.Transparency = (State.currentOwnerBadge == bKey) and 0.4 or 1
+    modalSelectionIndicators[bKey] = {dot = dotIndicator, stroke = dStroke}
+
+    UI.applySpringHover(bBtn)
+    bBtn.MouseButton1Click:Connect(function()
+        State.currentOwnerBadge = bKey
+        for k, ind in pairs(modalSelectionIndicators) do
+            ind.dot.BackgroundTransparency = (k == State.currentOwnerBadge) and 0.1 or 1
+            ind.stroke.Transparency = (k == State.currentOwnerBadge) and 0.4 or 1
+        end
+        TweenService:Create(UI.badgeSelectorModal:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
+        task.delay(0.2, function() UI.badgeSelectorModal.Visible = false end)
+        UI.playSFX("default")
+    end)
+end
+
+-- =========================================================
+-- 💬 CORE MESSAGE RENDERER
+-- =========================================================
+local function updateLiveCounter(username)
+    activeUsersTable[username:lower()] = os.time()
+    local count = 0; local now = os.time()
+    for u, t in pairs(activeUsersTable) do if now - t < 300 then count = count + 1 else activeUsersTable[u] = nil end end
+    UI.liveText.Text = string.format("%d Active", math.max(1, count))
+end
+
+local function addJoinNotice(username)
+    local pill = Instance.new("Frame", UI.messageFeed)
+    pill.Size = UDim2.new(1, 0, 0, 28); pill.BackgroundColor3 = UI.Colors.Surface; pill.BackgroundTransparency = 0.15; pill.ZIndex = 9
+    Instance.new("UICorner", pill).CornerRadius = UDim.new(0, 8)
+    local s = Instance.new("UIStroke", pill); s.Color = Color3.fromRGB(50, 255, 140); s.Thickness = 1.0; s.Transparency = 0.6
+    local lbl = Instance.new("TextLabel", pill)
+    lbl.Size = UDim2.fromScale(1, 1); lbl.BackgroundTransparency = 1; lbl.Font = Enum.Font.GothamBold; lbl.TextSize = 11; lbl.TextColor3 = Color3.new(1,1,1); lbl.RichText = true; lbl.Text = string.format("🎉 <font color='#32FF8C'>@%s</font> <i>dropped into the Titan Network</i>", UI.sanitizeXml(username)); lbl.TextXAlignment = Enum.TextXAlignment.Center; lbl.ZIndex = 10
+    UI.crispText(lbl, 0.4)
+    local scale = Instance.new("UIScale", pill); scale.Scale = 0.5
+    TweenService:Create(scale, TweenInfo.new(0.5, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1}):Play()
+    task.defer(function()
+        local maxOffset = math.max(0, UI.messageFeed.AbsoluteCanvasSize.Y - UI.messageFeed.AbsoluteWindowSize.Y)
+        if maxOffset - UI.messageFeed.CanvasPosition.Y < 80 then UI.messageFeed.CanvasPosition = Vector2.new(0, maxOffset) end
+    end)
+end
+
+local MAX_MESSAGES = 60
+local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSender, msgJobId, scopeType)
+    local memeIdMatch = msg:match("%[MEME:(%d+)%]")
+    local actualUsername, dispName = rawUserName:match("^(.-)::(.*)$")
+    if not actualUsername then actualUsername = rawUserName; local targetPlr = Players:FindFirstChild(rawUserName); dispName = targetPlr and targetPlr.DisplayName or rawUserName end
+
+    local isMentioned = string.find(string.lower(msg), string.lower(lp.Name), 1, true) or string.find(string.lower(msg), string.lower(lp.DisplayName), 1, true)
+    local isAdminUser = Admin[actualUsername:lower()] == true
+    local badgeProfile = BadgePresets[State.currentOwnerBadge] or BadgePresets["OWNER"]
+
+    local count = 0
+    for _, child in ipairs(UI.messageFeed:GetChildren()) do if child:IsA("GuiObject") and child.Name ~= "UIListLayout" and child.Name ~= "UIPadding" then count = count + 1 end end
+    if count >= MAX_MESSAGES then for _, child in ipairs(UI.messageFeed:GetChildren()) do if child:IsA("Frame") then child:Destroy() break end end end
+
+    local cardRoot = Instance.new("Frame", UI.messageFeed)
+    cardRoot.Size = UDim2.new(1, 0, 0, 0) ; cardRoot.AutomaticSize = Enum.AutomaticSize.Y; cardRoot.BackgroundTransparency = 1; cardRoot.ZIndex = 9
+    cardRoot:SetAttribute("ChatScope", scopeType or "global")
+    cardRoot:SetAttribute("JobId", msgJobId or game.JobId)
+
+    local replyIcon = Instance.new("TextLabel", cardRoot)
+    replyIcon.Size = UDim2.fromOffset(40, 40); replyIcon.Position = UDim2.new(1, -45, 0.5, -20); replyIcon.BackgroundTransparency = 1; replyIcon.Text = "↩️"; replyIcon.TextSize = 18; replyIcon.ZIndex = 8
+    
+    local dmIcon = Instance.new("TextLabel", cardRoot)
+    dmIcon.Size = UDim2.fromOffset(40, 40); dmIcon.Position = UDim2.new(0, 5, 0.5, -20); dmIcon.BackgroundTransparency = 1; dmIcon.Text = "🔐"; dmIcon.TextSize = 18; dmIcon.ZIndex = 8
+
+    local card = Instance.new("Frame", cardRoot)
+    card.Name = "SwipeWrapper"; card.Size = UDim2.new(1, 0, 0, 0); card.AutomaticSize = Enum.AutomaticSize.Y; card.BackgroundColor3 = Color3.fromRGB(14, 17, 24) ; card.BackgroundTransparency = State.isGhostMode and 0.50 or 0.10 ; card.ClipsDescendants = false; card.ZIndex = 9
+    Instance.new("UICorner", card).CornerRadius = UDim.new(0, 10)
+
+    local padFix = Instance.new("UIPadding", card)
+    padFix.PaddingBottom = UDim2.new(0, 10); padFix.PaddingTop = UDim2.new(0, 2)
+
+    if State.chatMode == "server" then if scopeType == "global" or (msgJobId and msgJobId ~= "" and msgJobId ~= game.JobId) then cardRoot.Visible = false end
+    else if scopeType == "server" then cardRoot.Visible = false end end
+
+    local cardScale = Instance.new("UIScale", cardRoot); cardScale.Scale = 0.85; cardRoot.Position = UDim2.new(0, -20, 0, 0)
+    TweenService:Create(cardScale, TweenInfo.new(0.4, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Scale = 1}):Play()
+    TweenService:Create(cardRoot, TweenInfo.new(0.4, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Position = UDim2.new(0, 0, 0, 0)}):Play()
+
+    local accentStrip = Instance.new("Frame", card)
+    accentStrip.Size = UDim2.new(0, 3, 1, -12); accentStrip.Position = UDim2.new(0, 5, 0, 6); accentStrip.BorderSizePixel = 0; accentStrip.BackgroundColor3 = Color3.new(1,1,1); accentStrip.ZIndex = 10
+    Instance.new("UICorner", accentStrip).CornerRadius = UDim.new(1, 0)
+    local stripGrad = Instance.new("UIGradient", accentStrip); stripGrad.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, isMentioned and UI.Colors.MentionGold or (privateUserTarget and UI.Colors.Purple or UI.Colors.Primary)), ColorSequenceKeypoint.new(1, isMentioned and Color3.fromRGB(255,180,0) or (privateUserTarget and UI.Colors.PrimaryDark or UI.Colors.PrimaryDark)) }); stripGrad.Rotation = 90
+
+    local cardStroke = Instance.new("UIStroke", card)
+    cardStroke.Thickness = 1.0; cardStroke.Transparency = isMentioned and 0.15 or 0.6; cardStroke.Color = isMentioned and UI.Colors.MentionGold or UI.Colors.SurfaceHover
+
+    card.MouseEnter:Connect(function() TweenService:Create(cardStroke, TweenInfo.new(0.2), {Transparency = 0.2, Color = UI.Colors.Primary}):Play() end)
+    card.MouseLeave:Connect(function() TweenService:Create(cardStroke, TweenInfo.new(0.3), { Transparency = isMentioned and 0.15 or 0.6, Color = isMentioned and UI.Colors.MentionGold or UI.Colors.SurfaceHover }):Play() end)
+
+    local avatarImg = Instance.new("ImageLabel", card)
+    avatarImg.Size = UDim2.fromOffset(30, 30); avatarImg.Position = UDim2.fromOffset(16, 10); avatarImg.BackgroundColor3 = UI.Colors.Background; avatarImg.BackgroundTransparency = 0.5; avatarImg.ZIndex = 11
+    Instance.new("UICorner", avatarImg).CornerRadius = UDim.new(1, 0)
+    local avStroke = Instance.new("UIStroke", avatarImg); avStroke.Thickness = 1.2; avStroke.Transparency = 0.2; avStroke.Color = isAdminUser and UI.Colors.Primary or UI.Colors.SurfaceHover
+    if isAdminUser then local avGrad = Instance.new("UIGradient", avStroke); avGrad.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, UI.Colors.Primary), ColorSequenceKeypoint.new(1, UI.Colors.Purple) }); avGrad.Rotation = 45 end
+
+    task.spawn(function()
+        local uId = userIdCache[actualUsername:lower()]
+        if not uId then pcall(function() uId = Players:GetUserIdFromNameAsync(actualUsername); userIdCache[actualUsername:lower()] = uId end) end
+        if uId and avatarImg then avatarImg.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=48&h=48", uId) end
+    end)
+
+    local cardContent = Instance.new("Frame", card)
+    cardContent.Size = UDim2.new(1, -56, 0, 0); cardContent.Position = UDim2.fromOffset(56, 10); cardContent.AutomaticSize = Enum.AutomaticSize.Y; cardContent.BackgroundTransparency = 1; cardContent.ZIndex = 11
+    local ccLayout = Instance.new("UIListLayout", cardContent); ccLayout.SortOrder = Enum.SortOrder.LayoutOrder; ccLayout.Padding = UDim.new(0, 4)
+
+    local headerRow = Instance.new("Frame", cardContent)
+    headerRow.Size = UDim2.new(1, 0, 0, 18); headerRow.BackgroundTransparency = 1; headerRow.LayoutOrder = 1; headerRow.ZIndex = 11
+    local hLayout = Instance.new("UIListLayout", headerRow); hLayout.FillDirection = Enum.FillDirection.Horizontal; hLayout.VerticalAlignment = Enum.VerticalAlignment.Center; hLayout.Padding = UDim.new(0, 6); hLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+    local timeLbl = Instance.new("TextLabel", headerRow)
+    timeLbl.AutomaticSize = Enum.AutomaticSize.X; timeLbl.Size = UDim2.new(0, 0, 1, 0); timeLbl.BackgroundTransparency = 1; timeLbl.Text = string.format("[%s]", os.date("%H:%M")); timeLbl.TextColor3 = Color3.fromRGB(110, 125, 145); timeLbl.Font = Enum.Font.GothamBold; timeLbl.TextSize = 10.5; timeLbl.LayoutOrder = 1; timeLbl.ZIndex = 12; UI.crispText(timeLbl, 0.6)
+
+    if privateUserTarget then
+        local dmLbl = Instance.new("TextLabel", headerRow)
+        dmLbl.AutomaticSize = Enum.AutomaticSize.X; dmLbl.Size = UDim2.new(0, 0, 1, 0); dmLbl.BackgroundTransparency = 1; dmLbl.RichText = true; dmLbl.Text = isPrivateSender and ("[To @" .. UI.sanitizeXml(privateUserTarget) .. "]") or ("[From @" .. UI.sanitizeXml(privateUserTarget) .. "]"); dmLbl.TextColor3 = UI.Colors.Purple; dmLbl.Font = Enum.Font.GothamBold; dmLbl.TextSize = 10.5; dmLbl.LayoutOrder = 2; dmLbl.ZIndex = 12; UI.crispText(dmLbl, 0.5)
+    end
+
+    if isAdminUser then
+        local tagWidth = TextService:GetTextSize(badgeProfile.Title, 11, Enum.Font.GothamBlack, Vector2.new(1000, 20)).X + 4
+        local badgeHost = Instance.new("Frame", headerRow)
+        badgeHost.Size = UDim2.fromOffset(tagWidth, 18); badgeHost.BackgroundTransparency = 1; badgeHost.BorderSizePixel = 0; badgeHost.LayoutOrder = 3; badgeHost.ZIndex = 13
+
+        local badgeGlow = Instance.new("TextLabel", badgeHost)
+        badgeGlow.Size = UDim2.fromScale(1, 1); badgeGlow.BackgroundTransparency = 1; badgeGlow.BorderSizePixel = 0; badgeGlow.Text = badgeProfile.Title; badgeGlow.TextColor3 = Color3.fromRGB(255, 255, 255); badgeGlow.TextTransparency = 0.50; badgeGlow.Font = Enum.Font.GothamBlack; badgeGlow.TextSize = 11; badgeGlow.ZIndex = 13
+        local glowStroke = Instance.new("UIStroke", badgeGlow); glowStroke.Thickness = 1.0; glowStroke.Transparency = 0.55; glowStroke.Color = Color3.fromRGB(255, 255, 255)
+
+        local badgeLabel = Instance.new("TextLabel", badgeHost)
+        badgeLabel.Size = UDim2.fromScale(1, 1); badgeLabel.BackgroundTransparency = 1; badgeLabel.BorderSizePixel = 0; badgeLabel.Text = badgeProfile.Title; badgeLabel.TextColor3 = Color3.fromRGB(255, 255, 255); badgeLabel.Font = Enum.Font.GothamBlack; badgeLabel.TextSize = 11; badgeLabel.ZIndex = 14
+        local bStroke = Instance.new("UIStroke", badgeLabel); bStroke.Thickness = 0.8; bStroke.Color = Color3.fromRGB(0, 0, 0); bStroke.Transparency = 0.3
+
+        local badgeShine = Instance.new("TextLabel", badgeHost)
+        badgeShine.Size = UDim2.fromScale(1, 1); badgeShine.BackgroundTransparency = 1; badgeShine.BorderSizePixel = 0; badgeShine.Text = badgeProfile.Title; badgeShine.TextColor3 = Color3.fromRGB(255, 255, 255); badgeShine.Font = Enum.Font.GothamBlack; badgeShine.TextSize = 11; badgeShine.ZIndex = 75
+        local shineGrad = Instance.new("UIGradient", badgeShine); shineGrad.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0.0, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(0.48, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(0.52, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 255, 255)) }); shineGrad.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0.0, 1), NumberSequenceKeypoint.new(0.45, 1), NumberSequenceKeypoint.new(0.5, 0.05), NumberSequenceKeypoint.new(0.55, 1), NumberSequenceKeypoint.new(1.0, 1) })
+
+        local textGrad = Instance.new("UIGradient", badgeLabel); textGrad.Color = ColorSequence.new(badgeProfile.Colors)
+        local glowGrad = Instance.new("UIGradient", badgeGlow); glowGrad.Color = ColorSequence.new(badgeProfile.Colors)
+        local strokeGradGlow = Instance.new("UIGradient", glowStroke); strokeGradGlow.Color = ColorSequence.new(badgeProfile.Colors)
+
+        table.insert(activeBadgesList, { textGrad = textGrad, glowGrad = glowGrad, strokeGradGlow = strokeGradGlow, shineGrad = shineGrad, badgeGlow = badgeGlow, glowStroke = glowStroke, speed = badgeProfile.Speed or 1.15 })
+    end
+
+    local nameLbl = Instance.new("TextLabel", headerRow)
+    nameLbl.AutomaticSize = Enum.AutomaticSize.X; nameLbl.Size = UDim2.new(0, 0, 1, 0); nameLbl.BackgroundTransparency = 1; nameLbl.RichText = true; nameLbl.Text = UI.sanitizeXml(dispName); nameLbl.TextColor3 = (currentThemeIdx == 2 and Color3.fromRGB(255, 45, 85) or UI.Colors.Primary); nameLbl.Font = Enum.Font.GothamBlack; nameLbl.TextSize = 12; nameLbl.LayoutOrder = 4; nameLbl.ZIndex = 12; UI.crispText(nameLbl)
+
+    if actualUsername ~= dispName and actualUsername ~= "System" then
+        local handleLbl = Instance.new("TextLabel", headerRow)
+        handleLbl.AutomaticSize = Enum.AutomaticSize.X; handleLbl.Size = UDim2.new(0, 0, 1, 0); handleLbl.BackgroundTransparency = 1; handleLbl.Text = "@" .. UI.sanitizeXml(actualUsername) .. ":"; handleLbl.TextColor3 = UI.Colors.SubText; handleLbl.Font = Enum.Font.GothamMedium; handleLbl.TextSize = 10; handleLbl.LayoutOrder = 5; handleLbl.ZIndex = 12; UI.crispText(handleLbl, 0.6)
+    else
+        nameLbl.Text = UI.sanitizeXml(dispName) .. ":"
+    end
+
+    if memeIdMatch then
+        local memeHolder = Instance.new("Frame", cardContent); memeHolder.Size = UDim2.new(1, 0, 0, 94); memeHolder.BackgroundTransparency = 1; memeHolder.LayoutOrder = 2; memeHolder.ZIndex = 12
+        local memeImg = Instance.new("ImageLabel", memeHolder); memeImg.Size = UDim2.fromOffset(90, 90); memeImg.Position = UDim2.fromOffset(0, 2); memeImg.BackgroundColor3 = UI.Colors.Background; memeImg.BackgroundTransparency = 0.3; memeImg.Image = string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", memeIdMatch); memeImg.ScaleType = Enum.ScaleType.Fit; memeImg.ZIndex = 12; Instance.new("UICorner", memeImg).CornerRadius = UDim.new(0, 8); local mStroke = Instance.new("UIStroke", memeImg); mStroke.Color = UI.Colors.PrimaryDark; mStroke.Thickness = 1.0
+    else
+        local bodyTxt = Instance.new("TextLabel", cardContent)
+        bodyTxt.Name = "MsgContent"; bodyTxt.Size = UDim2.new(1, 0, 0, 0); bodyTxt.AutomaticSize = Enum.AutomaticSize.Y; bodyTxt.BackgroundTransparency = 1; bodyTxt.TextColor3 = Color3.fromRGB(250, 252, 255); bodyTxt.Font = Enum.Font.GothamMedium ; bodyTxt.TextSize = 13.5 ; bodyTxt.TextWrapped = true; bodyTxt.TextXAlignment = Enum.TextXAlignment.Left; bodyTxt.RichText = true; bodyTxt.LayoutOrder = 2; bodyTxt.ZIndex = 12; bodyTxt.Text = UI.sanitizeXml(msg); UI.crispText(bodyTxt)
+    end
+
+    if isMentioned and actualUsername ~= lp.Name then UI.playSFX("mention") elseif memeIdMatch and actualUsername ~= lp.Name then UI.playSFX("meme") end
+
+    local dragStart = nil; local isDragging = false; local hasTriggeredSwipe = false
+    card.InputBegan:Connect(function(input)
+        if actualUsername == lp.Name or actualUsername == "System" then return end
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragStart = input.Position.X; isDragging = true; hasTriggeredSwipe = false
+            TweenService:Create(cardScale, TweenInfo.new(0.1), {Scale = 0.98}):Play()
+        end
+    end)
+
+    card.InputChanged:Connect(function(input)
+        if isDragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            local delta = input.Position.X - dragStart; local clampedX = math.clamp(delta, -80, 80); card.Position = UDim2.new(0, clampedX, 0, 0)
+            if clampedX > 50 and not hasTriggeredSwipe then hasTriggeredSwipe = true; UI.playSFX("swipe")
+            elseif clampedX < -50 and not hasTriggeredSwipe then hasTriggeredSwipe = true; UI.playSFX("swipe") end
+        end
+    end)
+
+    card.InputEnded:Connect(function(input)
+        if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and isDragging then
+            isDragging = false
+            TweenService:Create(cardScale, TweenInfo.new(0.3, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1}):Play()
+            local finalDelta = card.Position.X.Offset
+            TweenService:Create(card, TweenInfo.new(0.3, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Position = UDim2.new(0, 0, 0, 0)}):Play()
+
+            if finalDelta > 50 then State.privateTarget = actualUsername; UI.updateInputBar(); UI.playSFX("dm")
+            elseif finalDelta < -50 then UI.chatInput.Text = "@" .. actualUsername .. " "; UI.chatInput:CaptureFocus()
+            elseif math.abs(finalDelta) < 5 then
+                for _, c in ipairs(UI.actionMenu:GetChildren()) do if c:IsA("TextButton") then c:Destroy() end end
+                UI.createActionBtn("COPY", UI.Colors.Text, function() pcall(function() setClip(memeIdMatch and ("ID: " .. memeIdMatch) or msg) end) end)
+                UI.createActionBtn("TP", UI.Colors.MentionGold, function()
+                    local targetPlr = Players:FindFirstChild(actualUsername)
+                    if targetPlr and targetPlr.Character and targetPlr.Character:FindFirstChild("HumanoidRootPart") and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then lp.Character.HumanoidRootPart.CFrame = targetPlr.Character.HumanoidRootPart.CFrame end
+                end)
+                UI.createActionBtn("VIEW", UI.Colors.PrimaryDark, function()
+                    local targetPlr = Players:FindFirstChild(actualUsername)
+                    if targetPlr and targetPlr.Character and targetPlr.Character:FindFirstChild("Humanoid") then Camera.CameraSubject = targetPlr.Character.Humanoid end
+                end)
+                local cardPos = card.AbsolutePosition - UI.mainFrame.AbsolutePosition
+                UI.actionMenu.Position = UDim2.fromOffset(math.clamp(cardPos.X + 25, 10, 180), math.clamp(cardPos.Y - 24, 30, 280))
+                UI.actionMenu.Visible = true
+            end
+        end
+    end)
+
+    task.defer(function()
+        local maxOffset = math.max(0, UI.messageFeed.AbsoluteCanvasSize.Y - UI.messageFeed.AbsoluteWindowSize.Y)
+        if maxOffset - UI.messageFeed.CanvasPosition.Y < 90 then UI.messageFeed.CanvasPosition = Vector2.new(0, maxOffset) else UI.jumpBottomBtn.Visible = true end
+    end)
+end
+
+-- =========================================================
+-- 📡 SEND MESSAGE (SCOPE-LOCKED)
+-- =========================================================
+local lastSendTick = 0
+UI.sendMessageFunc = function(overrideText)
+    local text = overrideText or UI.chatInput.Text
+    if not text then return end
+    if text == "TextBox" then text = "" end
+    text = string.gsub(text, "^%s+", ""); text = string.gsub(text, "%s+$", "")
+    if text == "" or (tick() - lastSendTick < 0.15) then return end
+    lastSendTick = tick()
+
+    local pMatch = text:match("^!p%s+(%w+)")
+    if pMatch then UI.chatInput.Text = ""; State.privateTarget = pMatch; UI.updateInputBar(); addMessageToFeed("System::System", "DM mode locked with @" .. pMatch, nil, false, game.JobId, "global"); return end
+
+    local finalMsg = text
+    if State.privateTarget then finalMsg = "( 🔐 " .. lp.Name .. " Private " .. State.privateTarget .. ") " .. text
+    else finalMsg = (State.chatMode == "server") and ("[SRV:" .. tostring(game.JobId) .. "] " .. text) or ("[GLB] " .. text) end
+
+    if not overrideText then UI.chatInput.Text = "" end
+    local encodedUserTag = lp.Name .. "::" .. lp.DisplayName
+
+    if State.privateTarget then addMessageToFeed(encodedUserTag, text, State.privateTarget, true, game.JobId, State.chatMode)
+    else addMessageToFeed(encodedUserTag, text, nil, false, game.JobId, State.chatMode) end
+    displayBubble(lp.Name, text)
+
+    local cleanKey = string.lower(finalMsg)
+    recentLocalSentMap[cleanKey] = tick()
+
+    task.spawn(function()
+        if req then
+            local payload = HttpService:JSONEncode({ user = encodedUserTag, msg = finalMsg, jobId = game.JobId })
+            pcall(function() req({ Url = SERVER_URL .. "/send", Method = "POST", Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" }, Body = payload }) end)
+        end
+    end)
+end
+
+UI.sendBtn.MouseButton1Click:Connect(function() UI.sendMessageFunc() end)
+UI.chatInput.FocusLost:Connect(function(enterPressed) if enterPressed then UI.sendMessageFunc() end end)
+
+-- =========================================================
+-- ⚡ 60 FPS ULTRA-SMOOTH TYPING RENDERER 
+-- =========================================================
+local lastTypingBroadcast = 0; local isCurrentlyTypingLocally = false
+UI.chatInput:GetPropertyChangedSignal("Text"):Connect(function()
+    if #UI.chatInput.Text > 0 then
+        UI.typingIndicator.BackgroundTransparency = 0.2
+        if not isCurrentlyTypingLocally or (tick() - lastTypingBroadcast > 2.0) then
+            isCurrentlyTypingLocally = true; lastTypingBroadcast = tick()
+            task.spawn(function() if req then pcall(function() req({ Url = SERVER_URL .. "/send", Method = "POST", Headers = { ["Content-Type"] = "application/json" }, Body = HttpService:JSONEncode({ user = lp.Name .. "::" .. lp.DisplayName, msg = "[TYPING]", jobId = game.JobId, hidden = true }) }) end) end end)
+        end
+    else
+        UI.typingIndicator.BackgroundTransparency = 1
+        if isCurrentlyTypingLocally then
+            isCurrentlyTypingLocally = false
+            task.spawn(function() if req then pcall(function() req({ Url = SERVER_URL .. "/send", Method = "POST", Headers = { ["Content-Type"] = "application/json" }, Body = HttpService:JSONEncode({ user = lp.Name .. "::" .. lp.DisplayName, msg = "[STOP_TYPING]", jobId = game.JobId, hidden = true }) }) end) end end)
+        end
+    end
+end)
+
+task.spawn(function()
+    local t = 0
+    RunService.RenderStepped:Connect(function(dt)
+        if _G.TXR_ChatInstanceID ~= currentExecutionID or not UI.gui.Parent then return end
+        t = t + dt
+
+        local typingList = {}
+        for user, typtime in pairs(globalTypers) do
+            if tick() - typtime < 2.5 then table.insert(typingList, "@" .. user) else globalTypers[user] = nil end
+        end
+        if #typingList > 0 then
+            UI.globalTypingBar.Visible = true; local tText = table.concat(typingList, ", ")
+            if #typingList > 2 then tText = "Several people" end
+            local dots = string.rep(".", math.floor(t * 3) % 4)
+            UI.globalTypingText.Text = "<i>✏️ " .. tText .. " is typing" .. dots .. "</i>"
+            UI.globalTypingText.TextTransparency = 0.2 + (math.sin(t * 8) * 0.15)
+        else UI.globalTypingBar.Visible = false end
+
+        if #activeBadgesList > 0 then
+            for i = #activeBadgesList, 1, -1 do
+                local item = activeBadgesList[i]
+                if item.textGrad and item.textGrad.Parent then
+                    local sSpeed = item.speed or 1.15; local continuousRotation = (t * 55 * sSpeed) % 360; local waveOffset = math.sin(t * 1.5 * sSpeed) * 0.35
+                    item.textGrad.Rotation = continuousRotation; item.textGrad.Offset = Vector2.new(waveOffset, 0); item.glowGrad.Rotation = continuousRotation; item.glowGrad.Offset = Vector2.new(-waveOffset, 0)
+                    if item.strokeGradGlow and item.strokeGradGlow.Parent then item.strokeGradGlow.Rotation = (continuousRotation + 180) % 360 end
+                    if item.shineGrad and item.shineGrad.Parent then item.shineGrad.Offset = Vector2.new(((t * 0.75 * sSpeed) % 3.5) - 1.75, 0) end
+                    local breathPulse = (math.sin(t * 2.2 * sSpeed) + 1) / 2
+                    if item.glowStroke then item.glowStroke.Thickness = 1.0 + (breathPulse * 0.4); item.glowStroke.Transparency = 0.50 + (breathPulse * 0.20) end
+                    if item.badgeGlow then item.badgeGlow.TextTransparency = 0.45 + (breathPulse * 0.20) end
+                else table.remove(activeBadgesList, i) end
+            end
+        end
+    end)
+end)
+
+-- =========================================================
+-- 📥 HIGH-FREQUENCY POLLING ENGINE
+-- =========================================================
+task.spawn(function()
+    while _G.TXR_IsPolling and (_G.TXR_ChatInstanceID == currentExecutionID) and task.wait(0.4) do
+        if req then
+            local success, res = pcall(function() return req({ Url = SERVER_URL .. "/messages?since=" .. tostring(lastSyncTime), Method = "GET", Headers = { ["User-Agent"] = "Roblox/WinInet" } }) end)
+            if success and res and res.StatusCode == 200 then
+                local decodeSuccess, data = pcall(function() return HttpService:JSONDecode(res.Body) end)
+                if decodeSuccess and type(data) == "table" then
+                    if isInitialSync then
+                        isInitialSync = false
+                        if #data > 0 then
+                            local startIndex = math.max(1, #data - 6)
+                            for i = startIndex, #data do
+                                local m = data[i]
+                                if not m.hidden and m.msg ~= "Joined" then
+                                    local initKey = (m.id and tostring(m.id)) or (m.user .. "_" .. tostring(m.time) .. "_" .. m.msg)
+                                    processedServerMessageMap[initKey] = true
+                                    local srvJob, cleanSrvMsg = m.msg:match("^%[SRV:(.-)%]%s*(.*)$")
+                                    local cleanGlbMsg = m.msg:match("^%[GLB%]%s*(.*)$")
+                                    local scope = "global"; local parsedMsg = m.msg
+                                    if srvJob then scope = "server"; parsedMsg = cleanSrvMsg; if srvJob ~= game.JobId then continue end
+                                    elseif cleanGlbMsg then scope = "global"; parsedMsg = cleanGlbMsg end
+                                    addMessageToFeed(m.user, parsedMsg, nil, false, m.jobId, scope)
+                                    local rawUsernameOnly = m.user:match("^(.-)::") or m.user; updateLiveCounter(rawUsernameOnly)
+                                end
+                            end
+                            lastSyncTime = data[#data].time
+                        end
+                        continue
+                    end
+
+                    for _, m in ipairs(data) do
+                        local uniqueMsgKey = (m.id and tostring(m.id)) or (m.user .. "_" .. tostring(m.time) .. "_" .. m.msg)
+                        if processedServerMessageMap[uniqueMsgKey] then continue end
+
+                        if m.time >= lastSyncTime then
+                            lastSyncTime = m.time
+                            local rawUsernameOnly = m.user:match("^(.-)::") or m.user
+                            knownUsers[rawUsernameOnly:lower()] = rawUsernameOnly; updateLiveCounter(rawUsernameOnly)
+
+                            if m.msg == "Joined" then
+                                processedServerMessageMap[uniqueMsgKey] = true
+                                if rawUsernameOnly ~= lp.Name then addJoinNotice(rawUsernameOnly); UI.playSFX("default") end
+                                continue
+                            end
+
+                            if m.hidden then 
+                                processedServerMessageMap[uniqueMsgKey] = true
+                                if m.msg == "[TYPING]" and rawUsernameOnly ~= lp.Name then globalTypers[rawUsernameOnly] = tick()
+                                elseif m.msg == "[STOP_TYPING]" and rawUsernameOnly ~= lp.Name then globalTypers[rawUsernameOnly] = nil end
+                                continue 
+                            end
+
+                            if rawUsernameOnly:lower() == lp.Name:lower() then
+                                local lowMsg = string.lower(m.msg); local isEcho = false
+                                for sentText, sentTime in pairs(recentLocalSentMap) do
+                                    if (sentText == lowMsg or lowMsg:find(sentText, 1, true)) and (tick() - sentTime <= 60) then isEcho = true; recentLocalSentMap[sentText] = nil; break end
+                                end
+                                if isEcho then processedServerMessageMap[uniqueMsgKey] = true; continue end
+                            end
+
+                            processedServerMessageMap[uniqueMsgKey] = true
+                            local srvJob, cleanSrvMsg = m.msg:match("^%[SRV:(.-)%]%s*(.*)$")
+                            local cleanGlbMsg = m.msg:match("^%[GLB%]%s*(.*)$")
+                            local scope = "global"; local effectiveMsg = m.msg
+
+                            if srvJob then scope = "server"; effectiveMsg = cleanSrvMsg; if srvJob ~= game.JobId then continue end
+                            elseif cleanGlbMsg then scope = "global"; effectiveMsg = cleanGlbMsg end
+
+                            local pSender, pTarget, pMsg = string.match(effectiveMsg, "^%( 🔐 ([%w_]+) Private ([%w_]+)%) (.*)$")
+                            if pSender and pTarget then
+                                if lp.Name == pSender then addMessageToFeed(m.user, pMsg, pTarget, true, m.jobId, scope)
+                                elseif lp.Name == pTarget then addMessageToFeed(m.user, pMsg, pSender, false, m.jobId, scope); displayBubble(rawUsernameOnly, pMsg); UI.playSFX("dm")
+                                    if not UI.mainFrame.Visible then UI.unreadBadge.Visible = true end
+                                end
+                                continue
+                            end
+
+                            addMessageToFeed(m.user, effectiveMsg, nil, false, m.jobId, scope)
+                            if rawUsernameOnly ~= lp.Name then displayBubble(rawUsernameOnly, effectiveMsg); UI.playSFX("default"); globalTypers[rawUsernameOnly] = nil
+                                if not UI.mainFrame.Visible then UI.unreadBadge.Visible = true end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
+task.spawn(function()
+    if req then pcall(function() req({ Url = SERVER_URL .. "/send", Method = "POST", Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" }, Body = HttpService:JSONEncode({ user = lp.Name .. "::" .. lp.DisplayName, msg = "Joined", jobId = game.JobId, hidden = false }) }) end) end
+    addMessageToFeed("System::System", "TXR Cyber-Titan Aesthetic Online! Swipe Card Right for DMs.", nil, false, game.JobId, "global")
+end)
