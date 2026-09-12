@@ -1,0 +1,670 @@
+-- =========================================================
+-- 📦 TXR CYBER-TITAN: ADVANCED FEATURES MODULE
+-- =========================================================
+return function(TXR)
+    local mainFrame = TXR.mainFrame
+    local Colors = TXR.Colors
+    local Themes = TXR.Themes
+    local applySpringHover = TXR.applySpringHover
+    local crispText = TXR.crispText
+    local playSFX = TXR.playSFX
+    local lp = TXR.lp
+    local socialData = TXR.socialData
+    local activeUsersTable = TXR.activeUsersTable
+    local knownUsers = TXR.knownUsers
+    local userIdCache = TXR.userIdCache
+    local SERVER_URL = TXR.SERVER_URL
+    local req = TXR.req
+    local HttpService = TXR.HttpService
+    local chatInput = TXR.chatInput
+    local createHeaderBtn = TXR.createHeaderBtn
+    local sendMessageFunc = TXR.sendMessageFunc
+    local updateInputBar = TXR.updateInputBar
+    local BadgePresets = TXR.BadgePresets
+    local MemeLibrary = TXR.MemeLibrary
+    local activeBadgesList = TXR.activeBadgesList
+    local getAssetThumb = TXR.getAssetThumb
+    local jobId = TXR.jobId
+
+    local TweenService = game:GetService("TweenService")
+    local TextService = game:GetService("TextService")
+    local Players = game:GetService("Players")
+
+    local profileModal, leaderboardModal, badgeSelectorModal, emojiFrame, memeFrame
+
+    TXR.Callbacks.HideAllModals = function()
+        if profileModal then profileModal.Visible = false end
+        if leaderboardModal then leaderboardModal.Visible = false end
+        if badgeSelectorModal then badgeSelectorModal.Visible = false end
+        if emojiFrame then emojiFrame.Visible = false end
+        if memeFrame then memeFrame.Visible = false end
+    end
+
+    -- =========================================================
+    -- 📱 iOS 18 SOCIAL PROFILE SHEET
+    -- =========================================================
+    profileModal = Instance.new("Frame", mainFrame)
+    profileModal.Size = UDim2.fromOffset(260, 280)
+    profileModal.Position = UDim2.new(0.5, -130, 0.5, -140)
+    profileModal.BackgroundColor3 = Color3.fromRGB(10, 13, 18)
+    profileModal.BackgroundTransparency = 0.04
+    profileModal.ClipsDescendants = true
+    profileModal.Visible = false
+    profileModal.ZIndex = 80
+    Instance.new("UICorner", profileModal).CornerRadius = UDim.new(0, 16)
+
+    local pmScale = Instance.new("UIScale", profileModal)
+    pmScale.Scale = 0
+
+    local pmStroke = Instance.new("UIStroke", profileModal)
+    pmStroke.Color = Colors.Primary
+    pmStroke.Thickness = 1.2
+    pmStroke.Transparency = 0.3
+
+    local pmBanner = Instance.new("Frame", profileModal)
+    pmBanner.Size = UDim2.new(1, 0, 0, 48)
+    pmBanner.BackgroundColor3 = Colors.Background
+    pmBanner.BorderSizePixel = 0
+    pmBanner.ZIndex = 81
+    local pmbGrad = Instance.new("UIGradient", pmBanner)
+    pmbGrad.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(15, 30, 45)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(35, 15, 45)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(20, 40, 35))
+    })
+
+    local pmTierBadge = Instance.new("TextLabel", pmBanner)
+    pmTierBadge.Size = UDim2.fromOffset(90, 18)
+    pmTierBadge.Position = UDim2.fromOffset(10, 8)
+    pmTierBadge.BackgroundColor3 = Color3.fromRGB(12, 16, 24)
+    pmTierBadge.BackgroundTransparency = 0.3
+    pmTierBadge.Text = "TITAN LEGEND"
+    pmTierBadge.TextColor3 = Colors.Primary
+    pmTierBadge.Font = Enum.Font.GothamBlack
+    pmTierBadge.TextSize = 8
+    pmTierBadge.ZIndex = 82
+    Instance.new("UICorner", pmTierBadge).CornerRadius = UDim.new(1, 0)
+    local pmtbStroke = Instance.new("UIStroke", pmTierBadge)
+    pmtbStroke.Color = Colors.PrimaryDark
+    pmtbStroke.Thickness = 0.8
+
+    local pmClose = Instance.new("TextButton", profileModal)
+    pmClose.Size = UDim2.fromOffset(22, 22)
+    pmClose.Position = UDim2.new(1, -28, 0, 8)
+    pmClose.BackgroundColor3 = Color3.fromRGB(15, 18, 26)
+    pmClose.Text = "✕"
+    pmClose.TextColor3 = Colors.SubText
+    pmClose.Font = Enum.Font.GothamBlack
+    pmClose.TextSize = 10
+    pmClose.ZIndex = 85
+    Instance.new("UICorner", pmClose).CornerRadius = UDim.new(1, 0)
+    applySpringHover(pmClose)
+
+    local pmAvatar = Instance.new("ImageLabel", profileModal)
+    pmAvatar.Size = UDim2.fromOffset(54, 54)
+    pmAvatar.Position = UDim2.fromOffset(16, 26)
+    pmAvatar.BackgroundColor3 = Colors.Background
+    pmAvatar.ZIndex = 83
+    Instance.new("UICorner", pmAvatar).CornerRadius = UDim.new(1, 0)
+    local pmaStroke = Instance.new("UIStroke", pmAvatar)
+    pmaStroke.Color = Colors.Primary
+    pmaStroke.Thickness = 1.4
+
+    local pmOnlineDot = Instance.new("Frame", pmAvatar)
+    pmOnlineDot.Size = UDim2.fromOffset(10, 10)
+    pmOnlineDot.Position = UDim2.new(1, -8, 1, -8)
+    pmOnlineDot.BackgroundColor3 = Color3.fromRGB(50, 255, 140)
+    pmOnlineDot.ZIndex = 84
+    Instance.new("UICorner", pmOnlineDot).CornerRadius = UDim.new(1, 0)
+    local pmodStroke = Instance.new("UIStroke", pmOnlineDot)
+    pmodStroke.Color = Color3.new(0, 0, 0)
+    pmodStroke.Thickness = 1.2
+
+    local pmDispName = Instance.new("TextLabel", profileModal)
+    pmDispName.Size = UDim2.new(1, -95, 0, 18)
+    pmDispName.Position = UDim2.fromOffset(80, 50)
+    pmDispName.BackgroundTransparency = 1
+    pmDispName.Text = "Player"
+    pmDispName.TextColor3 = Colors.Text
+    pmDispName.Font = Enum.Font.GothamBlack
+    pmDispName.TextSize = 13.5
+    pmDispName.TextXAlignment = Enum.TextXAlignment.Left
+    pmDispName.ZIndex = 82
+    crispText(pmDispName, 0.2)
+
+    local pmUserHandle = Instance.new("TextLabel", profileModal)
+    pmUserHandle.Size = UDim2.new(1, -95, 0, 14)
+    pmUserHandle.Position = UDim2.fromOffset(80, 68)
+    pmUserHandle.BackgroundTransparency = 1
+    pmUserHandle.Text = "@player"
+    pmUserHandle.TextColor3 = Colors.SubText
+    pmUserHandle.Font = Enum.Font.GothamMedium
+    pmUserHandle.TextSize = 10
+    pmUserHandle.TextXAlignment = Enum.TextXAlignment.Left
+    pmUserHandle.ZIndex = 82
+
+    local pmStatsRow = Instance.new("Frame", profileModal)
+    pmStatsRow.Size = UDim2.new(1, -32, 0, 46)
+    pmStatsRow.Position = UDim2.fromOffset(16, 96)
+    pmStatsRow.BackgroundColor3 = Color3.fromRGB(15, 18, 26)
+    pmStatsRow.ZIndex = 82
+    Instance.new("UICorner", pmStatsRow).CornerRadius = UDim.new(0, 10)
+
+    local pmStatsLayout = Instance.new("UIListLayout", pmStatsRow)
+    pmStatsLayout.FillDirection = Enum.FillDirection.Horizontal
+    pmStatsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    pmStatsLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+    pmStatsLayout.Padding = UDim.new(0, 16)
+
+    local function makeStatBlock(title, count)
+        local f = Instance.new("Frame", pmStatsRow)
+        f.Size = UDim2.new(0, 60, 1, 0)
+        f.BackgroundTransparency = 1
+        f.ZIndex = 83
+
+        local numLbl = Instance.new("TextLabel", f)
+        numLbl.Size = UDim2.new(1, 0, 0, 20)
+        numLbl.Position = UDim2.fromOffset(0, 6)
+        numLbl.BackgroundTransparency = 1
+        numLbl.Text = tostring(count)
+        numLbl.TextColor3 = Colors.Primary
+        numLbl.Font = Enum.Font.GothamBlack
+        numLbl.TextSize = 14
+        numLbl.ZIndex = 84
+
+        local tLbl = Instance.new("TextLabel", f)
+        tLbl.Size = UDim2.new(1, 0, 0, 14)
+        tLbl.Position = UDim2.fromOffset(0, 24)
+        tLbl.BackgroundTransparency = 1
+        tLbl.Text = title
+        tLbl.TextColor3 = Colors.SubText
+        tLbl.Font = Enum.Font.GothamMedium
+        tLbl.TextSize = 8.5
+        tLbl.ZIndex = 84
+        return numLbl
+    end
+
+    local followersCountLbl = makeStatBlock("Followers", 0)
+    local followingCountLbl = makeStatBlock("Following", 0)
+    local repCountLbl = makeStatBlock("Reputation", 100)
+
+    local pmBio = Instance.new("TextLabel", profileModal)
+    pmBio.Size = UDim2.new(1, -32, 0, 36)
+    pmBio.Position = UDim2.fromOffset(16, 152)
+    pmBio.BackgroundColor3 = Color3.fromRGB(14, 17, 24)
+    pmBio.BackgroundTransparency = 0.3
+    pmBio.TextColor3 = Colors.SubText
+    pmBio.Font = Enum.Font.Gotham
+    pmBio.TextSize = 10
+    pmBio.Text = "Verified TXR Global Network Member."
+    pmBio.TextWrapped = true
+    pmBio.ZIndex = 82
+    Instance.new("UICorner", pmBio).CornerRadius = UDim.new(0, 8)
+    local pmBioPad = Instance.new("UIPadding", pmBio)
+    pmBioPad.PaddingLeft = UDim.new(0, 8)
+    pmBioPad.PaddingRight = UDim.new(0, 8)
+
+    local pmFollowBtn = Instance.new("TextButton", profileModal)
+    pmFollowBtn.Size = UDim2.new(0.5, -20, 0, 32)
+    pmFollowBtn.Position = UDim2.new(0, 16, 1, -44)
+    pmFollowBtn.BackgroundColor3 = Colors.Primary
+    pmFollowBtn.Text = "+ Follow"
+    pmFollowBtn.TextColor3 = Colors.TextDark
+    pmFollowBtn.Font = Enum.Font.GothamBlack
+    pmFollowBtn.TextSize = 11
+    pmFollowBtn.AutoButtonColor = false
+    pmFollowBtn.ZIndex = 83
+    Instance.new("UICorner", pmFollowBtn).CornerRadius = UDim.new(0, 8)
+    applySpringHover(pmFollowBtn)
+
+    local pmDmBtn = Instance.new("TextButton", profileModal)
+    pmDmBtn.Size = UDim2.new(0.5, -20, 0, 32)
+    pmDmBtn.Position = UDim2.new(0.5, 4, 1, -44)
+    pmDmBtn.BackgroundColor3 = Color3.fromRGB(24, 28, 38)
+    pmDmBtn.Text = "Message"
+    pmDmBtn.TextColor3 = Colors.Text
+    pmDmBtn.Font = Enum.Font.GothamBold
+    pmDmBtn.TextSize = 11
+    pmDmBtn.AutoButtonColor = false
+    pmDmBtn.ZIndex = 83
+    Instance.new("UICorner", pmDmBtn).CornerRadius = UDim.new(0, 8)
+    applySpringHover(pmDmBtn)
+
+    local activeProfileTarget = nil
+
+    TXR.Callbacks.OpenProfile = function(username)
+        TXR.Callbacks.HideAllModals()
+        TXR.actionMenu.Visible = false
+        activeProfileTarget = username
+        local lowUser = username:lower()
+        local targetPlr = Players:FindFirstChild(username)
+        local dName = targetPlr and targetPlr.DisplayName or username
+
+        pmDispName.Text = dName
+        pmUserHandle.Text = "@" .. username
+        pmBio.Text = socialData.bios[lowUser] or "Verified TXR Cyber-Titan Member."
+        
+        local fCount = socialData.followers[lowUser] or 0
+        local ingCount = socialData.following[lowUser] or 0
+        followersCountLbl.Text = tostring(fCount)
+        followingCountLbl.Text = tostring(ingCount)
+
+        if fCount >= 10 then
+            pmTierBadge.Text = "CYBER OVERLORD"
+            pmTierBadge.TextColor3 = Colors.Danger
+        elseif fCount >= 5 then
+            pmTierBadge.Text = "TITAN MASTER"
+            pmTierBadge.TextColor3 = Colors.MentionGold
+        elseif fCount >= 2 then
+            pmTierBadge.Text = "TITAN ELITE"
+            pmTierBadge.TextColor3 = Colors.Primary
+        else
+            pmTierBadge.Text = "ROOKIE OPERATOR"
+            pmTierBadge.TextColor3 = Colors.SubText
+        end
+
+        local isFollowing = socialData.myFollowing[lowUser] == true
+        if lowUser == lp.Name:lower() then
+            pmFollowBtn.Visible = false
+            pmDmBtn.Size = UDim2.new(1, -32, 0, 32)
+            pmDmBtn.Position = UDim2.new(0, 16, 1, -44)
+            pmDmBtn.Text = "Edit Bio"
+        else
+            pmFollowBtn.Visible = true
+            pmDmBtn.Size = UDim2.new(0.5, -20, 0, 32)
+            pmDmBtn.Position = UDim2.new(0.5, 4, 1, -44)
+            pmDmBtn.Text = "Message"
+
+            if isFollowing then
+                pmFollowBtn.Text = "✓ Following"
+                pmFollowBtn.BackgroundColor3 = Color3.fromRGB(22, 28, 38)
+                pmFollowBtn.TextColor3 = Colors.Primary
+            else
+                pmFollowBtn.Text = "+ Follow"
+                pmFollowBtn.BackgroundColor3 = Colors.Primary
+                pmFollowBtn.TextColor3 = Colors.TextDark
+            end
+        end
+
+        task.spawn(function()
+            local uId = targetPlr and targetPlr.UserId or userIdCache[lowUser]
+            if not uId then
+                pcall(function() uId = Players:GetUserIdFromNameAsync(username); userIdCache[lowUser] = uId end)
+            end
+            if uId and pmAvatar then pmAvatar.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=150&h=150", uId) end
+        end)
+
+        profileModal.Visible = true
+        TweenService:Create(pmScale, TweenInfo.new(0.35, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Scale = 1}):Play()
+    end
+
+    createHeaderBtn("PRF", function() TXR.Callbacks.OpenProfile(lp.Name) end)
+
+    pmClose.MouseButton1Click:Connect(function()
+        TweenService:Create(pmScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
+        task.delay(0.2, function() profileModal.Visible = false end)
+    end)
+
+    pmFollowBtn.MouseButton1Click:Connect(function()
+        if not activeProfileTarget or activeProfileTarget:lower() == lp.Name:lower() then return end
+        local lowTarget = activeProfileTarget:lower()
+        local isFollowing = socialData.myFollowing[lowTarget] == true
+
+        if isFollowing then
+            socialData.myFollowing[lowTarget] = nil
+            socialData.followers[lowTarget] = math.max(0, (socialData.followers[lowTarget] or 1) - 1)
+            pmFollowBtn.Text = "+ Follow"
+            pmFollowBtn.BackgroundColor3 = Colors.Primary
+            pmFollowBtn.TextColor3 = Colors.TextDark
+        else
+            socialData.myFollowing[lowTarget] = true
+            socialData.followers[lowTarget] = (socialData.followers[lowTarget] or 0) + 1
+            pmFollowBtn.Text = "✓ Following"
+            pmFollowBtn.BackgroundColor3 = Color3.fromRGB(22, 28, 38)
+            pmFollowBtn.TextColor3 = Colors.Primary
+            playSFX("mention")
+        end
+        followersCountLbl.Text = tostring(socialData.followers[lowTarget])
+        task.spawn(function()
+            if req then
+                local actionMsg = isFollowing and ("[UNFOLLOW:" .. activeProfileTarget .. "]") or ("[FOLLOW:" .. activeProfileTarget .. "]")
+                pcall(function()
+                    req({ Url = SERVER_URL .. "/send", Method = "POST", Headers = { ["Content-Type"] = "application/json" }, Body = HttpService:JSONEncode({ user = lp.Name .. "::" .. lp.DisplayName, msg = actionMsg, jobId = jobId, hidden = true }) })
+                end)
+            end
+        end)
+    end)
+
+    pmDmBtn.MouseButton1Click:Connect(function()
+        if not activeProfileTarget then return end
+        if activeProfileTarget:lower() == lp.Name:lower() then
+            chatInput.Text = "!bio "
+            chatInput:CaptureFocus()
+        else
+            TXR.State.privateTarget = activeProfileTarget
+            updateInputBar()
+            playSFX("dm")
+        end
+        pmClose.MouseButton1Click:Fire()
+    end)
+
+    -- =========================================================
+    -- 🏆 GLOBAL FAME LEADERBOARD (iOS SHEET MODAL)
+    -- =========================================================
+    leaderboardModal = Instance.new("Frame", mainFrame)
+    leaderboardModal.Size = UDim2.fromOffset(250, 260)
+    leaderboardModal.Position = UDim2.new(0.5, -125, 0.5, -130)
+    leaderboardModal.BackgroundColor3 = Color3.fromRGB(10, 13, 18)
+    leaderboardModal.BackgroundTransparency = 0.04
+    leaderboardModal.Visible = false
+    leaderboardModal.ZIndex = 80
+    Instance.new("UICorner", leaderboardModal).CornerRadius = UDim.new(0, 16)
+
+    local lbScale = Instance.new("UIScale", leaderboardModal)
+    lbScale.Scale = 0
+
+    local lbmStroke = Instance.new("UIStroke", leaderboardModal)
+    lbmStroke.Color = Colors.MentionGold
+    lbmStroke.Thickness = 1.2
+    lbmStroke.Transparency = 0.3
+
+    local lbHeader = Instance.new("TextLabel", leaderboardModal)
+    lbHeader.Size = UDim2.new(1, -40, 0, 32)
+    lbHeader.Position = UDim2.fromOffset(16, 6)
+    lbHeader.BackgroundTransparency = 1
+    lbHeader.Text = "👑 GLOBAL FAME BOARD"
+    lbHeader.TextColor3 = Colors.MentionGold
+    lbHeader.Font = Enum.Font.GothamBlack
+    lbHeader.TextSize = 11
+    lbHeader.TextXAlignment = Enum.TextXAlignment.Left
+    lbHeader.ZIndex = 82
+    crispText(lbHeader, 0.2)
+
+    local lbClose = Instance.new("TextButton", leaderboardModal)
+    lbClose.Size = UDim2.fromOffset(22, 22)
+    lbClose.Position = UDim2.new(1, -28, 0, 8)
+    lbClose.BackgroundColor3 = Colors.Surface
+    lbClose.Text = "✕"
+    lbClose.TextColor3 = Colors.SubText
+    lbClose.Font = Enum.Font.GothamBlack
+    lbClose.TextSize = 10
+    lbClose.ZIndex = 85
+    Instance.new("UICorner", lbClose).CornerRadius = UDim.new(1, 0)
+    applySpringHover(lbClose)
+
+    lbClose.MouseButton1Click:Connect(function()
+        TweenService:Create(lbScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
+        task.delay(0.2, function() leaderboardModal.Visible = false end)
+    end)
+
+    local lbScroll = Instance.new("ScrollingFrame", leaderboardModal)
+    lbScroll.Size = UDim2.new(1, -20, 1, -48)
+    lbScroll.Position = UDim2.fromOffset(10, 38)
+    lbScroll.BackgroundTransparency = 1
+    lbScroll.ScrollBarThickness = 1
+    lbScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    lbScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+    lbScroll.ZIndex = 82
+
+    local lbListLayout = Instance.new("UIListLayout", lbScroll)
+    lbListLayout.Padding = UDim.new(0, 5)
+
+    createHeaderBtn("TOP", function()
+        TXR.Callbacks.HideAllModals()
+        for _, c in ipairs(lbScroll:GetChildren()) do
+            if c:IsA("GuiObject") and c.Name ~= "UIListLayout" then c:Destroy() end
+        end
+
+        local rankList = {}
+        local seen = {}
+        for u, _ in pairs(activeUsersTable) do
+            local low = u:lower()
+            if not seen[low] then
+                seen[low] = true; table.insert(rankList, {name = u, count = socialData.followers[low] or 0})
+            end
+        end
+        for low, count in pairs(socialData.followers) do
+            if not seen[low] then
+                seen[low] = true; table.insert(rankList, {name = knownUsers[low] or low, count = count})
+            end
+        end
+
+        table.sort(rankList, function(a, b) return a.count > b.count end)
+
+        for rank, item in ipairs(rankList) do
+            local rankCard = Instance.new("TextButton", lbScroll)
+            rankCard.Size = UDim2.new(1, 0, 0, 30)
+            rankCard.BackgroundColor3 = Color3.fromRGB(15, 18, 26)
+            rankCard.Text = ""
+            rankCard.AutoButtonColor = false
+            rankCard.ZIndex = 83
+            Instance.new("UICorner", rankCard).CornerRadius = UDim.new(0, 8)
+
+            local medal = tostring(rank)
+            local medalColor = Colors.SubText
+            if rank == 1 then medal = "👑"; medalColor = Colors.MentionGold
+            elseif rank == 2 then medal = "🥈"; medalColor = Color3.fromRGB(210, 220, 235)
+            elseif rank == 3 then medal = "🥉"; medalColor = Color3.fromRGB(205, 130, 80)
+            end
+
+            local rankBadge = Instance.new("TextLabel", rankCard)
+            rankBadge.Size = UDim2.fromOffset(24, 30)
+            rankBadge.BackgroundTransparency = 1; rankBadge.Text = medal; rankBadge.TextColor3 = medalColor; rankBadge.Font = Enum.Font.GothamBlack; rankBadge.TextSize = 11; rankBadge.ZIndex = 84
+
+            local nameTxt = Instance.new("TextLabel", rankCard)
+            nameTxt.Size = UDim2.new(1, -95, 1, 0); nameTxt.Position = UDim2.fromOffset(26, 0); nameTxt.BackgroundTransparency = 1
+            nameTxt.Text = "@" .. item.name; nameTxt.TextColor3 = (rank == 1 and Colors.MentionGold or Colors.Text); nameTxt.Font = Enum.Font.GothamBold; nameTxt.TextSize = 10.5; nameTxt.TextXAlignment = Enum.TextXAlignment.Left; nameTxt.ZIndex = 84
+
+            local fCountTxt = Instance.new("TextLabel", rankCard)
+            fCountTxt.Size = UDim2.fromOffset(60, 30); fCountTxt.Position = UDim2.new(1, -66, 0, 0); fCountTxt.BackgroundTransparency = 1
+            fCountTxt.Text = item.count .. " fans"; fCountTxt.TextColor3 = Colors.Primary; fCountTxt.Font = Enum.Font.GothamMedium; fCountTxt.TextSize = 9.5; fCountTxt.TextXAlignment = Enum.TextXAlignment.Right; fCountTxt.ZIndex = 84
+
+            applySpringHover(rankCard)
+            rankCard.MouseButton1Click:Connect(function()
+                lbClose.MouseButton1Click:Fire()
+                TXR.Callbacks.OpenProfile(item.name)
+            end)
+        end
+
+        leaderboardModal.Visible = true
+        TweenService:Create(lbScale, TweenInfo.new(0.35, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Scale = 1}):Play()
+    end)
+
+    -- =========================================================
+    -- 🏷️ 16 ELITE LIVE ANIMATED BADGE PRESET SELECTOR
+    -- =========================================================
+    badgeSelectorModal = Instance.new("Frame", mainFrame)
+    badgeSelectorModal.Size = UDim2.fromOffset(240, 250)
+    badgeSelectorModal.Position = UDim2.new(1, -250, 0, 44)
+    badgeSelectorModal.BackgroundColor3 = Color3.fromRGB(12, 16, 24)
+    badgeSelectorModal.BackgroundTransparency = 0.05
+    badgeSelectorModal.Visible = false
+    badgeSelectorModal.ZIndex = 70
+    Instance.new("UICorner", badgeSelectorModal).CornerRadius = UDim.new(0, 10)
+
+    local bsmScale = Instance.new("UIScale", badgeSelectorModal)
+    bsmScale.Scale = 0
+
+    local bsStroke = Instance.new("UIStroke", badgeSelectorModal)
+    bsStroke.Color = Colors.PrimaryDark
+    bsStroke.Thickness = 1.0
+    bsStroke.Transparency = 0.2
+    
+    local bsTitle = Instance.new("TextLabel", badgeSelectorModal)
+    bsTitle.Size = UDim2.new(1, 0, 0, 28)
+    bsTitle.BackgroundTransparency = 1
+    bsTitle.Text = "SELECT LIVE TAG"
+    bsTitle.TextColor3 = Colors.Primary
+    bsTitle.Font = Enum.Font.GothamBlack
+    bsTitle.TextSize = 10
+    bsTitle.ZIndex = 71
+
+    local bsScroll = Instance.new("ScrollingFrame", badgeSelectorModal)
+    bsScroll.Size = UDim2.new(1, -10, 1, -34)
+    bsScroll.Position = UDim2.fromOffset(5, 28)
+    bsScroll.BackgroundTransparency = 1
+    bsScroll.ScrollBarThickness = 2
+    bsScroll.ScrollBarImageColor3 = Colors.Primary
+    bsScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    bsScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+    bsScroll.ZIndex = 71
+
+    local bsLayout = Instance.new("UIListLayout", bsScroll)
+    bsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    bsLayout.Padding = UDim.new(0, 4)
+
+    local badgeKeysOrder = {
+        "OWNER", "DADDY", "TITAN", "OVERLORD", "PHANTOM", "DEV", "VIP", "GOD",
+        "CYBER", "VOID", "ZENITH", "APEX", "LUCIFER", "SUPREME", "ROYAL", "DEMON"
+    }
+    local modalSelectionIndicators = {}
+
+    for _, bKey in ipairs(badgeKeysOrder) do
+        local bData = BadgePresets[bKey]
+        local bBtn = Instance.new("TextButton", bsScroll)
+        bBtn.Size = UDim2.new(0.95, 0, 0, 30)
+        bBtn.BackgroundColor3 = Colors.Surface
+        bBtn.BackgroundTransparency = 0.3
+        bBtn.Text = "" 
+        bBtn.AutoButtonColor = false
+        bBtn.ZIndex = 72
+        Instance.new("UICorner", bBtn).CornerRadius = UDim.new(0, 6)
+        
+        local btnStroke = Instance.new("UIStroke", bBtn)
+        btnStroke.Color = Colors.PrimaryDark
+        btnStroke.Thickness = 0.8
+        btnStroke.Transparency = 0.5
+        
+        local tagWidth = TextService:GetTextSize(bData.Title, 11, Enum.Font.GothamBlack, Vector2.new(1000, 20)).X + 4
+        
+        local badgeHost = Instance.new("Frame", bBtn)
+        badgeHost.Size = UDim2.fromOffset(tagWidth, 18)
+        badgeHost.AnchorPoint = Vector2.new(0, 0.5)
+        badgeHost.Position = UDim2.new(0, 12, 0.5, 0)
+        badgeHost.BackgroundTransparency = 1
+        badgeHost.BorderSizePixel = 0
+        badgeHost.ZIndex = 73
+
+        local badgeGlow = Instance.new("TextLabel", badgeHost)
+        badgeGlow.Size = UDim2.fromScale(1, 1)
+        badgeGlow.BackgroundTransparency = 1; badgeGlow.BorderSizePixel = 0; badgeGlow.Text = bData.Title; badgeGlow.TextColor3 = Color3.fromRGB(255, 255, 255); badgeGlow.TextTransparency = 0.50; badgeGlow.Font = Enum.Font.GothamBlack; badgeGlow.TextSize = 11; badgeGlow.ZIndex = 73
+        local glowStroke = Instance.new("UIStroke", badgeGlow); glowStroke.Thickness = 1.0; glowStroke.Transparency = 0.55; glowStroke.Color = Color3.fromRGB(255, 255, 255)
+
+        local badgeLabel = Instance.new("TextLabel", badgeHost)
+        badgeLabel.Size = UDim2.fromScale(1, 1); badgeLabel.BackgroundTransparency = 1; badgeLabel.BorderSizePixel = 0; badgeLabel.Text = bData.Title; badgeLabel.TextColor3 = Color3.fromRGB(255, 255, 255); badgeLabel.Font = Enum.Font.GothamBlack; badgeLabel.TextSize = 11; badgeLabel.ZIndex = 74
+        local bStroke = Instance.new("UIStroke", badgeLabel); bStroke.Thickness = 0.8; bStroke.Color = Color3.fromRGB(0, 0, 0); bStroke.Transparency = 0.3
+
+        local badgeShine = Instance.new("TextLabel", badgeHost)
+        badgeShine.Size = UDim2.fromScale(1, 1); badgeShine.BackgroundTransparency = 1; badgeShine.BorderSizePixel = 0; badgeShine.Text = bData.Title; badgeShine.TextColor3 = Color3.fromRGB(255, 255, 255); badgeShine.Font = Enum.Font.GothamBlack; badgeShine.TextSize = 11; badgeShine.ZIndex = 75
+        local shineGrad = Instance.new("UIGradient", badgeShine)
+        shineGrad.Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.new(1,1,1)), ColorSequenceKeypoint.new(0.48, Color3.new(1,1,1)), ColorSequenceKeypoint.new(0.5, Color3.new(1,1,1)), ColorSequenceKeypoint.new(0.52, Color3.new(1,1,1)), ColorSequenceKeypoint.new(1, Color3.new(1,1,1)) })
+        shineGrad.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(0.45, 1), NumberSequenceKeypoint.new(0.5, 0.05), NumberSequenceKeypoint.new(0.55, 1), NumberSequenceKeypoint.new(1, 1) })
+
+        local textGrad = Instance.new("UIGradient", badgeLabel); textGrad.Color = ColorSequence.new(bData.Colors)
+        local glowGrad = Instance.new("UIGradient", badgeGlow); glowGrad.Color = ColorSequence.new(bData.Colors)
+        local strokeGradGlow = Instance.new("UIGradient", glowStroke); strokeGradGlow.Color = ColorSequence.new(bData.Colors)
+
+        table.insert(activeBadgesList, { textGrad = textGrad, glowGrad = glowGrad, strokeGradGlow = strokeGradGlow, shineGrad = shineGrad, badgeGlow = badgeGlow, glowStroke = glowStroke, speed = bData.Speed or 1.15 })
+
+        local dotIndicator = Instance.new("Frame", bBtn)
+        dotIndicator.Size = UDim2.fromOffset(8, 8); dotIndicator.AnchorPoint = Vector2.new(1, 0.5); dotIndicator.Position = UDim2.new(1, -12, 0.5, 0); dotIndicator.BackgroundColor3 = Color3.fromRGB(50, 255, 140)
+        dotIndicator.BackgroundTransparency = (TXR.State.currentOwnerBadge == bKey) and 0.1 or 1; dotIndicator.ZIndex = 74
+        Instance.new("UICorner", dotIndicator).CornerRadius = UDim.new(1, 0)
+        local dStroke = Instance.new("UIStroke", dotIndicator); dStroke.Color = Color3.fromRGB(0, 0, 0); dStroke.Transparency = (TXR.State.currentOwnerBadge == bKey) and 0.4 or 1
+        modalSelectionIndicators[bKey] = {dot = dotIndicator, stroke = dStroke}
+
+        applySpringHover(bBtn)
+        bBtn.MouseButton1Click:Connect(function()
+            TXR.State.currentOwnerBadge = bKey
+            for k, ind in pairs(modalSelectionIndicators) do
+                ind.dot.BackgroundTransparency = (k == TXR.State.currentOwnerBadge) and 0.1 or 1
+                ind.stroke.Transparency = (k == TXR.State.currentOwnerBadge) and 0.4 or 1
+            end
+            TweenService:Create(bsmScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
+            task.delay(0.2, function() badgeSelectorModal.Visible = false end)
+            playSFX("default")
+        end)
+    end
+
+    if TXR.isAdmin then
+        createHeaderBtn("TAG", function()
+            local isOpen = badgeSelectorModal.Visible
+            TXR.Callbacks.HideAllModals()
+            if not isOpen then
+                badgeSelectorModal.Visible = true
+                TweenService:Create(bsmScale, TweenInfo.new(0.35, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Scale = 1}):Play()
+            end
+        end)
+    end
+
+    -- =========================================================
+    -- 😀 EMOJI MODAL DRAWER
+    -- =========================================================
+    emojiFrame = Instance.new("Frame", mainFrame)
+    emojiFrame.Size = UDim2.new(0, 240, 0, 160)
+    emojiFrame.Position = UDim2.new(0.5, -120, 0.5, -80)
+    emojiFrame.BackgroundColor3 = Colors.Surface
+    emojiFrame.BackgroundTransparency = 0.05
+    emojiFrame.Visible = false
+    emojiFrame.ZIndex = 30
+    Instance.new("UICorner", emojiFrame).CornerRadius = UDim.new(0, 10)
+    local efStroke = Instance.new("UIStroke", emojiFrame); efStroke.Color = Colors.Primary; efStroke.Thickness = 1.0; efStroke.Transparency = 0.3
+
+    local emojiScroll = Instance.new("ScrollingFrame", emojiFrame)
+    emojiScroll.Size = UDim2.new(1, -8, 1, -8); emojiScroll.Position = UDim2.fromOffset(4, 4); emojiScroll.BackgroundTransparency = 1; emojiScroll.ScrollBarThickness = 2; emojiScroll.CanvasSize = UDim2.new(0, 0, 2.5, 0); emojiScroll.ZIndex = 31
+    local emojiGrid = Instance.new("UIGridLayout", emojiScroll); emojiGrid.CellSize = UDim2.new(0, 26, 0, 26); emojiGrid.CellPadding = UDim2.new(0, 3, 0, 3)
+
+    local emojiRaw = "😃😁😆😂🤣😎🫡🔥💀❤️🖤✨💯👑⚡⚠️🔒💬🍜🍕🚀🎉"
+    if utf8 and utf8.graphemes then
+        for p, c in utf8.graphemes(emojiRaw) do
+            local em = string.sub(emojiRaw, p, c)
+            local btn = Instance.new("TextButton", emojiScroll)
+            btn.Text = em; btn.TextSize = 15; btn.BackgroundTransparency = 1; btn.ZIndex = 32
+            btn.MouseButton1Click:Connect(function() chatInput.Text = chatInput.Text .. em; chatInput:CaptureFocus() end)
+        end
+    end
+
+    TXR.emojiBtn.MouseButton1Click:Connect(function()
+        local isOpen = emojiFrame.Visible
+        TXR.Callbacks.HideAllModals()
+        emojiFrame.Visible = not isOpen
+    end)
+
+    -- =========================================================
+    -- 🎭 MEME / STICKER MODAL DRAWER
+    -- =========================================================
+    memeFrame = Instance.new("Frame", mainFrame)
+    memeFrame.Size = UDim2.new(0, 280, 0, 190)
+    memeFrame.Position = UDim2.new(0.5, -140, 0.5, -95)
+    memeFrame.BackgroundColor3 = Colors.Surface
+    memeFrame.BackgroundTransparency = 0.05
+    memeFrame.Visible = false
+    memeFrame.ZIndex = 30
+    Instance.new("UICorner", memeFrame).CornerRadius = UDim.new(0, 10)
+    local mfStroke = Instance.new("UIStroke", memeFrame); mfStroke.Color = Colors.Purple; mfStroke.Thickness = 1.0; mfStroke.Transparency = 0.3
+
+    local mfTitle = Instance.new("TextLabel", memeFrame)
+    mfTitle.Size = UDim2.new(1, 0, 0, 24); mfTitle.BackgroundTransparency = 1; mfTitle.Text = "MEME STICKERS"; mfTitle.TextColor3 = Colors.Purple; mfTitle.Font = Enum.Font.GothamBlack; mfTitle.TextSize = 10; mfTitle.ZIndex = 31
+
+    local memeScroll = Instance.new("ScrollingFrame", memeFrame)
+    memeScroll.Size = UDim2.new(1, -8, 1, -28); memeScroll.Position = UDim2.fromOffset(4, 24); memeScroll.BackgroundTransparency = 1; memeScroll.ScrollBarThickness = 2; memeScroll.CanvasSize = UDim2.new(0, 0, 0, 0); memeScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y; memeScroll.ZIndex = 31
+    local memeGrid = Instance.new("UIGridLayout", memeScroll); memeGrid.CellSize = UDim2.new(0, 60, 0, 60); memeGrid.CellPadding = UDim2.new(0, 6, 0, 6)
+
+    for _, mData in ipairs(MemeLibrary) do
+        local mItem = Instance.new("ImageButton", memeScroll)
+        mItem.BackgroundColor3 = Colors.Background; mItem.Image = getAssetThumb(mData.id); mItem.ScaleType = Enum.ScaleType.Fit; mItem.ZIndex = 32
+        Instance.new("UICorner", mItem).CornerRadius = UDim.new(0, 8)
+        local is = Instance.new("UIStroke", mItem); is.Color = Colors.PrimaryDark; is.Thickness = 1; is.Transparency = 0.6
+        applySpringHover(mItem)
+        mItem.MouseButton1Click:Connect(function()
+            memeFrame.Visible = false
+            if sendMessageFunc then sendMessageFunc(string.format("[MEME:%d]", mData.id)) end
+        end)
+    end
+
+    TXR.memeBtn.MouseButton1Click:Connect(function()
+        local isOpen = memeFrame.Visible
+        TXR.Callbacks.HideAllModals()
+        memeFrame.Visible = not isOpen
+    end)
+end
