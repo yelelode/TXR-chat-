@@ -1,20 +1,21 @@
 -- =========================================================
--- 🌐 DELTA/UNIVERSAL MOBILE COMPATIBILITY SHIM
+-- 🌐 DELTA/UNIVERSAL MOBILE COMPATIBILITY SHIM (FIXED)
 -- =========================================================
 pcall(function()
     local g = (getgenv and getgenv()) or _G or shared
     if not g.gethui then
         g.gethui = function()
             local lp = game:GetService("Players").LocalPlayer
-            local cg = pcall(function() return game:GetService("CoreGui") end)
-            return (cg and game:GetService("CoreGui")) or (lp and lp:FindFirstChild("PlayerGui")) or nil
+            local success, cg = pcall(function() return game:GetService("CoreGui") end)
+            if success and cg then return cg end
+            return lp and lp:FindFirstChild("PlayerGui") or nil
         end
     end
     g.TXR_RepoBranch = "main" 
 end)
 
 -- =========================================================
--- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V11 SUPREME OLED) 👑
+-- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V11.1 SUPREME OLED) 👑
 -- =========================================================
 
 local currentExecutionID = tick()
@@ -800,8 +801,8 @@ rfTitle.Size = UDim2.new(1, 0, 0, 26)
 rfTitle.BackgroundTransparency = 1
 rfTitle.Text = "ONLINE USERS"
 rfTitle.TextColor3 = Colors.Primary
-rfTitle.Font = Enum.Font.Bodoni 
-rfTitle.TextSize = 11.5
+rfTitle.Font = Enum.Font.GothamBlack 
+rfTitle.TextSize = 10.5
 rfTitle.ZIndex = 41
 
 local rosterScroll = Instance.new("ScrollingFrame", rosterFrame)
@@ -878,8 +879,8 @@ headerTitle.Size = UDim2.new(0, 0, 0, 24)
 headerTitle.BackgroundTransparency = 1
 headerTitle.Text = "TXR // TITAN"
 headerTitle.TextColor3 = Colors.Primary
-headerTitle.Font = Enum.Font.Bodoni
-headerTitle.TextSize = 14.5
+headerTitle.Font = Enum.Font.GothamBlack
+headerTitle.TextSize = 12.5
 headerTitle.TextXAlignment = Enum.TextXAlignment.Left
 headerTitle.ZIndex = 12
 crispText(headerTitle, 0.1)
@@ -1044,11 +1045,8 @@ createHeaderBtn("CLR", function()
     coreGlow.ImageColor3 = th.Primary
     eventGlow.ImageColor3 = th.Accent
     
-    -- Sync UI components with new theme
+    -- Sync main UI elements safely
     mainStroke.Color = th.Primary
-    rfTitle.TextColor3 = th.Primary
-    mfTitle.TextColor3 = th.Primary
-    bsTitle.TextColor3 = th.Primary
 end)
 
 local ghostBtn
@@ -1291,8 +1289,8 @@ pmTierBadge.BackgroundColor3 = Color3.fromRGB(12, 16, 24)
 pmTierBadge.BackgroundTransparency = 0.3
 pmTierBadge.Text = "TITAN LEGEND"
 pmTierBadge.TextColor3 = Colors.Primary
-pmTierBadge.Font = Enum.Font.Bodoni
-pmTierBadge.TextSize = 10
+pmTierBadge.Font = Enum.Font.GothamBlack
+pmTierBadge.TextSize = 8
 pmTierBadge.ZIndex = 82
 Instance.new("UICorner", pmTierBadge).CornerRadius = UDim.new(1, 0)
 local pmtbStroke = Instance.new("UIStroke", pmTierBadge)
@@ -1338,8 +1336,8 @@ pmDispName.Position = UDim2.fromOffset(80, 50)
 pmDispName.BackgroundTransparency = 1
 pmDispName.Text = "Player"
 pmDispName.TextColor3 = Colors.Text
-pmDispName.Font = Enum.Font.Bodoni
-pmDispName.TextSize = 16.5
+pmDispName.Font = Enum.Font.GothamBlack
+pmDispName.TextSize = 13.5
 pmDispName.TextXAlignment = Enum.TextXAlignment.Left
 pmDispName.ZIndex = 82
 crispText(pmDispName, 0.2)
@@ -1603,8 +1601,8 @@ lbHeader.Position = UDim2.fromOffset(16, 6)
 lbHeader.BackgroundTransparency = 1
 lbHeader.Text = "👑 GLOBAL FAME BOARD"
 lbHeader.TextColor3 = Colors.MentionGold
-lbHeader.Font = Enum.Font.Bodoni
-lbHeader.TextSize = 13
+lbHeader.Font = Enum.Font.GothamBlack
+lbHeader.TextSize = 11
 lbHeader.TextXAlignment = Enum.TextXAlignment.Left
 lbHeader.ZIndex = 82
 crispText(lbHeader, 0.2)
@@ -1748,8 +1746,8 @@ bsTitle.Size = UDim2.new(1, 0, 0, 28)
 bsTitle.BackgroundTransparency = 1
 bsTitle.Text = "SELECT LIVE TAG"
 bsTitle.TextColor3 = Colors.Primary
-bsTitle.Font = Enum.Font.Bodoni
-bsTitle.TextSize = 12
+bsTitle.Font = Enum.Font.GothamBlack
+bsTitle.TextSize = 10
 bsTitle.ZIndex = 71
 
 local bsScroll = Instance.new("ScrollingFrame", badgeSelectorModal)
@@ -2901,8 +2899,8 @@ mfTitle.Size = UDim2.new(1, 0, 0, 24)
 mfTitle.BackgroundTransparency = 1
 mfTitle.Text = "MEME STICKERS"
 mfTitle.TextColor3 = Colors.Purple
-mfTitle.Font = Enum.Font.Bodoni
-mfTitle.TextSize = 11.5
+mfTitle.Font = Enum.Font.GothamBlack
+mfTitle.TextSize = 10
 mfTitle.ZIndex = 31
 
 local memeScroll = Instance.new("ScrollingFrame", memeFrame)
@@ -3662,5 +3660,5 @@ task.spawn(function()
             })
         end)
     end
-    addMessageToFeed("System::System", "TXR Cyber-Titan V11 Supreme Online! Type !bio [msg] to update status.", nil, false, game.JobId, "global")
+    addMessageToFeed("System::System", "TXR Cyber-Titan V11.1 Supreme Online! Bug patched. Type !bio [msg] to update status.", nil, false, game.JobId, "global")
 end)
