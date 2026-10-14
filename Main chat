@@ -12,7 +12,7 @@ pcall(function()
 end)
 
 -- =========================================================
--- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V22.0 REAL-CHAT EDITION) 👑
+-- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V23.0 SWIPE REAL-CHAT) 👑
 -- =========================================================
 
 local currentExecutionID = tick()
@@ -99,8 +99,8 @@ local currentThemeIdx = 1
 local Colors = {
     Background    = Color3.fromRGB(10, 14, 22),       
     Surface       = Color3.fromRGB(18, 24, 36),          
-    SurfaceSelf   = Color3.fromRGB(16, 30, 42),
-    SurfaceAI     = Color3.fromRGB(18, 22, 42),
+    SurfaceSelf   = Color3.fromRGB(15, 30, 44),
+    SurfaceAI     = Color3.fromRGB(18, 22, 44),
     SurfaceHover  = Color3.fromRGB(28, 36, 52),     
     ActiveTint    = Themes[1].ActiveTint,       
     Primary       = Themes[1].Primary,         
@@ -316,7 +316,7 @@ end
 local function crispText(element, overrideTransparency)
     local stroke = element:FindFirstChildOfClass("UIStroke") or Instance.new("UIStroke", element)
     stroke.Color = Color3.new(0, 0, 0)
-    stroke.Transparency = overrideTransparency or 0.42
+    stroke.Transparency = overrideTransparency or 0.40
     stroke.Thickness = 1.0
 end
 
@@ -366,6 +366,7 @@ local lastSyncTime = 0
 local isInitialSync = true
 local chatMode = "server" 
 local privateTarget = nil
+local activeReplyData = nil -- Stores { user = ..., text = ... } for Swipe-to-Reply
 local knownUsers = {}
 local activeUsersTable = {}
 local unreadCount = 0
@@ -376,7 +377,6 @@ local activeBadgesList = {}
 local activeAICoresList = {}
 local modalSelectionIndicators = {}
 
--- ⚡ DEDUPLICATION ENGINE CACHE
 local processedServerMessageMap = {}
 local recentLocalSentMap = {}
 
@@ -422,7 +422,7 @@ gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 local shadow = Instance.new("ImageLabel", gui)
 shadow.AnchorPoint = Vector2.new(0.5, 0.5)
 shadow.Position = UDim2.fromScale(0.4, 0.5)
-shadow.Size = UDim2.new(0, 490, 0, 400)
+shadow.Size = UDim2.new(0, 495, 0, 405)
 shadow.BackgroundTransparency = 1
 shadow.Image = "rbxassetid://1316045217"
 shadow.ImageColor3 = Color3.new(0, 0, 0)
@@ -432,7 +432,7 @@ shadow.ZIndex = 1
 local aura = Instance.new("ImageLabel", gui)
 aura.AnchorPoint = Vector2.new(0.5, 0.5)
 aura.Position = UDim2.fromScale(0.4, 0.5)
-aura.Size = UDim2.new(0, 468, 0, 378)
+aura.Size = UDim2.new(0, 472, 0, 384)
 aura.BackgroundTransparency = 1
 aura.Image = "rbxassetid://1316045217"
 aura.ImageColor3 = Colors.Primary
@@ -447,7 +447,7 @@ shadowScale.Scale = 1
 local mainFrame = Instance.new("Frame", gui)
 mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 mainFrame.Position = UDim2.fromScale(0.4, 0.5)
-mainFrame.Size = UDim2.new(0, 446, 0, 356)
+mainFrame.Size = UDim2.new(0, 450, 0, 362)
 mainFrame.BackgroundColor3 = Colors.Background
 mainFrame.BackgroundTransparency = 0.10
 mainFrame.ClipsDescendants = true
@@ -821,7 +821,6 @@ header.BackgroundTransparency = 1
 header.Active = true
 header.ZIndex = 10
 
--- Sleek Top Grab Bar Indicator (Visual cue for dragging)
 local dragPill = Instance.new("Frame", header)
 dragPill.Size = UDim2.fromOffset(38, 3)
 dragPill.AnchorPoint = Vector2.new(0.5, 0)
@@ -898,7 +897,6 @@ liveBadge.MouseButton1Click:Connect(function()
     end
 end)
 
--- Header Action Buttons
 local headerRightCluster = Instance.new("Frame", header)
 headerRightCluster.AnchorPoint = Vector2.new(1, 0.5)
 headerRightCluster.Position = UDim2.new(1, -12, 0.5, 1)
@@ -991,7 +989,6 @@ end)
 
 local messageFeed
 
--- ⚡ ULTRA FROSTED GLASS HUD TOGGLE (GST MODE)
 local ghostBtn
 ghostBtn = createHeaderBtn("GST", function()
     if ghostDebounce then return end
@@ -1010,9 +1007,10 @@ ghostBtn = createHeaderBtn("GST", function()
         mainStroke.Thickness = 1.6
         badgeSelectorModal.BackgroundTransparency = 0.45
 
-        for _, card in ipairs(messageFeed:GetChildren()) do
-            if card:IsA("TextButton") then
-                card.BackgroundTransparency = 0.55
+        for _, cardWrap in ipairs(messageFeed:GetChildren()) do
+            local inner = cardWrap:FindFirstChild("CardSurface")
+            if inner then
+                inner.BackgroundTransparency = 0.55
             end
         end
     else
@@ -1026,9 +1024,10 @@ ghostBtn = createHeaderBtn("GST", function()
         mainStroke.Thickness = 1.5
         badgeSelectorModal.BackgroundTransparency = 0.05
 
-        for _, card in ipairs(messageFeed:GetChildren()) do
-            if card:IsA("TextButton") then
-                card.BackgroundTransparency = 0.28
+        for _, cardWrap in ipairs(messageFeed:GetChildren()) do
+            local inner = cardWrap:FindFirstChild("CardSurface")
+            if inner then
+                inner.BackgroundTransparency = 0.26
             end
         end
     end
@@ -1103,7 +1102,6 @@ tsStroke.Thickness = 1
 tsStroke.Color = Colors.SurfaceHover
 tsStroke.Transparency = 0.4
 
--- 1. SERVER TAB (First Position - Ephemeral to Current Server)
 serverBtn = Instance.new("TextButton", tabShell)
 serverBtn.Size = UDim2.new(0.5, -2, 1, -4)
 serverBtn.Position = UDim2.new(0, 2, 0, 2)
@@ -1117,7 +1115,6 @@ serverBtn.ZIndex = 10
 Instance.new("UICorner", serverBtn).CornerRadius = UDim.new(0, 6)
 crispText(serverBtn, 0.4)
 
--- 2. GLOBAL TAB (Second Position - Persistent Across Servers)
 globalBtn = Instance.new("TextButton", tabShell)
 globalBtn.Size = UDim2.new(0.5, -2, 1, -4)
 globalBtn.Position = UDim2.new(0.5, 0, 0, 2)
@@ -1131,7 +1128,6 @@ globalBtn.ZIndex = 10
 Instance.new("UICorner", globalBtn).CornerRadius = UDim.new(0, 6)
 crispText(globalBtn, 0.4)
 
--- ⚡ STRICT SERVER WIPE & GLOBAL PERSISTENCE FILTER
 local function filterFeedMode()
     CURRENT_SESSION_JOB = tostring(game.JobId)
     for _, card in ipairs(messageFeed:GetChildren()) do
@@ -1139,24 +1135,15 @@ local function filterFeedMode()
             local cardScope = card:GetAttribute("ChatScope")
             local cardJob = tostring(card:GetAttribute("JobId") or "")
 
-            -- Purge any server-scoped message that does not belong to the current server
             if cardScope == "server" and cardJob ~= "" and cardJob ~= CURRENT_SESSION_JOB then
                 card:Destroy()
                 continue
             end
 
             if chatMode == "server" then
-                if cardScope == "global" then
-                    card.Visible = false
-                else
-                    card.Visible = true
-                end
+                card.Visible = (cardScope ~= "global")
             else
-                if cardScope == "server" then
-                    card.Visible = false
-                else
-                    card.Visible = true
-                end
+                card.Visible = (cardScope ~= "server")
             end
         end
     end
@@ -1232,14 +1219,25 @@ local badgeKeysOrder = {
     "LUCIFER", "SUPREME", "ROYAL", "DEMON"
 }
 
+-- ⚡ UPGRADED ULTRA-HD TAG BUILDER (SOFT HALO + METALLIC SHINE)
 local function buildLiveBadgeElement(parentContainer, bData, zBase)
-    local tagWidth = TextService:GetTextSize(bData.Title, 11, Enum.Font.GothamBlack, Vector2.new(1000, 20)).X + 4
+    local tagWidth = TextService:GetTextSize(bData.Title, 11, Enum.Font.GothamBlack, Vector2.new(1000, 20)).X + 12
     
     local badgeHost = Instance.new("Frame", parentContainer)
     badgeHost.Size = UDim2.fromOffset(tagWidth, 18)
-    badgeHost.BackgroundTransparency = 1
+    badgeHost.BackgroundColor3 = Color3.fromRGB(12, 16, 26)
+    badgeHost.BackgroundTransparency = 0.35
     badgeHost.BorderSizePixel = 0
     badgeHost.ZIndex = zBase
+    Instance.new("UICorner", badgeHost).CornerRadius = UDim.new(0, 5)
+
+    local pillStroke = Instance.new("UIStroke", badgeHost)
+    pillStroke.Thickness = 1.0
+    pillStroke.Transparency = 0.35
+    pillStroke.Color = Color3.fromRGB(255, 255, 255)
+
+    local strokeGradGlow = Instance.new("UIGradient", pillStroke)
+    strokeGradGlow.Color = ColorSequence.new(bData.Colors)
 
     local badgeGlow = Instance.new("TextLabel", badgeHost)
     badgeGlow.Size = UDim2.fromScale(1, 1)
@@ -1247,13 +1245,13 @@ local function buildLiveBadgeElement(parentContainer, bData, zBase)
     badgeGlow.BorderSizePixel = 0
     badgeGlow.Text = bData.Title
     badgeGlow.TextColor3 = Color3.fromRGB(255, 255, 255)
-    badgeGlow.TextTransparency = 0.50
+    badgeGlow.TextTransparency = 0.45
     badgeGlow.Font = Enum.Font.GothamBlack
-    badgeGlow.TextSize = 11
-    badgeGlow.ZIndex = zBase
+    badgeGlow.TextSize = 10.5
+    badgeGlow.ZIndex = zBase + 1
 
     local glowStroke = Instance.new("UIStroke", badgeGlow)
-    glowStroke.Thickness = 1.2
+    glowStroke.Thickness = 1.1
     glowStroke.Transparency = 0.55
     glowStroke.Color = Color3.fromRGB(255, 255, 255)
 
@@ -1264,13 +1262,13 @@ local function buildLiveBadgeElement(parentContainer, bData, zBase)
     badgeLabel.Text = bData.Title
     badgeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     badgeLabel.Font = Enum.Font.GothamBlack
-    badgeLabel.TextSize = 11
-    badgeLabel.ZIndex = zBase + 1
+    badgeLabel.TextSize = 10.5
+    badgeLabel.ZIndex = zBase + 2
 
     local bStroke = Instance.new("UIStroke", badgeLabel)
-    bStroke.Thickness = 0.8
+    bStroke.Thickness = 0.85
     bStroke.Color = Color3.fromRGB(0, 0, 0)
-    bStroke.Transparency = 0.3
+    bStroke.Transparency = 0.25
 
     local badgeShine = Instance.new("TextLabel", badgeHost)
     badgeShine.Size = UDim2.fromScale(1, 1)
@@ -1279,8 +1277,8 @@ local function buildLiveBadgeElement(parentContainer, bData, zBase)
     badgeShine.Text = bData.Title
     badgeShine.TextColor3 = Color3.fromRGB(255, 255, 255)
     badgeShine.Font = Enum.Font.GothamBlack
-    badgeShine.TextSize = 11
-    badgeShine.ZIndex = zBase + 2
+    badgeShine.TextSize = 10.5
+    badgeShine.ZIndex = zBase + 3
 
     local shineGrad = Instance.new("UIGradient", badgeShine)
     shineGrad.Color = ColorSequence.new({
@@ -1292,9 +1290,9 @@ local function buildLiveBadgeElement(parentContainer, bData, zBase)
     })
     shineGrad.Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0.0, 1),
-        NumberSequenceKeypoint.new(0.45, 1),
-        NumberSequenceKeypoint.new(0.5, 0.05),
-        NumberSequenceKeypoint.new(0.55, 1),
+        NumberSequenceKeypoint.new(0.44, 1),
+        NumberSequenceKeypoint.new(0.5, 0.02),
+        NumberSequenceKeypoint.new(0.56, 1),
         NumberSequenceKeypoint.new(1.0, 1)
     })
 
@@ -1303,9 +1301,6 @@ local function buildLiveBadgeElement(parentContainer, bData, zBase)
 
     local glowGrad = Instance.new("UIGradient", badgeGlow)
     glowGrad.Color = ColorSequence.new(bData.Colors)
-
-    local strokeGradGlow = Instance.new("UIGradient", glowStroke)
-    strokeGradGlow.Color = ColorSequence.new(bData.Colors)
 
     table.insert(activeBadgesList, {
         textGrad = textGrad, glowGrad = glowGrad, strokeGradGlow = strokeGradGlow,
@@ -1334,7 +1329,7 @@ for _, bKey in ipairs(badgeKeysOrder) do
     
     local badgeHost = buildLiveBadgeElement(bBtn, bData, 73)
     badgeHost.AnchorPoint = Vector2.new(0, 0.5)
-    badgeHost.Position = UDim2.new(0, 12, 0.5, 0)
+    badgeHost.Position = UDim2.new(0, 10, 0.5, 0)
 
     local dotIndicator = Instance.new("Frame", bBtn)
     dotIndicator.Size = UDim2.fromOffset(8, 8)
@@ -1424,6 +1419,7 @@ end)
 
 local sendMessageFunc
 local chatInput
+local activateReplyBanner
 
 actionMenu = Instance.new("Frame", mainFrame)
 actionMenu.Size = UDim2.fromOffset(225, 32)
@@ -1460,7 +1456,7 @@ local function createActionBtn(text, color, onClick)
 end
 
 -- =========================================================
--- 💬 REAL-CHAT MESSAGE PIPELINE (WITH CUSTOM AI CORE AVATAR)
+-- 💬 REAL-CHAT MESSAGE PIPELINE (TWO-TIER IDENTITY + SWIPE REPLY)
 -- =========================================================
 local function updateLiveCounter(username)
     activeUsersTable[username:lower()] = os.time()
@@ -1509,12 +1505,15 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     local effectiveScope = scopeType or "global"
     local effectiveJob = tostring(msgJobId or game.JobId)
 
-    -- Strict Server Isolation: Never create cards for other servers' local server chat
     if effectiveScope == "server" and effectiveJob ~= "" and effectiveJob ~= tostring(game.JobId) then
         return
     end
 
-    local memeIdMatch = msg:match("%[MEME:(%d+)%]")
+    -- ⚡ PARSE QUOTED REPLY BLOCK IF PRESENT: [REP:User|Snippet] RestOfMsg
+    local replyToUser, replySnippet, cleanBodyMsg = msg:match("^%[REP:([^|]+)|([^%]]+)%]%s*(.*)$")
+    local displayMsg = cleanBodyMsg or msg
+
+    local memeIdMatch = displayMsg:match("%[MEME:(%d+)%]")
 
     local actualUsername, dispName = rawUserName:match("^(.-)::(.*)$")
     if not actualUsername then
@@ -1529,7 +1528,11 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     end
 
     local isSelf = (actualUsername:lower() == lp.Name:lower())
-    local isMentioned = (not isSystemAI) and (string.find(string.lower(msg), string.lower(lp.Name), 1, true) or string.find(string.lower(msg), string.lower(lp.DisplayName), 1, true))
+    local isMentioned = (not isSystemAI) and (
+        string.find(string.lower(displayMsg), string.lower(lp.Name), 1, true) or 
+        string.find(string.lower(displayMsg), string.lower(lp.DisplayName), 1, true) or
+        (replyToUser and replyToUser:lower() == lp.Name:lower())
+    )
     local isAdminUser = Admin[actualUsername:lower()] == true
     local badgeProfile = isSystemAI and BadgePresets["AICORE"] or (BadgePresets[currentOwnerBadge] or BadgePresets["OWNER"])
 
@@ -1545,37 +1548,72 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         end
     end
 
-    local card = Instance.new("TextButton", messageFeed)
-    card.Size = memeIdMatch and UDim2.new(1, 0, 0, 134) or UDim2.new(1, 0, 0, 0)
+    -- Outer Wrapper for Right-Drag Swipe-to-Reply Gesture
+    local cardWrapper = Instance.new("Frame", messageFeed)
+    cardWrapper.Size = memeIdMatch and UDim2.new(1, 0, 0, 142) or UDim2.new(1, 0, 0, 0)
+    cardWrapper.AutomaticSize = memeIdMatch and Enum.AutomaticSize.None or Enum.AutomaticSize.Y
+    cardWrapper.BackgroundTransparency = 1
+    cardWrapper.ZIndex = 9
+    cardWrapper:SetAttribute("ChatScope", effectiveScope)
+    cardWrapper:SetAttribute("JobId", effectiveJob)
+
+    if chatMode == "server" then
+        cardWrapper.Visible = (effectiveScope ~= "global")
+    else
+        cardWrapper.Visible = (effectiveScope ~= "server")
+    end
+
+    -- Hidden Left Swipe Reply Indicator Badge (Revealed when dragging right)
+    local swipeIconBadge = Instance.new("Frame", cardWrapper)
+    swipeIconBadge.Size = UDim2.fromOffset(30, 30)
+    swipeIconBadge.AnchorPoint = Vector2.new(0, 0.5)
+    swipeIconBadge.Position = UDim2.new(0, 6, 0.5, 0)
+    swipeIconBadge.BackgroundColor3 = Colors.ActiveTint
+    swipeIconBadge.BackgroundTransparency = 1
+    swipeIconBadge.ZIndex = 8
+    Instance.new("UICorner", swipeIconBadge).CornerRadius = UDim.new(1, 0)
+
+    local sibStroke = Instance.new("UIStroke", swipeIconBadge)
+    sibStroke.Color = Colors.Primary
+    sibStroke.Thickness = 1.4
+    sibStroke.Transparency = 1
+
+    local sibScale = Instance.new("UIScale", swipeIconBadge)
+    sibScale.Scale = 0.4
+
+    local swipeArrowTxt = Instance.new("TextLabel", swipeIconBadge)
+    swipeArrowTxt.Size = UDim2.fromScale(1, 1)
+    swipeArrowTxt.BackgroundTransparency = 1
+    swipeArrowTxt.Text = "↩"
+    swipeArrowTxt.TextColor3 = Colors.Primary
+    swipeArrowTxt.TextTransparency = 1
+    swipeArrowTxt.Font = Enum.Font.GothamBlack
+    swipeArrowTxt.TextSize = 15
+    swipeArrowTxt.ZIndex = 9
+
+    -- Interactive Draggable Card Surface
+    local card = Instance.new("TextButton", cardWrapper)
+    card.Name = "CardSurface"
+    card.Size = memeIdMatch and UDim2.new(1, 0, 0, 142) or UDim2.new(1, 0, 0, 0)
     card.AutomaticSize = memeIdMatch and Enum.AutomaticSize.None or Enum.AutomaticSize.Y
     card.BackgroundColor3 = isMentioned and Colors.MentionBg or (isSystemAI and Colors.SurfaceAI or (isSelf and Colors.SurfaceSelf or Colors.Surface))
-    card.BackgroundTransparency = isGhostMode and 0.55 or 0.28
+    card.BackgroundTransparency = isGhostMode and 0.55 or 0.26
     card.Text = ""
     card.AutoButtonColor = false
     card.ClipsDescendants = false
-    card.ZIndex = 9
-    
-    card:SetAttribute("ChatScope", effectiveScope)
-    card:SetAttribute("JobId", effectiveJob)
+    card.ZIndex = 10
     Instance.new("UICorner", card).CornerRadius = UDim.new(0, 11)
-
-    if chatMode == "server" then
-        card.Visible = (effectiveScope ~= "global")
-    else
-        card.Visible = (effectiveScope ~= "server")
-    end
 
     local cardScale = Instance.new("UIScale", card)
     cardScale.Scale = 0.95
     TweenService:Create(cardScale, TweenInfo.new(0.28, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
 
-    -- Left Neon Accent Strip
     local accentStrip = Instance.new("Frame", card)
     accentStrip.Size = UDim2.new(0, 3, 1, -14)
     accentStrip.Position = UDim2.new(0, 5, 0, 7)
     accentStrip.BorderSizePixel = 0
     accentStrip.BackgroundColor3 = isMentioned and Colors.MentionGold or (isSystemAI and Colors.Purple or (privateUserTarget and Colors.Purple or Colors.Primary))
-    accentStrip.ZIndex = 10
+    accentStrip.ZIndex = 11
     Instance.new("UICorner", accentStrip).CornerRadius = UDim.new(1, 0)
 
     local cardStroke = Instance.new("UIStroke", card)
@@ -1583,13 +1621,13 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     cardStroke.Transparency = isMentioned and 0.25 or (isSystemAI and 0.45 or (isSelf and 0.65 or 0.80))
     cardStroke.Color = isMentioned and Colors.MentionGold or (isSystemAI and Colors.Purple or (isSelf and Colors.PrimaryDark or Colors.SurfaceHover))
 
-    -- ⚡ AVATAR ORB: CUSTOM CYBERNETIC AI CORE VS REAL PLAYER AVATAR
+    -- Avatar Orb (34x34 Vertically Aligned with Two-Tier Identity Block)
     if isSystemAI then
         local aiAvatar = Instance.new("Frame", card)
-        aiAvatar.Size = UDim2.fromOffset(30, 30)
+        aiAvatar.Size = UDim2.fromOffset(34, 34)
         aiAvatar.Position = UDim2.fromOffset(14, 9)
         aiAvatar.BackgroundColor3 = Color3.fromRGB(14, 18, 30)
-        aiAvatar.ZIndex = 11
+        aiAvatar.ZIndex = 12
         Instance.new("UICorner", aiAvatar).CornerRadius = UDim.new(1, 0)
 
         local aiOuterStroke = Instance.new("UIStroke", aiAvatar)
@@ -1604,11 +1642,11 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         })
 
         local aiRing = Instance.new("Frame", aiAvatar)
-        aiRing.Size = UDim2.fromOffset(22, 22)
+        aiRing.Size = UDim2.fromOffset(24, 24)
         aiRing.AnchorPoint = Vector2.new(0.5, 0.5)
         aiRing.Position = UDim2.fromScale(0.5, 0.5)
         aiRing.BackgroundTransparency = 1
-        aiRing.ZIndex = 12
+        aiRing.ZIndex = 13
         local rSt = Instance.new("UIStroke", aiRing)
         rSt.Thickness = 1
         rSt.Color = Colors.Purple
@@ -1620,8 +1658,8 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         aiCoreText.Text = "✦"
         aiCoreText.TextColor3 = Colors.Primary
         aiCoreText.Font = Enum.Font.GothamBlack
-        aiCoreText.TextSize = 14
-        aiCoreText.ZIndex = 13
+        aiCoreText.TextSize = 15
+        aiCoreText.ZIndex = 14
 
         table.insert(activeAICoresList, {
             grad = aiStrokeGrad,
@@ -1630,29 +1668,28 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         })
     else
         local avatarImg = Instance.new("ImageLabel", card)
-        avatarImg.Size = UDim2.fromOffset(30, 30)
+        avatarImg.Size = UDim2.fromOffset(34, 34)
         avatarImg.Position = UDim2.fromOffset(14, 9)
         avatarImg.BackgroundColor3 = Colors.Background
-        avatarImg.BackgroundTransparency = 0.3
-        avatarImg.ZIndex = 11
+        avatarImg.BackgroundTransparency = 0.25
+        avatarImg.ZIndex = 12
         Instance.new("UICorner", avatarImg).CornerRadius = UDim.new(1, 0)
         
         local avStroke = Instance.new("UIStroke", avatarImg)
-        avStroke.Thickness = 1.2
-        avStroke.Transparency = 0.35
+        avStroke.Thickness = 1.3
+        avStroke.Transparency = 0.30
         avStroke.Color = isAdminUser and Colors.Primary or Colors.SurfaceHover
 
-        -- Real-Chat Online Status Dot on Avatar
         local statusDot = Instance.new("Frame", avatarImg)
-        statusDot.Size = UDim2.fromOffset(8, 8)
+        statusDot.Size = UDim2.fromOffset(9, 9)
         statusDot.AnchorPoint = Vector2.new(1, 1)
         statusDot.Position = UDim2.new(1, 0, 1, 0)
         statusDot.BackgroundColor3 = Colors.OnlineGreen
-        statusDot.ZIndex = 13
+        statusDot.ZIndex = 14
         Instance.new("UICorner", statusDot).CornerRadius = UDim.new(1, 0)
         local sdStroke = Instance.new("UIStroke", statusDot)
         sdStroke.Color = Colors.Background
-        sdStroke.Thickness = 1.5
+        sdStroke.Thickness = 1.6
 
         task.spawn(function()
             local targetPlr = Players:FindFirstChild(actualUsername)
@@ -1669,7 +1706,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         end)
     end
 
-    -- Right-Aligned Sleek Timestamp (Real Chat App Style)
+    -- Top-Right Timestamp
     local timeLbl = Instance.new("TextLabel", card)
     timeLbl.AnchorPoint = Vector2.new(1, 0)
     timeLbl.Position = UDim2.new(1, -10, 0, 8)
@@ -1680,54 +1717,40 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     timeLbl.Font = Enum.Font.GothamBold
     timeLbl.TextSize = 9.5
     timeLbl.TextXAlignment = Enum.TextXAlignment.Right
-    timeLbl.ZIndex = 12
+    timeLbl.ZIndex = 13
     crispText(timeLbl, 0.65)
 
+    -- ⚡ TWO-TIER IDENTITY + CONTENT STACK (Perfect Profile Name & @username Placement)
     local cardContent = Instance.new("Frame", card)
-    cardContent.Size = UDim2.new(1, -62, 0, 0)
-    cardContent.Position = UDim2.fromOffset(52, 8)
+    cardContent.Size = UDim2.new(1, -66, 0, 0)
+    cardContent.Position = UDim2.fromOffset(56, 7)
     cardContent.AutomaticSize = Enum.AutomaticSize.Y
     cardContent.BackgroundTransparency = 1
-    cardContent.ZIndex = 11
+    cardContent.ZIndex = 12
 
     local ccLayout = Instance.new("UIListLayout", cardContent)
     ccLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    ccLayout.Padding = UDim.new(0, 3)
+    ccLayout.Padding = UDim.new(0, 2)
 
-    local headerRow = Instance.new("Frame", cardContent)
-    headerRow.Size = UDim2.new(1, -42, 0, 18)
-    headerRow.BackgroundTransparency = 1
-    headerRow.LayoutOrder = 1
-    headerRow.ZIndex = 11
+    -- Tier 1: [LIVE BADGE] + Main Display Name
+    local topIdentityRow = Instance.new("Frame", cardContent)
+    topIdentityRow.Size = UDim2.new(1, -44, 0, 18)
+    topIdentityRow.BackgroundTransparency = 1
+    topIdentityRow.LayoutOrder = 1
+    topIdentityRow.ZIndex = 12
 
-    local hLayout = Instance.new("UIListLayout", headerRow)
-    hLayout.FillDirection = Enum.FillDirection.Horizontal
-    hLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-    hLayout.Padding = UDim.new(0, 6)
-    hLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    local tiLayout = Instance.new("UIListLayout", topIdentityRow)
+    tiLayout.FillDirection = Enum.FillDirection.Horizontal
+    tiLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+    tiLayout.Padding = UDim.new(0, 6)
+    tiLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
-    if privateUserTarget then
-        local dmLbl = Instance.new("TextLabel", headerRow)
-        dmLbl.AutomaticSize = Enum.AutomaticSize.X
-        dmLbl.Size = UDim2.new(0, 0, 1, 0)
-        dmLbl.BackgroundTransparency = 1
-        dmLbl.RichText = true
-        dmLbl.Text = isPrivateSender and ("[To @" .. sanitizeXml(privateUserTarget) .. "]") or ("[From @" .. sanitizeXml(privateUserTarget) .. "]")
-        dmLbl.TextColor3 = Colors.Purple
-        dmLbl.Font = Enum.Font.GothamBold
-        dmLbl.TextSize = 10
-        dmLbl.LayoutOrder = 1
-        dmLbl.ZIndex = 12
-        crispText(dmLbl, 0.5)
-    end
-
-    -- ⚡ 60 FPS LIVE BADGE FOR ADMIN OR TXR AI ASSISTANT
     if isAdminUser or isSystemAI then
-        local bHost = buildLiveBadgeElement(headerRow, badgeProfile, 13)
-        bHost.LayoutOrder = 2
+        local bHost = buildLiveBadgeElement(topIdentityRow, badgeProfile, 13)
+        bHost.LayoutOrder = 1
     end
 
-    local nameLbl = Instance.new("TextLabel", headerRow)
+    local nameLbl = Instance.new("TextLabel", topIdentityRow)
     nameLbl.AutomaticSize = Enum.AutomaticSize.X
     nameLbl.Size = UDim2.new(0, 0, 1, 0)
     nameLbl.BackgroundTransparency = 1
@@ -1735,40 +1758,100 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     nameLbl.Text = sanitizeXml(dispName)
     nameLbl.TextColor3 = isSystemAI and Color3.fromRGB(0, 235, 255) or (currentThemeIdx == 2 and Color3.fromRGB(255, 45, 85) or Colors.Primary)
     nameLbl.Font = Enum.Font.GothamBlack
-    nameLbl.TextSize = 12
-    nameLbl.LayoutOrder = 3
-    nameLbl.ZIndex = 12
-    crispText(nameLbl, 0.35)
+    nameLbl.TextSize = 12.5
+    nameLbl.LayoutOrder = 2
+    nameLbl.ZIndex = 13
+    crispText(nameLbl, 0.30)
 
-    if not isSystemAI then
-        local handleLbl = Instance.new("TextLabel", headerRow)
-        handleLbl.AutomaticSize = Enum.AutomaticSize.X
-        handleLbl.Size = UDim2.new(0, 0, 1, 0)
-        handleLbl.BackgroundTransparency = 1
-        handleLbl.Text = "@" .. sanitizeXml(actualUsername)
-        handleLbl.TextColor3 = Colors.SubText
-        handleLbl.Font = Enum.Font.GothamMedium
-        handleLbl.TextSize = 10
-        handleLbl.LayoutOrder = 4
-        handleLbl.ZIndex = 12
-        crispText(handleLbl, 0.6)
+    -- Tier 2: Dedicated @username & DM Tag Row right below DisplayName
+    local subIdentityRow = Instance.new("Frame", cardContent)
+    subIdentityRow.Size = UDim2.new(1, 0, 0, 13)
+    subIdentityRow.BackgroundTransparency = 1
+    subIdentityRow.LayoutOrder = 2
+    subIdentityRow.ZIndex = 12
+
+    local siLayout = Instance.new("UIListLayout", subIdentityRow)
+    siLayout.FillDirection = Enum.FillDirection.Horizontal
+    siLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+    siLayout.Padding = UDim.new(0, 6)
+    siLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+    local handleLbl = Instance.new("TextLabel", subIdentityRow)
+    handleLbl.AutomaticSize = Enum.AutomaticSize.X
+    handleLbl.Size = UDim2.new(0, 0, 1, 0)
+    handleLbl.BackgroundTransparency = 1
+    handleLbl.Text = isSystemAI and "@txr_neural_core" or ("@" .. sanitizeXml(actualUsername))
+    handleLbl.TextColor3 = Colors.SubText
+    handleLbl.Font = Enum.Font.GothamBold
+    handleLbl.TextSize = 9.5
+    handleLbl.LayoutOrder = 1
+    handleLbl.ZIndex = 13
+    crispText(handleLbl, 0.55)
+
+    if privateUserTarget then
+        local dmLbl = Instance.new("TextLabel", subIdentityRow)
+        dmLbl.AutomaticSize = Enum.AutomaticSize.X
+        dmLbl.Size = UDim2.new(0, 0, 1, 0)
+        dmLbl.BackgroundTransparency = 1
+        dmLbl.RichText = true
+        dmLbl.Text = isPrivateSender and ("• 🔐 To @" .. sanitizeXml(privateUserTarget)) or ("• 🔐 From @" .. sanitizeXml(privateUserTarget))
+        dmLbl.TextColor3 = Colors.Purple
+        dmLbl.Font = Enum.Font.GothamBlack
+        dmLbl.TextSize = 9.5
+        dmLbl.LayoutOrder = 2
+        dmLbl.ZIndex = 13
+        crispText(dmLbl, 0.45)
     end
 
+    -- Tier 3: Real-Chat Quoted Reply Box (If this message is a reply)
+    if replyToUser and replySnippet then
+        local quoteBox = Instance.new("Frame", cardContent)
+        quoteBox.Size = UDim2.new(1, -4, 0, 22)
+        quoteBox.BackgroundColor3 = Colors.Background
+        quoteBox.BackgroundTransparency = 0.35
+        quoteBox.LayoutOrder = 3
+        quoteBox.ZIndex = 13
+        Instance.new("UICorner", quoteBox).CornerRadius = UDim.new(0, 5)
+
+        local qBar = Instance.new("Frame", quoteBox)
+        qBar.Size = UDim2.new(0, 2, 1, -6)
+        qBar.Position = UDim2.new(0, 4, 0, 3)
+        qBar.BorderSizePixel = 0
+        qBar.BackgroundColor3 = Colors.Primary
+        qBar.ZIndex = 14
+        Instance.new("UICorner", qBar).CornerRadius = UDim.new(1, 0)
+
+        local qText = Instance.new("TextLabel", quoteBox)
+        qText.Size = UDim2.new(1, -14, 1, 0)
+        qText.Position = UDim2.fromOffset(10, 0)
+        qText.BackgroundTransparency = 1
+        qText.RichText = true
+        qText.Text = string.format("<font color='#00FFCD'><b>↩ @%s:</b></font> <i>%s</i>", sanitizeXml(replyToUser), sanitizeXml(replySnippet))
+        qText.TextColor3 = Colors.SubText
+        qText.Font = Enum.Font.GothamMedium
+        qText.TextSize = 9.5
+        qText.TextTruncate = Enum.TextTruncate.AtEnd
+        qText.TextXAlignment = Enum.TextXAlignment.Left
+        qText.ZIndex = 14
+        crispText(qText, 0.5)
+    end
+
+    -- Tier 4: Message Body or Sticker
     if memeIdMatch then
         local memeHolder = Instance.new("Frame", cardContent)
         memeHolder.Size = UDim2.new(1, 0, 0, 96)
         memeHolder.BackgroundTransparency = 1
-        memeHolder.LayoutOrder = 2
-        memeHolder.ZIndex = 12
+        memeHolder.LayoutOrder = 4
+        memeHolder.ZIndex = 13
 
         local memeImg = Instance.new("ImageLabel", memeHolder)
         memeImg.Size = UDim2.fromOffset(92, 92)
-        memeImg.Position = UDim2.fromOffset(0, 2)
+        memeImg.Position = UDim2.fromOffset(0, 3)
         memeImg.BackgroundColor3 = Colors.Background
         memeImg.BackgroundTransparency = 0.25
         memeImg.Image = getAssetThumb(memeIdMatch)
         memeImg.ScaleType = Enum.ScaleType.Fit
-        memeImg.ZIndex = 12
+        memeImg.ZIndex = 13
         Instance.new("UICorner", memeImg).CornerRadius = UDim.new(0, 8)
         
         local mStroke = Instance.new("UIStroke", memeImg)
@@ -1786,14 +1869,14 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         bodyTxt.TextWrapped = true
         bodyTxt.TextXAlignment = Enum.TextXAlignment.Left
         bodyTxt.RichText = true
-        bodyTxt.LayoutOrder = 2
-        bodyTxt.ZIndex = 12
-        bodyTxt.Text = sanitizeXml(msg)
-        crispText(bodyTxt, 0.42)
+        bodyTxt.LayoutOrder = 4
+        bodyTxt.ZIndex = 13
+        bodyTxt.Text = sanitizeXml(displayMsg)
+        crispText(bodyTxt, 0.40)
     end
 
     local padFix = Instance.new("UIPadding", card)
-    padFix.PaddingBottom = UDim.new(0, 10)
+    padFix.PaddingBottom = UDim.new(0, 9)
 
     if isMentioned and not isSelf then
         playSFX("mention")
@@ -1801,50 +1884,131 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         playSFX("meme")
     end
 
-    card.MouseButton1Click:Connect(function()
-        if isSelf or isSystemAI then return end
-        
-        for _, c in ipairs(actionMenu:GetChildren()) do
-            if c:IsA("TextButton") then c:Destroy() end
+    -- ⚡ REAL-CHAT RIGHT-DRAG SWIPE-TO-REPLY ENGINE + TAP CONTEXT MENU
+    local isSwipingCard = false
+    local swipeInputObj = nil
+    local swipeStartPos = nil
+    local swipeTriggered = false
+    local movedDistance = 0
+
+    card.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            isSwipingCard = true
+            swipeInputObj = input
+            swipeStartPos = input.Position
+            swipeTriggered = false
+            movedDistance = 0
         end
+    end)
 
-        createActionBtn("REPLY", Colors.Primary, function()
-            chatInput.Text = "@" .. actualUsername .. " "
-            chatInput:CaptureFocus()
-        end)
+    local moveConn
+    moveConn = UserInputService.InputChanged:Connect(function(input)
+        if not card.Parent then
+            moveConn:Disconnect()
+            return
+        end
+        if isSwipingCard and (input == swipeInputObj or input.UserInputType == Enum.UserInputType.MouseMovement) then
+            local delta = input.Position - swipeStartPos
+            movedDistance = delta.Magnitude
 
-        createActionBtn("DM", Colors.Purple, function()
-            privateTarget = actualUsername
-            updateInputBar()
-            playSFX("dm")
-        end)
+            -- Right-Drag Swipe Gesture (Only when dragging horizontally to the right)
+            if delta.X > 6 and math.abs(delta.X) > math.abs(delta.Y) * 1.3 then
+                local dragOffset = math.clamp(delta.X * 0.75, 0, 62)
+                card.Position = UDim2.fromOffset(dragOffset, 0)
 
-        createActionBtn("COPY", Colors.Text, function()
-            pcall(function() setClip(memeIdMatch and ("ID: " .. memeIdMatch) or msg) end)
-        end)
+                local progress = math.clamp(dragOffset / 42, 0, 1)
+                swipeIconBadge.BackgroundTransparency = 1 - (progress * 0.85)
+                sibStroke.Transparency = 1 - progress
+                swipeArrowTxt.TextTransparency = 1 - progress
+                sibScale.Scale = 0.5 + (progress * 0.65)
 
-        createActionBtn("TP", Colors.MentionGold, function()
-            local targetPlr = Players:FindFirstChild(actualUsername)
-            if targetPlr and targetPlr.Character and targetPlr.Character:FindFirstChild("HumanoidRootPart") and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
-                lp.Character.HumanoidRootPart.CFrame = targetPlr.Character.HumanoidRootPart.CFrame
+                if dragOffset >= 42 and not swipeTriggered then
+                    swipeTriggered = true
+                    playSFX("default")
+                elseif dragOffset < 42 and swipeTriggered then
+                    swipeTriggered = false
+                end
             end
-        end)
+        end
+    end)
 
-        createActionBtn("VIEW", Colors.PrimaryDark, function()
-            local targetPlr = Players:FindFirstChild(actualUsername)
-            if targetPlr and targetPlr.Character and targetPlr.Character:FindFirstChild("Humanoid") then
-                Camera.CameraSubject = targetPlr.Character.Humanoid
+    local endConn
+    endConn = UserInputService.InputEnded:Connect(function(input)
+        if not card.Parent then
+            endConn:Disconnect()
+            return
+        end
+        if isSwipingCard and (input == swipeInputObj or input.UserInputType == Enum.UserInputType.MouseButton1) then
+            isSwipingCard = false
+            swipeInputObj = nil
+
+            TweenService:Create(card, TweenInfo.new(0.32, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.fromOffset(0, 0)}):Play()
+            TweenService:Create(swipeIconBadge, TweenInfo.new(0.25), {BackgroundTransparency = 1}):Play()
+            TweenService:Create(sibStroke, TweenInfo.new(0.25), {Transparency = 1}):Play()
+            TweenService:Create(swipeArrowTxt, TweenInfo.new(0.25), {TextTransparency = 1}):Play()
+            TweenService:Create(sibScale, TweenInfo.new(0.25), {Scale = 0.4}):Play()
+
+            if swipeTriggered then
+                swipeTriggered = false
+                if activateReplyBanner then
+                    local cleanPreview = memeIdMatch and "[Sticker]" or displayMsg
+                    if #cleanPreview > 36 then
+                        cleanPreview = string.sub(cleanPreview, 1, 36) .. "..."
+                    end
+                    activateReplyBanner(actualUsername, dispName, cleanPreview)
+                end
+            elseif movedDistance < 10 then
+                -- Standard Tap Context Menu
+                if isSelf or isSystemAI then return end
+                
+                for _, c in ipairs(actionMenu:GetChildren()) do
+                    if c:IsA("TextButton") then c:Destroy() end
+                end
+
+                createActionBtn("REPLY", Colors.Primary, function()
+                    if activateReplyBanner then
+                        local cleanPreview = memeIdMatch and "[Sticker]" or displayMsg
+                        if #cleanPreview > 36 then
+                            cleanPreview = string.sub(cleanPreview, 1, 36) .. "..."
+                        end
+                        activateReplyBanner(actualUsername, dispName, cleanPreview)
+                    end
+                end)
+
+                createActionBtn("DM", Colors.Purple, function()
+                    privateTarget = actualUsername
+                    updateInputBar()
+                    playSFX("dm")
+                end)
+
+                createActionBtn("COPY", Colors.Text, function()
+                    pcall(function() setClip(memeIdMatch and ("ID: " .. memeIdMatch) or displayMsg) end)
+                end)
+
+                createActionBtn("TP", Colors.MentionGold, function()
+                    local targetPlr = Players:FindFirstChild(actualUsername)
+                    if targetPlr and targetPlr.Character and targetPlr.Character:FindFirstChild("HumanoidRootPart") and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
+                        lp.Character.HumanoidRootPart.CFrame = targetPlr.Character.HumanoidRootPart.CFrame
+                    end
+                end)
+
+                createActionBtn("VIEW", Colors.PrimaryDark, function()
+                    local targetPlr = Players:FindFirstChild(actualUsername)
+                    if targetPlr and targetPlr.Character and targetPlr.Character:FindFirstChild("Humanoid") then
+                        Camera.CameraSubject = targetPlr.Character.Humanoid
+                    end
+                end)
+
+                local cardPos = cardWrapper.AbsolutePosition - mainFrame.AbsolutePosition
+                actionMenu.Position = UDim2.fromOffset(math.clamp(cardPos.X + 25, 10, 180), math.clamp(cardPos.Y - 24, 30, 280))
+                actionMenu.Visible = true
             end
-        end)
-
-        local cardPos = card.AbsolutePosition - mainFrame.AbsolutePosition
-        actionMenu.Position = UDim2.fromOffset(math.clamp(cardPos.X + 25, 10, 180), math.clamp(cardPos.Y - 24, 30, 280))
-        actionMenu.Visible = true
+        end
     end)
 
     task.defer(function()
         local maxOffset = math.max(0, messageFeed.AbsoluteCanvasSize.Y - messageFeed.AbsoluteWindowSize.Y)
-        if maxOffset - messageFeed.CanvasPosition.Y < 90 then
+        if maxOffset - messageFeed.CanvasPosition.Y < 95 then
             messageFeed.CanvasPosition = Vector2.new(0, maxOffset)
         else
             jumpBottomBtn.Visible = true
@@ -1853,8 +2017,75 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
 end
 
 -- =========================================================
--- ⌨️ PILL-SHAPED INPUT CONTAINER & SEAMLESS CONTROLS
+-- ↩️ SWIPE-TO-REPLY PREVIEW BANNER & PILL INPUT CONTAINER
 -- =========================================================
+local replyBanner = Instance.new("Frame", mainFrame)
+replyBanner.Size = UDim2.new(1, -32, 0, 28)
+replyBanner.Position = UDim2.new(0, 16, 1, -84)
+replyBanner.BackgroundColor3 = Color3.fromRGB(16, 22, 34)
+replyBanner.BackgroundTransparency = 0.08
+replyBanner.Visible = false
+replyBanner.ZIndex = 20
+Instance.new("UICorner", replyBanner).CornerRadius = UDim.new(0, 8)
+
+local rbStroke = Instance.new("UIStroke", replyBanner)
+rbStroke.Color = Colors.PrimaryDark
+rbStroke.Thickness = 1
+rbStroke.Transparency = 0.45
+
+local rbAccent = Instance.new("Frame", replyBanner)
+rbAccent.Size = UDim2.new(0, 3, 1, -8)
+rbAccent.Position = UDim2.new(0, 5, 0, 4)
+rbAccent.BorderSizePixel = 0
+rbAccent.BackgroundColor3 = Colors.Primary
+rbAccent.ZIndex = 21
+Instance.new("UICorner", rbAccent).CornerRadius = UDim.new(1, 0)
+
+local rbText = Instance.new("TextLabel", replyBanner)
+rbText.Size = UDim2.new(1, -42, 1, 0)
+rbText.Position = UDim2.fromOffset(14, 0)
+rbText.BackgroundTransparency = 1
+rbText.RichText = true
+rbText.Text = ""
+rbText.TextColor3 = Colors.Text
+rbText.Font = Enum.Font.GothamMedium
+rbText.TextSize = 10
+rbText.TextTruncate = Enum.TextTruncate.AtEnd
+rbText.TextXAlignment = Enum.TextXAlignment.Left
+rbText.ZIndex = 21
+
+local rbClose = Instance.new("TextButton", replyBanner)
+rbClose.Size = UDim2.fromOffset(22, 22)
+rbClose.AnchorPoint = Vector2.new(1, 0.5)
+rbClose.Position = UDim2.new(1, -4, 0.5, 0)
+rbClose.BackgroundTransparency = 1
+rbClose.Text = "✕"
+rbClose.TextColor3 = Colors.SubText
+rbClose.Font = Enum.Font.GothamBlack
+rbClose.TextSize = 11
+rbClose.ZIndex = 22
+
+local function clearReplyBanner()
+    activeReplyData = nil
+    replyBanner.Visible = false
+    messageFeed.Size = UDim2.new(1, -24, 1, -146)
+end
+
+rbClose.MouseButton1Click:Connect(clearReplyBanner)
+
+activateReplyBanner = function(targetUsername, targetDispName, snippetText)
+    local cleanSnippet = string.gsub(snippetText, "[%[%]\n\r|]", " ")
+    activeReplyData = {
+        user = targetUsername,
+        disp = targetDispName,
+        text = cleanSnippet
+    }
+    rbText.Text = string.format("<font color='#00FFCD'><b>Replying to %s (@%s):</b></font> <i>%s</i>", sanitizeXml(targetDispName), sanitizeXml(targetUsername), sanitizeXml(cleanSnippet))
+    replyBanner.Visible = true
+    messageFeed.Size = UDim2.new(1, -24, 1, -176)
+    chatInput:CaptureFocus()
+end
+
 local inputContainer = Instance.new("Frame", mainFrame)
 inputContainer.Size = UDim2.new(1, -24, 0, 44)
 inputContainer.Position = UDim2.new(0, 12, 1, -52)
@@ -1894,7 +2125,7 @@ chatInput.Text = ""
 chatInput.Size = UDim2.new(1, -134, 1, 0)
 chatInput.Position = UDim2.new(0, 16, 0, 0)
 chatInput.BackgroundTransparency = 1
-chatInput.PlaceholderText = "Message... (!p user to DM | !ai for help)"
+chatInput.PlaceholderText = "Swipe card right to reply | !p user to DM"
 chatInput.PlaceholderColor3 = Colors.SubText
 chatInput.TextColor3 = Colors.Text
 chatInput.Font = Enum.Font.GothamMedium
@@ -2252,7 +2483,6 @@ local function makeDraggable(frame, handlesList, ghostAura, isOrb)
     end)
 end
 
--- Attach dragging to Header, MainFrame background, and ChannelFrame so dragging works smoothly from anywhere
 makeDraggable(mainFrame, {header, mainFrame, channelFrame}, aura, false)
 makeDraggable(openBtnContainer, {openBtn}, nil, true)
 
@@ -2266,7 +2496,6 @@ openBtn.MouseButton1Up:Connect(function()
     TweenService:Create(openBtnScale, tInfo, {Scale = 1.05}):Play()
 end)
 
--- Reopen Handler
 openBtn.MouseButton1Click:Connect(function()
     if dragThresholdMet then 
         dragThresholdMet = false 
@@ -2303,7 +2532,6 @@ openBtn.MouseButton1Click:Connect(function()
     TweenService:Create(shadow, tInfo3, {ImageTransparency = isGhostMode and 0.55 or 0.25}):Play()
 end)
 
--- Keyboard Shortcuts
 UserInputService.InputBegan:Connect(function(input, gp)
     if gp then return end
     if input.KeyCode == Enum.KeyCode.RightShift then
@@ -2343,15 +2571,14 @@ task.spawn(function()
         if _G.TXR_ChatInstanceID ~= currentExecutionID or not gui.Parent then return end
         t = t + dt
 
-        -- ⚡ 60 FPS CALIBRATED SILK-SMOOTH IRIDESCENT GRADIENT & SHINE
         if #activeBadgesList > 0 then
             for i = #activeBadgesList, 1, -1 do
                 local item = activeBadgesList[i]
                 if item.textGrad and item.textGrad.Parent and item.glowGrad and item.glowGrad.Parent then
                     local sSpeed = item.speed or 1.15
 
-                    local continuousRotation = (t * 55 * sSpeed) % 360
-                    local waveOffset = math.sin(t * 1.5 * sSpeed) * 0.35
+                    local continuousRotation = (t * 58 * sSpeed) % 360
+                    local waveOffset = math.sin(t * 1.6 * sSpeed) * 0.35
                     
                     item.textGrad.Rotation = continuousRotation
                     item.textGrad.Offset = Vector2.new(waveOffset, 0)
@@ -2364,17 +2591,17 @@ task.spawn(function()
                     end
 
                     if item.shineGrad and item.shineGrad.Parent then
-                        local sweep = ((t * 0.75 * sSpeed) % 3.5) - 1.75
+                        local sweep = ((t * 0.8 * sSpeed) % 3.4) - 1.7
                         item.shineGrad.Offset = Vector2.new(sweep, 0)
                     end
 
-                    local breathPulse = (math.sin(t * 2.2 * sSpeed) + 1) / 2
+                    local breathPulse = (math.sin(t * 2.4 * sSpeed) + 1) / 2
                     if item.glowStroke and item.glowStroke.Parent then
-                        item.glowStroke.Thickness = 1.0 + (breathPulse * 0.4)
-                        item.glowStroke.Transparency = 0.50 + (breathPulse * 0.20)
+                        item.glowStroke.Thickness = 1.0 + (breathPulse * 0.45)
+                        item.glowStroke.Transparency = 0.48 + (breathPulse * 0.22)
                     end
                     if item.badgeGlow and item.badgeGlow.Parent then
-                        item.badgeGlow.TextTransparency = 0.45 + (breathPulse * 0.20)
+                        item.badgeGlow.TextTransparency = 0.42 + (breathPulse * 0.22)
                     end
                 else
                     table.remove(activeBadgesList, i)
@@ -2382,7 +2609,6 @@ task.spawn(function()
             end
         end
 
-        -- ⚡ ANIMATE CUSTOM TXR AI CORE AVATAR ORBS
         if #activeAICoresList > 0 then
             for i = #activeAICoresList, 1, -1 do
                 local ai = activeAICoresList[i]
@@ -2528,7 +2754,7 @@ task.spawn(function()
 end)
 
 -- =========================================================
--- 📡 SEND MESSAGE & SMART TXR AI ASSISTANT COMMANDS
+-- 📡 SEND MESSAGE (WITH SWIPE-REPLY QUOTE ENCODING)
 -- =========================================================
 local lastSendTick = 0
 sendMessageFunc = function(overrideText)
@@ -2553,20 +2779,26 @@ sendMessageFunc = function(overrideText)
 
     if text:lower() == "!ai" or text:lower() == "/help" then
         chatInput.Text = ""
-        addMessageToFeed("System::TXR // AI", "Commands: Use '!p username' to Private DM | Tap any player card to Reply, Copy, TP, or Spectate | Server Chat auto-wipes on server hop while Global Chat stays saved.", nil, false, game.JobId, chatMode)
+        addMessageToFeed("System::TXR // AI", "Commands: Swipe any message right to Reply | '!p username' for Private DM | Tap any card to Copy, TP, or Spectate.", nil, false, game.JobId, chatMode)
         return
     end
 
-    local finalMsg = text
+    local payloadBodyText = text
+    if activeReplyData then
+        payloadBodyText = string.format("[REP:%s|%s] %s", activeReplyData.user, activeReplyData.text, text)
+        clearReplyBanner()
+    end
+
+    local finalMsg = payloadBodyText
     local currentScope = chatMode
 
     if privateTarget then
-        finalMsg = "( 🔐 " .. lp.Name .. " Private " .. privateTarget .. ") " .. text
+        finalMsg = "( 🔐 " .. lp.Name .. " Private " .. privateTarget .. ") " .. payloadBodyText
     else
         if currentScope == "server" then
-            finalMsg = "[SRV:" .. tostring(game.JobId) .. "] " .. text
+            finalMsg = "[SRV:" .. tostring(game.JobId) .. "] " .. payloadBodyText
         else
-            finalMsg = "[GLB] " .. text
+            finalMsg = "[GLB] " .. payloadBodyText
         end
     end
 
@@ -2575,14 +2807,15 @@ sendMessageFunc = function(overrideText)
     local encodedUserTag = lp.Name .. "::" .. lp.DisplayName
 
     if privateTarget then
-        addMessageToFeed(encodedUserTag, text, privateTarget, true, game.JobId, currentScope)
+        addMessageToFeed(encodedUserTag, payloadBodyText, privateTarget, true, game.JobId, currentScope)
     else
-        addMessageToFeed(encodedUserTag, text, nil, false, game.JobId, currentScope)
+        addMessageToFeed(encodedUserTag, payloadBodyText, nil, false, game.JobId, currentScope)
     end
     displayBubble(lp.Name, text)
 
     local cleanKey = string.lower(finalMsg)
     recentLocalSentMap[cleanKey] = tick()
+    recentLocalSentMap[string.lower(payloadBodyText)] = tick()
     recentLocalSentMap[string.lower(text)] = tick()
 
     task.spawn(function()
@@ -2615,7 +2848,6 @@ end)
 -- =========================================================
 task.spawn(function()
     while _G.TXR_IsPolling and (_G.TXR_ChatInstanceID == currentExecutionID) and task.wait(0.4) do
-        -- Auto-detect if player hopped servers and purge old server chat immediately
         if tostring(game.JobId) ~= CURRENT_SESSION_JOB then
             filterFeedMode()
         end
@@ -2638,7 +2870,6 @@ task.spawn(function()
                     if isInitialSync then
                         isInitialSync = false
                         if #data > 0 then
-                            -- Load up to 15 historical messages: Keep Global messages intact, discard other servers' local chats
                             local startIndex = math.max(1, #data - 15)
                             for i = startIndex, #data do
                                 local m = data[i]
@@ -2654,7 +2885,6 @@ task.spawn(function()
                                     if srvJob then
                                         scope = "server"
                                         parsedMsg = cleanSrvMsg
-                                        -- Strictly discard server messages from other servers
                                         if tostring(srvJob) ~= tostring(game.JobId) then
                                             continue
                                         end
@@ -2699,7 +2929,6 @@ task.spawn(function()
                                 continue 
                             end
 
-                            -- Local Echo Deduplication
                             if rawUsernameOnly:lower() == lp.Name:lower() then
                                 local lowMsg = string.lower(m.msg)
                                 local isEcho = false
@@ -2742,7 +2971,8 @@ task.spawn(function()
                                     addMessageToFeed(m.user, pMsg, pTarget, true, m.jobId, scope)
                                 elseif lp.Name == pTarget then
                                     addMessageToFeed(m.user, pMsg, pSender, false, m.jobId, scope)
-                                    displayBubble(rawUsernameOnly, pMsg)
+                                    local _, _, strippedBubble = pMsg:match("^%[REP:([^|]+)|([^%]]+)%]%s*(.*)$")
+                                    displayBubble(rawUsernameOnly, strippedBubble or pMsg)
                                     playSFX("dm")
 
                                     if not mainFrame.Visible then
@@ -2757,7 +2987,8 @@ task.spawn(function()
                             addMessageToFeed(m.user, effectiveMsg, nil, false, m.jobId, scope)
 
                             if rawUsernameOnly ~= lp.Name then
-                                displayBubble(rawUsernameOnly, effectiveMsg)
+                                local _, _, strippedBubble = effectiveMsg:match("^%[REP:([^|]+)|([^%]]+)%]%s*(.*)$")
+                                displayBubble(rawUsernameOnly, strippedBubble or effectiveMsg)
                                 playSFX("default")
 
                                 if not mainFrame.Visible then
@@ -2774,7 +3005,7 @@ task.spawn(function()
     end
 end)
 
--- Handshake (Appears in both Server & Global on launch with Custom AI Core)
+-- Handshake
 task.spawn(function()
     if req then
         pcall(function()
@@ -2790,6 +3021,6 @@ task.spawn(function()
             })
         end)
     end
-    addMessageToFeed("System::TXR // AI", "Neural Link Active! Server Chat is locked to this server. Switch to Global Chat for cross-server messages, or type !ai for commands.", nil, false, game.JobId, "server")
-    addMessageToFeed("System::TXR // AI", "Global Network Synchronized! Your messages here persist across all servers.", nil, false, game.JobId, "global")
+    addMessageToFeed("System::TXR // AI", "Neural Link Active! Swipe any message right to Reply, or tap TAG to preview live badges.", nil, false, game.JobId, "server")
+    addMessageToFeed("System::TXR // AI", "Global Network Synchronized! Swipe right on any card to quote & reply.", nil, false, game.JobId, "global")
 end)
