@@ -12,7 +12,7 @@ pcall(function()
 end)
 
 -- =========================================================
--- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V26.0 PRO MESSENGER) 👑
+-- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V27.0 MICRO-PERFECT) 👑
 -- =========================================================
 local currentExecutionID = tick()
 _G.TXR_ChatInstanceID = currentExecutionID
@@ -54,47 +54,47 @@ local function sanitizeXml(str)
 end
 
 -- =========================================================
--- 🎨 MULTI-CHROMA PALETTE & THEMES
+-- 🎨 EYE-SOOTHING MICRO-PERFECT PALETTE & THEMES
 -- =========================================================
 local rgb, csk = Color3.fromRGB, ColorSequenceKeypoint.new
 local Themes = {
-    [1] = { Primary = rgb(0, 255, 205), PrimaryDark = rgb(0, 165, 140), Accent = rgb(160, 55, 255), ActiveTint = rgb(12, 38, 48) },
-    [2] = { Primary = rgb(255, 45, 85), PrimaryDark = rgb(175, 20, 55), Accent = rgb(255, 145, 0), ActiveTint = rgb(46, 12, 24) },
-    [3] = { Primary = rgb(185, 80, 255), PrimaryDark = rgb(120, 40, 185), Accent = rgb(0, 205, 255), ActiveTint = rgb(34, 14, 52) },
-    [4] = { Primary = rgb(255, 205, 55), PrimaryDark = rgb(185, 130, 20), Accent = rgb(255, 80, 80), ActiveTint = rgb(46, 36, 12) }
+    [1] = { Primary = rgb(0, 230, 195), PrimaryDark = rgb(0, 150, 130), Accent = rgb(140, 85, 255), ActiveTint = rgb(14, 34, 44) },
+    [2] = { Primary = rgb(255, 65, 100), PrimaryDark = rgb(175, 30, 60), Accent = rgb(255, 150, 40), ActiveTint = rgb(44, 14, 24) },
+    [3] = { Primary = rgb(175, 95, 255), PrimaryDark = rgb(115, 45, 180), Accent = rgb(40, 200, 255), ActiveTint = rgb(32, 16, 48) },
+    [4] = { Primary = rgb(245, 195, 65), PrimaryDark = rgb(175, 125, 25), Accent = rgb(255, 95, 95), ActiveTint = rgb(44, 34, 14) }
 }
 local currentThemeIdx = 1
 
 local Colors = {
-    Background = rgb(8, 11, 18), Surface = rgb(16, 22, 34), SurfaceSelf = rgb(14, 28, 42),
-    SurfaceAI = rgb(18, 22, 44), SurfaceHover = rgb(28, 36, 54), ActiveTint = Themes[1].ActiveTint,
-    Primary = Themes[1].Primary, PrimaryDark = Themes[1].PrimaryDark, Danger = rgb(255, 60, 90),
-    Warning = rgb(255, 175, 20), Purple = Themes[1].Accent, Text = rgb(246, 250, 255),
-    SubText = rgb(135, 152, 178), TextDark = rgb(8, 10, 15), MentionGold = rgb(255, 205, 65),
-    MentionBg = rgb(42, 32, 14), OnlineGreen = rgb(45, 245, 135)
+    Background = rgb(10, 14, 22), Surface = rgb(17, 23, 35), SurfaceSelf = rgb(15, 29, 42),
+    SurfaceAI = rgb(19, 23, 44), SurfaceHover = rgb(28, 37, 54), ActiveTint = Themes[1].ActiveTint,
+    Primary = Themes[1].Primary, PrimaryDark = Themes[1].PrimaryDark, Danger = rgb(255, 70, 95),
+    Warning = rgb(255, 180, 40), Purple = Themes[1].Accent, Text = rgb(240, 246, 255),
+    SubText = rgb(135, 152, 178), TextDark = rgb(8, 11, 18), MentionGold = rgb(255, 205, 70),
+    MentionBg = rgb(40, 32, 16), OnlineGreen = rgb(45, 235, 135)
 }
 
 -- =========================================================
 -- 👑 16 SILK-SMOOTH BALANCED BADGE PRESETS (+ AI CORE)
 -- =========================================================
 local BadgePresets = {
-    ["AICORE"]   = { Title = "AI CORE", Speed = 1.2, Colors = { csk(0, rgb(0,255,235)), csk(0.5, rgb(170,80,255)), csk(1, rgb(0,255,235)) } },
-    ["OWNER"]    = { Title = "OWNER", Speed = 1.15, Colors = { csk(0, rgb(255,45,95)), csk(0.2, rgb(255,165,35)), csk(0.4, rgb(0,245,195)), csk(0.6, rgb(50,155,255)), csk(0.8, rgb(180,65,255)), csk(1, rgb(255,45,95)) } },
-    ["DADDY"]    = { Title = "DADDY", Speed = 1.1, Colors = { csk(0, rgb(255,30,80)), csk(0.35, rgb(255,115,45)), csk(0.7, rgb(255,220,50)), csk(1, rgb(255,30,80)) } },
-    ["TITAN"]    = { Title = "TITAN", Speed = 1.15, Colors = { csk(0, rgb(0,240,255)), csk(0.35, rgb(70,165,255)), csk(0.7, rgb(160,60,255)), csk(1, rgb(0,240,255)) } },
-    ["OVERLORD"] = { Title = "OVERLORD", Speed = 1.05, Colors = { csk(0, rgb(180,60,255)), csk(0.35, rgb(255,60,180)), csk(0.7, rgb(95,110,255)), csk(1, rgb(180,60,255)) } },
-    ["DEV"]      = { Title = "DEV", Speed = 1.25, Colors = { csk(0, rgb(0,255,195)), csk(0.5, rgb(65,150,255)), csk(1, rgb(0,255,195)) } },
-    ["VIP"]      = { Title = "VIP", Speed = 1.1, Colors = { csk(0, rgb(255,140,25)), csk(0.5, rgb(255,230,65)), csk(1, rgb(255,140,25)) } },
-    ["GOD"]      = { Title = "GOD", Speed = 1.2, Colors = { csk(0, rgb(255,110,175)), csk(0.25, rgb(255,230,100)), csk(0.5, rgb(95,255,190)), csk(0.75, rgb(100,190,255)), csk(1, rgb(255,110,175)) } },
-    ["CYBER"]    = { Title = "CYBER", Speed = 1.2, Colors = { csk(0, rgb(255,10,220)), csk(0.5, rgb(10,245,255)), csk(1, rgb(255,10,220)) } },
-    ["VOID"]     = { Title = "VOID", Speed = 0.95, Colors = { csk(0, rgb(85,90,145)), csk(0.5, rgb(180,185,240)), csk(1, rgb(85,90,145)) } },
-    ["ZENITH"]   = { Title = "ZENITH", Speed = 1.15, Colors = { csk(0, rgb(0,255,215)), csk(0.5, rgb(45,180,255)), csk(1, rgb(0,255,215)) } },
-    ["APEX"]     = { Title = "APEX", Speed = 1.2, Colors = { csk(0, rgb(255,40,80)), csk(0.5, rgb(255,160,35)), csk(1, rgb(255,40,80)) } },
-    ["LUCIFER"]  = { Title = "LUCIFER", Speed = 1.2, Colors = { csk(0, rgb(255,15,35)), csk(0.5, rgb(255,95,25)), csk(1, rgb(255,15,35)) } },
+    ["AICORE"]   = { Title = "AI CORE", Speed = 1.2, Colors = { csk(0, rgb(0,240,225)), csk(0.5, rgb(160,90,255)), csk(1, rgb(0,240,225)) } },
+    ["OWNER"]    = { Title = "OWNER", Speed = 1.15, Colors = { csk(0, rgb(255,50,95)), csk(0.2, rgb(255,165,40)), csk(0.4, rgb(0,240,195)), csk(0.6, rgb(55,160,255)), csk(0.8, rgb(180,70,255)), csk(1, rgb(255,50,95)) } },
+    ["DADDY"]    = { Title = "DADDY", Speed = 1.1, Colors = { csk(0, rgb(255,35,85)), csk(0.35, rgb(255,120,50)), csk(0.7, rgb(255,220,55)), csk(1, rgb(255,35,85)) } },
+    ["TITAN"]    = { Title = "TITAN", Speed = 1.15, Colors = { csk(0, rgb(0,235,255)), csk(0.35, rgb(75,165,255)), csk(0.7, rgb(160,65,255)), csk(1, rgb(0,235,255)) } },
+    ["OVERLORD"] = { Title = "OVERLORD", Speed = 1.05, Colors = { csk(0, rgb(180,65,255)), csk(0.35, rgb(255,65,180)), csk(0.7, rgb(95,115,255)), csk(1, rgb(180,65,255)) } },
+    ["DEV"]      = { Title = "DEV", Speed = 1.25, Colors = { csk(0, rgb(0,245,195)), csk(0.5, rgb(65,155,255)), csk(1, rgb(0,245,195)) } },
+    ["VIP"]      = { Title = "VIP", Speed = 1.1, Colors = { csk(0, rgb(255,140,30)), csk(0.5, rgb(255,230,70)), csk(1, rgb(255,140,30)) } },
+    ["GOD"]      = { Title = "GOD", Speed = 1.2, Colors = { csk(0, rgb(255,110,175)), csk(0.25, rgb(255,230,105)), csk(0.5, rgb(95,250,190)), csk(0.75, rgb(100,190,255)), csk(1, rgb(255,110,175)) } },
+    ["CYBER"]    = { Title = "CYBER", Speed = 1.2, Colors = { csk(0, rgb(255,20,220)), csk(0.5, rgb(15,240,255)), csk(1, rgb(255,20,220)) } },
+    ["VOID"]     = { Title = "VOID", Speed = 0.95, Colors = { csk(0, rgb(90,95,150)), csk(0.5, rgb(185,190,240)), csk(1, rgb(90,95,150)) } },
+    ["ZENITH"]   = { Title = "ZENITH", Speed = 1.15, Colors = { csk(0, rgb(0,245,215)), csk(0.5, rgb(50,180,255)), csk(1, rgb(0,245,215)) } },
+    ["APEX"]     = { Title = "APEX", Speed = 1.2, Colors = { csk(0, rgb(255,45,85)), csk(0.5, rgb(255,160,40)), csk(1, rgb(255,45,85)) } },
+    ["LUCIFER"]  = { Title = "LUCIFER", Speed = 1.2, Colors = { csk(0, rgb(255,20,40)), csk(0.5, rgb(255,95,30)), csk(1, rgb(255,20,40)) } },
     ["SUPREME"]  = { Title = "SUPREME", Speed = 1.1, Colors = { csk(0, rgb(255,215,65)), csk(0.5, rgb(255,245,165)), csk(1, rgb(255,215,65)) } },
-    ["ROYAL"]    = { Title = "ROYAL", Speed = 1.0, Colors = { csk(0, rgb(225,165,30)), csk(0.4, rgb(255,230,110)), csk(0.7, rgb(255,145,35)), csk(1, rgb(225,165,30)) } },
-    ["DEMON"]    = { Title = "DEMON", Speed = 1.2, Colors = { csk(0, rgb(255,10,85)), csk(0.5, rgb(255,75,40)), csk(1, rgb(255,10,85)) } },
-    ["PHANTOM"]  = { Title = "PHANTOM", Speed = 1.15, Colors = { csk(0, rgb(5,255,160)), csk(0.5, rgb(5,210,255)), csk(1, rgb(5,255,160)) } }
+    ["ROYAL"]    = { Title = "ROYAL", Speed = 1.0, Colors = { csk(0, rgb(225,165,35)), csk(0.4, rgb(255,230,115)), csk(0.7, rgb(255,145,40)), csk(1, rgb(225,165,35)) } },
+    ["DEMON"]    = { Title = "DEMON", Speed = 1.2, Colors = { csk(0, rgb(255,15,85)), csk(0.5, rgb(255,75,40)), csk(1, rgb(255,15,85)) } },
+    ["PHANTOM"]  = { Title = "PHANTOM", Speed = 1.15, Colors = { csk(0, rgb(10,245,160)), csk(0.5, rgb(10,210,255)), csk(1, rgb(10,245,160)) } }
 }
 local currentOwnerBadge = "OWNER"
 
@@ -118,25 +118,25 @@ local function getAssetThumb(id) return string.format("rbxthumb://type=Asset&id=
 local function crispText(element, overrideTransparency)
     local stroke = element:FindFirstChildOfClass("UIStroke") or Instance.new("UIStroke", element)
     stroke.Color = Color3.new(0, 0, 0)
-    stroke.Transparency = overrideTransparency or 0.35
+    stroke.Transparency = overrideTransparency or 0.40
     stroke.Thickness = 1.0
 end
 
 local function applySpringHover(btn)
     local btnScale = btn:FindFirstChildOfClass("UIScale") or Instance.new("UIScale", btn)
-    btn.MouseEnter:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.22, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1.06}):Play() end)
-    btn.MouseLeave:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart), {Scale = 1}):Play() end)
-    btn.MouseButton1Down:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.08, Enum.EasingStyle.Sine), {Scale = 0.92}):Play() end)
-    btn.MouseButton1Up:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.28, Enum.EasingStyle.Elastic), {Scale = 1.06}):Play() end)
+    btn.MouseEnter:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1.05}):Play() end)
+    btn.MouseLeave:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.18, Enum.EasingStyle.Quart), {Scale = 1}):Play() end)
+    btn.MouseButton1Down:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.08, Enum.EasingStyle.Sine), {Scale = 0.93}):Play() end)
+    btn.MouseButton1Up:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.25, Enum.EasingStyle.Elastic), {Scale = 1.05}):Play() end)
 end
 
 local function playSFX(soundType)
     task.spawn(function()
         pcall(function()
             local s = Instance.new("Sound")
-            if soundType == "mention" or soundType == "dm" then s.SoundId = "rbxassetid://9114223177"; s.Volume = 0.8
-            elseif soundType == "meme" then s.SoundId = "rbxassetid://9069609268"; s.Volume = 0.6
-            else s.SoundId = "rbxassetid://6518811702"; s.Volume = 0.4 end
+            if soundType == "mention" or soundType == "dm" then s.SoundId = "rbxassetid://9114223177"; s.Volume = 0.75
+            elseif soundType == "meme" then s.SoundId = "rbxassetid://9069609268"; s.Volume = 0.55
+            else s.SoundId = "rbxassetid://6518811702"; s.Volume = 0.35 end
             s.Parent = SoundService; s:Play()
             task.delay(1.5, function() pcall(function() s:Destroy() end) end)
         end)
@@ -183,15 +183,15 @@ gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 local shadow = Instance.new("ImageLabel", gui)
 shadow.AnchorPoint = Vector2.new(0.5, 0.5); shadow.Position = UDim2.fromScale(0.4, 0.5)
-shadow.Size = UDim2.new(0, 502, 0, 416); shadow.BackgroundTransparency = 1
+shadow.Size = UDim2.new(0, 500, 0, 414); shadow.BackgroundTransparency = 1
 shadow.Image = "rbxassetid://1316045217"; shadow.ImageColor3 = Color3.new(0, 0, 0)
-shadow.ImageTransparency = 0.22; shadow.ZIndex = 1
+shadow.ImageTransparency = 0.25; shadow.ZIndex = 1
 
 local aura = Instance.new("ImageLabel", gui)
 aura.AnchorPoint = Vector2.new(0.5, 0.5); aura.Position = UDim2.fromScale(0.4, 0.5)
-aura.Size = UDim2.new(0, 478, 0, 392); aura.BackgroundTransparency = 1
+aura.Size = UDim2.new(0, 476, 0, 390); aura.BackgroundTransparency = 1
 aura.Image = "rbxassetid://1316045217"; aura.ImageColor3 = Colors.Primary
-aura.ImageTransparency = 0.65; aura.ZIndex = 2
+aura.ImageTransparency = 0.68; aura.ZIndex = 2
 
 local auraScale = Instance.new("UIScale", aura)
 local shadowScale = Instance.new("UIScale", shadow)
@@ -201,10 +201,10 @@ mainFrame.AnchorPoint = Vector2.new(0.5, 0.5); mainFrame.Position = UDim2.fromSc
 mainFrame.Size = UDim2.new(0, 456, 0, 370); mainFrame.BackgroundColor3 = Colors.Background
 mainFrame.BackgroundTransparency = 0.08; mainFrame.ClipsDescendants = true
 mainFrame.Active = true; mainFrame.ZIndex = 5
-Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 18)
+Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 16)
 
 local mainStroke = Instance.new("UIStroke", mainFrame)
-mainStroke.Thickness = 1.6; mainStroke.Transparency = 0.25; mainStroke.Color = Colors.Primary
+mainStroke.Thickness = 1.4; mainStroke.Transparency = 0.30; mainStroke.Color = Colors.Primary
 
 local strokeGrad = Instance.new("UIGradient", mainStroke)
 strokeGrad.Color = ColorSequence.new({ csk(0, Colors.Primary), csk(0.5, Colors.Purple), csk(1, Colors.Primary) })
@@ -215,18 +215,18 @@ mainFrame:GetPropertyChangedSignal("Position"):Connect(function()
 end)
 
 local mainBgGrad = Instance.new("UIGradient", mainFrame)
-mainBgGrad.Color = ColorSequence.new({ csk(0, rgb(18, 25, 38)), csk(0.5, rgb(11, 15, 24)), csk(1, rgb(8, 10, 16)) })
+mainBgGrad.Color = ColorSequence.new({ csk(0, rgb(17, 23, 35)), csk(0.5, rgb(12, 16, 25)), csk(1, rgb(9, 12, 19)) })
 mainBgGrad.Rotation = 35
 
 local glassSheen = Instance.new("Frame", mainFrame)
-glassSheen.Size = UDim2.new(1, 0, 0, 90); glassSheen.BackgroundTransparency = 0.93
+glassSheen.Size = UDim2.new(1, 0, 0, 86); glassSheen.BackgroundTransparency = 0.94
 glassSheen.BackgroundColor3 = rgb(255, 255, 255); glassSheen.BorderSizePixel = 0; glassSheen.ZIndex = 6
 local gsGrad = Instance.new("UIGradient", glassSheen)
-gsGrad.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.35), NumberSequenceKeypoint.new(1, 1) })
+gsGrad.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.40), NumberSequenceKeypoint.new(1, 1) })
 gsGrad.Rotation = 90
 
 -- =========================================================
--- 🌧️ MATRIX CODE RAIN
+-- 🌧️ SUBTLE BACKGROUND MATRIX CODE RAIN
 -- =========================================================
 local matrixBox = Instance.new("Frame", mainFrame)
 matrixBox.Size = UDim2.fromScale(1, 1); matrixBox.BackgroundTransparency = 1
@@ -238,7 +238,7 @@ for i = 1, 16 do
     local col = Instance.new("TextLabel", matrixBox)
     col.Size = UDim2.new(0, 18, 1, 0); col.Position = UDim2.new((i - 1) / 16, 4, 0, 0)
     col.BackgroundTransparency = 1; col.Font = Enum.Font.Code; col.TextSize = 10
-    col.TextColor3 = Colors.PrimaryDark; col.TextTransparency = 0.94; col.TextWrapped = true
+    col.TextColor3 = Colors.PrimaryDark; col.TextTransparency = 0.95; col.TextWrapped = true
     col.TextYAlignment = Enum.TextYAlignment.Top; col.ZIndex = 6
     table.insert(matrixColumns, col)
 end
@@ -373,15 +373,15 @@ openBtnContainer:GetPropertyChangedSignal("Visible"):Connect(function()
 end)
 
 -- =========================================================
--- 👥 ONLINE ACTIVE ROSTER (SLIDE-IN DRAWER)
+-- 👥 ONLINE ACTIVE ROSTER (ZERO-BOX UI DOT DRAWER)
 -- =========================================================
 local rosterFrame = Instance.new("Frame", mainFrame)
-rosterFrame.Size = UDim2.new(0, 148, 1, -50); rosterFrame.Position = UDim2.new(1, 10, 0, 46)
-rosterFrame.BackgroundColor3 = Colors.Surface; rosterFrame.BackgroundTransparency = 0.06
+rosterFrame.Size = UDim2.new(0, 152, 1, -50); rosterFrame.Position = UDim2.new(1, 10, 0, 46)
+rosterFrame.BackgroundColor3 = Colors.Surface; rosterFrame.BackgroundTransparency = 0.05
 rosterFrame.Visible = false; rosterFrame.ZIndex = 40
 Instance.new("UICorner", rosterFrame).CornerRadius = UDim.new(0, 12)
 local rfStroke = Instance.new("UIStroke", rosterFrame)
-rfStroke.Color = Colors.PrimaryDark; rfStroke.Thickness = 1.2; rfStroke.Transparency = 0.35
+rfStroke.Color = Colors.PrimaryDark; rfStroke.Thickness = 1.2; rfStroke.Transparency = 0.40
 
 local rfTitle = Instance.new("TextLabel", rosterFrame)
 rfTitle.Size = UDim2.new(1, 0, 0, 26); rfTitle.BackgroundTransparency = 1; rfTitle.Text = "ONLINE PLAYERS"
@@ -401,10 +401,16 @@ local function refreshRosterUI()
     for u, info in pairs(activeUsersTable) do
         local dName = (type(info) == "table" and info.disp) or u
         local uBtn = Instance.new("TextButton", rosterScroll)
-        uBtn.Size = UDim2.new(1, 0, 0, 26); uBtn.BackgroundColor3 = Colors.Background; uBtn.BackgroundTransparency = 0.45
-        uBtn.Text = "  ● " .. dName; uBtn.TextColor3 = Colors.Text; uBtn.Font = Enum.Font.GothamBold; uBtn.TextSize = 10
+        uBtn.Size = UDim2.new(1, 0, 0, 26); uBtn.BackgroundColor3 = Colors.Background; uBtn.BackgroundTransparency = 0.40
+        uBtn.Text = "      " .. dName; uBtn.TextColor3 = Colors.Text; uBtn.Font = Enum.Font.GothamBold; uBtn.TextSize = 10
         uBtn.TextTruncate = Enum.TextTruncate.AtEnd; uBtn.TextXAlignment = Enum.TextXAlignment.Left; uBtn.ZIndex = 42
         Instance.new("UICorner", uBtn).CornerRadius = UDim.new(0, 6)
+        
+        local rDot = Instance.new("Frame", uBtn)
+        rDot.Size = UDim2.fromOffset(6, 6); rDot.AnchorPoint = Vector2.new(0, 0.5); rDot.Position = UDim2.new(0, 8, 0.5, 0)
+        rDot.BackgroundColor3 = Colors.OnlineGreen; rDot.ZIndex = 43
+        Instance.new("UICorner", rDot).CornerRadius = UDim.new(1, 0)
+
         local ubStr = Instance.new("UIStroke", uBtn)
         ubStr.Color = Colors.SurfaceHover; ubStr.Thickness = 1
         applySpringHover(uBtn)
@@ -423,8 +429,8 @@ local header = Instance.new("Frame", mainFrame)
 header.Size = UDim2.new(1, 0, 0, 46); header.BackgroundTransparency = 1; header.Active = true; header.ZIndex = 10
 
 local dragPill = Instance.new("Frame", header)
-dragPill.Size = UDim2.fromOffset(42, 3); dragPill.AnchorPoint = Vector2.new(0.5, 0); dragPill.Position = UDim2.new(0.5, 0, 0, 4)
-dragPill.BackgroundColor3 = Colors.Primary; dragPill.BackgroundTransparency = 0.50; dragPill.BorderSizePixel = 0; dragPill.ZIndex = 12
+dragPill.Size = UDim2.fromOffset(40, 3); dragPill.AnchorPoint = Vector2.new(0.5, 0); dragPill.Position = UDim2.new(0.5, 0, 0, 4)
+dragPill.BackgroundColor3 = Colors.Primary; dragPill.BackgroundTransparency = 0.55; dragPill.BorderSizePixel = 0; dragPill.ZIndex = 12
 Instance.new("UICorner", dragPill).CornerRadius = UDim.new(1, 0)
 
 local headerLeftCluster = Instance.new("Frame", header)
@@ -437,15 +443,15 @@ hlLayout.FillDirection = Enum.FillDirection.Horizontal; hlLayout.VerticalAlignme
 local headerTitle = Instance.new("TextLabel", headerLeftCluster)
 headerTitle.AutomaticSize = Enum.AutomaticSize.X; headerTitle.Size = UDim2.new(0, 0, 0, 24); headerTitle.BackgroundTransparency = 1
 headerTitle.Text = "TXR // TITAN"; headerTitle.TextColor3 = Colors.Primary; headerTitle.Font = Enum.Font.GothamBlack
-headerTitle.TextSize = 14; headerTitle.TextXAlignment = Enum.TextXAlignment.Left; headerTitle.ZIndex = 12
-crispText(headerTitle, 0.25)
+headerTitle.TextSize = 13.5; headerTitle.TextXAlignment = Enum.TextXAlignment.Left; headerTitle.ZIndex = 12
+crispText(headerTitle, 0.30)
 
 local liveBadge = Instance.new("TextButton", headerLeftCluster)
-liveBadge.Size = UDim2.fromOffset(84, 23); liveBadge.BackgroundColor3 = Colors.Surface; liveBadge.BackgroundTransparency = 0.20
+liveBadge.Size = UDim2.fromOffset(82, 22); liveBadge.BackgroundColor3 = Colors.Surface; liveBadge.BackgroundTransparency = 0.22
 liveBadge.Text = ""; liveBadge.AutoButtonColor = false; liveBadge.ZIndex = 12
 Instance.new("UICorner", liveBadge).CornerRadius = UDim.new(1, 0)
 local lbStroke = Instance.new("UIStroke", liveBadge)
-lbStroke.Color = Colors.PrimaryDark; lbStroke.Thickness = 1; lbStroke.Transparency = 0.40
+lbStroke.Color = Colors.PrimaryDark; lbStroke.Thickness = 1; lbStroke.Transparency = 0.45
 
 local ledDot = Instance.new("Frame", liveBadge)
 ledDot.Size = UDim2.fromOffset(6, 6); ledDot.AnchorPoint = Vector2.new(0, 0.5); ledDot.Position = UDim2.new(0, 9, 0.5, 0)
@@ -463,13 +469,13 @@ liveBadge.MouseButton1Click:Connect(function()
     rosterFrame.Visible = not rosterFrame.Visible
     if rosterFrame.Visible then
         rosterFrame.Position = UDim2.new(1, 10, 0, 46)
-        TweenService:Create(rosterFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(1, -154, 0, 46)}):Play()
+        TweenService:Create(rosterFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(1, -158, 0, 46)}):Play()
     end
 end)
 
 local headerRightCluster = Instance.new("Frame", header)
 headerRightCluster.AnchorPoint = Vector2.new(1, 0.5); headerRightCluster.Position = UDim2.new(1, -12, 0.5, 1)
-headerRightCluster.Size = UDim2.new(0, 180, 0, 25); headerRightCluster.BackgroundTransparency = 1; headerRightCluster.ZIndex = 12
+headerRightCluster.Size = UDim2.new(0, 180, 0, 24); headerRightCluster.BackgroundTransparency = 1; headerRightCluster.ZIndex = 12
 
 local hrLayout = Instance.new("UIListLayout", headerRightCluster)
 hrLayout.FillDirection = Enum.FillDirection.Horizontal; hrLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
@@ -483,7 +489,7 @@ local function createHeaderBtn(text, onClick)
     Instance.new("UICorner", b).CornerRadius = UDim.new(0, 7)
     crispText(b, 0.35)
     local btnStr = Instance.new("UIStroke", b)
-    btnStr.Thickness = 1; btnStr.Color = Colors.PrimaryDark; btnStr.Transparency = 0.50
+    btnStr.Thickness = 1; btnStr.Color = Colors.PrimaryDark; btnStr.Transparency = 0.55
     applySpringHover(b)
     b.MouseButton1Click:Connect(function() pcall(onClick) end)
     return b
@@ -506,7 +512,7 @@ if Admin[lp.Name:lower()] then
     end)
 end
 
-local serverBtn, globalBtn, tabActiveSlider, tabSliderStroke, sendBtn, sendBtnGrad, memeBtn, inputFocusGrad, inputLeadIcon
+local serverBtn, globalBtn, tabActiveSlider, tabSliderStroke, sendBtn, sendBtnGrad, memeBtn, inputFocusGrad, inputDiamondCore
 
 createHeaderBtn("CLR", function()
     currentThemeIdx = (currentThemeIdx % #Themes) + 1
@@ -516,7 +522,7 @@ createHeaderBtn("CLR", function()
     strokeGrad.Color = cSeq
     if inputFocusGrad then inputFocusGrad.Color = cSeq end
     if sendBtnGrad then sendBtnGrad.Color = ColorSequence.new(th.Primary, th.Accent) end
-    if inputLeadIcon then inputLeadIcon.TextColor3 = th.Primary end
+    if inputDiamondCore then inputDiamondCore.BackgroundColor3 = th.Primary end
     aura.ImageColor3 = th.Primary; headerTitle.TextColor3 = th.Primary; liveText.TextColor3 = th.Primary
     dragPill.BackgroundColor3 = th.Primary; coreGlow.ImageColor3 = th.Primary; eventGlow.ImageColor3 = th.Accent
     if memeBtn then memeBtn.TextColor3 = th.Primary end
@@ -538,18 +544,18 @@ ghostBtn = createHeaderBtn("GST", function()
         TweenService:Create(aura, TweenInfo.new(0.35), {ImageTransparency = 0.90}):Play()
         TweenService:Create(shadow, TweenInfo.new(0.35), {ImageTransparency = 0.55}):Play()
         ghostBtn.BackgroundColor3 = Colors.ActiveTint; ghostBtn.TextColor3 = Colors.Primary
-        mainStroke.Transparency = 0.15; mainStroke.Thickness = 1.7; badgeSelectorModal.BackgroundTransparency = 0.45
+        mainStroke.Transparency = 0.18; mainStroke.Thickness = 1.6; badgeSelectorModal.BackgroundTransparency = 0.45
         for _, cardWrap in ipairs(messageFeed:GetChildren()) do
             local inner = cardWrap:FindFirstChild("CardSurface")
             if inner then inner.BackgroundTransparency = 0.52 end
         end
     else
         TweenService:Create(mainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quart), {BackgroundTransparency = 0.08}):Play()
-        TweenService:Create(glassSheen, TweenInfo.new(0.35), {BackgroundTransparency = 0.93}):Play()
-        TweenService:Create(aura, TweenInfo.new(0.35), {ImageTransparency = 0.65}):Play()
-        TweenService:Create(shadow, TweenInfo.new(0.35), {ImageTransparency = 0.22}):Play()
+        TweenService:Create(glassSheen, TweenInfo.new(0.35), {BackgroundTransparency = 0.94}):Play()
+        TweenService:Create(aura, TweenInfo.new(0.35), {ImageTransparency = 0.68}):Play()
+        TweenService:Create(shadow, TweenInfo.new(0.35), {ImageTransparency = 0.25}):Play()
         ghostBtn.BackgroundColor3 = Colors.Surface; ghostBtn.TextColor3 = Colors.Text
-        mainStroke.Transparency = 0.25; mainStroke.Thickness = 1.6; badgeSelectorModal.BackgroundTransparency = 0.05
+        mainStroke.Transparency = 0.30; mainStroke.Thickness = 1.4; badgeSelectorModal.BackgroundTransparency = 0.05
         for _, cardWrap in ipairs(messageFeed:GetChildren()) do
             local inner = cardWrap:FindFirstChild("CardSurface")
             if inner then inner.BackgroundTransparency = 0.20 end
@@ -589,8 +595,8 @@ closeBtn.TextColor3 = Colors.Danger
 
 local headerDivider = Instance.new("Frame", header)
 headerDivider.Size = UDim2.new(1, -24, 0, 1); headerDivider.Position = UDim2.new(0, 12, 1, 0)
-headerDivider.BorderSizePixel = 0; headerDivider.BackgroundColor3 = rgb(38, 48, 70)
-headerDivider.BackgroundTransparency = 0.40; headerDivider.ZIndex = 12
+headerDivider.BorderSizePixel = 0; headerDivider.BackgroundColor3 = rgb(34, 44, 64)
+headerDivider.BackgroundTransparency = 0.45; headerDivider.ZIndex = 12
 
 -- =========================================================
 -- 🔀 LUXURY SLIDING SEGMENTED TABS (SERVER FIRST, GLOBAL SECOND)
@@ -604,14 +610,14 @@ tabShell.Size = UDim2.new(1, 0, 1, 0); tabShell.BackgroundColor3 = Colors.Surfac
 tabShell.BackgroundTransparency = 0.25; tabShell.ZIndex = 9
 Instance.new("UICorner", tabShell).CornerRadius = UDim.new(0, 10)
 local tsStroke = Instance.new("UIStroke", tabShell)
-tsStroke.Thickness = 1; tsStroke.Color = Colors.SurfaceHover; tsStroke.Transparency = 0.35
+tsStroke.Thickness = 1; tsStroke.Color = Colors.SurfaceHover; tsStroke.Transparency = 0.40
 
 tabActiveSlider = Instance.new("Frame", tabShell)
 tabActiveSlider.Size = UDim2.new(0.5, -4, 1, -4); tabActiveSlider.Position = UDim2.new(0, 2, 0, 2)
 tabActiveSlider.BackgroundColor3 = Colors.ActiveTint; tabActiveSlider.ZIndex = 9
 Instance.new("UICorner", tabActiveSlider).CornerRadius = UDim.new(0, 8)
 tabSliderStroke = Instance.new("UIStroke", tabActiveSlider)
-tabSliderStroke.Thickness = 1; tabSliderStroke.Color = Colors.PrimaryDark; tabSliderStroke.Transparency = 0.45
+tabSliderStroke.Thickness = 1; tabSliderStroke.Color = Colors.PrimaryDark; tabSliderStroke.Transparency = 0.50
 
 serverBtn = Instance.new("TextButton", tabShell)
 serverBtn.Size = UDim2.new(0.5, 0, 1, 0); serverBtn.Position = UDim2.new(0, 0, 0, 0)
@@ -687,21 +693,21 @@ local function buildLiveBadgeElement(parentContainer, bData, zBase)
     local tagWidth = TextService:GetTextSize(bData.Title, 10.5, Enum.Font.GothamBlack, Vector2.new(1000, 20)).X + 14
     local badgeHost = Instance.new("Frame", parentContainer)
     badgeHost.Size = UDim2.fromOffset(tagWidth, 18); badgeHost.BackgroundColor3 = rgb(9, 13, 22)
-    badgeHost.BackgroundTransparency = 0.20; badgeHost.BorderSizePixel = 0; badgeHost.ZIndex = zBase
+    badgeHost.BackgroundTransparency = 0.22; badgeHost.BorderSizePixel = 0; badgeHost.ZIndex = zBase
     Instance.new("UICorner", badgeHost).CornerRadius = UDim.new(0, 5)
 
     local pillStroke = Instance.new("UIStroke", badgeHost)
-    pillStroke.Thickness = 1.15; pillStroke.Transparency = 0.22; pillStroke.Color = rgb(255, 255, 255)
+    pillStroke.Thickness = 1.1; pillStroke.Transparency = 0.25; pillStroke.Color = rgb(255, 255, 255)
     local strokeGradGlow = Instance.new("UIGradient", pillStroke)
     strokeGradGlow.Color = ColorSequence.new(bData.Colors)
 
     local badgeGlow = Instance.new("TextLabel", badgeHost)
     badgeGlow.Size = UDim2.fromScale(1, 1); badgeGlow.BackgroundTransparency = 1; badgeGlow.Text = bData.Title
-    badgeGlow.TextColor3 = rgb(255, 255, 255); badgeGlow.TextTransparency = 0.42
+    badgeGlow.TextColor3 = rgb(255, 255, 255); badgeGlow.TextTransparency = 0.44
     badgeGlow.Font = Enum.Font.GothamBlack; badgeGlow.TextSize = 10.5; badgeGlow.ZIndex = zBase + 1
 
     local glowStroke = Instance.new("UIStroke", badgeGlow)
-    glowStroke.Thickness = 1.1; glowStroke.Transparency = 0.50; glowStroke.Color = rgb(255, 255, 255)
+    glowStroke.Thickness = 1.1; glowStroke.Transparency = 0.52; glowStroke.Color = rgb(255, 255, 255)
 
     local badgeLabel = Instance.new("TextLabel", badgeHost)
     badgeLabel.Size = UDim2.fromScale(1, 1); badgeLabel.BackgroundTransparency = 1; badgeLabel.Text = bData.Title
@@ -709,7 +715,7 @@ local function buildLiveBadgeElement(parentContainer, bData, zBase)
     badgeLabel.TextSize = 10.5; badgeLabel.ZIndex = zBase + 2
 
     local bStroke = Instance.new("UIStroke", badgeLabel)
-    bStroke.Thickness = 0.9; bStroke.Color = Color3.new(0, 0, 0); bStroke.Transparency = 0.18
+    bStroke.Thickness = 0.9; bStroke.Color = Color3.new(0, 0, 0); bStroke.Transparency = 0.20
 
     local badgeShine = Instance.new("TextLabel", badgeHost)
     badgeShine.Size = UDim2.fromScale(1, 1); badgeShine.BackgroundTransparency = 1; badgeShine.Text = bData.Title
@@ -719,7 +725,7 @@ local function buildLiveBadgeElement(parentContainer, bData, zBase)
     local shineGrad = Instance.new("UIGradient", badgeShine)
     shineGrad.Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0.0, 1), NumberSequenceKeypoint.new(0.44, 1),
-        NumberSequenceKeypoint.new(0.5, 0.02), NumberSequenceKeypoint.new(0.56, 1),
+        NumberSequenceKeypoint.new(0.5, 0.04), NumberSequenceKeypoint.new(0.56, 1),
         NumberSequenceKeypoint.new(1.0, 1)
     })
 
@@ -773,21 +779,21 @@ end
 -- =========================================================
 messageFeed = Instance.new("ScrollingFrame", mainFrame)
 messageFeed.Size = UDim2.new(1, -24, 1, -152); messageFeed.Position = UDim2.new(0, 12, 0, 90)
-messageFeed.BackgroundTransparency = 1; messageFeed.ScrollBarThickness = 3
+messageFeed.BackgroundTransparency = 1; messageFeed.ScrollBarThickness = 2
 messageFeed.ScrollBarImageColor3 = Colors.PrimaryDark; messageFeed.CanvasSize = UDim2.new(0, 0, 0, 0)
 messageFeed.AutomaticCanvasSize = Enum.AutomaticSize.Y; messageFeed.ZIndex = 8
 
 local feedLayout = Instance.new("UIListLayout", messageFeed)
-feedLayout.Padding = UDim.new(0, 8); feedLayout.SortOrder = Enum.SortOrder.LayoutOrder
+feedLayout.Padding = UDim.new(0, 7); feedLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
 local feedPadding = Instance.new("UIPadding", messageFeed)
 feedPadding.PaddingTop = UDim.new(0, 2); feedPadding.PaddingLeft = UDim.new(0, 2)
 feedPadding.PaddingRight = UDim.new(0, 5); feedPadding.PaddingBottom = UDim.new(0, 6)
 
 local jumpBottomBtn = Instance.new("TextButton", mainFrame)
-jumpBottomBtn.Size = UDim2.fromOffset(126, 26); jumpBottomBtn.AnchorPoint = Vector2.new(0.5, 1)
+jumpBottomBtn.Size = UDim2.fromOffset(126, 25); jumpBottomBtn.AnchorPoint = Vector2.new(0.5, 1)
 jumpBottomBtn.Position = UDim2.new(0.5, 0, 1, -64); jumpBottomBtn.BackgroundColor3 = Colors.Surface
-jumpBottomBtn.BackgroundTransparency = 0.08; jumpBottomBtn.Text = "↓ New Messages"
+jumpBottomBtn.BackgroundTransparency = 0.08; jumpBottomBtn.Text = "New Messages"
 jumpBottomBtn.TextColor3 = Colors.Primary; jumpBottomBtn.Font = Enum.Font.GothamBlack
 jumpBottomBtn.TextSize = 9.5; jumpBottomBtn.Visible = false; jumpBottomBtn.ZIndex = 35
 Instance.new("UICorner", jumpBottomBtn).CornerRadius = UDim.new(1, 0)
@@ -827,7 +833,7 @@ local function createActionBtn(text, color, onClick)
 end
 
 -- =========================================================
--- 💬 ULTRA-CRISP MESSAGE PIPELINE & SCULPTED QUOTE CARDS
+-- 💬 MICRO-PERFECT MESSAGE PIPELINE (ZERO UNICODE BOXES)
 -- =========================================================
 local function updateLiveCounter(username, dispName)
     activeUsersTable[username:lower()] = { time = os.time(), disp = dispName or username, user = username }
@@ -847,7 +853,7 @@ local function addJoinNotice(dispName)
     local lbl = Instance.new("TextLabel", pill)
     lbl.Size = UDim2.fromScale(1, 1); lbl.BackgroundTransparency = 1; lbl.Font = Enum.Font.GothamMedium
     lbl.TextSize = 10; lbl.TextColor3 = Colors.SubText; lbl.RichText = true
-    lbl.Text = string.format("<font color='#2DF587'>●</font> <i>%s joined the network</i>", sanitizeXml(dispName))
+    lbl.Text = string.format("<font color='#2DEB87'><b>•</b></font> <i>%s joined the network</i>", sanitizeXml(dispName))
     lbl.TextXAlignment = Enum.TextXAlignment.Center; lbl.ZIndex = 10
     crispText(lbl, 0.6)
 
@@ -903,8 +909,9 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     cardWrapper:SetAttribute("ChatScope", effectiveScope); cardWrapper:SetAttribute("JobId", effectiveJob)
     cardWrapper.Visible = (chatMode == "server") and (effectiveScope ~= "global") or (effectiveScope ~= "server")
 
+    -- Zero-Box Cyber-Capsule Swipe Indicator
     local swipeCapsule = Instance.new("Frame", cardWrapper)
-    swipeCapsule.Size = UDim2.fromOffset(38, 26); swipeCapsule.AnchorPoint = Vector2.new(0, 0.5)
+    swipeCapsule.Size = UDim2.fromOffset(38, 24); swipeCapsule.AnchorPoint = Vector2.new(0, 0.5)
     swipeCapsule.Position = UDim2.new(0, 4, 0.5, 0); swipeCapsule.BackgroundColor3 = Colors.ActiveTint
     swipeCapsule.BackgroundTransparency = 1; swipeCapsule.ClipsDescendants = true; swipeCapsule.ZIndex = 8
     Instance.new("UICorner", swipeCapsule).CornerRadius = UDim.new(1, 0)
@@ -915,13 +922,13 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     Instance.new("UICorner", scFill).CornerRadius = UDim.new(1, 0)
 
     local scStroke = Instance.new("UIStroke", swipeCapsule)
-    scStroke.Color = Colors.Primary; scStroke.Thickness = 1.4; scStroke.Transparency = 1
+    scStroke.Color = Colors.Primary; scStroke.Thickness = 1.3; scStroke.Transparency = 1
     local scScale = Instance.new("UIScale", swipeCapsule); scScale.Scale = 0.5
 
     local swipeLabel = Instance.new("TextLabel", swipeCapsule)
-    swipeLabel.Size = UDim2.fromScale(1, 1); swipeLabel.BackgroundTransparency = 1; swipeLabel.Text = "↩"
+    swipeLabel.Size = UDim2.fromScale(1, 1); swipeLabel.BackgroundTransparency = 1; swipeLabel.Text = "REP"
     swipeLabel.TextColor3 = Colors.Primary; swipeLabel.TextTransparency = 1
-    swipeLabel.Font = Enum.Font.GothamBlack; swipeLabel.TextSize = 13; swipeLabel.ZIndex = 9
+    swipeLabel.Font = Enum.Font.GothamBlack; swipeLabel.TextSize = 8.5; swipeLabel.ZIndex = 9
 
     local card = Instance.new("TextButton", cardWrapper)
     card.Name = "CardSurface"
@@ -930,15 +937,15 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     card.BackgroundColor3 = isMentioned and Colors.MentionBg or (isSystemAI and Colors.SurfaceAI or (isSelf and Colors.SurfaceSelf or Colors.Surface))
     card.BackgroundTransparency = isGhostMode and 0.52 or 0.20
     card.Text = ""; card.AutoButtonColor = false; card.ClipsDescendants = false; card.ZIndex = 10
-    Instance.new("UICorner", card).CornerRadius = UDim.new(0, 12)
+    Instance.new("UICorner", card).CornerRadius = UDim.new(0, 11)
 
     local cardGrad = Instance.new("UIGradient", card)
-    cardGrad.Color = ColorSequence.new({ csk(0, rgb(255, 255, 255)), csk(0.6, rgb(230, 238, 250)), csk(1, rgb(190, 202, 222)) })
+    cardGrad.Color = ColorSequence.new({ csk(0, rgb(255, 255, 255)), csk(0.6, rgb(232, 240, 252)), csk(1, rgb(195, 206, 225)) })
     cardGrad.Rotation = 25
 
     local topSpecular = Instance.new("Frame", card)
     topSpecular.Size = UDim2.new(1, -24, 0, 1); topSpecular.Position = UDim2.new(0, 12, 0, 1)
-    topSpecular.BackgroundColor3 = rgb(255, 255, 255); topSpecular.BackgroundTransparency = 0.86
+    topSpecular.BackgroundColor3 = rgb(255, 255, 255); topSpecular.BackgroundTransparency = 0.88
     topSpecular.BorderSizePixel = 0; topSpecular.ZIndex = 11
 
     local cardScale = Instance.new("UIScale", card); cardScale.Scale = 0.96
@@ -956,10 +963,11 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     stripGrad.Rotation = 90
 
     local cardStroke = Instance.new("UIStroke", card)
-    cardStroke.Thickness = (isMentioned or isSystemAI) and 1.3 or 1.1
-    cardStroke.Transparency = isMentioned and 0.20 or (isSystemAI and 0.40 or (isSelf and 0.55 or 0.72))
+    cardStroke.Thickness = (isMentioned or isSystemAI) and 1.25 or 1.0
+    cardStroke.Transparency = isMentioned and 0.22 or (isSystemAI and 0.42 or (isSelf and 0.58 or 0.74))
     cardStroke.Color = isMentioned and Colors.MentionGold or (isSystemAI and Colors.Purple or (isSelf and Colors.PrimaryDark or Colors.SurfaceHover))
 
+    -- Zero-Box Geometric AI Avatar vs Player Avatar
     if isSystemAI then
         local aiAvatar = Instance.new("Frame", card)
         aiAvatar.Size = UDim2.fromOffset(32, 32); aiAvatar.Position = UDim2.fromOffset(14, 9)
@@ -971,22 +979,25 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         aiStrokeGrad.Color = ColorSequence.new({ csk(0, Colors.Primary), csk(0.5, Colors.Purple), csk(1, Colors.Primary) })
 
         local aiRing = Instance.new("Frame", aiAvatar)
-        aiRing.Size = UDim2.fromOffset(22, 22); aiRing.AnchorPoint = Vector2.new(0.5, 0.5)
+        aiRing.Size = UDim2.fromOffset(20, 20); aiRing.AnchorPoint = Vector2.new(0.5, 0.5)
         aiRing.Position = UDim2.fromScale(0.5, 0.5); aiRing.BackgroundTransparency = 1; aiRing.ZIndex = 13
         local rSt = Instance.new("UIStroke", aiRing)
-        rSt.Thickness = 1; rSt.Color = Colors.Purple; rSt.Transparency = 0.3
+        rSt.Thickness = 1; rSt.Color = Colors.Purple; rSt.Transparency = 0.35
 
-        local aiCoreText = Instance.new("TextLabel", aiAvatar)
-        aiCoreText.Size = UDim2.fromScale(1, 1); aiCoreText.BackgroundTransparency = 1; aiCoreText.Text = "✦"
-        aiCoreText.TextColor3 = Colors.Primary; aiCoreText.Font = Enum.Font.GothamBlack; aiCoreText.TextSize = 14; aiCoreText.ZIndex = 14
-        table.insert(activeAICoresList, { grad = aiStrokeGrad, ring = aiRing, icon = aiCoreText })
+        -- Pure Geometric Rotated Diamond (Never shows a Unicode Box)
+        local aiCoreDiamond = Instance.new("Frame", aiAvatar)
+        aiCoreDiamond.Size = UDim2.fromOffset(9, 9); aiCoreDiamond.AnchorPoint = Vector2.new(0.5, 0.5)
+        aiCoreDiamond.Position = UDim2.fromScale(0.5, 0.5); aiCoreDiamond.Rotation = 45
+        aiCoreDiamond.BackgroundColor3 = Colors.Primary; aiCoreDiamond.ZIndex = 14
+        Instance.new("UICorner", aiCoreDiamond).CornerRadius = UDim.new(0, 2)
+        table.insert(activeAICoresList, { grad = aiStrokeGrad, ring = aiRing, icon = aiCoreDiamond })
     else
         local avatarImg = Instance.new("ImageLabel", card)
         avatarImg.Size = UDim2.fromOffset(32, 32); avatarImg.Position = UDim2.fromOffset(14, 9)
         avatarImg.BackgroundColor3 = Colors.Background; avatarImg.BackgroundTransparency = 0.15; avatarImg.ZIndex = 12
         Instance.new("UICorner", avatarImg).CornerRadius = UDim.new(1, 0)
         local avStroke = Instance.new("UIStroke", avatarImg)
-        avStroke.Thickness = 1.35; avStroke.Transparency = 0.22
+        avStroke.Thickness = 1.3; avStroke.Transparency = 0.25
         avStroke.Color = isAdminUser and Colors.Primary or Colors.SurfaceHover
 
         local statusDot = Instance.new("Frame", avatarImg)
@@ -1047,21 +1058,22 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     local nameLbl = Instance.new("TextLabel", topIdentityRow)
     nameLbl.AutomaticSize = Enum.AutomaticSize.X; nameLbl.Size = UDim2.new(0, 0, 1, 0); nameLbl.BackgroundTransparency = 1
     nameLbl.RichText = true; nameLbl.Text = sanitizeXml(dispName)
-    nameLbl.TextColor3 = isSystemAI and rgb(0, 235, 255) or (currentThemeIdx == 2 and rgb(255, 45, 85) or Colors.Primary)
+    nameLbl.TextColor3 = isSystemAI and rgb(0, 235, 255) or (currentThemeIdx == 2 and rgb(255, 65, 100) or Colors.Primary)
     nameLbl.Font = Enum.Font.GothamBlack; nameLbl.TextSize = 12.5; nameLbl.LayoutOrder = 2; nameLbl.ZIndex = 13
     crispText(nameLbl, 0.25)
 
     if privateUserTarget then
         local dmLbl = Instance.new("TextLabel", topIdentityRow)
         dmLbl.AutomaticSize = Enum.AutomaticSize.X; dmLbl.Size = UDim2.new(0, 0, 1, 0); dmLbl.BackgroundTransparency = 1
-        dmLbl.RichText = true; dmLbl.Text = isPrivateSender and ("• 🔐 Private") or ("• 🔐 Direct")
+        dmLbl.RichText = true; dmLbl.Text = isPrivateSender and ("• [DM Sent]") or ("• [Direct DM]")
         dmLbl.TextColor3 = Colors.Purple; dmLbl.Font = Enum.Font.GothamBlack; dmLbl.TextSize = 9.5; dmLbl.LayoutOrder = 3; dmLbl.ZIndex = 13
         crispText(dmLbl, 0.45)
     end
 
+    -- Zero-Box Sculpted Quote Box
     if replyToName and replySnippet then
         local quoteBox = Instance.new("Frame", cardContent)
-        quoteBox.Size = UDim2.new(1, -4, 0, 28); quoteBox.BackgroundColor3 = rgb(8, 11, 19)
+        quoteBox.Size = UDim2.new(1, -4, 0, 26); quoteBox.BackgroundColor3 = rgb(8, 11, 19)
         quoteBox.BackgroundTransparency = 0.18; quoteBox.LayoutOrder = 2; quoteBox.ZIndex = 13
         Instance.new("UICorner", quoteBox).CornerRadius = UDim.new(0, 7)
         local qbStroke = Instance.new("UIStroke", quoteBox)
@@ -1074,13 +1086,13 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         local qBarGrad = Instance.new("UIGradient", qBar)
         qBarGrad.Color = ColorSequence.new(Colors.Primary, Colors.Purple); qBarGrad.Rotation = 90
 
-        local qIcon = Instance.new("TextLabel", quoteBox)
-        qIcon.Size = UDim2.fromOffset(16, 28); qIcon.Position = UDim2.fromOffset(11, 0); qIcon.BackgroundTransparency = 1
-        qIcon.Text = "↩"; qIcon.TextColor3 = Colors.Primary; qIcon.Font = Enum.Font.GothamBlack; qIcon.TextSize = 11; qIcon.ZIndex = 14
+        local qTag = Instance.new("TextLabel", quoteBox)
+        qTag.Size = UDim2.fromOffset(24, 26); qTag.Position = UDim2.fromOffset(11, 0); qTag.BackgroundTransparency = 1
+        qTag.Text = "RE:"; qTag.TextColor3 = Colors.Primary; qTag.Font = Enum.Font.GothamBlack; qTag.TextSize = 9; qTag.ZIndex = 14
 
         local qText = Instance.new("TextLabel", quoteBox)
-        qText.Size = UDim2.new(1, -32, 1, 0); qText.Position = UDim2.fromOffset(28, 0); qText.BackgroundTransparency = 1; qText.RichText = true
-        qText.Text = string.format("<font color='#00FFCD'><b>%s</b></font>  <font color='#A5B8D4'>%s</font>", sanitizeXml(replyToName), sanitizeXml(replySnippet))
+        qText.Size = UDim2.new(1, -40, 1, 0); qText.Position = UDim2.fromOffset(35, 0); qText.BackgroundTransparency = 1; qText.RichText = true
+        qText.Text = string.format("<font color='#00E6C3'><b>%s</b></font>  <font color='#A5B8D4'>%s</font>", sanitizeXml(replyToName), sanitizeXml(replySnippet))
         qText.TextColor3 = Colors.SubText; qText.Font = Enum.Font.GothamMedium; qText.TextSize = 10
         qText.TextTruncate = Enum.TextTruncate.AtEnd; qText.TextXAlignment = Enum.TextXAlignment.Left; qText.ZIndex = 14
         crispText(qText, 0.45)
@@ -1199,7 +1211,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
 end
 
 -- =========================================================
--- ✨ FEATURE 5: COMPACT LIVE "SOMEONE IS TYPING..." WAVE PILL
+-- ✨ COMPACT LIVE "SOMEONE IS TYPING..." WAVE PILL
 -- =========================================================
 local liveTypingPill = Instance.new("Frame", mainFrame)
 liveTypingPill.AutomaticSize = Enum.AutomaticSize.X; liveTypingPill.Size = UDim2.fromOffset(0, 22)
@@ -1233,7 +1245,7 @@ ltpLabel.Text = ""; ltpLabel.TextColor3 = Colors.SubText; ltpLabel.Font = Enum.F
 crispText(ltpLabel, 0.5)
 
 -- =========================================================
--- ⚡ FEATURE 6: LIGHTWEIGHT SMART AUTO-COMPLETE CHIP BAR
+-- ⚡ ZERO-BOX SMART AUTO-COMPLETE CHIP BAR
 -- =========================================================
 local autoCompleteBar = Instance.new("Frame", mainFrame)
 autoCompleteBar.Size = UDim2.new(1, -28, 0, 30); autoCompleteBar.Position = UDim2.new(0, 14, 1, -88)
@@ -1264,9 +1276,9 @@ local function refreshAutoComplete(rawText)
     if cmdPrefix then
         local q = cmdPrefix:sub(2):lower()
         local cmds = {
-            { label = "⚡ !p [Direct Message]", fill = "!p " },
-            { label = "✦ !ai [Neural Help]", fill = "!ai" },
-            { label = "👑 /help [Commands]", fill = "/help" }
+            { label = "!p  •  Direct DM", fill = "!p " },
+            { label = "!ai  •  AI Assistant", fill = "!ai" },
+            { label = "/help  •  Commands", fill = "/help" }
         }
         for _, item in ipairs(cmds) do
             if q == "" or item.fill:lower():find(q, 1, true) then
@@ -1281,7 +1293,7 @@ local function refreshAutoComplete(rawText)
             if q == "" or uName:lower():find(q, 1, true) or dName:lower():find(q, 1, true) then
                 seen[uName:lower()] = true
                 table.insert(suggestions, {
-                    text = "● " .. dName,
+                    text = "@ " .. dName,
                     replaceMode = isDM and "dm" or "mention",
                     val = isDM and ("!p " .. uName .. " ") or ("@" .. dName .. " ")
                 })
@@ -1322,7 +1334,7 @@ local function refreshAutoComplete(rawText)
 end
 
 -- =========================================================
--- ↩️ LUXURY FLOATING REPLY DOCK & EXPENSIVE PILL INPUT BAR
+-- ↩️ ZERO-BOX REPLY DOCK & CLEAN PILL INPUT BAR (NO TYPING LINE)
 -- =========================================================
 local replyBanner = Instance.new("Frame", mainFrame)
 replyBanner.Size = UDim2.new(1, -28, 0, 30); replyBanner.Position = UDim2.new(0, 14, 1, -88)
@@ -1346,8 +1358,8 @@ rbText.TextSize = 10; rbText.TextTruncate = Enum.TextTruncate.AtEnd; rbText.Text
 
 local rbClose = Instance.new("TextButton", replyBanner)
 rbClose.Size = UDim2.fromOffset(22, 22); rbClose.AnchorPoint = Vector2.new(1, 0.5); rbClose.Position = UDim2.new(1, -5, 0.5, 0)
-rbClose.BackgroundColor3 = Colors.Background; rbClose.BackgroundTransparency = 0.35; rbClose.Text = "✕"
-rbClose.TextColor3 = Colors.SubText; rbClose.Font = Enum.Font.GothamBlack; rbClose.TextSize = 10; rbClose.ZIndex = 22
+rbClose.BackgroundColor3 = Colors.Background; rbClose.BackgroundTransparency = 0.35; rbClose.Text = "X"
+rbClose.TextColor3 = Colors.SubText; rbClose.Font = Enum.Font.GothamBlack; rbClose.TextSize = 9.5; rbClose.ZIndex = 22
 Instance.new("UICorner", rbClose).CornerRadius = UDim.new(1, 0)
 
 local function clearReplyBanner()
@@ -1359,13 +1371,14 @@ rbClose.MouseButton1Click:Connect(clearReplyBanner)
 activateReplyBanner = function(targetDispName, snippetText)
     local cleanSnippet = string.gsub(snippetText, "[%[%]\n\r|]", " ")
     activeReplyData = { disp = targetDispName, text = cleanSnippet }
-    rbText.Text = string.format("<font color='#00FFCD'><b>↩ Replying to %s</b></font>  •  <font color='#9AB0CE'>%s</font>", sanitizeXml(targetDispName), sanitizeXml(cleanSnippet))
+    rbText.Text = string.format("<font color='#00E6C3'><b>RE: %s</b></font>  •  <font color='#9AB0CE'>%s</font>", sanitizeXml(targetDispName), sanitizeXml(cleanSnippet))
     replyBanner.Visible = true; rbScale.Scale = 0.92
     TweenService:Create(rbScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
     messageFeed.Size = UDim2.new(1, -24, 1, -184)
     chatInput:CaptureFocus()
 end
 
+-- Micro-Perfect Pill Input Dock (Top Typing Line Removed)
 local inputContainer = Instance.new("Frame", mainFrame)
 inputContainer.Size = UDim2.new(1, -24, 0, 46); inputContainer.Position = UDim2.new(0, 12, 1, -54)
 inputContainer.BackgroundColor3 = rgb(13, 18, 29); inputContainer.BackgroundTransparency = 0.10; inputContainer.ZIndex = 12
@@ -1375,17 +1388,12 @@ local icGrad = Instance.new("UIGradient", inputContainer)
 icGrad.Color = ColorSequence.new({ csk(0, rgb(255, 255, 255)), csk(1, rgb(195, 208, 230)) }); icGrad.Rotation = 90
 
 local inputStroke = Instance.new("UIStroke", inputContainer)
-inputStroke.Thickness = 1.3; inputStroke.Color = rgb(255, 255, 255); inputStroke.Transparency = 0.42
+inputStroke.Thickness = 1.2; inputStroke.Color = rgb(255, 255, 255); inputStroke.Transparency = 0.45
 
 inputFocusGrad = Instance.new("UIGradient", inputStroke)
 inputFocusGrad.Color = ColorSequence.new({ csk(0, Colors.Primary), csk(0.5, Colors.Purple), csk(1, Colors.Primary) })
 
-local typingIndicator = Instance.new("Frame", inputContainer)
-typingIndicator.Size = UDim2.new(1, -32, 0, 2); typingIndicator.Position = UDim2.new(0, 16, 0, 0)
-typingIndicator.BackgroundColor3 = Colors.Primary; typingIndicator.BorderSizePixel = 0
-typingIndicator.BackgroundTransparency = 1; typingIndicator.ZIndex = 16
-Instance.new("UICorner", typingIndicator).CornerRadius = UDim.new(1, 0)
-
+-- Pure Geometric Diamond Core Inside Input Orb (Never Renders a Box)
 local inputLeadOrb = Instance.new("Frame", inputContainer)
 inputLeadOrb.Size = UDim2.fromOffset(28, 28); inputLeadOrb.AnchorPoint = Vector2.new(0, 0.5)
 inputLeadOrb.Position = UDim2.new(0, 9, 0.5, 0); inputLeadOrb.BackgroundColor3 = Colors.ActiveTint
@@ -1394,14 +1402,16 @@ Instance.new("UICorner", inputLeadOrb).CornerRadius = UDim.new(1, 0)
 local iloStroke = Instance.new("UIStroke", inputLeadOrb)
 iloStroke.Color = Colors.PrimaryDark; iloStroke.Thickness = 1; iloStroke.Transparency = 0.45
 
-inputLeadIcon = Instance.new("TextLabel", inputLeadOrb)
-inputLeadIcon.Size = UDim2.fromScale(1, 1); inputLeadIcon.BackgroundTransparency = 1; inputLeadIcon.Text = "✦"
-inputLeadIcon.TextColor3 = Colors.Primary; inputLeadIcon.Font = Enum.Font.GothamBlack; inputLeadIcon.TextSize = 12; inputLeadIcon.ZIndex = 14
+inputDiamondCore = Instance.new("Frame", inputLeadOrb)
+inputDiamondCore.Size = UDim2.fromOffset(8, 8); inputDiamondCore.AnchorPoint = Vector2.new(0.5, 0.5)
+inputDiamondCore.Position = UDim2.fromScale(0.5, 0.5); inputDiamondCore.Rotation = 45
+inputDiamondCore.BackgroundColor3 = Colors.Primary; inputDiamondCore.ZIndex = 14
+Instance.new("UICorner", inputDiamondCore).CornerRadius = UDim.new(0, 2)
 
 local dmBadge = Instance.new("TextButton", inputContainer)
 dmBadge.Size = UDim2.new(0, 0, 1, -14); dmBadge.AnchorPoint = Vector2.new(0, 0.5); dmBadge.Position = UDim2.new(0, 42, 0.5, 0)
 dmBadge.BackgroundColor3 = rgb(45, 20, 65); dmBadge.TextColor3 = Colors.Purple
-dmBadge.Font = Enum.Font.GothamBlack; dmBadge.TextSize = 10; dmBadge.Visible = false; dmBadge.ZIndex = 14
+dmBadge.Font = Enum.Font.GothamBlack; dmBadge.TextSize = 9.5; dmBadge.Visible = false; dmBadge.ZIndex = 14
 Instance.new("UICorner", dmBadge).CornerRadius = UDim.new(1, 0)
 
 chatInput = Instance.new("TextBox", inputContainer)
@@ -1434,32 +1444,30 @@ chatInput:GetPropertyChangedSignal("Text"):Connect(function()
     sanitizeChatInput()
     local txt = chatInput.Text
     if #txt > 0 then
-        typingIndicator.BackgroundTransparency = 0.15
         refreshAutoComplete(txt)
         if not txt:match("^[!/]") then broadcastTypingSignal() end
     else
-        typingIndicator.BackgroundTransparency = 1; autoCompleteBar.Visible = false
+        autoCompleteBar.Visible = false
     end
 end)
 task.defer(sanitizeChatInput)
 
 chatInput.Focused:Connect(function()
     sanitizeChatInput()
-    TweenService:Create(inputStroke, TweenInfo.new(0.25), {Transparency = 0.05, Thickness = 1.7}):Play()
-    TweenService:Create(iloStroke, TweenInfo.new(0.25), {Color = Colors.Primary, Transparency = 0.1}):Play()
+    TweenService:Create(inputStroke, TweenInfo.new(0.25), {Transparency = 0.10, Thickness = 1.5}):Play()
+    TweenService:Create(iloStroke, TweenInfo.new(0.25), {Color = Colors.Primary, Transparency = 0.15}):Play()
 end)
 
 chatInput.FocusLost:Connect(function()
-    typingIndicator.BackgroundTransparency = 1
     task.delay(0.15, function() autoCompleteBar.Visible = false end)
-    TweenService:Create(inputStroke, TweenInfo.new(0.25), {Transparency = 0.42, Thickness = 1.3}):Play()
+    TweenService:Create(inputStroke, TweenInfo.new(0.25), {Transparency = 0.45, Thickness = 1.2}):Play()
     TweenService:Create(iloStroke, TweenInfo.new(0.25), {Color = Colors.PrimaryDark, Transparency = 0.45}):Play()
 end)
 
 updateInputBar = function()
     if privateTarget then
-        dmBadge.Text = "🔐 " .. privateTarget .. " ✕"
-        local w = TextService:GetTextSize(dmBadge.Text, 10, Enum.Font.GothamBlack, Vector2.new(1000, 30)).X + 16
+        dmBadge.Text = "DM: " .. privateTarget .. " X"
+        local w = TextService:GetTextSize(dmBadge.Text, 9.5, Enum.Font.GothamBlack, Vector2.new(1000, 30)).X + 16
         dmBadge.Size = UDim2.new(0, w, 1, -14); dmBadge.Visible = true
         chatInput.Position = UDim2.new(0, w + 48, 0, 0); chatInput.Size = UDim2.new(1, -(w + 166), 1, 0)
     else
@@ -1481,7 +1489,7 @@ crispText(memeBtn, 0.4); applySpringHover(memeBtn)
 local emojiBtn = Instance.new("TextButton", inputContainer)
 emojiBtn.Size = UDim2.fromOffset(30, 28); emojiBtn.AnchorPoint = Vector2.new(1, 0.5); emojiBtn.Position = UDim2.new(1, -45, 0.5, 0)
 emojiBtn.BackgroundColor3 = Colors.Background; emojiBtn.BackgroundTransparency = 0.30; emojiBtn.Text = ":)"
-emojiBtn.Font = Enum.Font.GothamBlack; emojiBtn.TextColor3 = Colors.Text; emojiBtn.TextSize = 12
+emojiBtn.Font = Enum.Font.GothamBlack; emojiBtn.TextColor3 = Colors.Text; emojiBtn.TextSize = 11.5
 emojiBtn.AutoButtonColor = false; emojiBtn.ZIndex = 14
 Instance.new("UICorner", emojiBtn).CornerRadius = UDim.new(1, 0)
 local ebStr = Instance.new("UIStroke", emojiBtn); ebStr.Color = Colors.SurfaceHover; ebStr.Thickness = 1
@@ -1489,8 +1497,8 @@ crispText(emojiBtn, 0.4); applySpringHover(emojiBtn)
 
 sendBtn = Instance.new("TextButton", inputContainer)
 sendBtn.Size = UDim2.fromOffset(34, 34); sendBtn.AnchorPoint = Vector2.new(1, 0.5); sendBtn.Position = UDim2.new(1, -6, 0.5, 0)
-sendBtn.BackgroundColor3 = rgb(255, 255, 255); sendBtn.Text = "➤"; sendBtn.TextColor3 = rgb(8, 10, 16)
-sendBtn.Font = Enum.Font.GothamBlack; sendBtn.TextSize = 13; sendBtn.AutoButtonColor = false; sendBtn.ZIndex = 14
+sendBtn.BackgroundColor3 = rgb(255, 255, 255); sendBtn.Text = ">"; sendBtn.TextColor3 = rgb(8, 10, 16)
+sendBtn.Font = Enum.Font.GothamBlack; sendBtn.TextSize = 14; sendBtn.AutoButtonColor = false; sendBtn.ZIndex = 14
 Instance.new("UICorner", sendBtn).CornerRadius = UDim.new(1, 0)
 
 sendBtnGrad = Instance.new("UIGradient", sendBtn)
@@ -1521,7 +1529,7 @@ if utf8 and utf8.graphemes then
     for p, c in utf8.graphemes(emojiRaw) do
         local em = string.sub(emojiRaw, p, c)
         local btn = Instance.new("TextButton", emojiScroll)
-        btn.Text = em; btn.TextSize = 15; btn.BackgroundTransparency = 1; btn.ZIndex = 32
+        btn.Text = em; btn.Font = Enum.Font.SourceSans; btn.TextSize = 18; btn.BackgroundTransparency = 1; btn.ZIndex = 32
         btn.MouseButton1Click:Connect(function() chatInput.Text = chatInput.Text .. em; chatInput:CaptureFocus() end)
     end
 end
@@ -1602,7 +1610,7 @@ local function makeDraggable(frame, handlesList, ghostAura, isOrb)
             if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                 dragging, activeDragInput, dragStart, startPos, targetPos = true, input, input.Position, frame.Position, frame.Position
                 lastInputPos, velocity = Vector2.new(input.Position.X, input.Position.Y), Vector2.new(0, 0)
-                if not isOrb then TweenService:Create(dragPill, TweenInfo.new(0.2), {Size = UDim2.fromOffset(62, 4), BackgroundTransparency = 0.08}):Play()
+                if not isOrb then TweenService:Create(dragPill, TweenInfo.new(0.2), {Size = UDim2.fromOffset(60, 4), BackgroundTransparency = 0.12}):Play()
                 else isDraggingOrb, dragThresholdMet = true, false end
                 if dragLoop then dragLoop:Disconnect() end
                 dragLoop = RunService.RenderStepped:Connect(function(dt)
@@ -1627,7 +1635,7 @@ local function makeDraggable(frame, handlesList, ghostAura, isOrb)
     UserInputService.InputEnded:Connect(function(input)
         if input == activeDragInput or input.UserInputType == Enum.UserInputType.MouseButton1 then
             dragging, activeDragInput = false, nil
-            if not isOrb then TweenService:Create(dragPill, TweenInfo.new(0.25), {Size = UDim2.fromOffset(42, 3), BackgroundTransparency = 0.50}):Play()
+            if not isOrb then TweenService:Create(dragPill, TweenInfo.new(0.25), {Size = UDim2.fromOffset(40, 3), BackgroundTransparency = 0.55}):Play()
             else isDraggingOrb, orbHovered = false, false end
         end
     end)
@@ -1663,8 +1671,8 @@ openBtn.MouseButton1Click:Connect(function()
     TweenService:Create(auraScale, tInfo2, {Scale = 1}):Play()
     TweenService:Create(shadowScale, tInfo2, {Scale = 1}):Play()
     TweenService:Create(mainFrame, tInfo3, {BackgroundTransparency = isGhostMode and 0.62 or 0.08}):Play()
-    TweenService:Create(aura, tInfo3, {ImageTransparency = isGhostMode and 0.90 or 0.65}):Play()
-    TweenService:Create(shadow, tInfo3, {ImageTransparency = isGhostMode and 0.55 or 0.22}):Play()
+    TweenService:Create(aura, tInfo3, {ImageTransparency = isGhostMode and 0.90 or 0.68}):Play()
+    TweenService:Create(shadow, tInfo3, {ImageTransparency = isGhostMode and 0.55 or 0.25}):Play()
 end)
 
 UserInputService.InputBegan:Connect(function(input, gp)
@@ -1677,8 +1685,8 @@ UserInputService.InputBegan:Connect(function(input, gp)
             openBtnContainer.Visible = false; mainFrame.Visible = true; aura.Visible = true; shadow.Visible = true
             mainScale.Scale, auraScale.Scale, shadowScale.Scale = 1, 1, 1
             mainFrame.BackgroundTransparency = isGhostMode and 0.62 or 0.08
-            aura.ImageTransparency = isGhostMode and 0.90 or 0.65
-            shadow.ImageTransparency = isGhostMode and 0.55 or 0.22
+            aura.ImageTransparency = isGhostMode and 0.90 or 0.68
+            shadow.ImageTransparency = isGhostMode and 0.55 or 0.25
         end
     elseif input.KeyCode == Enum.KeyCode.Semicolon or input.KeyCode == Enum.KeyCode.Slash then
         task.delay(0.05, function() chatInput:CaptureFocus() end)
@@ -1721,7 +1729,7 @@ task.spawn(function()
             for i = #activeAICoresList, 1, -1 do
                 local ai = activeAICoresList[i]
                 if ai.grad and ai.grad.Parent and ai.ring and ai.ring.Parent then
-                    ai.grad.Rotation = (t * 95) % 360; ai.ring.Rotation = -(t * 60) % 360; ai.icon.Rotation = math.sin(t * 3) * 18
+                    ai.grad.Rotation = (t * 95) % 360; ai.ring.Rotation = -(t * 60) % 360; ai.icon.Rotation = 45 + math.sin(t * 3) * 20
                 else
                     table.remove(activeAICoresList, i)
                 end
@@ -1731,14 +1739,10 @@ task.spawn(function()
         if mainFrame.Visible then
             strokeGrad.Rotation = (t * 35) % 360
             inputFocusGrad.Rotation = (t * 65) % 360
-            inputLeadIcon.Rotation = math.sin(t * 3) * 15
+            inputDiamondCore.Rotation = 45 + math.sin(t * 3) * 20
             local breath = (math.sin(t * 2.5) + 1) / 2
-            aura.ImageTransparency = isGhostMode and 0.90 or (0.65 + (breath * 0.08))
+            aura.ImageTransparency = isGhostMode and 0.90 or (0.68 + (breath * 0.08))
             ledDot.BackgroundTransparency = 0.1 + (((math.sin(t * 4) + 1) / 2) * 0.5)
-            local typingWave = (math.sin(t * 8) + 1) / 2
-            if typingIndicator.BackgroundTransparency < 1 then
-                typingIndicator.Size = UDim2.new(0.3 + (typingWave * 0.66), 0, 0, 2)
-            end
 
             local activeTyperNames, nowTick = {}, tick()
             for dName, expTick in pairs(remoteTypers) do
@@ -1857,7 +1861,7 @@ sendMessageFunc = function(overrideText)
     local pMatch = text:match("^!p%s+(%w+)")
     if pMatch then
         chatInput.Text = ""; privateTarget = pMatch; updateInputBar()
-        addMessageToFeed("System::TXR // AI", "Encrypted DM link locked with " .. pMatch, nil, false, game.JobId, chatMode)
+        addMessageToFeed("System::TXR // AI", "Direct DM link locked with " .. pMatch, nil, false, game.JobId, chatMode)
         return
     end
 
