@@ -12,7 +12,7 @@ pcall(function()
 end)
 
 -- =========================================================
--- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V23.0 SWIPE REAL-CHAT) 👑
+-- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V24.0 LUXURY PRO) 👑
 -- =========================================================
 
 local currentExecutionID = tick()
@@ -38,7 +38,6 @@ local SoundService = game:GetService("SoundService")
 local lp = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 local setClip = setclipboard or toclipboard or function() end
-
 local req = (syn and syn.request) or (http and http.request) or http_request or request
 
 local targetGuiParent
@@ -73,35 +72,35 @@ local Themes = {
         Primary = Color3.fromRGB(0, 255, 205),
         PrimaryDark = Color3.fromRGB(0, 165, 140),
         Accent = Color3.fromRGB(160, 55, 255),
-        ActiveTint = Color3.fromRGB(14, 40, 50)
+        ActiveTint = Color3.fromRGB(12, 38, 48)
     },
     [2] = {
         Primary = Color3.fromRGB(255, 45, 85),
         PrimaryDark = Color3.fromRGB(175, 20, 55),
         Accent = Color3.fromRGB(255, 145, 0),
-        ActiveTint = Color3.fromRGB(48, 14, 26)
+        ActiveTint = Color3.fromRGB(46, 12, 24)
     },
     [3] = {
         Primary = Color3.fromRGB(185, 80, 255),
         PrimaryDark = Color3.fromRGB(120, 40, 185),
         Accent = Color3.fromRGB(0, 205, 255),
-        ActiveTint = Color3.fromRGB(36, 15, 54)
+        ActiveTint = Color3.fromRGB(34, 14, 52)
     },
     [4] = {
         Primary = Color3.fromRGB(255, 205, 55),
         PrimaryDark = Color3.fromRGB(185, 130, 20),
         Accent = Color3.fromRGB(255, 80, 80),
-        ActiveTint = Color3.fromRGB(48, 38, 14)
+        ActiveTint = Color3.fromRGB(46, 36, 12)
     }
 }
 local currentThemeIdx = 1
 
 local Colors = {
-    Background    = Color3.fromRGB(10, 14, 22),       
-    Surface       = Color3.fromRGB(18, 24, 36),          
-    SurfaceSelf   = Color3.fromRGB(15, 30, 44),
-    SurfaceAI     = Color3.fromRGB(18, 22, 44),
-    SurfaceHover  = Color3.fromRGB(28, 36, 52),     
+    Background    = Color3.fromRGB(8, 11, 18),       
+    Surface       = Color3.fromRGB(15, 20, 32),          
+    SurfaceSelf   = Color3.fromRGB(14, 26, 40),
+    SurfaceAI     = Color3.fromRGB(16, 20, 42),
+    SurfaceHover  = Color3.fromRGB(26, 34, 50),     
     ActiveTint    = Themes[1].ActiveTint,       
     Primary       = Themes[1].Primary,         
     PrimaryDark   = Themes[1].PrimaryDark,     
@@ -112,7 +111,7 @@ local Colors = {
     SubText       = Color3.fromRGB(130, 146, 172),       
     TextDark      = Color3.fromRGB(8, 10, 15),
     MentionGold   = Color3.fromRGB(255, 205, 65),
-    MentionBg     = Color3.fromRGB(44, 34, 16),
+    MentionBg     = Color3.fromRGB(42, 32, 14),
     OnlineGreen   = Color3.fromRGB(45, 245, 135)
 }
 
@@ -121,8 +120,7 @@ local Colors = {
 -- =========================================================
 local BadgePresets = {
     ["AICORE"] = {
-        Title = "AI CORE",
-        Speed = 1.2,
+        Title = "AI CORE", Speed = 1.2,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 255, 235)),
             ColorSequenceKeypoint.new(0.50, Color3.fromRGB(170, 80, 255)),
@@ -130,8 +128,7 @@ local BadgePresets = {
         }
     },
     ["OWNER"] = {
-        Title = "OWNER",
-        Speed = 1.15,
+        Title = "OWNER", Speed = 1.15,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 45, 95)),
             ColorSequenceKeypoint.new(0.20, Color3.fromRGB(255, 165, 35)),
@@ -142,8 +139,7 @@ local BadgePresets = {
         }
     },
     ["DADDY"] = {
-        Title = "DADDY",
-        Speed = 1.1,
+        Title = "DADDY", Speed = 1.1,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 30, 80)),
             ColorSequenceKeypoint.new(0.35, Color3.fromRGB(255, 115, 45)),
@@ -152,8 +148,7 @@ local BadgePresets = {
         }
     },
     ["TITAN"] = {
-        Title = "TITAN",
-        Speed = 1.15,
+        Title = "TITAN", Speed = 1.15,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 240, 255)),
             ColorSequenceKeypoint.new(0.35, Color3.fromRGB(70, 165, 255)),
@@ -162,8 +157,7 @@ local BadgePresets = {
         }
     },
     ["OVERLORD"] = {
-        Title = "OVERLORD",
-        Speed = 1.05,
+        Title = "OVERLORD", Speed = 1.05,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(180, 60, 255)),
             ColorSequenceKeypoint.new(0.35, Color3.fromRGB(255, 60, 180)),
@@ -172,8 +166,7 @@ local BadgePresets = {
         }
     },
     ["DEV"] = {
-        Title = "DEV",
-        Speed = 1.25,
+        Title = "DEV", Speed = 1.25,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 255, 195)),
             ColorSequenceKeypoint.new(0.50, Color3.fromRGB(65, 150, 255)),
@@ -181,8 +174,7 @@ local BadgePresets = {
         }
     },
     ["VIP"] = {
-        Title = "VIP",
-        Speed = 1.1,
+        Title = "VIP", Speed = 1.1,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 140, 25)),
             ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 230, 65)),
@@ -190,8 +182,7 @@ local BadgePresets = {
         }
     },
     ["GOD"] = {
-        Title = "GOD",
-        Speed = 1.2,
+        Title = "GOD", Speed = 1.2,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 110, 175)),
             ColorSequenceKeypoint.new(0.25, Color3.fromRGB(255, 230, 100)),
@@ -201,8 +192,7 @@ local BadgePresets = {
         }
     },
     ["CYBER"] = {
-        Title = "CYBER",
-        Speed = 1.2,
+        Title = "CYBER", Speed = 1.2,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 10, 220)),
             ColorSequenceKeypoint.new(0.50, Color3.fromRGB(10, 245, 255)),
@@ -210,8 +200,7 @@ local BadgePresets = {
         }
     },
     ["VOID"] = {
-        Title = "VOID",
-        Speed = 0.95,
+        Title = "VOID", Speed = 0.95,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(85, 90, 145)),
             ColorSequenceKeypoint.new(0.50, Color3.fromRGB(180, 185, 240)),
@@ -219,8 +208,7 @@ local BadgePresets = {
         }
     },
     ["ZENITH"] = {
-        Title = "ZENITH",
-        Speed = 1.15,
+        Title = "ZENITH", Speed = 1.15,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 255, 215)),
             ColorSequenceKeypoint.new(0.50, Color3.fromRGB(45, 180, 255)),
@@ -228,8 +216,7 @@ local BadgePresets = {
         }
     },
     ["APEX"] = {
-        Title = "APEX",
-        Speed = 1.2,
+        Title = "APEX", Speed = 1.2,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 40, 80)),
             ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 160, 35)),
@@ -237,8 +224,7 @@ local BadgePresets = {
         }
     },
     ["LUCIFER"] = {
-        Title = "LUCIFER",
-        Speed = 1.2,
+        Title = "LUCIFER", Speed = 1.2,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 15, 35)),
             ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 95, 25)),
@@ -246,8 +232,7 @@ local BadgePresets = {
         }
     },
     ["SUPREME"] = {
-        Title = "SUPREME",
-        Speed = 1.1,
+        Title = "SUPREME", Speed = 1.1,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 215, 65)),
             ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 245, 165)),
@@ -255,8 +240,7 @@ local BadgePresets = {
         }
     },
     ["ROYAL"] = {
-        Title = "ROYAL",
-        Speed = 1.0,
+        Title = "ROYAL", Speed = 1.0,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(225, 165, 30)),
             ColorSequenceKeypoint.new(0.40, Color3.fromRGB(255, 230, 110)),
@@ -265,8 +249,7 @@ local BadgePresets = {
         }
     },
     ["DEMON"] = {
-        Title = "DEMON",
-        Speed = 1.2,
+        Title = "DEMON", Speed = 1.2,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 10, 85)),
             ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 75, 40)),
@@ -274,8 +257,7 @@ local BadgePresets = {
         }
     },
     ["PHANTOM"] = {
-        Title = "PHANTOM",
-        Speed = 1.15,
+        Title = "PHANTOM", Speed = 1.15,
         Colors = {
             ColorSequenceKeypoint.new(0.00, Color3.fromRGB(5, 255, 160)),
             ColorSequenceKeypoint.new(0.50, Color3.fromRGB(5, 210, 255)),
@@ -316,7 +298,7 @@ end
 local function crispText(element, overrideTransparency)
     local stroke = element:FindFirstChildOfClass("UIStroke") or Instance.new("UIStroke", element)
     stroke.Color = Color3.new(0, 0, 0)
-    stroke.Transparency = overrideTransparency or 0.40
+    stroke.Transparency = overrideTransparency or 0.38
     stroke.Thickness = 1.0
 end
 
@@ -366,7 +348,7 @@ local lastSyncTime = 0
 local isInitialSync = true
 local chatMode = "server" 
 local privateTarget = nil
-local activeReplyData = nil -- Stores { user = ..., text = ... } for Swipe-to-Reply
+local activeReplyData = nil
 local knownUsers = {}
 local activeUsersTable = {}
 local unreadCount = 0
@@ -393,20 +375,13 @@ end
 local function displayBubble(userName, msg)
     local speaker = Players:FindFirstChild(userName)
     if not speaker or not speaker.Character then return end
-
-    local cleanMsg = msg
-    if cleanMsg:find("%[MEME:") then
-        cleanMsg = "[Sticker / Meme]"
-    end
-
+    local cleanMsg = msg:find("%[MEME:") and "[Sticker / Meme]" or msg
     pcall(function()
         if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
             TextChatService:DisplayBubble(speaker.Character, cleanMsg)
         else
             local head = speaker.Character:FindFirstChild("Head")
-            if head then
-                ChatService:Chat(head, cleanMsg, Enum.ChatColor.White)
-            end
+            if head then ChatService:Chat(head, cleanMsg, Enum.ChatColor.White) end
         end
     end)
 end
@@ -422,17 +397,17 @@ gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 local shadow = Instance.new("ImageLabel", gui)
 shadow.AnchorPoint = Vector2.new(0.5, 0.5)
 shadow.Position = UDim2.fromScale(0.4, 0.5)
-shadow.Size = UDim2.new(0, 495, 0, 405)
+shadow.Size = UDim2.new(0, 500, 0, 412)
 shadow.BackgroundTransparency = 1
 shadow.Image = "rbxassetid://1316045217"
 shadow.ImageColor3 = Color3.new(0, 0, 0)
-shadow.ImageTransparency = 0.25
+shadow.ImageTransparency = 0.22
 shadow.ZIndex = 1
 
 local aura = Instance.new("ImageLabel", gui)
 aura.AnchorPoint = Vector2.new(0.5, 0.5)
 aura.Position = UDim2.fromScale(0.4, 0.5)
-aura.Size = UDim2.new(0, 472, 0, 384)
+aura.Size = UDim2.new(0, 476, 0, 388)
 aura.BackgroundTransparency = 1
 aura.Image = "rbxassetid://1316045217"
 aura.ImageColor3 = Colors.Primary
@@ -440,26 +415,24 @@ aura.ImageTransparency = 0.65
 aura.ZIndex = 2
 
 local auraScale = Instance.new("UIScale", aura)
-auraScale.Scale = 1
 local shadowScale = Instance.new("UIScale", shadow)
-shadowScale.Scale = 1
 
 local mainFrame = Instance.new("Frame", gui)
 mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 mainFrame.Position = UDim2.fromScale(0.4, 0.5)
-mainFrame.Size = UDim2.new(0, 450, 0, 362)
+mainFrame.Size = UDim2.new(0, 454, 0, 366)
 mainFrame.BackgroundColor3 = Colors.Background
-mainFrame.BackgroundTransparency = 0.10
+mainFrame.BackgroundTransparency = 0.08
 mainFrame.ClipsDescendants = true
 mainFrame.Active = true
 mainFrame.ZIndex = 5
 
 local mainCorner = Instance.new("UICorner", mainFrame)
-mainCorner.CornerRadius = UDim.new(0, 16)
+mainCorner.CornerRadius = UDim.new(0, 18)
 
 local mainStroke = Instance.new("UIStroke", mainFrame)
-mainStroke.Thickness = 1.5
-mainStroke.Transparency = 0.30
+mainStroke.Thickness = 1.6
+mainStroke.Transparency = 0.25
 mainStroke.Color = Colors.Primary
 
 local strokeGrad = Instance.new("UIGradient", mainStroke)
@@ -470,7 +443,6 @@ strokeGrad.Color = ColorSequence.new({
 })
 
 local mainScale = Instance.new("UIScale", mainFrame)
-mainScale.Scale = 1
 
 mainFrame:GetPropertyChangedSignal("Position"):Connect(function()
     aura.Position = mainFrame.Position
@@ -479,22 +451,19 @@ end)
 
 local mainBgGrad = Instance.new("UIGradient", mainFrame)
 mainBgGrad.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(18, 24, 36)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(10, 13, 20))
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(18, 25, 38)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(11, 15, 24)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(8, 10, 16))
 })
-mainBgGrad.Rotation = 45
+mainBgGrad.Rotation = 35
 
 local glassSheen = Instance.new("Frame", mainFrame)
-glassSheen.Size = UDim2.new(1, 0, 0, 84)
-glassSheen.BackgroundTransparency = 0.94
+glassSheen.Size = UDim2.new(1, 0, 0, 90)
+glassSheen.BackgroundTransparency = 0.93
 glassSheen.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 glassSheen.BorderSizePixel = 0
 glassSheen.ZIndex = 6
 local gsGrad = Instance.new("UIGradient", glassSheen)
-gsGrad.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
-})
 gsGrad.Transparency = NumberSequence.new({
     NumberSequenceKeypoint.new(0, 0.35),
     NumberSequenceKeypoint.new(1, 1)
@@ -520,7 +489,7 @@ for i = 1, 16 do
     col.Font = Enum.Font.Code
     col.TextSize = 10
     col.TextColor3 = Colors.PrimaryDark
-    col.TextTransparency = 0.93
+    col.TextTransparency = 0.94
     col.TextWrapped = true
     col.TextYAlignment = Enum.TextYAlignment.Top
     col.ZIndex = 6
@@ -531,12 +500,10 @@ task.spawn(function()
     while _G.TXR_ChatInstanceID == currentExecutionID and gui.Parent do
         for _, col in ipairs(matrixColumns) do
             local str = ""
-            for j = 1, 14 do
-                str = str .. matrixChars[math.random(1, #matrixChars)] .. "\n"
-            end
+            for j = 1, 14 do str = str .. matrixChars[math.random(1, #matrixChars)] .. "\n" end
             col.Text = str
         end
-        task.wait(0.3)
+        task.wait(0.35)
     end
 end)
 
@@ -582,7 +549,6 @@ openBtn.BackgroundColor3 = Colors.Surface
 openBtn.BackgroundTransparency = 0.15
 openBtn.Text = ""
 openBtn.AutoButtonColor = false
-openBtn.ClipsDescendants = false
 openBtn.ZIndex = 101
 Instance.new("UICorner", openBtn).CornerRadius = UDim.new(1, 0)
 
@@ -619,7 +585,6 @@ for i = 1, 4 do
     g.BackgroundTransparency = 1
     g.ZIndex = 102
     Instance.new("UICorner", g).CornerRadius = UDim.new(1, 0)
-    
     local gs = Instance.new("UIStroke", g)
     gs.Color = (i % 2 == 0) and Colors.Primary or Colors.Purple
     gs.Thickness = 1.2
@@ -635,7 +600,6 @@ for i = 1, 4 do
     d.BackgroundColor3 = Colors.Background
     d.BackgroundTransparency = 0.5
     d.ZIndex = 103
-    
     local ds = Instance.new("UIStroke", d)
     ds.Color = (i % 2 == 0) and Colors.Primary or Colors.Purple
     ds.Thickness = 1.5
@@ -689,7 +653,7 @@ ubStroke.Thickness = 1.5
 local unreadTxt = Instance.new("TextLabel", unreadBadge)
 unreadTxt.Size = UDim2.fromScale(1, 1)
 unreadTxt.BackgroundTransparency = 1
-unreadTxt.TextColor3 = Color3.fromRGB(255, 255, 255)
+unreadTxt.TextColor3 = Color3.new(1, 1, 1)
 unreadTxt.Font = Enum.Font.GothamBlack
 unreadTxt.TextSize = 10
 unreadTxt.Text = "0"
@@ -713,56 +677,41 @@ local function spawnSonar(pulseColor)
     ring.BackgroundTransparency = 1
     ring.ZIndex = 101
     Instance.new("UICorner", ring).CornerRadius = UDim.new(1, 0)
-    
     local rs = Instance.new("UIStroke", ring)
     rs.Color = pulseColor
     rs.Thickness = 2
-    rs.Transparency = 0
-    
-    local pulseSpeed = 1.0
-    TweenService:Create(ring, TweenInfo.new(pulseSpeed, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {Size = UDim2.fromOffset(105, 105)}):Play()
-    TweenService:Create(rs, TweenInfo.new(pulseSpeed, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {Transparency = 1}):Play()
-    
-    task.delay(pulseSpeed, function()
-        pcall(function() ring:Destroy() end)
-    end)
+    TweenService:Create(ring, TweenInfo.new(1.0, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {Size = UDim2.fromOffset(105, 105)}):Play()
+    TweenService:Create(rs, TweenInfo.new(1.0, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {Transparency = 1}):Play()
+    task.delay(1.0, function() pcall(function() ring:Destroy() end) end)
 end
 
 local openBtnScale = Instance.new("UIScale", openBtn)
-openBtnScale.Scale = 1
-
-local openPulseTweenInfo = TweenInfo.new(1.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
-local openPulseScale = TweenService:Create(openBtnScale, openPulseTweenInfo, {Scale = 1.05})
+local openPulseScale = TweenService:Create(openBtnScale, TweenInfo.new(1.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {Scale = 1.05})
 
 openBtnContainer:GetPropertyChangedSignal("Visible"):Connect(function()
-    if openBtnContainer.Visible then
-        openPulseScale:Play()
-    else
-        openPulseScale:Cancel()
-        openBtnScale.Scale = 1
-    end
+    if openBtnContainer.Visible then openPulseScale:Play() else openPulseScale:Cancel() openBtnScale.Scale = 1 end
 end)
 
 -- =========================================================
 -- 👥 ONLINE ACTIVE ROSTER (SLIDE-IN DRAWER)
 -- =========================================================
 local rosterFrame = Instance.new("Frame", mainFrame)
-rosterFrame.Size = UDim2.new(0, 145, 1, -48)
-rosterFrame.Position = UDim2.new(1, 10, 0, 44)
+rosterFrame.Size = UDim2.new(0, 148, 1, -50)
+rosterFrame.Position = UDim2.new(1, 10, 0, 46)
 rosterFrame.BackgroundColor3 = Colors.Surface
-rosterFrame.BackgroundTransparency = 0.08
+rosterFrame.BackgroundTransparency = 0.06
 rosterFrame.Visible = false
 rosterFrame.ZIndex = 40
-Instance.new("UICorner", rosterFrame).CornerRadius = UDim.new(0, 10)
+Instance.new("UICorner", rosterFrame).CornerRadius = UDim.new(0, 12)
 local rfStroke = Instance.new("UIStroke", rosterFrame)
 rfStroke.Color = Colors.PrimaryDark
 rfStroke.Thickness = 1.2
-rfStroke.Transparency = 0.4
+rfStroke.Transparency = 0.35
 
 local rfTitle = Instance.new("TextLabel", rosterFrame)
 rfTitle.Size = UDim2.new(1, 0, 0, 26)
 rfTitle.BackgroundTransparency = 1
-rfTitle.Text = "ONLINE USERS"
+rfTitle.Text = "ONLINE PLAYERS"
 rfTitle.TextColor3 = Colors.Primary
 rfTitle.Font = Enum.Font.GothamBlack
 rfTitle.TextSize = 9.5
@@ -785,23 +734,23 @@ local function refreshRosterUI()
     for _, c in ipairs(rosterScroll:GetChildren()) do
         if c:IsA("GuiObject") and c.Name ~= "UIListLayout" then c:Destroy() end
     end
-    for u, _ in pairs(activeUsersTable) do
+    for u, info in pairs(activeUsersTable) do
+        local dName = (type(info) == "table" and info.disp) or u
         local uBtn = Instance.new("TextButton", rosterScroll)
-        uBtn.Size = UDim2.new(1, 0, 0, 24)
+        uBtn.Size = UDim2.new(1, 0, 0, 26)
         uBtn.BackgroundColor3 = Colors.Background
-        uBtn.BackgroundTransparency = 0.5
-        uBtn.Text = "  ● @" .. u
+        uBtn.BackgroundTransparency = 0.45
+        uBtn.Text = "  ● " .. dName
         uBtn.TextColor3 = Colors.Text
         uBtn.Font = Enum.Font.GothamBold
-        uBtn.TextSize = 9.5
+        uBtn.TextSize = 10
+        uBtn.TextTruncate = Enum.TextTruncate.AtEnd
         uBtn.TextXAlignment = Enum.TextXAlignment.Left
         uBtn.ZIndex = 42
         Instance.new("UICorner", uBtn).CornerRadius = UDim.new(0, 6)
-        
         local ubStr = Instance.new("UIStroke", uBtn)
         ubStr.Color = Colors.SurfaceHover
         ubStr.Thickness = 1
-        
         applySpringHover(uBtn)
         uBtn.MouseButton1Click:Connect(function()
             privateTarget = u
@@ -816,23 +765,23 @@ end
 -- 🌟 HEADER BAR, GRAB HANDLE & BALANCED CONTROLS
 -- =========================================================
 local header = Instance.new("Frame", mainFrame)
-header.Size = UDim2.new(1, 0, 0, 44)
+header.Size = UDim2.new(1, 0, 0, 46)
 header.BackgroundTransparency = 1
 header.Active = true
 header.ZIndex = 10
 
 local dragPill = Instance.new("Frame", header)
-dragPill.Size = UDim2.fromOffset(38, 3)
+dragPill.Size = UDim2.fromOffset(42, 3)
 dragPill.AnchorPoint = Vector2.new(0.5, 0)
 dragPill.Position = UDim2.new(0.5, 0, 0, 4)
 dragPill.BackgroundColor3 = Colors.Primary
-dragPill.BackgroundTransparency = 0.55
+dragPill.BackgroundTransparency = 0.50
 dragPill.BorderSizePixel = 0
 dragPill.ZIndex = 12
 Instance.new("UICorner", dragPill).CornerRadius = UDim.new(1, 0)
 
 local headerLeftCluster = Instance.new("Frame", header)
-headerLeftCluster.Size = UDim2.new(0, 220, 1, 0)
+headerLeftCluster.Size = UDim2.new(0, 225, 1, 0)
 headerLeftCluster.Position = UDim2.fromOffset(14, 2)
 headerLeftCluster.BackgroundTransparency = 1
 headerLeftCluster.ZIndex = 11
@@ -840,7 +789,7 @@ headerLeftCluster.ZIndex = 11
 local hlLayout = Instance.new("UIListLayout", headerLeftCluster)
 hlLayout.FillDirection = Enum.FillDirection.Horizontal
 hlLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-hlLayout.Padding = UDim.new(0, 8)
+hlLayout.Padding = UDim.new(0, 9)
 
 local headerTitle = Instance.new("TextLabel", headerLeftCluster)
 headerTitle.AutomaticSize = Enum.AutomaticSize.X
@@ -849,15 +798,15 @@ headerTitle.BackgroundTransparency = 1
 headerTitle.Text = "TXR // TITAN"
 headerTitle.TextColor3 = Colors.Primary
 headerTitle.Font = Enum.Font.GothamBlack
-headerTitle.TextSize = 13.5
+headerTitle.TextSize = 14
 headerTitle.TextXAlignment = Enum.TextXAlignment.Left
 headerTitle.ZIndex = 12
-crispText(headerTitle, 0.3)
+crispText(headerTitle, 0.25)
 
 local liveBadge = Instance.new("TextButton", headerLeftCluster)
-liveBadge.Size = UDim2.fromOffset(82, 22)
+liveBadge.Size = UDim2.fromOffset(84, 23)
 liveBadge.BackgroundColor3 = Colors.Surface
-liveBadge.BackgroundTransparency = 0.25
+liveBadge.BackgroundTransparency = 0.20
 liveBadge.Text = ""
 liveBadge.AutoButtonColor = false
 liveBadge.ZIndex = 12
@@ -866,19 +815,19 @@ Instance.new("UICorner", liveBadge).CornerRadius = UDim.new(1, 0)
 local lbStroke = Instance.new("UIStroke", liveBadge)
 lbStroke.Color = Colors.PrimaryDark
 lbStroke.Thickness = 1
-lbStroke.Transparency = 0.45
+lbStroke.Transparency = 0.40
 
 local ledDot = Instance.new("Frame", liveBadge)
 ledDot.Size = UDim2.fromOffset(6, 6)
 ledDot.AnchorPoint = Vector2.new(0, 0.5)
-ledDot.Position = UDim2.new(0, 8, 0.5, 0)
+ledDot.Position = UDim2.new(0, 9, 0.5, 0)
 ledDot.BackgroundColor3 = Colors.OnlineGreen
 ledDot.ZIndex = 13
 Instance.new("UICorner", ledDot).CornerRadius = UDim.new(1, 0)
 
 local liveText = Instance.new("TextLabel", liveBadge)
-liveText.Size = UDim2.new(1, -20, 1, 0)
-liveText.Position = UDim2.fromOffset(20, 0)
+liveText.Size = UDim2.new(1, -22, 1, 0)
+liveText.Position = UDim2.fromOffset(21, 0)
 liveText.BackgroundTransparency = 1
 liveText.Text = "1 Active"
 liveText.TextColor3 = Colors.Primary
@@ -886,21 +835,21 @@ liveText.Font = Enum.Font.GothamBlack
 liveText.TextSize = 8.5
 liveText.TextXAlignment = Enum.TextXAlignment.Left
 liveText.ZIndex = 13
-crispText(liveText, 0.5)
+crispText(liveText, 0.45)
 
 liveBadge.MouseButton1Click:Connect(function()
     refreshRosterUI()
     rosterFrame.Visible = not rosterFrame.Visible
     if rosterFrame.Visible then
-        rosterFrame.Position = UDim2.new(1, 10, 0, 44)
-        TweenService:Create(rosterFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(1, -150, 0, 44)}):Play()
+        rosterFrame.Position = UDim2.new(1, 10, 0, 46)
+        TweenService:Create(rosterFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(1, -154, 0, 46)}):Play()
     end
 end)
 
 local headerRightCluster = Instance.new("Frame", header)
 headerRightCluster.AnchorPoint = Vector2.new(1, 0.5)
 headerRightCluster.Position = UDim2.new(1, -12, 0.5, 1)
-headerRightCluster.Size = UDim2.new(0, 175, 0, 24)
+headerRightCluster.Size = UDim2.new(0, 180, 0, 25)
 headerRightCluster.BackgroundTransparency = 1
 headerRightCluster.ZIndex = 12
 
@@ -912,27 +861,25 @@ hrLayout.Padding = UDim.new(0, 6)
 
 local function createHeaderBtn(text, onClick)
     local b = Instance.new("TextButton", headerRightCluster)
-    b.Size = UDim2.fromOffset(29, 24)
+    b.Size = UDim2.fromOffset(30, 24)
     b.BackgroundColor3 = Colors.Surface
-    b.BackgroundTransparency = 0.3
+    b.BackgroundTransparency = 0.25
     b.Text = text
     b.TextColor3 = Colors.Text
-    b.Font = Enum.Font.GothamBold
+    b.Font = Enum.Font.GothamBlack
     b.TextSize = 9.5
     b.AutoButtonColor = false
     b.ZIndex = 15
-    Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
-    crispText(b, 0.4)
+    Instance.new("UICorner", b).CornerRadius = UDim.new(0, 7)
+    crispText(b, 0.35)
 
     local btnStr = Instance.new("UIStroke", b)
     btnStr.Thickness = 1
     btnStr.Color = Colors.PrimaryDark
-    btnStr.Transparency = 0.55
+    btnStr.Transparency = 0.50
 
     applySpringHover(b)
-    b.MouseButton1Click:Connect(function()
-        pcall(onClick)
-    end)
+    b.MouseButton1Click:Connect(function() pcall(onClick) end)
     return b
 end
 
@@ -955,7 +902,7 @@ if Admin[lp.Name:lower()] then
     end)
 end
 
-local serverBtn, globalBtn, sendBtn, memeBtn
+local serverBtn, globalBtn, tabActiveSlider, tabSliderStroke, sendBtn, memeBtn
 
 createHeaderBtn("CLR", function()
     currentThemeIdx = (currentThemeIdx % #Themes) + 1
@@ -978,11 +925,11 @@ createHeaderBtn("CLR", function()
     eventGlow.ImageColor3 = th.Accent
     if sendBtn then sendBtn.BackgroundColor3 = th.Primary end
     if memeBtn then memeBtn.TextColor3 = th.Primary end
+    if tabActiveSlider then tabActiveSlider.BackgroundColor3 = th.ActiveTint end
+    if tabSliderStroke then tabSliderStroke.Color = th.PrimaryDark end
     if chatMode == "server" and serverBtn then
-        serverBtn.BackgroundColor3 = th.ActiveTint
         serverBtn.TextColor3 = th.Primary
     elseif chatMode == "global" and globalBtn then
-        globalBtn.BackgroundColor3 = th.ActiveTint
         globalBtn.TextColor3 = th.Primary
     end
 end)
@@ -1003,32 +950,28 @@ ghostBtn = createHeaderBtn("GST", function()
         TweenService:Create(shadow, TweenInfo.new(0.35), {ImageTransparency = 0.55}):Play()
         ghostBtn.BackgroundColor3 = Colors.ActiveTint
         ghostBtn.TextColor3 = Colors.Primary
-        mainStroke.Transparency = 0.18
-        mainStroke.Thickness = 1.6
+        mainStroke.Transparency = 0.15
+        mainStroke.Thickness = 1.7
         badgeSelectorModal.BackgroundTransparency = 0.45
 
         for _, cardWrap in ipairs(messageFeed:GetChildren()) do
             local inner = cardWrap:FindFirstChild("CardSurface")
-            if inner then
-                inner.BackgroundTransparency = 0.55
-            end
+            if inner then inner.BackgroundTransparency = 0.54 end
         end
     else
-        TweenService:Create(mainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quart), {BackgroundTransparency = 0.10}):Play()
-        TweenService:Create(glassSheen, TweenInfo.new(0.35), {BackgroundTransparency = 0.94}):Play()
+        TweenService:Create(mainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quart), {BackgroundTransparency = 0.08}):Play()
+        TweenService:Create(glassSheen, TweenInfo.new(0.35), {BackgroundTransparency = 0.93}):Play()
         TweenService:Create(aura, TweenInfo.new(0.35), {ImageTransparency = 0.65}):Play()
-        TweenService:Create(shadow, TweenInfo.new(0.35), {ImageTransparency = 0.25}):Play()
+        TweenService:Create(shadow, TweenInfo.new(0.35), {ImageTransparency = 0.22}):Play()
         ghostBtn.BackgroundColor3 = Colors.Surface
         ghostBtn.TextColor3 = Colors.Text
-        mainStroke.Transparency = 0.30
-        mainStroke.Thickness = 1.5
+        mainStroke.Transparency = 0.25
+        mainStroke.Thickness = 1.6
         badgeSelectorModal.BackgroundTransparency = 0.05
 
         for _, cardWrap in ipairs(messageFeed:GetChildren()) do
             local inner = cardWrap:FindFirstChild("CardSurface")
-            if inner then
-                inner.BackgroundTransparency = 0.26
-            end
+            if inner then inner.BackgroundTransparency = 0.22 end
         end
     end
 end)
@@ -1062,9 +1005,7 @@ createHeaderBtn("-", function()
     shadow.Visible = false
     openBtnContainer.Visible = true
     openBtnScale.Scale = 0
-    
-    local tInfo3 = TweenInfo.new(0.6, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out)
-    TweenService:Create(openBtnScale, tInfo3, {Scale = 1}):Play()
+    TweenService:Create(openBtnScale, TweenInfo.new(0.6, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1}):Play()
 end)
 
 local closeBtn = createHeaderBtn("X", function()
@@ -1078,46 +1019,57 @@ local headerDivider = Instance.new("Frame", header)
 headerDivider.Size = UDim2.new(1, -24, 0, 1)
 headerDivider.Position = UDim2.new(0, 12, 1, 0)
 headerDivider.BorderSizePixel = 0
-headerDivider.BackgroundColor3 = Color3.fromRGB(35, 45, 65)
-headerDivider.BackgroundTransparency = 0.45
+headerDivider.BackgroundColor3 = Color3.fromRGB(38, 48, 70)
+headerDivider.BackgroundTransparency = 0.40
 headerDivider.ZIndex = 12
 
 -- =========================================================
--- 🔀 CHANNEL TABS (SERVER FIRST, THEN GLOBAL)
+-- 🔀 LUXURY SLIDING SEGMENTED TABS (SERVER FIRST, GLOBAL SECOND)
 -- =========================================================
 local channelFrame = Instance.new("Frame", mainFrame)
-channelFrame.Size = UDim2.new(1, -24, 0, 30)
-channelFrame.Position = UDim2.new(0, 12, 0, 50)
+channelFrame.Size = UDim2.new(1, -24, 0, 32)
+channelFrame.Position = UDim2.new(0, 12, 0, 52)
 channelFrame.BackgroundTransparency = 1
 channelFrame.ZIndex = 8
 
 local tabShell = Instance.new("Frame", channelFrame)
 tabShell.Size = UDim2.new(1, 0, 1, 0)
 tabShell.BackgroundColor3 = Colors.Surface
-tabShell.BackgroundTransparency = 0.30
+tabShell.BackgroundTransparency = 0.25
 tabShell.ZIndex = 9
-Instance.new("UICorner", tabShell).CornerRadius = UDim.new(0, 8)
+Instance.new("UICorner", tabShell).CornerRadius = UDim.new(0, 10)
 local tsStroke = Instance.new("UIStroke", tabShell)
 tsStroke.Thickness = 1
 tsStroke.Color = Colors.SurfaceHover
-tsStroke.Transparency = 0.4
+tsStroke.Transparency = 0.35
+
+-- Animated Sliding Active Pill
+tabActiveSlider = Instance.new("Frame", tabShell)
+tabActiveSlider.Size = UDim2.new(0.5, -4, 1, -4)
+tabActiveSlider.Position = UDim2.new(0, 2, 0, 2)
+tabActiveSlider.BackgroundColor3 = Colors.ActiveTint
+tabActiveSlider.ZIndex = 9
+Instance.new("UICorner", tabActiveSlider).CornerRadius = UDim.new(0, 8)
+tabSliderStroke = Instance.new("UIStroke", tabActiveSlider)
+tabSliderStroke.Thickness = 1
+tabSliderStroke.Color = Colors.PrimaryDark
+tabSliderStroke.Transparency = 0.45
 
 serverBtn = Instance.new("TextButton", tabShell)
-serverBtn.Size = UDim2.new(0.5, -2, 1, -4)
-serverBtn.Position = UDim2.new(0, 2, 0, 2)
-serverBtn.BackgroundColor3 = Colors.ActiveTint
+serverBtn.Size = UDim2.new(0.5, 0, 1, 0)
+serverBtn.Position = UDim2.new(0, 0, 0, 0)
+serverBtn.BackgroundTransparency = 1
 serverBtn.Text = "SERVER CHAT"
 serverBtn.TextColor3 = Colors.Primary
 serverBtn.Font = Enum.Font.GothamBlack
 serverBtn.TextSize = 10.5
 serverBtn.AutoButtonColor = false
 serverBtn.ZIndex = 10
-Instance.new("UICorner", serverBtn).CornerRadius = UDim.new(0, 6)
-crispText(serverBtn, 0.4)
+crispText(serverBtn, 0.35)
 
 globalBtn = Instance.new("TextButton", tabShell)
-globalBtn.Size = UDim2.new(0.5, -2, 1, -4)
-globalBtn.Position = UDim2.new(0.5, 0, 0, 2)
+globalBtn.Size = UDim2.new(0.5, 0, 1, 0)
+globalBtn.Position = UDim2.new(0.5, 0, 0, 0)
 globalBtn.BackgroundTransparency = 1
 globalBtn.Text = "GLOBAL CHAT"
 globalBtn.TextColor3 = Colors.SubText
@@ -1125,8 +1077,7 @@ globalBtn.Font = Enum.Font.GothamBold
 globalBtn.TextSize = 10.5
 globalBtn.AutoButtonColor = false
 globalBtn.ZIndex = 10
-Instance.new("UICorner", globalBtn).CornerRadius = UDim.new(0, 6)
-crispText(globalBtn, 0.4)
+crispText(globalBtn, 0.35)
 
 local function filterFeedMode()
     CURRENT_SESSION_JOB = tostring(game.JobId)
@@ -1151,21 +1102,21 @@ end
 
 serverBtn.MouseButton1Click:Connect(function()
     chatMode = "server"
-    serverBtn.BackgroundColor3 = Colors.ActiveTint
-    serverBtn.BackgroundTransparency = 0
+    TweenService:Create(tabActiveSlider, TweenInfo.new(0.28, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0, 2, 0, 2)}):Play()
     serverBtn.TextColor3 = Colors.Primary
-    globalBtn.BackgroundTransparency = 1
+    serverBtn.Font = Enum.Font.GothamBlack
     globalBtn.TextColor3 = Colors.SubText
+    globalBtn.Font = Enum.Font.GothamBold
     filterFeedMode()
 end)
 
 globalBtn.MouseButton1Click:Connect(function()
     chatMode = "global"
-    globalBtn.BackgroundColor3 = Colors.ActiveTint
-    globalBtn.BackgroundTransparency = 0
+    TweenService:Create(tabActiveSlider, TweenInfo.new(0.28, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, 2, 0, 2)}):Play()
     globalBtn.TextColor3 = Colors.Primary
-    serverBtn.BackgroundTransparency = 1
+    globalBtn.Font = Enum.Font.GothamBlack
     serverBtn.TextColor3 = Colors.SubText
+    serverBtn.Font = Enum.Font.GothamBold
     filterFeedMode()
 end)
 
@@ -1173,21 +1124,21 @@ end)
 -- 🏷️ 16 ELITE LIVE ANIMATED BADGE PRESET SELECTOR
 -- =========================================================
 badgeSelectorModal = Instance.new("Frame", mainFrame)
-badgeSelectorModal.Size = UDim2.fromOffset(240, 250)
-badgeSelectorModal.Position = UDim2.new(1, -252, 0, 46)
-badgeSelectorModal.BackgroundColor3 = Color3.fromRGB(12, 16, 24)
-badgeSelectorModal.BackgroundTransparency = 0.05
+badgeSelectorModal.Size = UDim2.fromOffset(242, 252)
+badgeSelectorModal.Position = UDim2.new(1, -254, 0, 48)
+badgeSelectorModal.BackgroundColor3 = Color3.fromRGB(11, 15, 24)
+badgeSelectorModal.BackgroundTransparency = 0.04
 badgeSelectorModal.Visible = false
 badgeSelectorModal.ZIndex = 70
-Instance.new("UICorner", badgeSelectorModal).CornerRadius = UDim.new(0, 10)
+Instance.new("UICorner", badgeSelectorModal).CornerRadius = UDim.new(0, 12)
 
 local bsmScale = Instance.new("UIScale", badgeSelectorModal)
 bsmScale.Scale = 0
 
 local bsStroke = Instance.new("UIStroke", badgeSelectorModal)
 bsStroke.Color = Colors.PrimaryDark
-bsStroke.Thickness = 1.2
-bsStroke.Transparency = 0.4
+bsStroke.Thickness = 1.3
+bsStroke.Transparency = 0.35
 
 local bsTitle = Instance.new("TextLabel", badgeSelectorModal)
 bsTitle.Size = UDim2.new(1, 0, 0, 28)
@@ -1219,21 +1170,20 @@ local badgeKeysOrder = {
     "LUCIFER", "SUPREME", "ROYAL", "DEMON"
 }
 
--- ⚡ UPGRADED ULTRA-HD TAG BUILDER (SOFT HALO + METALLIC SHINE)
 local function buildLiveBadgeElement(parentContainer, bData, zBase)
-    local tagWidth = TextService:GetTextSize(bData.Title, 11, Enum.Font.GothamBlack, Vector2.new(1000, 20)).X + 12
+    local tagWidth = TextService:GetTextSize(bData.Title, 10.5, Enum.Font.GothamBlack, Vector2.new(1000, 20)).X + 14
     
     local badgeHost = Instance.new("Frame", parentContainer)
     badgeHost.Size = UDim2.fromOffset(tagWidth, 18)
-    badgeHost.BackgroundColor3 = Color3.fromRGB(12, 16, 26)
-    badgeHost.BackgroundTransparency = 0.35
+    badgeHost.BackgroundColor3 = Color3.fromRGB(10, 14, 24)
+    badgeHost.BackgroundTransparency = 0.25
     badgeHost.BorderSizePixel = 0
     badgeHost.ZIndex = zBase
     Instance.new("UICorner", badgeHost).CornerRadius = UDim.new(0, 5)
 
     local pillStroke = Instance.new("UIStroke", badgeHost)
-    pillStroke.Thickness = 1.0
-    pillStroke.Transparency = 0.35
+    pillStroke.Thickness = 1.1
+    pillStroke.Transparency = 0.25
     pillStroke.Color = Color3.fromRGB(255, 255, 255)
 
     local strokeGradGlow = Instance.new("UIGradient", pillStroke)
@@ -1242,23 +1192,21 @@ local function buildLiveBadgeElement(parentContainer, bData, zBase)
     local badgeGlow = Instance.new("TextLabel", badgeHost)
     badgeGlow.Size = UDim2.fromScale(1, 1)
     badgeGlow.BackgroundTransparency = 1
-    badgeGlow.BorderSizePixel = 0
     badgeGlow.Text = bData.Title
     badgeGlow.TextColor3 = Color3.fromRGB(255, 255, 255)
-    badgeGlow.TextTransparency = 0.45
+    badgeGlow.TextTransparency = 0.42
     badgeGlow.Font = Enum.Font.GothamBlack
     badgeGlow.TextSize = 10.5
     badgeGlow.ZIndex = zBase + 1
 
     local glowStroke = Instance.new("UIStroke", badgeGlow)
     glowStroke.Thickness = 1.1
-    glowStroke.Transparency = 0.55
+    glowStroke.Transparency = 0.50
     glowStroke.Color = Color3.fromRGB(255, 255, 255)
 
     local badgeLabel = Instance.new("TextLabel", badgeHost)
     badgeLabel.Size = UDim2.fromScale(1, 1)
     badgeLabel.BackgroundTransparency = 1
-    badgeLabel.BorderSizePixel = 0
     badgeLabel.Text = bData.Title
     badgeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     badgeLabel.Font = Enum.Font.GothamBlack
@@ -1268,12 +1216,11 @@ local function buildLiveBadgeElement(parentContainer, bData, zBase)
     local bStroke = Instance.new("UIStroke", badgeLabel)
     bStroke.Thickness = 0.85
     bStroke.Color = Color3.fromRGB(0, 0, 0)
-    bStroke.Transparency = 0.25
+    bStroke.Transparency = 0.20
 
     local badgeShine = Instance.new("TextLabel", badgeHost)
     badgeShine.Size = UDim2.fromScale(1, 1)
     badgeShine.BackgroundTransparency = 1
-    badgeShine.BorderSizePixel = 0
     badgeShine.Text = bData.Title
     badgeShine.TextColor3 = Color3.fromRGB(255, 255, 255)
     badgeShine.Font = Enum.Font.GothamBlack
@@ -1281,13 +1228,6 @@ local function buildLiveBadgeElement(parentContainer, bData, zBase)
     badgeShine.ZIndex = zBase + 3
 
     local shineGrad = Instance.new("UIGradient", badgeShine)
-    shineGrad.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0.0, Color3.fromRGB(255, 255, 255)),
-        ColorSequenceKeypoint.new(0.48, Color3.fromRGB(255, 255, 255)),
-        ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 255, 255)),
-        ColorSequenceKeypoint.new(0.52, Color3.fromRGB(255, 255, 255)),
-        ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 255, 255))
-    })
     shineGrad.Transparency = NumberSequence.new({
         NumberSequenceKeypoint.new(0.0, 1),
         NumberSequenceKeypoint.new(0.44, 1),
@@ -1316,16 +1256,16 @@ for _, bKey in ipairs(badgeKeysOrder) do
     local bBtn = Instance.new("TextButton", bsScroll)
     bBtn.Size = UDim2.new(0.95, 0, 0, 30)
     bBtn.BackgroundColor3 = Colors.Surface
-    bBtn.BackgroundTransparency = 0.45
+    bBtn.BackgroundTransparency = 0.40
     bBtn.Text = ""
     bBtn.AutoButtonColor = false
     bBtn.ZIndex = 72
-    Instance.new("UICorner", bBtn).CornerRadius = UDim.new(0, 6)
+    Instance.new("UICorner", bBtn).CornerRadius = UDim.new(0, 7)
     
     local btnStroke = Instance.new("UIStroke", bBtn)
     btnStroke.Color = Colors.PrimaryDark
     btnStroke.Thickness = 0.8
-    btnStroke.Transparency = 0.7
+    btnStroke.Transparency = 0.65
     
     local badgeHost = buildLiveBadgeElement(bBtn, bData, 73)
     badgeHost.AnchorPoint = Vector2.new(0, 0.5)
@@ -1353,7 +1293,6 @@ for _, bKey in ipairs(badgeKeysOrder) do
             ind.dot.BackgroundTransparency = (k == currentOwnerBadge) and 0.1 or 1
             ind.stroke.Transparency = (k == currentOwnerBadge) and 0.4 or 1
         end
-        
         TweenService:Create(bsmScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
         task.delay(0.2, function()
             isBadgeModalOpen = false
@@ -1367,8 +1306,8 @@ end
 -- 💬 CHAT FEED & AUTOSCROLL DOCK
 -- =========================================================
 messageFeed = Instance.new("ScrollingFrame", mainFrame)
-messageFeed.Size = UDim2.new(1, -24, 1, -146)
-messageFeed.Position = UDim2.new(0, 12, 0, 86)
+messageFeed.Size = UDim2.new(1, -24, 1, -148)
+messageFeed.Position = UDim2.new(0, 12, 0, 90)
 messageFeed.BackgroundTransparency = 1
 messageFeed.ScrollBarThickness = 3
 messageFeed.ScrollBarImageColor3 = Colors.PrimaryDark
@@ -1387,11 +1326,11 @@ feedPadding.PaddingRight = UDim.new(0, 5)
 feedPadding.PaddingBottom = UDim.new(0, 6)
 
 local jumpBottomBtn = Instance.new("TextButton", mainFrame)
-jumpBottomBtn.Size = UDim2.fromOffset(124, 26)
+jumpBottomBtn.Size = UDim2.fromOffset(126, 26)
 jumpBottomBtn.AnchorPoint = Vector2.new(0.5, 1)
 jumpBottomBtn.Position = UDim2.new(0.5, 0, 1, -60)
 jumpBottomBtn.BackgroundColor3 = Colors.Surface
-jumpBottomBtn.BackgroundTransparency = 0.1
+jumpBottomBtn.BackgroundTransparency = 0.08
 jumpBottomBtn.Text = "↓ New Messages"
 jumpBottomBtn.TextColor3 = Colors.Primary
 jumpBottomBtn.Font = Enum.Font.GothamBlack
@@ -1402,7 +1341,7 @@ Instance.new("UICorner", jumpBottomBtn).CornerRadius = UDim.new(1, 0)
 local jbStroke = Instance.new("UIStroke", jumpBottomBtn)
 jbStroke.Color = Colors.Primary
 jbStroke.Thickness = 1
-jbStroke.Transparency = 0.5
+jbStroke.Transparency = 0.45
 applySpringHover(jumpBottomBtn)
 
 jumpBottomBtn.MouseButton1Click:Connect(function()
@@ -1456,23 +1395,20 @@ local function createActionBtn(text, color, onClick)
 end
 
 -- =========================================================
--- 💬 REAL-CHAT MESSAGE PIPELINE (TWO-TIER IDENTITY + SWIPE REPLY)
+-- 💬 LUXURY MESSAGE PIPELINE (PROFILE NAME ONLY + PRO SWIPE)
 -- =========================================================
-local function updateLiveCounter(username)
-    activeUsersTable[username:lower()] = os.time()
+local function updateLiveCounter(username, dispName)
+    activeUsersTable[username:lower()] = { time = os.time(), disp = dispName or username }
     local count = 0
     local now = os.time()
-    for u, t in pairs(activeUsersTable) do
-        if now - t < 300 then
-            count = count + 1
-        else
-            activeUsersTable[u] = nil
-        end
+    for u, data in pairs(activeUsersTable) do
+        local t = (type(data) == "table" and data.time) or data
+        if now - t < 300 then count = count + 1 else activeUsersTable[u] = nil end
     end
     liveText.Text = string.format("%d Active", math.max(1, count))
 end
 
-local function addJoinNotice(username)
+local function addJoinNotice(dispName)
     local pill = Instance.new("Frame", messageFeed)
     pill.Size = UDim2.new(1, 0, 0, 20)
     pill.BackgroundTransparency = 1
@@ -1487,7 +1423,7 @@ local function addJoinNotice(username)
     lbl.TextSize = 10
     lbl.TextColor3 = Colors.SubText
     lbl.RichText = true
-    lbl.Text = string.format("<font color='#2DF587'>●</font> <i>@%s connected to network</i>", sanitizeXml(username))
+    lbl.Text = string.format("<font color='#2DF587'>●</font> <i>%s joined the network</i>", sanitizeXml(dispName))
     lbl.TextXAlignment = Enum.TextXAlignment.Center
     lbl.ZIndex = 10
     crispText(lbl, 0.6)
@@ -1509,8 +1445,8 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         return
     end
 
-    -- ⚡ PARSE QUOTED REPLY BLOCK IF PRESENT: [REP:User|Snippet] RestOfMsg
-    local replyToUser, replySnippet, cleanBodyMsg = msg:match("^%[REP:([^|]+)|([^%]]+)%]%s*(.*)$")
+    -- Parse Reply Header: [REP:DisplayName|Snippet] RestOfMsg
+    local replyToName, replySnippet, cleanBodyMsg = msg:match("^%[REP:([^|]+)|([^%]]+)%]%s*(.*)$")
     local displayMsg = cleanBodyMsg or msg
 
     local memeIdMatch = displayMsg:match("%[MEME:(%d+)%]")
@@ -1523,24 +1459,20 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     end
 
     local isSystemAI = (actualUsername == "System")
-    if isSystemAI then
-        dispName = "TXR // AI"
-    end
+    if isSystemAI then dispName = "TXR // AI" end
 
     local isSelf = (actualUsername:lower() == lp.Name:lower())
     local isMentioned = (not isSystemAI) and (
         string.find(string.lower(displayMsg), string.lower(lp.Name), 1, true) or 
         string.find(string.lower(displayMsg), string.lower(lp.DisplayName), 1, true) or
-        (replyToUser and replyToUser:lower() == lp.Name:lower())
+        (replyToName and (replyToName:lower() == lp.DisplayName:lower() or replyToName:lower() == lp.Name:lower()))
     )
     local isAdminUser = Admin[actualUsername:lower()] == true
     local badgeProfile = isSystemAI and BadgePresets["AICORE"] or (BadgePresets[currentOwnerBadge] or BadgePresets["OWNER"])
 
     local count = 0
     for _, child in ipairs(messageFeed:GetChildren()) do
-        if child:IsA("GuiObject") and child.Name ~= "UIListLayout" and child.Name ~= "UIPadding" then 
-            count = count + 1 
-        end
+        if child:IsA("GuiObject") and child.Name ~= "UIListLayout" and child.Name ~= "UIPadding" then count = count + 1 end
     end
     if count >= MAX_MESSAGES then
         for _, child in ipairs(messageFeed:GetChildren()) do
@@ -1548,9 +1480,9 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         end
     end
 
-    -- Outer Wrapper for Right-Drag Swipe-to-Reply Gesture
+    -- Outer Wrapper for Elastic Swipe-to-Reply
     local cardWrapper = Instance.new("Frame", messageFeed)
-    cardWrapper.Size = memeIdMatch and UDim2.new(1, 0, 0, 142) or UDim2.new(1, 0, 0, 0)
+    cardWrapper.Size = memeIdMatch and UDim2.new(1, 0, 0, 136) or UDim2.new(1, 0, 0, 0)
     cardWrapper.AutomaticSize = memeIdMatch and Enum.AutomaticSize.None or Enum.AutomaticSize.Y
     cardWrapper.BackgroundTransparency = 1
     cardWrapper.ZIndex = 9
@@ -1563,50 +1495,66 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         cardWrapper.Visible = (effectiveScope ~= "server")
     end
 
-    -- Hidden Left Swipe Reply Indicator Badge (Revealed when dragging right)
-    local swipeIconBadge = Instance.new("Frame", cardWrapper)
-    swipeIconBadge.Size = UDim2.fromOffset(30, 30)
-    swipeIconBadge.AnchorPoint = Vector2.new(0, 0.5)
-    swipeIconBadge.Position = UDim2.new(0, 6, 0.5, 0)
-    swipeIconBadge.BackgroundColor3 = Colors.ActiveTint
-    swipeIconBadge.BackgroundTransparency = 1
-    swipeIconBadge.ZIndex = 8
-    Instance.new("UICorner", swipeIconBadge).CornerRadius = UDim.new(1, 0)
+    -- ⚡ REDESIGNED LUXURY CYBER-CAPSULE SWIPE INDICATOR
+    local swipeCapsule = Instance.new("Frame", cardWrapper)
+    swipeCapsule.Size = UDim2.fromOffset(38, 26)
+    swipeCapsule.AnchorPoint = Vector2.new(0, 0.5)
+    swipeCapsule.Position = UDim2.new(0, 4, 0.5, 0)
+    swipeCapsule.BackgroundColor3 = Colors.ActiveTint
+    swipeCapsule.BackgroundTransparency = 1
+    swipeCapsule.ClipsDescendants = true
+    swipeCapsule.ZIndex = 8
+    Instance.new("UICorner", swipeCapsule).CornerRadius = UDim.new(1, 0)
 
-    local sibStroke = Instance.new("UIStroke", swipeIconBadge)
-    sibStroke.Color = Colors.Primary
-    sibStroke.Thickness = 1.4
-    sibStroke.Transparency = 1
+    local scFill = Instance.new("Frame", swipeCapsule)
+    scFill.Size = UDim2.fromScale(0, 1)
+    scFill.BackgroundColor3 = Colors.Primary
+    scFill.BackgroundTransparency = 0.72
+    scFill.BorderSizePixel = 0
+    scFill.ZIndex = 8
+    Instance.new("UICorner", scFill).CornerRadius = UDim.new(1, 0)
 
-    local sibScale = Instance.new("UIScale", swipeIconBadge)
-    sibScale.Scale = 0.4
+    local scStroke = Instance.new("UIStroke", swipeCapsule)
+    scStroke.Color = Colors.Primary
+    scStroke.Thickness = 1.4
+    scStroke.Transparency = 1
 
-    local swipeArrowTxt = Instance.new("TextLabel", swipeIconBadge)
-    swipeArrowTxt.Size = UDim2.fromScale(1, 1)
-    swipeArrowTxt.BackgroundTransparency = 1
-    swipeArrowTxt.Text = "↩"
-    swipeArrowTxt.TextColor3 = Colors.Primary
-    swipeArrowTxt.TextTransparency = 1
-    swipeArrowTxt.Font = Enum.Font.GothamBlack
-    swipeArrowTxt.TextSize = 15
-    swipeArrowTxt.ZIndex = 9
+    local scScale = Instance.new("UIScale", swipeCapsule)
+    scScale.Scale = 0.5
 
-    -- Interactive Draggable Card Surface
+    local swipeLabel = Instance.new("TextLabel", swipeCapsule)
+    swipeLabel.Size = UDim2.fromScale(1, 1)
+    swipeLabel.BackgroundTransparency = 1
+    swipeLabel.Text = "REP"
+    swipeLabel.TextColor3 = Colors.Primary
+    swipeLabel.TextTransparency = 1
+    swipeLabel.Font = Enum.Font.GothamBlack
+    swipeLabel.TextSize = 8.5
+    swipeLabel.ZIndex = 9
+
+    -- Main Glass Message Card
     local card = Instance.new("TextButton", cardWrapper)
     card.Name = "CardSurface"
-    card.Size = memeIdMatch and UDim2.new(1, 0, 0, 142) or UDim2.new(1, 0, 0, 0)
+    card.Size = memeIdMatch and UDim2.new(1, 0, 0, 136) or UDim2.new(1, 0, 0, 0)
     card.AutomaticSize = memeIdMatch and Enum.AutomaticSize.None or Enum.AutomaticSize.Y
     card.BackgroundColor3 = isMentioned and Colors.MentionBg or (isSystemAI and Colors.SurfaceAI or (isSelf and Colors.SurfaceSelf or Colors.Surface))
-    card.BackgroundTransparency = isGhostMode and 0.55 or 0.26
+    card.BackgroundTransparency = isGhostMode and 0.54 or 0.22
     card.Text = ""
     card.AutoButtonColor = false
     card.ClipsDescendants = false
     card.ZIndex = 10
-    Instance.new("UICorner", card).CornerRadius = UDim.new(0, 11)
+    Instance.new("UICorner", card).CornerRadius = UDim.new(0, 12)
+
+    local cardGrad = Instance.new("UIGradient", card)
+    cardGrad.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 210, 230))
+    })
+    cardGrad.Rotation = 25
 
     local cardScale = Instance.new("UIScale", card)
-    cardScale.Scale = 0.95
-    TweenService:Create(cardScale, TweenInfo.new(0.28, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
+    cardScale.Scale = 0.96
+    TweenService:Create(cardScale, TweenInfo.new(0.26, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
 
     local accentStrip = Instance.new("Frame", card)
     accentStrip.Size = UDim2.new(0, 3, 1, -14)
@@ -1618,13 +1566,13 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
 
     local cardStroke = Instance.new("UIStroke", card)
     cardStroke.Thickness = (isMentioned or isSystemAI) and 1.3 or 1
-    cardStroke.Transparency = isMentioned and 0.25 or (isSystemAI and 0.45 or (isSelf and 0.65 or 0.80))
+    cardStroke.Transparency = isMentioned and 0.22 or (isSystemAI and 0.42 or (isSelf and 0.58 or 0.76))
     cardStroke.Color = isMentioned and Colors.MentionGold or (isSystemAI and Colors.Purple or (isSelf and Colors.PrimaryDark or Colors.SurfaceHover))
 
-    -- Avatar Orb (34x34 Vertically Aligned with Two-Tier Identity Block)
+    -- Avatar Orb (32x32 Crisp Circular Frame)
     if isSystemAI then
         local aiAvatar = Instance.new("Frame", card)
-        aiAvatar.Size = UDim2.fromOffset(34, 34)
+        aiAvatar.Size = UDim2.fromOffset(32, 32)
         aiAvatar.Position = UDim2.fromOffset(14, 9)
         aiAvatar.BackgroundColor3 = Color3.fromRGB(14, 18, 30)
         aiAvatar.ZIndex = 12
@@ -1642,7 +1590,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         })
 
         local aiRing = Instance.new("Frame", aiAvatar)
-        aiRing.Size = UDim2.fromOffset(24, 24)
+        aiRing.Size = UDim2.fromOffset(22, 22)
         aiRing.AnchorPoint = Vector2.new(0.5, 0.5)
         aiRing.Position = UDim2.fromScale(0.5, 0.5)
         aiRing.BackgroundTransparency = 1
@@ -1658,30 +1606,26 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         aiCoreText.Text = "✦"
         aiCoreText.TextColor3 = Colors.Primary
         aiCoreText.Font = Enum.Font.GothamBlack
-        aiCoreText.TextSize = 15
+        aiCoreText.TextSize = 14
         aiCoreText.ZIndex = 14
 
-        table.insert(activeAICoresList, {
-            grad = aiStrokeGrad,
-            ring = aiRing,
-            icon = aiCoreText
-        })
+        table.insert(activeAICoresList, { grad = aiStrokeGrad, ring = aiRing, icon = aiCoreText })
     else
         local avatarImg = Instance.new("ImageLabel", card)
-        avatarImg.Size = UDim2.fromOffset(34, 34)
+        avatarImg.Size = UDim2.fromOffset(32, 32)
         avatarImg.Position = UDim2.fromOffset(14, 9)
         avatarImg.BackgroundColor3 = Colors.Background
-        avatarImg.BackgroundTransparency = 0.25
+        avatarImg.BackgroundTransparency = 0.20
         avatarImg.ZIndex = 12
         Instance.new("UICorner", avatarImg).CornerRadius = UDim.new(1, 0)
         
         local avStroke = Instance.new("UIStroke", avatarImg)
         avStroke.Thickness = 1.3
-        avStroke.Transparency = 0.30
+        avStroke.Transparency = 0.28
         avStroke.Color = isAdminUser and Colors.Primary or Colors.SurfaceHover
 
         local statusDot = Instance.new("Frame", avatarImg)
-        statusDot.Size = UDim2.fromOffset(9, 9)
+        statusDot.Size = UDim2.fromOffset(8, 8)
         statusDot.AnchorPoint = Vector2.new(1, 1)
         statusDot.Position = UDim2.new(1, 0, 1, 0)
         statusDot.BackgroundColor3 = Colors.OnlineGreen
@@ -1689,7 +1633,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         Instance.new("UICorner", statusDot).CornerRadius = UDim.new(1, 0)
         local sdStroke = Instance.new("UIStroke", statusDot)
         sdStroke.Color = Colors.Background
-        sdStroke.Thickness = 1.6
+        sdStroke.Thickness = 1.5
 
         task.spawn(function()
             local targetPlr = Players:FindFirstChild(actualUsername)
@@ -1706,33 +1650,32 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         end)
     end
 
-    -- Top-Right Timestamp
+    -- Top-Right Frosted Timestamp Pill
     local timeLbl = Instance.new("TextLabel", card)
     timeLbl.AnchorPoint = Vector2.new(1, 0)
     timeLbl.Position = UDim2.new(1, -10, 0, 8)
-    timeLbl.Size = UDim2.fromOffset(45, 16)
+    timeLbl.Size = UDim2.fromOffset(42, 16)
     timeLbl.BackgroundTransparency = 1
     timeLbl.Text = os.date("%H:%M")
-    timeLbl.TextColor3 = Color3.fromRGB(105, 120, 145)
+    timeLbl.TextColor3 = Color3.fromRGB(110, 126, 152)
     timeLbl.Font = Enum.Font.GothamBold
     timeLbl.TextSize = 9.5
     timeLbl.TextXAlignment = Enum.TextXAlignment.Right
     timeLbl.ZIndex = 13
     crispText(timeLbl, 0.65)
 
-    -- ⚡ TWO-TIER IDENTITY + CONTENT STACK (Perfect Profile Name & @username Placement)
+    -- ⚡ CLEAN PROFILE NAME ONLY HEADER + MESSAGE STACK (NO @USERNAME SHOWN)
     local cardContent = Instance.new("Frame", card)
-    cardContent.Size = UDim2.new(1, -66, 0, 0)
-    cardContent.Position = UDim2.fromOffset(56, 7)
+    cardContent.Size = UDim2.new(1, -64, 0, 0)
+    cardContent.Position = UDim2.fromOffset(54, 8)
     cardContent.AutomaticSize = Enum.AutomaticSize.Y
     cardContent.BackgroundTransparency = 1
     cardContent.ZIndex = 12
 
     local ccLayout = Instance.new("UIListLayout", cardContent)
     ccLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    ccLayout.Padding = UDim.new(0, 2)
+    ccLayout.Padding = UDim.new(0, 4)
 
-    -- Tier 1: [LIVE BADGE] + Main Display Name
     local topIdentityRow = Instance.new("Frame", cardContent)
     topIdentityRow.Size = UDim2.new(1, -44, 0, 18)
     topIdentityRow.BackgroundTransparency = 1
@@ -1750,6 +1693,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         bHost.LayoutOrder = 1
     end
 
+    -- Profile DisplayName ONLY (No @username clutter)
     local nameLbl = Instance.new("TextLabel", topIdentityRow)
     nameLbl.AutomaticSize = Enum.AutomaticSize.X
     nameLbl.Size = UDim2.new(0, 0, 1, 0)
@@ -1761,92 +1705,72 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     nameLbl.TextSize = 12.5
     nameLbl.LayoutOrder = 2
     nameLbl.ZIndex = 13
-    crispText(nameLbl, 0.30)
-
-    -- Tier 2: Dedicated @username & DM Tag Row right below DisplayName
-    local subIdentityRow = Instance.new("Frame", cardContent)
-    subIdentityRow.Size = UDim2.new(1, 0, 0, 13)
-    subIdentityRow.BackgroundTransparency = 1
-    subIdentityRow.LayoutOrder = 2
-    subIdentityRow.ZIndex = 12
-
-    local siLayout = Instance.new("UIListLayout", subIdentityRow)
-    siLayout.FillDirection = Enum.FillDirection.Horizontal
-    siLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-    siLayout.Padding = UDim.new(0, 6)
-    siLayout.SortOrder = Enum.SortOrder.LayoutOrder
-
-    local handleLbl = Instance.new("TextLabel", subIdentityRow)
-    handleLbl.AutomaticSize = Enum.AutomaticSize.X
-    handleLbl.Size = UDim2.new(0, 0, 1, 0)
-    handleLbl.BackgroundTransparency = 1
-    handleLbl.Text = isSystemAI and "@txr_neural_core" or ("@" .. sanitizeXml(actualUsername))
-    handleLbl.TextColor3 = Colors.SubText
-    handleLbl.Font = Enum.Font.GothamBold
-    handleLbl.TextSize = 9.5
-    handleLbl.LayoutOrder = 1
-    handleLbl.ZIndex = 13
-    crispText(handleLbl, 0.55)
+    crispText(nameLbl, 0.28)
 
     if privateUserTarget then
-        local dmLbl = Instance.new("TextLabel", subIdentityRow)
+        local dmLbl = Instance.new("TextLabel", topIdentityRow)
         dmLbl.AutomaticSize = Enum.AutomaticSize.X
         dmLbl.Size = UDim2.new(0, 0, 1, 0)
         dmLbl.BackgroundTransparency = 1
         dmLbl.RichText = true
-        dmLbl.Text = isPrivateSender and ("• 🔐 To @" .. sanitizeXml(privateUserTarget)) or ("• 🔐 From @" .. sanitizeXml(privateUserTarget))
+        dmLbl.Text = isPrivateSender and ("• 🔐 Private") or ("• 🔐 Direct")
         dmLbl.TextColor3 = Colors.Purple
         dmLbl.Font = Enum.Font.GothamBlack
         dmLbl.TextSize = 9.5
-        dmLbl.LayoutOrder = 2
+        dmLbl.LayoutOrder = 3
         dmLbl.ZIndex = 13
         crispText(dmLbl, 0.45)
     end
 
-    -- Tier 3: Real-Chat Quoted Reply Box (If this message is a reply)
-    if replyToUser and replySnippet then
+    -- ⚡ REDESIGNED LUXURY FROSTED QUOTE CARD (When Replying)
+    if replyToName and replySnippet then
         local quoteBox = Instance.new("Frame", cardContent)
-        quoteBox.Size = UDim2.new(1, -4, 0, 22)
-        quoteBox.BackgroundColor3 = Colors.Background
-        quoteBox.BackgroundTransparency = 0.35
-        quoteBox.LayoutOrder = 3
+        quoteBox.Size = UDim2.new(1, -4, 0, 26)
+        quoteBox.BackgroundColor3 = Color3.fromRGB(9, 13, 22)
+        quoteBox.BackgroundTransparency = 0.25
+        quoteBox.LayoutOrder = 2
         quoteBox.ZIndex = 13
-        Instance.new("UICorner", quoteBox).CornerRadius = UDim.new(0, 5)
+        Instance.new("UICorner", quoteBox).CornerRadius = UDim.new(0, 7)
+
+        local qbStroke = Instance.new("UIStroke", quoteBox)
+        qbStroke.Color = Colors.PrimaryDark
+        qbStroke.Thickness = 0.9
+        qbStroke.Transparency = 0.65
 
         local qBar = Instance.new("Frame", quoteBox)
-        qBar.Size = UDim2.new(0, 2, 1, -6)
-        qBar.Position = UDim2.new(0, 4, 0, 3)
+        qBar.Size = UDim2.new(0, 3, 1, -8)
+        qBar.Position = UDim2.new(0, 5, 0, 4)
         qBar.BorderSizePixel = 0
         qBar.BackgroundColor3 = Colors.Primary
         qBar.ZIndex = 14
         Instance.new("UICorner", qBar).CornerRadius = UDim.new(1, 0)
 
         local qText = Instance.new("TextLabel", quoteBox)
-        qText.Size = UDim2.new(1, -14, 1, 0)
-        qText.Position = UDim2.fromOffset(10, 0)
+        qText.Size = UDim2.new(1, -18, 1, 0)
+        qText.Position = UDim2.fromOffset(13, 0)
         qText.BackgroundTransparency = 1
         qText.RichText = true
-        qText.Text = string.format("<font color='#00FFCD'><b>↩ @%s:</b></font> <i>%s</i>", sanitizeXml(replyToUser), sanitizeXml(replySnippet))
+        qText.Text = string.format("<font color='#00FFCD'><b>%s</b></font>  <font color='#92A4C0'>%s</font>", sanitizeXml(replyToName), sanitizeXml(replySnippet))
         qText.TextColor3 = Colors.SubText
         qText.Font = Enum.Font.GothamMedium
-        qText.TextSize = 9.5
+        qText.TextSize = 10
         qText.TextTruncate = Enum.TextTruncate.AtEnd
         qText.TextXAlignment = Enum.TextXAlignment.Left
         qText.ZIndex = 14
         crispText(qText, 0.5)
     end
 
-    -- Tier 4: Message Body or Sticker
+    -- Message Body or Sticker
     if memeIdMatch then
         local memeHolder = Instance.new("Frame", cardContent)
         memeHolder.Size = UDim2.new(1, 0, 0, 96)
         memeHolder.BackgroundTransparency = 1
-        memeHolder.LayoutOrder = 4
+        memeHolder.LayoutOrder = 3
         memeHolder.ZIndex = 13
 
         local memeImg = Instance.new("ImageLabel", memeHolder)
         memeImg.Size = UDim2.fromOffset(92, 92)
-        memeImg.Position = UDim2.fromOffset(0, 3)
+        memeImg.Position = UDim2.fromOffset(0, 2)
         memeImg.BackgroundColor3 = Colors.Background
         memeImg.BackgroundTransparency = 0.25
         memeImg.Image = getAssetThumb(memeIdMatch)
@@ -1869,10 +1793,10 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         bodyTxt.TextWrapped = true
         bodyTxt.TextXAlignment = Enum.TextXAlignment.Left
         bodyTxt.RichText = true
-        bodyTxt.LayoutOrder = 4
+        bodyTxt.LayoutOrder = 3
         bodyTxt.ZIndex = 13
         bodyTxt.Text = sanitizeXml(displayMsg)
-        crispText(bodyTxt, 0.40)
+        crispText(bodyTxt, 0.38)
     end
 
     local padFix = Instance.new("UIPadding", card)
@@ -1884,7 +1808,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         playSFX("meme")
     end
 
-    -- ⚡ REAL-CHAT RIGHT-DRAG SWIPE-TO-REPLY ENGINE + TAP CONTEXT MENU
+    -- ⚡ ELASTIC RIGHT-SWIPE REPLY GESTURE ENGINE
     local isSwipingCard = false
     local swipeInputObj = nil
     local swipeStartPos = nil
@@ -1903,30 +1827,33 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
 
     local moveConn
     moveConn = UserInputService.InputChanged:Connect(function(input)
-        if not card.Parent then
-            moveConn:Disconnect()
-            return
-        end
+        if not card.Parent then moveConn:Disconnect() return end
         if isSwipingCard and (input == swipeInputObj or input.UserInputType == Enum.UserInputType.MouseMovement) then
             local delta = input.Position - swipeStartPos
             movedDistance = delta.Magnitude
 
-            -- Right-Drag Swipe Gesture (Only when dragging horizontally to the right)
-            if delta.X > 6 and math.abs(delta.X) > math.abs(delta.Y) * 1.3 then
-                local dragOffset = math.clamp(delta.X * 0.75, 0, 62)
+            if delta.X > 6 and math.abs(delta.X) > math.abs(delta.Y) * 1.25 then
+                -- Smooth elastic resistance curve
+                local rawX = math.max(0, delta.X - 6)
+                local dragOffset = math.clamp(rawX ^ 0.85 * 1.35, 0, 58)
                 card.Position = UDim2.fromOffset(dragOffset, 0)
 
-                local progress = math.clamp(dragOffset / 42, 0, 1)
-                swipeIconBadge.BackgroundTransparency = 1 - (progress * 0.85)
-                sibStroke.Transparency = 1 - progress
-                swipeArrowTxt.TextTransparency = 1 - progress
-                sibScale.Scale = 0.5 + (progress * 0.65)
+                local progress = math.clamp(dragOffset / 40, 0, 1)
+                swipeCapsule.BackgroundTransparency = 1 - (progress * 0.90)
+                scFill.Size = UDim2.fromScale(progress, 1)
+                scStroke.Transparency = 1 - progress
+                swipeLabel.TextTransparency = 1 - progress
+                scScale.Scale = 0.65 + (progress * 0.40)
 
-                if dragOffset >= 42 and not swipeTriggered then
+                if dragOffset >= 40 and not swipeTriggered then
                     swipeTriggered = true
+                    swipeLabel.Text = "✓"
+                    scFill.BackgroundColor3 = Colors.OnlineGreen
                     playSFX("default")
-                elseif dragOffset < 42 and swipeTriggered then
+                elseif dragOffset < 40 and swipeTriggered then
                     swipeTriggered = false
+                    swipeLabel.Text = "REP"
+                    scFill.BackgroundColor3 = Colors.Primary
                 end
             end
         end
@@ -1934,33 +1861,26 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
 
     local endConn
     endConn = UserInputService.InputEnded:Connect(function(input)
-        if not card.Parent then
-            endConn:Disconnect()
-            return
-        end
+        if not card.Parent then endConn:Disconnect() return end
         if isSwipingCard and (input == swipeInputObj or input.UserInputType == Enum.UserInputType.MouseButton1) then
             isSwipingCard = false
             swipeInputObj = nil
 
             TweenService:Create(card, TweenInfo.new(0.32, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.fromOffset(0, 0)}):Play()
-            TweenService:Create(swipeIconBadge, TweenInfo.new(0.25), {BackgroundTransparency = 1}):Play()
-            TweenService:Create(sibStroke, TweenInfo.new(0.25), {Transparency = 1}):Play()
-            TweenService:Create(swipeArrowTxt, TweenInfo.new(0.25), {TextTransparency = 1}):Play()
-            TweenService:Create(sibScale, TweenInfo.new(0.25), {Scale = 0.4}):Play()
+            TweenService:Create(swipeCapsule, TweenInfo.new(0.22), {BackgroundTransparency = 1}):Play()
+            TweenService:Create(scStroke, TweenInfo.new(0.22), {Transparency = 1}):Play()
+            TweenService:Create(swipeLabel, TweenInfo.new(0.22), {TextTransparency = 1}):Play()
+            TweenService:Create(scScale, TweenInfo.new(0.22), {Scale = 0.5}):Play()
 
             if swipeTriggered then
                 swipeTriggered = false
                 if activateReplyBanner then
                     local cleanPreview = memeIdMatch and "[Sticker]" or displayMsg
-                    if #cleanPreview > 36 then
-                        cleanPreview = string.sub(cleanPreview, 1, 36) .. "..."
-                    end
-                    activateReplyBanner(actualUsername, dispName, cleanPreview)
+                    if #cleanPreview > 38 then cleanPreview = string.sub(cleanPreview, 1, 38) .. "..." end
+                    activateReplyBanner(dispName, cleanPreview)
                 end
             elseif movedDistance < 10 then
-                -- Standard Tap Context Menu
                 if isSelf or isSystemAI then return end
-                
                 for _, c in ipairs(actionMenu:GetChildren()) do
                     if c:IsA("TextButton") then c:Destroy() end
                 end
@@ -1968,10 +1888,8 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                 createActionBtn("REPLY", Colors.Primary, function()
                     if activateReplyBanner then
                         local cleanPreview = memeIdMatch and "[Sticker]" or displayMsg
-                        if #cleanPreview > 36 then
-                            cleanPreview = string.sub(cleanPreview, 1, 36) .. "..."
-                        end
-                        activateReplyBanner(actualUsername, dispName, cleanPreview)
+                        if #cleanPreview > 38 then cleanPreview = string.sub(cleanPreview, 1, 38) .. "..." end
+                        activateReplyBanner(dispName, cleanPreview)
                     end
                 end)
 
@@ -2017,33 +1935,33 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
 end
 
 -- =========================================================
--- ↩️ SWIPE-TO-REPLY PREVIEW BANNER & PILL INPUT CONTAINER
+-- ↩️ LUXURY FLOATING REPLY DOCK & PILL INPUT BAR
 -- =========================================================
 local replyBanner = Instance.new("Frame", mainFrame)
-replyBanner.Size = UDim2.new(1, -32, 0, 28)
-replyBanner.Position = UDim2.new(0, 16, 1, -84)
-replyBanner.BackgroundColor3 = Color3.fromRGB(16, 22, 34)
-replyBanner.BackgroundTransparency = 0.08
+replyBanner.Size = UDim2.new(1, -28, 0, 30)
+replyBanner.Position = UDim2.new(0, 14, 1, -86)
+replyBanner.BackgroundColor3 = Color3.fromRGB(14, 20, 32)
+replyBanner.BackgroundTransparency = 0.06
 replyBanner.Visible = false
 replyBanner.ZIndex = 20
-Instance.new("UICorner", replyBanner).CornerRadius = UDim.new(0, 8)
+Instance.new("UICorner", replyBanner).CornerRadius = UDim.new(0, 10)
 
 local rbStroke = Instance.new("UIStroke", replyBanner)
-rbStroke.Color = Colors.PrimaryDark
-rbStroke.Thickness = 1
-rbStroke.Transparency = 0.45
+rbStroke.Color = Colors.Primary
+rbStroke.Thickness = 1.1
+rbStroke.Transparency = 0.40
 
 local rbAccent = Instance.new("Frame", replyBanner)
-rbAccent.Size = UDim2.new(0, 3, 1, -8)
-rbAccent.Position = UDim2.new(0, 5, 0, 4)
+rbAccent.Size = UDim2.new(0, 3, 1, -10)
+rbAccent.Position = UDim2.new(0, 6, 0, 5)
 rbAccent.BorderSizePixel = 0
 rbAccent.BackgroundColor3 = Colors.Primary
 rbAccent.ZIndex = 21
 Instance.new("UICorner", rbAccent).CornerRadius = UDim.new(1, 0)
 
 local rbText = Instance.new("TextLabel", replyBanner)
-rbText.Size = UDim2.new(1, -42, 1, 0)
-rbText.Position = UDim2.fromOffset(14, 0)
+rbText.Size = UDim2.new(1, -44, 1, 0)
+rbText.Position = UDim2.fromOffset(15, 0)
 rbText.BackgroundTransparency = 1
 rbText.RichText = true
 rbText.Text = ""
@@ -2057,32 +1975,33 @@ rbText.ZIndex = 21
 local rbClose = Instance.new("TextButton", replyBanner)
 rbClose.Size = UDim2.fromOffset(22, 22)
 rbClose.AnchorPoint = Vector2.new(1, 0.5)
-rbClose.Position = UDim2.new(1, -4, 0.5, 0)
-rbClose.BackgroundTransparency = 1
+rbClose.Position = UDim2.new(1, -5, 0.5, 0)
+rbClose.BackgroundColor3 = Colors.Background
+rbClose.BackgroundTransparency = 0.4
 rbClose.Text = "✕"
 rbClose.TextColor3 = Colors.SubText
 rbClose.Font = Enum.Font.GothamBlack
-rbClose.TextSize = 11
+rbClose.TextSize = 10
 rbClose.ZIndex = 22
+Instance.new("UICorner", rbClose).CornerRadius = UDim.new(1, 0)
 
 local function clearReplyBanner()
     activeReplyData = nil
     replyBanner.Visible = false
-    messageFeed.Size = UDim2.new(1, -24, 1, -146)
+    messageFeed.Size = UDim2.new(1, -24, 1, -148)
 end
 
 rbClose.MouseButton1Click:Connect(clearReplyBanner)
 
-activateReplyBanner = function(targetUsername, targetDispName, snippetText)
+activateReplyBanner = function(targetDispName, snippetText)
     local cleanSnippet = string.gsub(snippetText, "[%[%]\n\r|]", " ")
     activeReplyData = {
-        user = targetUsername,
         disp = targetDispName,
         text = cleanSnippet
     }
-    rbText.Text = string.format("<font color='#00FFCD'><b>Replying to %s (@%s):</b></font> <i>%s</i>", sanitizeXml(targetDispName), sanitizeXml(targetUsername), sanitizeXml(cleanSnippet))
+    rbText.Text = string.format("<font color='#00FFCD'><b>Replying to %s</b></font>  •  <font color='#9AB0CE'>%s</font>", sanitizeXml(targetDispName), sanitizeXml(cleanSnippet))
     replyBanner.Visible = true
-    messageFeed.Size = UDim2.new(1, -24, 1, -176)
+    messageFeed.Size = UDim2.new(1, -24, 1, -180)
     chatInput:CaptureFocus()
 end
 
@@ -2090,14 +2009,14 @@ local inputContainer = Instance.new("Frame", mainFrame)
 inputContainer.Size = UDim2.new(1, -24, 0, 44)
 inputContainer.Position = UDim2.new(0, 12, 1, -52)
 inputContainer.BackgroundColor3 = Colors.Surface
-inputContainer.BackgroundTransparency = 0.20
+inputContainer.BackgroundTransparency = 0.16
 inputContainer.ZIndex = 12
 Instance.new("UICorner", inputContainer).CornerRadius = UDim.new(1, 0)
 
 local inputStroke = Instance.new("UIStroke", inputContainer)
 inputStroke.Thickness = 1.2
 inputStroke.Color = Colors.PrimaryDark
-inputStroke.Transparency = 0.50
+inputStroke.Transparency = 0.45
 
 local typingIndicator = Instance.new("Frame", inputContainer)
 typingIndicator.Size = UDim2.new(1, -28, 0, 2)
@@ -2125,7 +2044,7 @@ chatInput.Text = ""
 chatInput.Size = UDim2.new(1, -134, 1, 0)
 chatInput.Position = UDim2.new(0, 16, 0, 0)
 chatInput.BackgroundTransparency = 1
-chatInput.PlaceholderText = "Swipe card right to reply | !p user to DM"
+chatInput.PlaceholderText = "Write a message... (Swipe card to reply)"
 chatInput.PlaceholderColor3 = Colors.SubText
 chatInput.TextColor3 = Colors.Text
 chatInput.Font = Enum.Font.GothamMedium
@@ -2136,32 +2055,26 @@ chatInput.ZIndex = 13
 crispText(chatInput, 0.4)
 
 local function sanitizeChatInput()
-    if chatInput.Text == "TextBox" then
-        chatInput.Text = ""
-    end
+    if chatInput.Text == "TextBox" then chatInput.Text = "" end
 end
 chatInput:GetPropertyChangedSignal("Text"):Connect(function()
     sanitizeChatInput()
-    if #chatInput.Text > 0 then
-        typingIndicator.BackgroundTransparency = 0.2
-    else
-        typingIndicator.BackgroundTransparency = 1
-    end
+    typingIndicator.BackgroundTransparency = (#chatInput.Text > 0) and 0.2 or 1
 end)
 task.defer(sanitizeChatInput)
 
 chatInput.Focused:Connect(function()
     sanitizeChatInput()
-    TweenService:Create(inputStroke, TweenInfo.new(0.25), {Color = Colors.Primary, Transparency = 0.15, Thickness = 1.6}):Play()
+    TweenService:Create(inputStroke, TweenInfo.new(0.25), {Color = Colors.Primary, Transparency = 0.12, Thickness = 1.6}):Play()
 end)
 chatInput.FocusLost:Connect(function()
     typingIndicator.BackgroundTransparency = 1
-    TweenService:Create(inputStroke, TweenInfo.new(0.25), {Color = Colors.PrimaryDark, Transparency = 0.50, Thickness = 1.2}):Play()
+    TweenService:Create(inputStroke, TweenInfo.new(0.25), {Color = Colors.PrimaryDark, Transparency = 0.45, Thickness = 1.2}):Play()
 end)
 
 updateInputBar = function()
     if privateTarget then
-        dmBadge.Text = "@" .. privateTarget .. " ✕"
+        dmBadge.Text = "🔐 " .. privateTarget .. " ✕"
         local w = TextService:GetTextSize(dmBadge.Text, 10, Enum.Font.GothamBlack, Vector2.new(1000, 30)).X + 16
         dmBadge.Size = UDim2.new(0, w, 1, -14)
         dmBadge.Visible = true
@@ -2184,7 +2097,7 @@ memeBtn.Size = UDim2.fromOffset(34, 28)
 memeBtn.AnchorPoint = Vector2.new(1, 0.5)
 memeBtn.Position = UDim2.new(1, -78, 0.5, 0)
 memeBtn.BackgroundColor3 = Colors.Background
-memeBtn.BackgroundTransparency = 0.45
+memeBtn.BackgroundTransparency = 0.40
 memeBtn.Text = "GIF"
 memeBtn.Font = Enum.Font.GothamBlack
 memeBtn.TextColor3 = Colors.Primary
@@ -2200,7 +2113,7 @@ emojiBtn.Size = UDim2.fromOffset(30, 28)
 emojiBtn.AnchorPoint = Vector2.new(1, 0.5)
 emojiBtn.Position = UDim2.new(1, -44, 0.5, 0)
 emojiBtn.BackgroundColor3 = Colors.Background
-emojiBtn.BackgroundTransparency = 0.45
+emojiBtn.BackgroundTransparency = 0.40
 emojiBtn.Text = ":)"
 emojiBtn.Font = Enum.Font.GothamBlack
 emojiBtn.TextColor3 = Colors.Text
@@ -2226,7 +2139,7 @@ Instance.new("UICorner", sendBtn).CornerRadius = UDim.new(1, 0)
 applySpringHover(sendBtn)
 
 -- =========================================================
--- 😀 EMOJI MODAL DRAWER
+-- 😀 EMOJI & 🎭 MEME MODAL DRAWERS
 -- =========================================================
 local emojiFrame = Instance.new("Frame", mainFrame)
 emojiFrame.Size = UDim2.new(0, 240, 0, 160)
@@ -2279,9 +2192,6 @@ emojiBtn.MouseButton1Click:Connect(function()
     end
 end)
 
--- =========================================================
--- 🎭 MEME / STICKER MODAL DRAWER
--- =========================================================
 memeFrame = Instance.new("Frame", mainFrame)
 memeFrame.Size = UDim2.new(0, 280, 0, 190)
 memeFrame.Position = UDim2.new(0.5, -140, 0.5, -95)
@@ -2324,18 +2234,14 @@ for _, mData in ipairs(MemeLibrary) do
     mItem.ScaleType = Enum.ScaleType.Fit
     mItem.ZIndex = 32
     Instance.new("UICorner", mItem).CornerRadius = UDim.new(0, 8)
-    
     local is = Instance.new("UIStroke", mItem)
     is.Color = Colors.PrimaryDark
     is.Thickness = 1
     is.Transparency = 0.6
-    
     applySpringHover(mItem)
     mItem.MouseButton1Click:Connect(function()
         memeFrame.Visible = false
-        if sendMessageFunc then
-            sendMessageFunc(string.format("[MEME:%d]", mData.id))
-        end
+        if sendMessageFunc then sendMessageFunc(string.format("[MEME:%d]", mData.id)) end
     end)
 end
 
@@ -2366,41 +2272,32 @@ local function makeDraggable(frame, handlesList, ghostAura, isOrb)
         local parentSize = gui.AbsoluteSize
         local frameSize = frame.AbsoluteSize
         local anchor = frame.AnchorPoint
-
         if parentSize.X <= 0 or parentSize.Y <= 0 then
             return UDim2.new(newXScale, newXOffset, newYScale, newYOffset)
         end
-
         local absX = (newXScale * parentSize.X) + newXOffset
         local absY = (newYScale * parentSize.Y) + newYOffset
-
         local minX, maxX, minY, maxY
-
         if isOrb then
             minX = frameSize.X * anchor.X
             maxX = parentSize.X - (frameSize.X * (1 - anchor.X))
             minY = frameSize.Y * anchor.Y
             maxY = parentSize.Y - (frameSize.Y * (1 - anchor.Y))
         else
-            local visibleWidth = frameSize.X * 0.25
-            local visibleHeight = frameSize.Y * 0.25
-
-            minX = (frameSize.X * anchor.X) - (frameSize.X - visibleWidth)
-            maxX = parentSize.X - (frameSize.X * (1 - anchor.X)) + (frameSize.X - visibleWidth)
-            minY = (frameSize.Y * anchor.Y) - (frameSize.Y - visibleHeight)
-            maxY = parentSize.Y - (frameSize.Y * (1 - anchor.Y)) + (frameSize.Y - visibleHeight)
+            local vw, vh = frameSize.X * 0.25, frameSize.Y * 0.25
+            minX = (frameSize.X * anchor.X) - (frameSize.X - vw)
+            maxX = parentSize.X - (frameSize.X * (1 - anchor.X)) + (frameSize.X - vw)
+            minY = (frameSize.Y * anchor.Y) - (frameSize.Y - vh)
+            maxY = parentSize.Y - (frameSize.Y * (1 - anchor.Y)) + (frameSize.Y - vh)
         end
-
         if minX > maxX then minX, maxX = maxX, minX end
         if minY > maxY then minY, maxY = maxY, minY end
-
         local clampedX = math.clamp(absX, minX, maxX)
         local clampedY = math.clamp(absY, minY, maxY)
-
         return UDim2.new(newXScale, clampedX - (newXScale * parentSize.X), newYScale, clampedY - (newYScale * parentSize.Y))
     end
 
-    local function bindHandle(handle)
+    for _, handle in ipairs(handlesList) do
         handle.InputBegan:Connect(function(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                 dragging = true
@@ -2410,24 +2307,15 @@ local function makeDraggable(frame, handlesList, ghostAura, isOrb)
                 targetPos = startPos
                 lastInputPos = Vector2.new(input.Position.X, input.Position.Y)
                 velocity = Vector2.new(0, 0)
-                
                 if not isOrb then
-                    TweenService:Create(dragPill, TweenInfo.new(0.2), {Size = UDim2.fromOffset(58, 4), BackgroundTransparency = 0.1}):Play()
-                end
-
-                if isOrb then
+                    TweenService:Create(dragPill, TweenInfo.new(0.2), {Size = UDim2.fromOffset(62, 4), BackgroundTransparency = 0.08}):Play()
+                else
                     isDraggingOrb = true
                     dragThresholdMet = false
                 end
-                
                 if dragLoop then dragLoop:Disconnect() end
-                
                 dragLoop = RunService.RenderStepped:Connect(function(dt)
-                    if _G.TXR_ChatInstanceID ~= currentExecutionID then
-                        dragLoop:Disconnect()
-                        return
-                    end
-                    
+                    if _G.TXR_ChatInstanceID ~= currentExecutionID then dragLoop:Disconnect() return end
                     if dragging then
                         frame.Position = frame.Position:Lerp(targetPos, math.clamp(dt * 28, 0, 1))
                     else
@@ -2440,7 +2328,6 @@ local function makeDraggable(frame, handlesList, ghostAura, isOrb)
                             dragLoop = nil
                         end
                     end
-                    
                     if ghostAura then
                         ghostAura.Position = frame.Position
                         shadow.Position = frame.Position
@@ -2450,18 +2337,13 @@ local function makeDraggable(frame, handlesList, ghostAura, isOrb)
         end)
     end
 
-    for _, h in ipairs(handlesList) do
-        bindHandle(h)
-    end
-
     UserInputService.InputEnded:Connect(function(input)
         if input == activeDragInput or input.UserInputType == Enum.UserInputType.MouseButton1 then
             dragging = false
             activeDragInput = nil
             if not isOrb then
-                TweenService:Create(dragPill, TweenInfo.new(0.25), {Size = UDim2.fromOffset(38, 3), BackgroundTransparency = 0.55}):Play()
-            end
-            if isOrb then
+                TweenService:Create(dragPill, TweenInfo.new(0.25), {Size = UDim2.fromOffset(42, 3), BackgroundTransparency = 0.50}):Play()
+            else
                 isDraggingOrb = false
                 orbHovered = false
             end
@@ -2471,10 +2353,7 @@ local function makeDraggable(frame, handlesList, ghostAura, isOrb)
     UserInputService.InputChanged:Connect(function(input)
         if dragging and (input == activeDragInput or input.UserInputType == Enum.UserInputType.MouseMovement) then
             local delta = input.Position - dragStart
-            if isOrb and delta.Magnitude > 8 then 
-                dragThresholdMet = true
-            end
-            
+            if isOrb and delta.Magnitude > 8 then dragThresholdMet = true end
             targetPos = getClampedTarget(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
             local currentMousePos = Vector2.new(input.Position.X, input.Position.Y)
             velocity = currentMousePos - lastInputPos
@@ -2487,29 +2366,19 @@ makeDraggable(mainFrame, {header, mainFrame, channelFrame}, aura, false)
 makeDraggable(openBtnContainer, {openBtn}, nil, true)
 
 openBtn.MouseButton1Down:Connect(function()
-    local tInfo = TweenInfo.new(0.12, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-    TweenService:Create(openBtnScale, tInfo, {Scale = 0.85}):Play()
+    TweenService:Create(openBtnScale, TweenInfo.new(0.12, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {Scale = 0.85}):Play()
 end)
 
 openBtn.MouseButton1Up:Connect(function()
-    local tInfo = TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out, 0, false, 0.2)
-    TweenService:Create(openBtnScale, tInfo, {Scale = 1.05}):Play()
+    TweenService:Create(openBtnScale, TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out, 0, false, 0.2), {Scale = 1.05}):Play()
 end)
 
 openBtn.MouseButton1Click:Connect(function()
-    if dragThresholdMet then 
-        dragThresholdMet = false 
-        return 
-    end
-
+    if dragThresholdMet then dragThresholdMet = false return end
     ghostDebounce = true
     task.delay(0.5, function() ghostDebounce = false end)
-    
-    local tInfo1 = TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In)
-    TweenService:Create(openBtnScale, tInfo1, {Scale = 0}):Play()
-    
+    TweenService:Create(openBtnScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play()
     task.wait(0.25)
-    
     openBtnContainer.Visible = false
     mainFrame.Visible = true
     aura.Visible = true
@@ -2517,19 +2386,16 @@ openBtn.MouseButton1Click:Connect(function()
     mainScale.Scale = 0.8
     auraScale.Scale = 0.8
     shadowScale.Scale = 0.8
-    
     unreadCount = 0
     unreadBadge.Visible = false
-    
     local tInfo2 = TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
     local tInfo3 = TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-    
     TweenService:Create(mainScale, tInfo2, {Scale = 1}):Play()
     TweenService:Create(auraScale, tInfo2, {Scale = 1}):Play()
     TweenService:Create(shadowScale, tInfo2, {Scale = 1}):Play()
-    TweenService:Create(mainFrame, tInfo3, {BackgroundTransparency = isGhostMode and 0.62 or 0.10}):Play()
+    TweenService:Create(mainFrame, tInfo3, {BackgroundTransparency = isGhostMode and 0.62 or 0.08}):Play()
     TweenService:Create(aura, tInfo3, {ImageTransparency = isGhostMode and 0.90 or 0.65}):Play()
-    TweenService:Create(shadow, tInfo3, {ImageTransparency = isGhostMode and 0.55 or 0.25}):Play()
+    TweenService:Create(shadow, tInfo3, {ImageTransparency = isGhostMode and 0.55 or 0.22}):Play()
 end)
 
 UserInputService.InputBegan:Connect(function(input, gp)
@@ -2549,9 +2415,9 @@ UserInputService.InputBegan:Connect(function(input, gp)
             mainScale.Scale = 1
             auraScale.Scale = 1
             shadowScale.Scale = 1
-            mainFrame.BackgroundTransparency = isGhostMode and 0.62 or 0.10
+            mainFrame.BackgroundTransparency = isGhostMode and 0.62 or 0.08
             aura.ImageTransparency = isGhostMode and 0.90 or 0.65
-            shadow.ImageTransparency = isGhostMode and 0.55 or 0.25
+            shadow.ImageTransparency = isGhostMode and 0.55 or 0.22
         end
     elseif input.KeyCode == Enum.KeyCode.Semicolon or input.KeyCode == Enum.KeyCode.Slash then
         task.delay(0.05, function() chatInput:CaptureFocus() end)
@@ -2576,25 +2442,21 @@ task.spawn(function()
                 local item = activeBadgesList[i]
                 if item.textGrad and item.textGrad.Parent and item.glowGrad and item.glowGrad.Parent then
                     local sSpeed = item.speed or 1.15
-
                     local continuousRotation = (t * 58 * sSpeed) % 360
                     local waveOffset = math.sin(t * 1.6 * sSpeed) * 0.35
                     
                     item.textGrad.Rotation = continuousRotation
                     item.textGrad.Offset = Vector2.new(waveOffset, 0)
-                    
                     item.glowGrad.Rotation = continuousRotation
                     item.glowGrad.Offset = Vector2.new(-waveOffset, 0)
                     
                     if item.strokeGradGlow and item.strokeGradGlow.Parent then
                         item.strokeGradGlow.Rotation = (continuousRotation + 180) % 360
                     end
-
                     if item.shineGrad and item.shineGrad.Parent then
                         local sweep = ((t * 0.8 * sSpeed) % 3.4) - 1.7
                         item.shineGrad.Offset = Vector2.new(sweep, 0)
                     end
-
                     local breathPulse = (math.sin(t * 2.4 * sSpeed) + 1) / 2
                     if item.glowStroke and item.glowStroke.Parent then
                         item.glowStroke.Thickness = 1.0 + (breathPulse * 0.45)
@@ -2626,10 +2488,8 @@ task.spawn(function()
             strokeGrad.Rotation = (t * 35) % 360
             local breath = (math.sin(t * 2.5) + 1) / 2
             aura.ImageTransparency = isGhostMode and 0.90 or (0.65 + (breath * 0.08))
-
             local ledAlpha = (math.sin(t * 4) + 1) / 2
             ledDot.BackgroundTransparency = 0.1 + (ledAlpha * 0.5)
-
             local typingWave = (math.sin(t * 8) + 1) / 2
             if typingIndicator.BackgroundTransparency < 1 then
                 typingIndicator.Size = UDim2.new(0.3 + (typingWave * 0.68), 0, 0, 2)
@@ -2637,22 +2497,18 @@ task.spawn(function()
         end
 
         if openBtnContainer.Visible then
-            local targetSpeed = 1
-            if orbHovered then targetSpeed = targetSpeed * 1.5 end
-            
+            local targetSpeed = orbHovered and 1.5 or 1
             currentSpeedMod = currentSpeedMod + (targetSpeed - currentSpeedMod) * dt * 5
             local targetRadius = orbHovered and 0.6 or 1
             currentRadiusMod = currentRadiusMod + (targetRadius - currentRadiusMod) * dt * 8
             local activeT = t * 3 * currentSpeedMod
             
-            local baseColor1 = Colors.Primary
-            local baseColor2 = Colors.Purple
+            local baseColor1, baseColor2 = Colors.Primary, Colors.Purple
             local lerpAlpha = (math.sin(activeT * 0.8) + 1) / 2
             
             coreGlow.ImageColor3 = baseColor1:Lerp(baseColor2, lerpAlpha)
             coreGlow.ImageTransparency = 0.4 + (math.sin(activeT) * 0.25)
             eventGlow.ImageColor3 = baseColor2:Lerp(Color3.new(1,1,1), lerpAlpha)
-            
             openStroke.Color = baseColor1:Lerp(baseColor2, lerpAlpha)
             goGrad.Rotation = (activeT * 50) % 360
             goStroke.Transparency = orbHovered and 0.1 or 0.5
@@ -2661,15 +2517,12 @@ task.spawn(function()
             gimbals[1].frame.Size = UDim2.fromOffset(gPulse * math.abs(math.cos(activeT * 0.8)), gPulse)
             gimbals[1].frame.Rotation = (activeT * 20) % 360
             gimbals[1].stroke.Color = baseColor1
-            
             gimbals[2].frame.Size = UDim2.fromOffset(gPulse, gPulse * math.abs(math.sin(activeT * 0.9)))
             gimbals[2].frame.Rotation = -(activeT * 25) % 360
             gimbals[2].stroke.Color = baseColor2
-            
             gimbals[3].frame.Size = UDim2.fromOffset(gPulse * math.abs(math.cos(activeT * 1.1)), gPulse)
             gimbals[3].frame.Rotation = 45 + (activeT * 15) % 360
             gimbals[3].stroke.Color = baseColor1:Lerp(Color3.new(1,1,1), 0.5)
-            
             gimbals[4].frame.Size = UDim2.fromOffset(gPulse, gPulse * math.abs(math.sin(activeT * 1.2)))
             gimbals[4].frame.Rotation = -45 - (activeT * 15) % 360
             gimbals[4].stroke.Color = baseColor2:Lerp(Color3.new(1,1,1), 0.5)
@@ -2683,7 +2536,6 @@ task.spawn(function()
             
             crosshair.Rotation = -(activeT * 60) % 360
             crosshair.ImageColor3 = baseColor1
-            
             centerCore.BackgroundColor3 = baseColor1:Lerp(Color3.new(1,1,1), lerpAlpha * 0.5)
             coreStroke.Color = baseColor2
 
@@ -2719,21 +2571,15 @@ task.spawn(function()
             local btnAbsCenter = openBtnContainer.AbsolutePosition + (openBtnContainer.AbsoluteSize / 2)
             local mPos = Vector2.new(mouseLoc.X, mouseLoc.Y)
             local mDist = (mPos - btnAbsCenter).Magnitude
-            local magneticRadius = 150
-
-            if orbHovered and mDist < magneticRadius and not isDraggingOrb then
-                local pullStr = 1 - (mDist / magneticRadius)
+            if orbHovered and mDist < 150 and not isDraggingOrb then
+                local pullStr = 1 - (mDist / 150)
                 local offsetX = (mPos.X - btnAbsCenter.X) * 0.25 * pullStr
                 local offsetY = (mPos.Y - btnAbsCenter.Y) * 0.25 * pullStr
-                local stretchX = 0.85 + (math.abs(offsetX) / 200)
-                local stretchY = 0.85 + (math.abs(offsetY) / 200)
-
-                openBtn.Size = openBtn.Size:Lerp(UDim2.fromScale(stretchX, stretchY), dt * 12)
+                openBtn.Size = openBtn.Size:Lerp(UDim2.fromScale(0.85 + (math.abs(offsetX) / 200), 0.85 + (math.abs(offsetY) / 200)), dt * 12)
                 openBtn.Position = openBtn.Position:Lerp(UDim2.new(0.5, offsetX, 0.5, offsetY), dt * 10)
                 eventGlow.Position = eventGlow.Position:Lerp(UDim2.new(0.5, offsetX * 0.4, 0.5, offsetY * 0.4), dt * 10)
                 crosshair.Position = crosshair.Position:Lerp(UDim2.new(0.5, offsetX * 0.7, 0.5, offsetY * 0.7), dt * 12)
                 centerCore.Position = centerCore.Position:Lerp(UDim2.new(0.5, offsetX * 1.2, 0.5, offsetY * 1.2), dt * 15)
-                
                 eventGlow.ImageTransparency = 0.1 + (math.sin(activeT * 10) * 0.05)
             else
                 openBtn.Size = openBtn.Size:Lerp(baseOrbScale, dt * 12)
@@ -2745,10 +2591,7 @@ task.spawn(function()
             end
 
             sonarTimer = sonarTimer + dt
-            if sonarTimer >= 1.0 then
-                sonarTimer = 0
-                spawnSonar(baseColor1)
-            end
+            if sonarTimer >= 1.0 then sonarTimer = 0 spawnSonar(baseColor1) end
         end
     end)
 end)
@@ -2760,7 +2603,6 @@ local lastSendTick = 0
 sendMessageFunc = function(overrideText)
     local text = overrideText or chatInput.Text
     if not text then return end
-
     if text == "TextBox" then text = "" end
     text = string.gsub(text, "^%s+", "")
     text = string.gsub(text, "%s+$", "")
@@ -2773,19 +2615,19 @@ sendMessageFunc = function(overrideText)
         chatInput.Text = ""
         privateTarget = pMatch
         updateInputBar()
-        addMessageToFeed("System::TXR // AI", "Encrypted DM link locked with @" .. pMatch, nil, false, game.JobId, chatMode)
+        addMessageToFeed("System::TXR // AI", "Encrypted DM link locked with " .. pMatch, nil, false, game.JobId, chatMode)
         return
     end
 
     if text:lower() == "!ai" or text:lower() == "/help" then
         chatInput.Text = ""
-        addMessageToFeed("System::TXR // AI", "Commands: Swipe any message right to Reply | '!p username' for Private DM | Tap any card to Copy, TP, or Spectate.", nil, false, game.JobId, chatMode)
+        addMessageToFeed("System::TXR // AI", "Swipe any message right to Reply | '!p username' for Private DM | Tap any card to Copy, TP, or Spectate.", nil, false, game.JobId, chatMode)
         return
     end
 
     local payloadBodyText = text
     if activeReplyData then
-        payloadBodyText = string.format("[REP:%s|%s] %s", activeReplyData.user, activeReplyData.text, text)
+        payloadBodyText = string.format("[REP:%s|%s] %s", activeReplyData.disp, activeReplyData.text, text)
         clearReplyBanner()
     end
 
@@ -2825,7 +2667,6 @@ sendMessageFunc = function(overrideText)
                 msg = finalMsg,
                 jobId = game.JobId
             })
-
             pcall(function()
                 req({
                     Url = SERVER_URL .. "/send",
@@ -2885,17 +2726,15 @@ task.spawn(function()
                                     if srvJob then
                                         scope = "server"
                                         parsedMsg = cleanSrvMsg
-                                        if tostring(srvJob) ~= tostring(game.JobId) then
-                                            continue
-                                        end
+                                        if tostring(srvJob) ~= tostring(game.JobId) then continue end
                                     elseif cleanGlbMsg then
                                         scope = "global"
                                         parsedMsg = cleanGlbMsg
                                     end
 
                                     addMessageToFeed(m.user, parsedMsg, nil, false, m.jobId, scope)
-                                    local rawUsernameOnly = m.user:match("^(.-)::") or m.user
-                                    updateLiveCounter(rawUsernameOnly)
+                                    local rawU, rawD = m.user:match("^(.-)::(.*)$")
+                                    updateLiveCounter(rawU or m.user, rawD or m.user)
                                 end
                             end
                             lastSyncTime = data[#data].time
@@ -2905,20 +2744,20 @@ task.spawn(function()
 
                     for _, m in ipairs(data) do
                         local uniqueMsgKey = (m.id and tostring(m.id)) or (m.user .. "_" .. tostring(m.time) .. "_" .. m.msg)
-                        if processedServerMessageMap[uniqueMsgKey] then
-                            continue
-                        end
+                        if processedServerMessageMap[uniqueMsgKey] then continue end
 
                         if m.time >= lastSyncTime then
                             lastSyncTime = m.time
-                            local rawUsernameOnly = m.user:match("^(.-)::") or m.user
+                            local rawU, rawD = m.user:match("^(.-)::(.*)$")
+                            local rawUsernameOnly = rawU or m.user
+                            local rawDispOnly = rawD or rawUsernameOnly
                             knownUsers[rawUsernameOnly:lower()] = rawUsernameOnly
-                            updateLiveCounter(rawUsernameOnly)
+                            updateLiveCounter(rawUsernameOnly, rawDispOnly)
 
                             if m.msg == "Joined" then
                                 processedServerMessageMap[uniqueMsgKey] = true
                                 if rawUsernameOnly ~= lp.Name then
-                                    addJoinNotice(rawUsernameOnly)
+                                    addJoinNotice(rawDispOnly)
                                     playSFX("default")
                                 end
                                 continue
@@ -2932,7 +2771,6 @@ task.spawn(function()
                             if rawUsernameOnly:lower() == lp.Name:lower() then
                                 local lowMsg = string.lower(m.msg)
                                 local isEcho = false
-
                                 for sentText, sentTime in pairs(recentLocalSentMap) do
                                     if (sentText == lowMsg or lowMsg:find(sentText, 1, true)) and (tick() - sentTime <= 60) then
                                         isEcho = true
@@ -2940,7 +2778,6 @@ task.spawn(function()
                                         break
                                     end
                                 end
-
                                 if isEcho then
                                     processedServerMessageMap[uniqueMsgKey] = true
                                     continue
@@ -2957,9 +2794,7 @@ task.spawn(function()
                             if srvJob then
                                 scope = "server"
                                 effectiveMsg = cleanSrvMsg
-                                if tostring(srvJob) ~= tostring(game.JobId) then
-                                    continue
-                                end
+                                if tostring(srvJob) ~= tostring(game.JobId) then continue end
                             elseif cleanGlbMsg then
                                 scope = "global"
                                 effectiveMsg = cleanGlbMsg
@@ -2974,7 +2809,6 @@ task.spawn(function()
                                     local _, _, strippedBubble = pMsg:match("^%[REP:([^|]+)|([^%]]+)%]%s*(.*)$")
                                     displayBubble(rawUsernameOnly, strippedBubble or pMsg)
                                     playSFX("dm")
-
                                     if not mainFrame.Visible then
                                         unreadCount = unreadCount + 1
                                         unreadTxt.Text = tostring(unreadCount)
@@ -2990,7 +2824,6 @@ task.spawn(function()
                                 local _, _, strippedBubble = effectiveMsg:match("^%[REP:([^|]+)|([^%]]+)%]%s*(.*)$")
                                 displayBubble(rawUsernameOnly, strippedBubble or effectiveMsg)
                                 playSFX("default")
-
                                 if not mainFrame.Visible then
                                     unreadCount = unreadCount + 1
                                     unreadTxt.Text = tostring(unreadCount)
@@ -3021,6 +2854,6 @@ task.spawn(function()
             })
         end)
     end
-    addMessageToFeed("System::TXR // AI", "Neural Link Active! Swipe any message right to Reply, or tap TAG to preview live badges.", nil, false, game.JobId, "server")
-    addMessageToFeed("System::TXR // AI", "Global Network Synchronized! Swipe right on any card to quote & reply.", nil, false, game.JobId, "global")
+    addMessageToFeed("System::TXR // AI", "Neural Link Active! Swipe any card right to quote & reply.", nil, false, game.JobId, "server")
+    addMessageToFeed("System::TXR // AI", "Global Network Synchronized! Your messages here persist across all servers.", nil, false, game.JobId, "global")
 end)
