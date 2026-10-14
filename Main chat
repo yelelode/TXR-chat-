@@ -12,15 +12,11 @@ pcall(function()
 end)
 
 -- =========================================================
--- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V25.0 ULTRA-CRISP) 👑
+-- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V26.0 PRO MESSENGER) 👑
 -- =========================================================
-
 local currentExecutionID = tick()
 _G.TXR_ChatInstanceID = currentExecutionID
-
-if _G.TXR_ChatConnection then 
-    _G.TXR_ChatConnection:Disconnect() 
-end
+if _G.TXR_ChatConnection then _G.TXR_ChatConnection:Disconnect() end
 _G.TXR_IsPolling = false
 task.wait(0.05)
 _G.TXR_IsPolling = true
@@ -46,9 +42,7 @@ if gethui then pcall(function() targetGuiParent = gethui() end) end
 if not targetGuiParent then targetGuiParent = lp:WaitForChild("PlayerGui") end
 
 for _, v in pairs(targetGuiParent:GetChildren()) do
-    if v.Name:find("TXR_OnyxChat") or v.Name:find("HiddenChatUI") then 
-        v:Destroy() 
-    end
+    if v.Name:find("TXR_OnyxChat") or v.Name:find("HiddenChatUI") then v:Destroy() end
 end
 
 -- =========================================================
@@ -68,202 +62,54 @@ end
 -- 🎨 MULTI-CHROMA PALETTE & THEMES
 -- =========================================================
 local Themes = {
-    [1] = {
-        Primary = Color3.fromRGB(0, 255, 205),
-        PrimaryDark = Color3.fromRGB(0, 165, 140),
-        Accent = Color3.fromRGB(160, 55, 255),
-        ActiveTint = Color3.fromRGB(12, 38, 48)
-    },
-    [2] = {
-        Primary = Color3.fromRGB(255, 45, 85),
-        PrimaryDark = Color3.fromRGB(175, 20, 55),
-        Accent = Color3.fromRGB(255, 145, 0),
-        ActiveTint = Color3.fromRGB(46, 12, 24)
-    },
-    [3] = {
-        Primary = Color3.fromRGB(185, 80, 255),
-        PrimaryDark = Color3.fromRGB(120, 40, 185),
-        Accent = Color3.fromRGB(0, 205, 255),
-        ActiveTint = Color3.fromRGB(34, 14, 52)
-    },
-    [4] = {
-        Primary = Color3.fromRGB(255, 205, 55),
-        PrimaryDark = Color3.fromRGB(185, 130, 20),
-        Accent = Color3.fromRGB(255, 80, 80),
-        ActiveTint = Color3.fromRGB(46, 36, 12)
-    }
+    [1] = { Primary = Color3.fromRGB(0, 255, 205), PrimaryDark = Color3.fromRGB(0, 165, 140), Accent = Color3.fromRGB(160, 55, 255), ActiveTint = Color3.fromRGB(12, 38, 48) },
+    [2] = { Primary = Color3.fromRGB(255, 45, 85), PrimaryDark = Color3.fromRGB(175, 20, 55), Accent = Color3.fromRGB(255, 145, 0), ActiveTint = Color3.fromRGB(46, 12, 24) },
+    [3] = { Primary = Color3.fromRGB(185, 80, 255), PrimaryDark = Color3.fromRGB(120, 40, 185), Accent = Color3.fromRGB(0, 205, 255), ActiveTint = Color3.fromRGB(34, 14, 52) },
+    [4] = { Primary = Color3.fromRGB(255, 205, 55), PrimaryDark = Color3.fromRGB(185, 130, 20), Accent = Color3.fromRGB(255, 80, 80), ActiveTint = Color3.fromRGB(46, 36, 12) }
 }
 local currentThemeIdx = 1
 
 local Colors = {
-    Background    = Color3.fromRGB(8, 11, 18),       
-    Surface       = Color3.fromRGB(16, 22, 34),          
-    SurfaceSelf   = Color3.fromRGB(14, 28, 42),
-    SurfaceAI     = Color3.fromRGB(18, 22, 44),
-    SurfaceHover  = Color3.fromRGB(28, 36, 54),     
-    ActiveTint    = Themes[1].ActiveTint,       
-    Primary       = Themes[1].Primary,         
-    PrimaryDark   = Themes[1].PrimaryDark,     
-    Danger        = Color3.fromRGB(255, 60, 90),          
-    Warning       = Color3.fromRGB(255, 175, 20),         
-    Purple        = Themes[1].Accent,         
-    Text          = Color3.fromRGB(246, 250, 255),          
-    SubText       = Color3.fromRGB(135, 152, 178),       
-    TextDark      = Color3.fromRGB(8, 10, 15),
-    MentionGold   = Color3.fromRGB(255, 205, 65),
-    MentionBg     = Color3.fromRGB(42, 32, 14),
-    OnlineGreen   = Color3.fromRGB(45, 245, 135)
+    Background  = Color3.fromRGB(8, 11, 18),
+    Surface     = Color3.fromRGB(16, 22, 34),
+    SurfaceSelf = Color3.fromRGB(14, 28, 42),
+    SurfaceAI   = Color3.fromRGB(18, 22, 44),
+    SurfaceHover= Color3.fromRGB(28, 36, 54),
+    ActiveTint  = Themes[1].ActiveTint,
+    Primary     = Themes[1].Primary,
+    PrimaryDark = Themes[1].PrimaryDark,
+    Danger      = Color3.fromRGB(255, 60, 90),
+    Warning     = Color3.fromRGB(255, 175, 20),
+    Purple      = Themes[1].Accent,
+    Text        = Color3.fromRGB(246, 250, 255),
+    SubText     = Color3.fromRGB(135, 152, 178),
+    TextDark    = Color3.fromRGB(8, 10, 15),
+    MentionGold = Color3.fromRGB(255, 205, 65),
+    MentionBg   = Color3.fromRGB(42, 32, 14),
+    OnlineGreen = Color3.fromRGB(45, 245, 135)
 }
 
 -- =========================================================
 -- 👑 16 SILK-SMOOTH BALANCED BADGE PRESETS (+ AI CORE)
 -- =========================================================
 local BadgePresets = {
-    ["AICORE"] = {
-        Title = "AI CORE", Speed = 1.2,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 255, 235)),
-            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(170, 80, 255)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(0, 255, 235))
-        }
-    },
-    ["OWNER"] = {
-        Title = "OWNER", Speed = 1.15,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 45, 95)),
-            ColorSequenceKeypoint.new(0.20, Color3.fromRGB(255, 165, 35)),
-            ColorSequenceKeypoint.new(0.40, Color3.fromRGB(0, 245, 195)),
-            ColorSequenceKeypoint.new(0.60, Color3.fromRGB(50, 155, 255)),
-            ColorSequenceKeypoint.new(0.80, Color3.fromRGB(180, 65, 255)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 45, 95))
-        }
-    },
-    ["DADDY"] = {
-        Title = "DADDY", Speed = 1.1,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 30, 80)),
-            ColorSequenceKeypoint.new(0.35, Color3.fromRGB(255, 115, 45)),
-            ColorSequenceKeypoint.new(0.70, Color3.fromRGB(255, 220, 50)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 30, 80))
-        }
-    },
-    ["TITAN"] = {
-        Title = "TITAN", Speed = 1.15,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 240, 255)),
-            ColorSequenceKeypoint.new(0.35, Color3.fromRGB(70, 165, 255)),
-            ColorSequenceKeypoint.new(0.70, Color3.fromRGB(160, 60, 255)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(0, 240, 255))
-        }
-    },
-    ["OVERLORD"] = {
-        Title = "OVERLORD", Speed = 1.05,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(180, 60, 255)),
-            ColorSequenceKeypoint.new(0.35, Color3.fromRGB(255, 60, 180)),
-            ColorSequenceKeypoint.new(0.70, Color3.fromRGB(95, 110, 255)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(180, 60, 255))
-        }
-    },
-    ["DEV"] = {
-        Title = "DEV", Speed = 1.25,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 255, 195)),
-            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(65, 150, 255)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(0, 255, 195))
-        }
-    },
-    ["VIP"] = {
-        Title = "VIP", Speed = 1.1,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 140, 25)),
-            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 230, 65)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 140, 25))
-        }
-    },
-    ["GOD"] = {
-        Title = "GOD", Speed = 1.2,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 110, 175)),
-            ColorSequenceKeypoint.new(0.25, Color3.fromRGB(255, 230, 100)),
-            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(95, 255, 190)),
-            ColorSequenceKeypoint.new(0.75, Color3.fromRGB(100, 190, 255)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 110, 175))
-        }
-    },
-    ["CYBER"] = {
-        Title = "CYBER", Speed = 1.2,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 10, 220)),
-            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(10, 245, 255)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 10, 220))
-        }
-    },
-    ["VOID"] = {
-        Title = "VOID", Speed = 0.95,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(85, 90, 145)),
-            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(180, 185, 240)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(85, 90, 145))
-        }
-    },
-    ["ZENITH"] = {
-        Title = "ZENITH", Speed = 1.15,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 255, 215)),
-            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(45, 180, 255)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(0, 255, 215))
-        }
-    },
-    ["APEX"] = {
-        Title = "APEX", Speed = 1.2,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 40, 80)),
-            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 160, 35)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 40, 80))
-        }
-    },
-    ["LUCIFER"] = {
-        Title = "LUCIFER", Speed = 1.2,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 15, 35)),
-            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 95, 25)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 15, 35))
-        }
-    },
-    ["SUPREME"] = {
-        Title = "SUPREME", Speed = 1.1,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 215, 65)),
-            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 245, 165)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 215, 65))
-        }
-    },
-    ["ROYAL"] = {
-        Title = "ROYAL", Speed = 1.0,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(225, 165, 30)),
-            ColorSequenceKeypoint.new(0.40, Color3.fromRGB(255, 230, 110)),
-            ColorSequenceKeypoint.new(0.70, Color3.fromRGB(255, 145, 35)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(225, 165, 30))
-        }
-    },
-    ["DEMON"] = {
-        Title = "DEMON", Speed = 1.2,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 10, 85)),
-            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 75, 40)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 10, 85))
-        }
-    },
-    ["PHANTOM"] = {
-        Title = "PHANTOM", Speed = 1.15,
-        Colors = {
-            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(5, 255, 160)),
-            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(5, 210, 255)),
-            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(5, 255, 160))
-        }
-    }
+    ["AICORE"]   = { Title = "AI CORE", Speed = 1.2, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 235)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(170, 80, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 235)) } },
+    ["OWNER"]    = { Title = "OWNER", Speed = 1.15, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 45, 95)), ColorSequenceKeypoint.new(0.2, Color3.fromRGB(255, 165, 35)), ColorSequenceKeypoint.new(0.4, Color3.fromRGB(0, 245, 195)), ColorSequenceKeypoint.new(0.6, Color3.fromRGB(50, 155, 255)), ColorSequenceKeypoint.new(0.8, Color3.fromRGB(180, 65, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 45, 95)) } },
+    ["DADDY"]    = { Title = "DADDY", Speed = 1.1, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 30, 80)), ColorSequenceKeypoint.new(0.35, Color3.fromRGB(255, 115, 45)), ColorSequenceKeypoint.new(0.7, Color3.fromRGB(255, 220, 50)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 30, 80)) } },
+    ["TITAN"]    = { Title = "TITAN", Speed = 1.15, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 240, 255)), ColorSequenceKeypoint.new(0.35, Color3.fromRGB(70, 165, 255)), ColorSequenceKeypoint.new(0.7, Color3.fromRGB(160, 60, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 240, 255)) } },
+    ["OVERLORD"] = { Title = "OVERLORD", Speed = 1.05, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 60, 255)), ColorSequenceKeypoint.new(0.35, Color3.fromRGB(255, 60, 180)), ColorSequenceKeypoint.new(0.7, Color3.fromRGB(95, 110, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 60, 255)) } },
+    ["DEV"]      = { Title = "DEV", Speed = 1.25, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 195)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(65, 150, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 195)) } },
+    ["VIP"]      = { Title = "VIP", Speed = 1.1, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 140, 25)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 230, 65)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 140, 25)) } },
+    ["GOD"]      = { Title = "GOD", Speed = 1.2, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 110, 175)), ColorSequenceKeypoint.new(0.25, Color3.fromRGB(255, 230, 100)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(95, 255, 190)), ColorSequenceKeypoint.new(0.75, Color3.fromRGB(100, 190, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 110, 175)) } },
+    ["CYBER"]    = { Title = "CYBER", Speed = 1.2, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 10, 220)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(10, 245, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 10, 220)) } },
+    ["VOID"]     = { Title = "VOID", Speed = 0.95, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(85, 90, 145)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 185, 240)), ColorSequenceKeypoint.new(1, Color3.fromRGB(85, 90, 145)) } },
+    ["ZENITH"]   = { Title = "ZENITH", Speed = 1.15, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 215)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(45, 180, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 215)) } },
+    ["APEX"]     = { Title = "APEX", Speed = 1.2, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 40, 80)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 160, 35)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 40, 80)) } },
+    ["LUCIFER"]  = { Title = "LUCIFER", Speed = 1.2, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 15, 35)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 95, 25)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 15, 35)) } },
+    ["SUPREME"]  = { Title = "SUPREME", Speed = 1.1, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 215, 65)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 245, 165)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 215, 65)) } },
+    ["ROYAL"]    = { Title = "ROYAL", Speed = 1.0, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(225, 165, 30)), ColorSequenceKeypoint.new(0.4, Color3.fromRGB(255, 230, 110)), ColorSequenceKeypoint.new(0.7, Color3.fromRGB(255, 145, 35)), ColorSequenceKeypoint.new(1, Color3.fromRGB(225, 165, 30)) } },
+    ["DEMON"]    = { Title = "DEMON", Speed = 1.2, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 10, 85)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 75, 40)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 10, 85)) } },
+    ["PHANTOM"]  = { Title = "PHANTOM", Speed = 1.15, Colors = { ColorSequenceKeypoint.new(0, Color3.fromRGB(5, 255, 160)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(5, 210, 255)), ColorSequenceKeypoint.new(1, Color3.fromRGB(5, 255, 160)) } }
 }
 local currentOwnerBadge = "OWNER"
 
@@ -271,29 +117,18 @@ local currentOwnerBadge = "OWNER"
 -- 🎭 MEME PACK
 -- =========================================================
 local MemeLibrary = {
-    { name = "Mewing Shhh", id = 15632128790 },
-    { name = "Skibidi Toilet", id = 13809623197 },
-    { name = "Smurf Cat", id = 14757657984 },
-    { name = "Josh Hutcherson", id = 15469032734 },
-    { name = "The Wok / Social Credit", id = 7872621021 },
-    { name = "Walter Dog (Nelson)", id = 3698717882 },
-    { name = "Handsome Squidward", id = 6382103444 },
-    { name = "Sad Hamster", id = 16391456108 },
-    { name = "Nah I'd Win (Gojo)", id = 15377035543 },
-    { name = "Cat Stare Huh", id = 13838328014 },
-    { name = "Sigma Face", id = 12271810574 },
-    { name = "Pedro Raccoon", id = 17290159491 },
-    { name = "GigaChad HD", id = 7192664724 },
-    { name = "Rock Eyebrow", id = 8011210815 },
-    { name = "Roblox Man Face", id = 864877007 },
-    { name = "Skull Emoji", id = 9188849503 },
-    { name = "Clown License", id = 4905389658 },
-    { name = "Capybara Pull Up", id = 9811566897 }
+    { name = "Mewing Shhh", id = 15632128790 }, { name = "Skibidi Toilet", id = 13809623197 },
+    { name = "Smurf Cat", id = 14757657984 }, { name = "Josh Hutcherson", id = 15469032734 },
+    { name = "The Wok / Social Credit", id = 7872621021 }, { name = "Walter Dog (Nelson)", id = 3698717882 },
+    { name = "Handsome Squidward", id = 6382103444 }, { name = "Sad Hamster", id = 16391456108 },
+    { name = "Nah I'd Win (Gojo)", id = 15377035543 }, { name = "Cat Stare Huh", id = 13838328014 },
+    { name = "Sigma Face", id = 12271810574 }, { name = "Pedro Raccoon", id = 17290159491 },
+    { name = "GigaChad HD", id = 7192664724 }, { name = "Rock Eyebrow", id = 8011210815 },
+    { name = "Roblox Man Face", id = 864877007 }, { name = "Skull Emoji", id = 9188849503 },
+    { name = "Clown License", id = 4905389658 }, { name = "Capybara Pull Up", id = 9811566897 }
 }
 
-local function getAssetThumb(id)
-    return string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", tostring(id))
-end
+local function getAssetThumb(id) return string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", tostring(id)) end
 
 local function crispText(element, overrideTransparency)
     local stroke = element:FindFirstChildOfClass("UIStroke") or Instance.new("UIStroke", element)
@@ -304,34 +139,19 @@ end
 
 local function applySpringHover(btn)
     local btnScale = btn:FindFirstChildOfClass("UIScale") or Instance.new("UIScale", btn)
-    btn.MouseEnter:Connect(function()
-        TweenService:Create(btnScale, TweenInfo.new(0.22, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1.06}):Play()
-    end)
-    btn.MouseLeave:Connect(function()
-        TweenService:Create(btnScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart), {Scale = 1}):Play()
-    end)
-    btn.MouseButton1Down:Connect(function()
-        TweenService:Create(btnScale, TweenInfo.new(0.08, Enum.EasingStyle.Sine), {Scale = 0.92}):Play()
-    end)
-    btn.MouseButton1Up:Connect(function()
-        TweenService:Create(btnScale, TweenInfo.new(0.28, Enum.EasingStyle.Elastic), {Scale = 1.06}):Play()
-    end)
+    btn.MouseEnter:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.22, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1.06}):Play() end)
+    btn.MouseLeave:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart), {Scale = 1}):Play() end)
+    btn.MouseButton1Down:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.08, Enum.EasingStyle.Sine), {Scale = 0.92}):Play() end)
+    btn.MouseButton1Up:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.28, Enum.EasingStyle.Elastic), {Scale = 1.06}):Play() end)
 end
 
 local function playSFX(soundType)
     task.spawn(function()
         pcall(function()
             local s = Instance.new("Sound")
-            if soundType == "mention" or soundType == "dm" then
-                s.SoundId = "rbxassetid://9114223177"
-                s.Volume = 0.8
-            elseif soundType == "meme" then
-                s.SoundId = "rbxassetid://9069609268"
-                s.Volume = 0.6
-            else
-                s.SoundId = "rbxassetid://6518811702"
-                s.Volume = 0.4
-            end
+            if soundType == "mention" or soundType == "dm" then s.SoundId = "rbxassetid://9114223177" s.Volume = 0.8
+            elseif soundType == "meme" then s.SoundId = "rbxassetid://9069609268" s.Volume = 0.6
+            else s.SoundId = "rbxassetid://6518811702" s.Volume = 0.4 end
             s.Parent = SoundService
             s:Play()
             task.delay(1.5, function() pcall(function() s:Destroy() end) end)
@@ -346,11 +166,12 @@ local SERVER_URL = "https://my-roblox-private-chat.onrender.com"
 local CURRENT_SESSION_JOB = tostring(game.JobId)
 local lastSyncTime = 0
 local isInitialSync = true
-local chatMode = "server" 
+local chatMode = "server"
 local privateTarget = nil
 local activeReplyData = nil
 local knownUsers = {}
 local activeUsersTable = {}
+local remoteTypers = {}
 local unreadCount = 0
 local isGhostMode = false
 local ghostDebounce = false
@@ -362,15 +183,9 @@ local modalSelectionIndicators = {}
 local processedServerMessageMap = {}
 local recentLocalSentMap = {}
 
-local MY_VIP_ID = 9685785248 
-local Admin = { 
-    ["kausarali2"] = true, 
-    ["cutie143198"] = true 
-}
-
-if lp.UserId == MY_VIP_ID then
-    Admin[lp.Name:lower()] = true
-end
+local MY_VIP_ID = 9685785248
+local Admin = { ["kausarali2"] = true, ["cutie143198"] = true }
+if lp.UserId == MY_VIP_ID then Admin[lp.Name:lower()] = true end
 
 local function displayBubble(userName, msg)
     local speaker = Players:FindFirstChild(userName)
@@ -397,7 +212,7 @@ gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 local shadow = Instance.new("ImageLabel", gui)
 shadow.AnchorPoint = Vector2.new(0.5, 0.5)
 shadow.Position = UDim2.fromScale(0.4, 0.5)
-shadow.Size = UDim2.new(0, 500, 0, 412)
+shadow.Size = UDim2.new(0, 502, 0, 416)
 shadow.BackgroundTransparency = 1
 shadow.Image = "rbxassetid://1316045217"
 shadow.ImageColor3 = Color3.new(0, 0, 0)
@@ -407,7 +222,7 @@ shadow.ZIndex = 1
 local aura = Instance.new("ImageLabel", gui)
 aura.AnchorPoint = Vector2.new(0.5, 0.5)
 aura.Position = UDim2.fromScale(0.4, 0.5)
-aura.Size = UDim2.new(0, 476, 0, 388)
+aura.Size = UDim2.new(0, 478, 0, 392)
 aura.BackgroundTransparency = 1
 aura.Image = "rbxassetid://1316045217"
 aura.ImageColor3 = Colors.Primary
@@ -420,15 +235,13 @@ local shadowScale = Instance.new("UIScale", shadow)
 local mainFrame = Instance.new("Frame", gui)
 mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 mainFrame.Position = UDim2.fromScale(0.4, 0.5)
-mainFrame.Size = UDim2.new(0, 454, 0, 366)
+mainFrame.Size = UDim2.new(0, 456, 0, 370)
 mainFrame.BackgroundColor3 = Colors.Background
 mainFrame.BackgroundTransparency = 0.08
 mainFrame.ClipsDescendants = true
 mainFrame.Active = true
 mainFrame.ZIndex = 5
-
-local mainCorner = Instance.new("UICorner", mainFrame)
-mainCorner.CornerRadius = UDim.new(0, 18)
+Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 18)
 
 local mainStroke = Instance.new("UIStroke", mainFrame)
 mainStroke.Thickness = 1.6
@@ -437,13 +250,12 @@ mainStroke.Color = Colors.Primary
 
 local strokeGrad = Instance.new("UIGradient", mainStroke)
 strokeGrad.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Colors.Primary), 
-    ColorSequenceKeypoint.new(0.5, Colors.Purple), 
+    ColorSequenceKeypoint.new(0, Colors.Primary),
+    ColorSequenceKeypoint.new(0.5, Colors.Purple),
     ColorSequenceKeypoint.new(1, Colors.Primary)
 })
 
 local mainScale = Instance.new("UIScale", mainFrame)
-
 mainFrame:GetPropertyChangedSignal("Position"):Connect(function()
     aura.Position = mainFrame.Position
     shadow.Position = mainFrame.Position
@@ -464,10 +276,7 @@ glassSheen.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 glassSheen.BorderSizePixel = 0
 glassSheen.ZIndex = 6
 local gsGrad = Instance.new("UIGradient", glassSheen)
-gsGrad.Transparency = NumberSequence.new({
-    NumberSequenceKeypoint.new(0, 0.35),
-    NumberSequenceKeypoint.new(1, 1)
-})
+gsGrad.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.35), NumberSequenceKeypoint.new(1, 1) })
 gsGrad.Rotation = 90
 
 -- =========================================================
@@ -687,7 +496,6 @@ end
 
 local openBtnScale = Instance.new("UIScale", openBtn)
 local openPulseScale = TweenService:Create(openBtnScale, TweenInfo.new(1.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {Scale = 1.05})
-
 openBtnContainer:GetPropertyChangedSignal("Visible"):Connect(function()
     if openBtnContainer.Visible then openPulseScale:Play() else openPulseScale:Cancel() openBtnScale.Scale = 1 end
 end)
@@ -872,12 +680,10 @@ local function createHeaderBtn(text, onClick)
     b.ZIndex = 15
     Instance.new("UICorner", b).CornerRadius = UDim.new(0, 7)
     crispText(b, 0.35)
-
     local btnStr = Instance.new("UIStroke", b)
     btnStr.Thickness = 1
     btnStr.Color = Colors.PrimaryDark
     btnStr.Transparency = 0.50
-
     applySpringHover(b)
     b.MouseButton1Click:Connect(function() pcall(onClick) end)
     return b
@@ -895,14 +701,12 @@ if Admin[lp.Name:lower()] then
             TweenService:Create(bsScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
         else
             TweenService:Create(bsScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
-            task.delay(0.2, function()
-                if not isBadgeModalOpen then badgeSelectorModal.Visible = false end
-            end)
+            task.delay(0.2, function() if not isBadgeModalOpen then badgeSelectorModal.Visible = false end end)
         end
     end)
 end
 
-local serverBtn, globalBtn, tabActiveSlider, tabSliderStroke, sendBtn, memeBtn
+local serverBtn, globalBtn, tabActiveSlider, tabSliderStroke, sendBtn, sendBtnGrad, memeBtn, inputFocusGrad, inputLeadIcon
 
 createHeaderBtn("CLR", function()
     currentThemeIdx = (currentThemeIdx % #Themes) + 1
@@ -912,26 +716,26 @@ createHeaderBtn("CLR", function()
     Colors.Purple = th.Accent
     Colors.ActiveTint = th.ActiveTint
 
-    strokeGrad.Color = ColorSequence.new({
+    local cSeq = ColorSequence.new({
         ColorSequenceKeypoint.new(0, th.Primary),
         ColorSequenceKeypoint.new(0.5, th.Accent),
         ColorSequenceKeypoint.new(1, th.Primary)
     })
+    strokeGrad.Color = cSeq
+    if inputFocusGrad then inputFocusGrad.Color = cSeq end
+    if sendBtnGrad then sendBtnGrad.Color = ColorSequence.new(th.Primary, th.Accent) end
+    if inputLeadIcon then inputLeadIcon.TextColor3 = th.Primary end
     aura.ImageColor3 = th.Primary
     headerTitle.TextColor3 = th.Primary
     liveText.TextColor3 = th.Primary
     dragPill.BackgroundColor3 = th.Primary
     coreGlow.ImageColor3 = th.Primary
     eventGlow.ImageColor3 = th.Accent
-    if sendBtn then sendBtn.BackgroundColor3 = th.Primary end
     if memeBtn then memeBtn.TextColor3 = th.Primary end
     if tabActiveSlider then tabActiveSlider.BackgroundColor3 = th.ActiveTint end
     if tabSliderStroke then tabSliderStroke.Color = th.PrimaryDark end
-    if chatMode == "server" and serverBtn then
-        serverBtn.TextColor3 = th.Primary
-    elseif chatMode == "global" and globalBtn then
-        globalBtn.TextColor3 = th.Primary
-    end
+    if chatMode == "server" and serverBtn then serverBtn.TextColor3 = th.Primary
+    elseif chatMode == "global" and globalBtn then globalBtn.TextColor3 = th.Primary end
 end)
 
 local messageFeed
@@ -953,7 +757,6 @@ ghostBtn = createHeaderBtn("GST", function()
         mainStroke.Transparency = 0.15
         mainStroke.Thickness = 1.7
         badgeSelectorModal.BackgroundTransparency = 0.45
-
         for _, cardWrap in ipairs(messageFeed:GetChildren()) do
             local inner = cardWrap:FindFirstChild("CardSurface")
             if inner then inner.BackgroundTransparency = 0.52 end
@@ -968,7 +771,6 @@ ghostBtn = createHeaderBtn("GST", function()
         mainStroke.Transparency = 0.25
         mainStroke.Thickness = 1.6
         badgeSelectorModal.BackgroundTransparency = 0.05
-
         for _, cardWrap in ipairs(messageFeed:GetChildren()) do
             local inner = cardWrap:FindFirstChild("CardSurface")
             if inner then inner.BackgroundTransparency = 0.20 end
@@ -988,17 +790,14 @@ createHeaderBtn("-", function()
         badgeSelectorModal:FindFirstChildOfClass("UIScale").Scale = 0
         badgeSelectorModal.Visible = false 
     end
-    
     local tInfo1 = TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.In)
     local tInfo2 = TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.In)
-    
     TweenService:Create(mainScale, tInfo1, {Scale = 0}):Play()
     TweenService:Create(auraScale, tInfo1, {Scale = 0}):Play()
     TweenService:Create(shadowScale, tInfo1, {Scale = 0}):Play()
     TweenService:Create(mainFrame, tInfo2, {BackgroundTransparency = 1}):Play()
     TweenService:Create(aura, tInfo2, {ImageTransparency = 1}):Play()
     TweenService:Create(shadow, tInfo2, {ImageTransparency = 1}):Play()
-    
     task.wait(0.35)
     mainFrame.Visible = false
     aura.Visible = false
@@ -1084,17 +883,12 @@ local function filterFeedMode()
         if card:IsA("GuiObject") and card.Name ~= "UIListLayout" and card.Name ~= "UIPadding" then
             local cardScope = card:GetAttribute("ChatScope")
             local cardJob = tostring(card:GetAttribute("JobId") or "")
-
             if cardScope == "server" and cardJob ~= "" and cardJob ~= CURRENT_SESSION_JOB then
                 card:Destroy()
                 continue
             end
-
-            if chatMode == "server" then
-                card.Visible = (cardScope ~= "global")
-            else
-                card.Visible = (cardScope ~= "server")
-            end
+            if chatMode == "server" then card.Visible = (cardScope ~= "global")
+            else card.Visible = (cardScope ~= "server") end
         end
     end
 end
@@ -1171,7 +965,6 @@ local badgeKeysOrder = {
 
 local function buildLiveBadgeElement(parentContainer, bData, zBase)
     local tagWidth = TextService:GetTextSize(bData.Title, 10.5, Enum.Font.GothamBlack, Vector2.new(1000, 20)).X + 14
-    
     local badgeHost = Instance.new("Frame", parentContainer)
     badgeHost.Size = UDim2.fromOffset(tagWidth, 18)
     badgeHost.BackgroundColor3 = Color3.fromRGB(9, 13, 22)
@@ -1228,10 +1021,8 @@ local function buildLiveBadgeElement(parentContainer, bData, zBase)
 
     local shineGrad = Instance.new("UIGradient", badgeShine)
     shineGrad.Transparency = NumberSequence.new({
-        NumberSequenceKeypoint.new(0.0, 1),
-        NumberSequenceKeypoint.new(0.44, 1),
-        NumberSequenceKeypoint.new(0.5, 0.02),
-        NumberSequenceKeypoint.new(0.56, 1),
+        NumberSequenceKeypoint.new(0.0, 1), NumberSequenceKeypoint.new(0.44, 1),
+        NumberSequenceKeypoint.new(0.5, 0.02), NumberSequenceKeypoint.new(0.56, 1),
         NumberSequenceKeypoint.new(1.0, 1)
     })
 
@@ -1246,7 +1037,6 @@ local function buildLiveBadgeElement(parentContainer, bData, zBase)
         shineGrad = shineGrad, badgeGlow = badgeGlow, glowStroke = glowStroke,
         speed = bData.Speed or 1.15
     })
-
     return badgeHost
 end
 
@@ -1282,7 +1072,6 @@ for _, bKey in ipairs(badgeKeysOrder) do
     local dStroke = Instance.new("UIStroke", dotIndicator)
     dStroke.Color = Color3.fromRGB(0, 0, 0)
     dStroke.Transparency = (currentOwnerBadge == bKey) and 0.4 or 1
-    
     modalSelectionIndicators[bKey] = {dot = dotIndicator, stroke = dStroke}
 
     applySpringHover(bBtn)
@@ -1293,10 +1082,7 @@ for _, bKey in ipairs(badgeKeysOrder) do
             ind.stroke.Transparency = (k == currentOwnerBadge) and 0.4 or 1
         end
         TweenService:Create(bsmScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
-        task.delay(0.2, function()
-            isBadgeModalOpen = false
-            badgeSelectorModal.Visible = false
-        end)
+        task.delay(0.2, function() isBadgeModalOpen = false badgeSelectorModal.Visible = false end)
         playSFX("default")
     end)
 end
@@ -1305,7 +1091,7 @@ end
 -- 💬 CHAT FEED & AUTOSCROLL DOCK
 -- =========================================================
 messageFeed = Instance.new("ScrollingFrame", mainFrame)
-messageFeed.Size = UDim2.new(1, -24, 1, -148)
+messageFeed.Size = UDim2.new(1, -24, 1, -152)
 messageFeed.Position = UDim2.new(0, 12, 0, 90)
 messageFeed.BackgroundTransparency = 1
 messageFeed.ScrollBarThickness = 3
@@ -1327,7 +1113,7 @@ feedPadding.PaddingBottom = UDim.new(0, 6)
 local jumpBottomBtn = Instance.new("TextButton", mainFrame)
 jumpBottomBtn.Size = UDim2.fromOffset(126, 26)
 jumpBottomBtn.AnchorPoint = Vector2.new(0.5, 1)
-jumpBottomBtn.Position = UDim2.new(0.5, 0, 1, -60)
+jumpBottomBtn.Position = UDim2.new(0.5, 0, 1, -64)
 jumpBottomBtn.BackgroundColor3 = Colors.Surface
 jumpBottomBtn.BackgroundTransparency = 0.08
 jumpBottomBtn.Text = "↓ New Messages"
@@ -1350,9 +1136,7 @@ end)
 
 messageFeed:GetPropertyChangedSignal("CanvasPosition"):Connect(function()
     local maxOffset = math.max(0, messageFeed.AbsoluteCanvasSize.Y - messageFeed.AbsoluteWindowSize.Y)
-    if maxOffset - messageFeed.CanvasPosition.Y < 35 then
-        jumpBottomBtn.Visible = false
-    end
+    if maxOffset - messageFeed.CanvasPosition.Y < 35 then jumpBottomBtn.Visible = false end
 end)
 
 local sendMessageFunc
@@ -1387,17 +1171,14 @@ local function createActionBtn(text, color, onClick)
     b.AutoButtonColor = false
     b.ZIndex = 51
     Instance.new("UICorner", b).CornerRadius = UDim.new(0, 5)
-    b.MouseButton1Click:Connect(function()
-        actionMenu.Visible = false
-        pcall(onClick)
-    end)
+    b.MouseButton1Click:Connect(function() actionMenu.Visible = false pcall(onClick) end)
 end
 
 -- =========================================================
 -- 💬 ULTRA-CRISP MESSAGE PIPELINE & SCULPTED QUOTE CARDS
 -- =========================================================
 local function updateLiveCounter(username, dispName)
-    activeUsersTable[username:lower()] = { time = os.time(), disp = dispName or username }
+    activeUsersTable[username:lower()] = { time = os.time(), disp = dispName or username, user = username }
     local count = 0
     local now = os.time()
     for u, data in pairs(activeUsersTable) do
@@ -1440,14 +1221,10 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     local effectiveScope = scopeType or "global"
     local effectiveJob = tostring(msgJobId or game.JobId)
 
-    if effectiveScope == "server" and effectiveJob ~= "" and effectiveJob ~= tostring(game.JobId) then
-        return
-    end
+    if effectiveScope == "server" and effectiveJob ~= "" and effectiveJob ~= tostring(game.JobId) then return end
 
-    -- Parse Reply Header: [REP:DisplayName|Snippet] RestOfMsg
     local replyToName, replySnippet, cleanBodyMsg = msg:match("^%[REP:([^|]+)|([^%]]+)%]%s*(.*)$")
     local displayMsg = cleanBodyMsg or msg
-
     local memeIdMatch = displayMsg:match("%[MEME:(%d+)%]")
 
     local actualUsername, dispName = rawUserName:match("^(.-)::(.*)$")
@@ -1479,7 +1256,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         end
     end
 
-    -- Outer Wrapper for Elastic Swipe-to-Reply
     local cardWrapper = Instance.new("Frame", messageFeed)
     cardWrapper.Size = memeIdMatch and UDim2.new(1, 0, 0, 138) or UDim2.new(1, 0, 0, 0)
     cardWrapper.AutomaticSize = memeIdMatch and Enum.AutomaticSize.None or Enum.AutomaticSize.Y
@@ -1488,13 +1264,10 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     cardWrapper:SetAttribute("ChatScope", effectiveScope)
     cardWrapper:SetAttribute("JobId", effectiveJob)
 
-    if chatMode == "server" then
-        cardWrapper.Visible = (effectiveScope ~= "global")
-    else
-        cardWrapper.Visible = (effectiveScope ~= "server")
-    end
+    if chatMode == "server" then cardWrapper.Visible = (effectiveScope ~= "global")
+    else cardWrapper.Visible = (effectiveScope ~= "server") end
 
-    -- ⚡ ELASTIC CYBER-CAPSULE SWIPE INDICATOR (Zero Ticks/Checkmarks)
+    -- Elastic Cyber-Capsule Swipe Indicator
     local swipeCapsule = Instance.new("Frame", cardWrapper)
     swipeCapsule.Size = UDim2.fromOffset(38, 26)
     swipeCapsule.AnchorPoint = Vector2.new(0, 0.5)
@@ -1531,7 +1304,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     swipeLabel.TextSize = 13
     swipeLabel.ZIndex = 9
 
-    -- ⚡ ULTRA-CRISP SCULPTED GLASS MESSAGE CARD
+    -- Sculpted Glass Message Card
     local card = Instance.new("TextButton", cardWrapper)
     card.Name = "CardSurface"
     card.Size = memeIdMatch and UDim2.new(1, 0, 0, 138) or UDim2.new(1, 0, 0, 0)
@@ -1544,7 +1317,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     card.ZIndex = 10
     Instance.new("UICorner", card).CornerRadius = UDim.new(0, 12)
 
-    -- Subtle Diagonal Surface Sheen
     local cardGrad = Instance.new("UIGradient", card)
     cardGrad.Color = ColorSequence.new({
         ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
@@ -1553,7 +1325,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     })
     cardGrad.Rotation = 25
 
-    -- Inner Top-Edge Specular Glass Highlight
     local topSpecular = Instance.new("Frame", card)
     topSpecular.Size = UDim2.new(1, -24, 0, 1)
     topSpecular.Position = UDim2.new(0, 12, 0, 1)
@@ -1566,7 +1337,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     cardScale.Scale = 0.96
     TweenService:Create(cardScale, TweenInfo.new(0.26, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
 
-    -- Dual-Tone Gradient Left Neon Accent Strip
     local accentStrip = Instance.new("Frame", card)
     accentStrip.Size = UDim2.new(0, 3, 1, -14)
     accentStrip.Position = UDim2.new(0, 5, 0, 7)
@@ -1576,13 +1346,9 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     Instance.new("UICorner", accentStrip).CornerRadius = UDim.new(1, 0)
 
     local stripGrad = Instance.new("UIGradient", accentStrip)
-    if isMentioned then
-        stripGrad.Color = ColorSequence.new(Colors.MentionGold, Color3.fromRGB(255, 130, 20))
-    elseif isSystemAI or privateUserTarget then
-        stripGrad.Color = ColorSequence.new(Colors.Purple, Colors.Primary)
-    else
-        stripGrad.Color = ColorSequence.new(Colors.Primary, Colors.PrimaryDark)
-    end
+    if isMentioned then stripGrad.Color = ColorSequence.new(Colors.MentionGold, Color3.fromRGB(255, 130, 20))
+    elseif isSystemAI or privateUserTarget then stripGrad.Color = ColorSequence.new(Colors.Purple, Colors.Primary)
+    else stripGrad.Color = ColorSequence.new(Colors.Primary, Colors.PrimaryDark) end
     stripGrad.Rotation = 90
 
     local cardStroke = Instance.new("UIStroke", card)
@@ -1590,7 +1356,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     cardStroke.Transparency = isMentioned and 0.20 or (isSystemAI and 0.40 or (isSelf and 0.55 or 0.72))
     cardStroke.Color = isMentioned and Colors.MentionGold or (isSystemAI and Colors.Purple or (isSelf and Colors.PrimaryDark or Colors.SurfaceHover))
 
-    -- Avatar Orb (32x32 Crisp Circular Frame)
+    -- Avatar Orb
     if isSystemAI then
         local aiAvatar = Instance.new("Frame", card)
         aiAvatar.Size = UDim2.fromOffset(32, 32)
@@ -1629,7 +1395,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         aiCoreText.Font = Enum.Font.GothamBlack
         aiCoreText.TextSize = 14
         aiCoreText.ZIndex = 14
-
         table.insert(activeAICoresList, { grad = aiStrokeGrad, ring = aiRing, icon = aiCoreText })
     else
         local avatarImg = Instance.new("ImageLabel", card)
@@ -1671,7 +1436,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         end)
     end
 
-    -- ⚡ TOP-RIGHT FROSTED TIMESTAMP PILL
+    -- Top-Right Frosted Timestamp Pill
     local timePill = Instance.new("Frame", card)
     timePill.AnchorPoint = Vector2.new(1, 0)
     timePill.Position = UDim2.new(1, -8, 0, 7)
@@ -1696,7 +1461,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     timeLbl.ZIndex = 14
     crispText(timeLbl, 0.65)
 
-    -- ⚡ CLEAN PROFILE NAME ONLY HEADER + MESSAGE STACK
+    -- Clean Profile Name Only Header + Message Stack
     local cardContent = Instance.new("Frame", card)
     cardContent.Size = UDim2.new(1, -64, 0, 0)
     cardContent.Position = UDim2.fromOffset(54, 8)
@@ -1725,7 +1490,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         bHost.LayoutOrder = 1
     end
 
-    -- Profile DisplayName ONLY
     local nameLbl = Instance.new("TextLabel", topIdentityRow)
     nameLbl.AutomaticSize = Enum.AutomaticSize.X
     nameLbl.Size = UDim2.new(0, 0, 1, 0)
@@ -1754,7 +1518,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         crispText(dmLbl, 0.45)
     end
 
-    -- ⚡ ULTRA-CRISP SCULPTED QUOTE BOX (When Replying)
+    -- Ultra-Crisp Sculpted Quote Box
     if replyToName and replySnippet then
         local quoteBox = Instance.new("Frame", cardContent)
         quoteBox.Size = UDim2.new(1, -4, 0, 28)
@@ -1806,7 +1570,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         crispText(qText, 0.45)
     end
 
-    -- Message Body or Sticker
     if memeIdMatch then
         local memeHolder = Instance.new("Frame", cardContent)
         memeHolder.Size = UDim2.new(1, 0, 0, 96)
@@ -1848,13 +1611,10 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     local padFix = Instance.new("UIPadding", card)
     padFix.PaddingBottom = UDim.new(0, 9)
 
-    if isMentioned and not isSelf then
-        playSFX("mention")
-    elseif memeIdMatch and not isSelf then
-        playSFX("meme")
-    end
+    if isMentioned and not isSelf then playSFX("mention")
+    elseif memeIdMatch and not isSelf then playSFX("meme") end
 
-    -- ⚡ ELASTIC RIGHT-SWIPE REPLY GESTURE ENGINE (No Checkmarks/Ticks)
+    -- Elastic Right-Swipe Reply Gesture Engine
     local isSwipingCard = false
     local swipeInputObj = nil
     local swipeStartPos = nil
@@ -1924,9 +1684,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                 end
             elseif movedDistance < 10 then
                 if isSelf or isSystemAI then return end
-                for _, c in ipairs(actionMenu:GetChildren()) do
-                    if c:IsA("TextButton") then c:Destroy() end
-                end
+                for _, c in ipairs(actionMenu:GetChildren()) do if c:IsA("TextButton") then c:Destroy() end end
 
                 createActionBtn("REPLY", Colors.Primary, function()
                     if activateReplyBanner then
@@ -1978,11 +1736,178 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
 end
 
 -- =========================================================
--- ↩️ LUXURY FLOATING REPLY DOCK & PILL INPUT BAR
+-- ✨ FEATURE 5: COMPACT LIVE "SOMEONE IS TYPING..." WAVE PILL
+-- =========================================================
+local liveTypingPill = Instance.new("Frame", mainFrame)
+liveTypingPill.AutomaticSize = Enum.AutomaticSize.X
+liveTypingPill.Size = UDim2.fromOffset(0, 22)
+liveTypingPill.Position = UDim2.new(0, 14, 1, -82)
+liveTypingPill.BackgroundColor3 = Color3.fromRGB(11, 16, 26)
+liveTypingPill.BackgroundTransparency = 0.12
+liveTypingPill.Visible = false
+liveTypingPill.ZIndex = 24
+Instance.new("UICorner", liveTypingPill).CornerRadius = UDim.new(1, 0)
+
+local ltpPadding = Instance.new("UIPadding", liveTypingPill)
+ltpPadding.PaddingLeft = UDim.new(0, 10)
+ltpPadding.PaddingRight = UDim.new(0, 10)
+
+local ltpStroke = Instance.new("UIStroke", liveTypingPill)
+ltpStroke.Color = Colors.PrimaryDark
+ltpStroke.Thickness = 1
+ltpStroke.Transparency = 0.45
+
+local ltpLayout = Instance.new("UIListLayout", liveTypingPill)
+ltpLayout.FillDirection = Enum.FillDirection.Horizontal
+ltpLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+ltpLayout.Padding = UDim.new(0, 6)
+
+local dotWaveBox = Instance.new("Frame", liveTypingPill)
+dotWaveBox.Size = UDim2.fromOffset(22, 12)
+dotWaveBox.BackgroundTransparency = 1
+dotWaveBox.ZIndex = 25
+
+local typingDots = {}
+for i = 1, 3 do
+    local d = Instance.new("Frame", dotWaveBox)
+    d.Size = UDim2.fromOffset(4, 4)
+    d.AnchorPoint = Vector2.new(0.5, 0.5)
+    d.Position = UDim2.new(0, (i - 1) * 7 + 4, 0.5, 0)
+    d.BackgroundColor3 = Colors.Primary
+    d.ZIndex = 26
+    Instance.new("UICorner", d).CornerRadius = UDim.new(1, 0)
+    table.insert(typingDots, d)
+end
+
+local ltpLabel = Instance.new("TextLabel", liveTypingPill)
+ltpLabel.AutomaticSize = Enum.AutomaticSize.X
+ltpLabel.Size = UDim2.new(0, 0, 1, 0)
+ltpLabel.BackgroundTransparency = 1
+ltpLabel.Text = ""
+ltpLabel.TextColor3 = Colors.SubText
+ltpLabel.Font = Enum.Font.GothamBold
+ltpLabel.TextSize = 9.5
+ltpLabel.ZIndex = 25
+crispText(ltpLabel, 0.5)
+
+-- =========================================================
+-- ⚡ FEATURE 6: LIGHTWEIGHT SMART AUTO-COMPLETE CHIP BAR
+-- =========================================================
+local autoCompleteBar = Instance.new("Frame", mainFrame)
+autoCompleteBar.Size = UDim2.new(1, -28, 0, 30)
+autoCompleteBar.Position = UDim2.new(0, 14, 1, -88)
+autoCompleteBar.BackgroundColor3 = Color3.fromRGB(11, 15, 25)
+autoCompleteBar.BackgroundTransparency = 0.06
+autoCompleteBar.Visible = false
+autoCompleteBar.ZIndex = 28
+Instance.new("UICorner", autoCompleteBar).CornerRadius = UDim.new(0, 10)
+
+local acScale = Instance.new("UIScale", autoCompleteBar)
+local acStroke = Instance.new("UIStroke", autoCompleteBar)
+acStroke.Color = Colors.PrimaryDark
+acStroke.Thickness = 1.1
+acStroke.Transparency = 0.35
+
+local acScroll = Instance.new("ScrollingFrame", autoCompleteBar)
+acScroll.Size = UDim2.new(1, -12, 1, -6)
+acScroll.Position = UDim2.fromOffset(6, 3)
+acScroll.BackgroundTransparency = 1
+acScroll.ScrollBarThickness = 0
+acScroll.ScrollingDirection = Enum.ScrollingDirection.X
+acScroll.AutomaticCanvasSize = Enum.AutomaticSize.X
+acScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+acScroll.ZIndex = 29
+
+local acLayout = Instance.new("UIListLayout", acScroll)
+acLayout.FillDirection = Enum.FillDirection.Horizontal
+acLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+acLayout.Padding = UDim.new(0, 6)
+
+local function refreshAutoComplete(rawText)
+    for _, c in ipairs(acScroll:GetChildren()) do if c:IsA("TextButton") then c:Destroy() end end
+
+    local cmdPrefix = rawText:match("^([!/][%w_]*)$")
+    local dmUserPrefix = rawText:match("^!p%s+([%w_]*)$")
+    local mentionPrefix = rawText:match("@([%w_]*)$")
+    local suggestions = {}
+
+    if cmdPrefix then
+        local q = cmdPrefix:sub(2):lower()
+        local cmds = {
+            { label = "⚡ !p [Direct Message]", fill = "!p " },
+            { label = "✦ !ai [Neural Help]", fill = "!ai" },
+            { label = "👑 /help [Commands]", fill = "/help" }
+        }
+        for _, item in ipairs(cmds) do
+            if q == "" or item.fill:lower():find(q, 1, true) then
+                table.insert(suggestions, { text = item.label, replaceMode = "full", val = item.fill })
+            end
+        end
+    elseif dmUserPrefix ~= nil or mentionPrefix ~= nil then
+        local q = (dmUserPrefix or mentionPrefix or ""):lower()
+        local isDM = (dmUserPrefix ~= nil)
+        local seen = {}
+        local function considerUser(uName, dName)
+            if uName:lower() == lp.Name:lower() or seen[uName:lower()] then return end
+            if q == "" or uName:lower():find(q, 1, true) or dName:lower():find(q, 1, true) then
+                seen[uName:lower()] = true
+                table.insert(suggestions, {
+                    text = "● " .. dName,
+                    replaceMode = isDM and "dm" or "mention",
+                    val = isDM and ("!p " .. uName .. " ") or ("@" .. dName .. " ")
+                })
+            end
+        end
+        for _, p in ipairs(Players:GetPlayers()) do considerUser(p.Name, p.DisplayName) end
+        for _, info in pairs(activeUsersTable) do
+            if type(info) == "table" and info.user then considerUser(info.user, info.disp) end
+        end
+    end
+
+    if #suggestions > 0 then
+        for i = 1, math.min(8, #suggestions) do
+            local s = suggestions[i]
+            local chip = Instance.new("TextButton", acScroll)
+            chip.AutomaticSize = Enum.AutomaticSize.X
+            chip.Size = UDim2.new(0, 0, 0, 22)
+            chip.BackgroundColor3 = Colors.ActiveTint
+            chip.BackgroundTransparency = 0.20
+            chip.Text = "  " .. s.text .. "  "
+            chip.TextColor3 = Colors.Primary
+            chip.Font = Enum.Font.GothamBlack
+            chip.TextSize = 9.5
+            chip.AutoButtonColor = false
+            chip.ZIndex = 30
+            Instance.new("UICorner", chip).CornerRadius = UDim.new(1, 0)
+            local cStr = Instance.new("UIStroke", chip)
+            cStr.Color = Colors.PrimaryDark
+            cStr.Thickness = 1
+            cStr.Transparency = 0.45
+            applySpringHover(chip)
+            chip.MouseButton1Click:Connect(function()
+                if s.replaceMode == "full" or s.replaceMode == "dm" then chatInput.Text = s.val
+                elseif s.replaceMode == "mention" then chatInput.Text = string.gsub(chatInput.Text, "@[%w_]*$", s.val) end
+                chatInput.CursorPosition = #chatInput.Text + 1
+                chatInput:CaptureFocus()
+                autoCompleteBar.Visible = false
+            end)
+        end
+        if not autoCompleteBar.Visible then
+            autoCompleteBar.Visible = true
+            acScale.Scale = 0.94
+            TweenService:Create(acScale, TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
+        end
+    else
+        autoCompleteBar.Visible = false
+    end
+end
+
+-- =========================================================
+-- ↩️ LUXURY FLOATING REPLY DOCK & EXPENSIVE PILL INPUT BAR
 -- =========================================================
 local replyBanner = Instance.new("Frame", mainFrame)
 replyBanner.Size = UDim2.new(1, -28, 0, 30)
-replyBanner.Position = UDim2.new(0, 14, 1, -86)
+replyBanner.Position = UDim2.new(0, 14, 1, -88)
 replyBanner.BackgroundColor3 = Color3.fromRGB(12, 17, 28)
 replyBanner.BackgroundTransparency = 0.05
 replyBanner.Visible = false
@@ -1990,8 +1915,6 @@ replyBanner.ZIndex = 20
 Instance.new("UICorner", replyBanner).CornerRadius = UDim.new(0, 10)
 
 local rbScale = Instance.new("UIScale", replyBanner)
-rbScale.Scale = 1
-
 local rbStroke = Instance.new("UIStroke", replyBanner)
 rbStroke.Color = Colors.Primary
 rbStroke.Thickness = 1.1
@@ -2034,51 +1957,85 @@ Instance.new("UICorner", rbClose).CornerRadius = UDim.new(1, 0)
 local function clearReplyBanner()
     activeReplyData = nil
     replyBanner.Visible = false
-    messageFeed.Size = UDim2.new(1, -24, 1, -148)
+    messageFeed.Size = UDim2.new(1, -24, 1, -152)
 end
-
 rbClose.MouseButton1Click:Connect(clearReplyBanner)
 
 activateReplyBanner = function(targetDispName, snippetText)
     local cleanSnippet = string.gsub(snippetText, "[%[%]\n\r|]", " ")
-    activeReplyData = {
-        disp = targetDispName,
-        text = cleanSnippet
-    }
+    activeReplyData = { disp = targetDispName, text = cleanSnippet }
     rbText.Text = string.format("<font color='#00FFCD'><b>↩ Replying to %s</b></font>  •  <font color='#9AB0CE'>%s</font>", sanitizeXml(targetDispName), sanitizeXml(cleanSnippet))
     replyBanner.Visible = true
     rbScale.Scale = 0.92
     TweenService:Create(rbScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
-    messageFeed.Size = UDim2.new(1, -24, 1, -180)
+    messageFeed.Size = UDim2.new(1, -24, 1, -184)
     chatInput:CaptureFocus()
 end
 
+-- Upgraded Expensive Multi-Layer Pill Input Dock
 local inputContainer = Instance.new("Frame", mainFrame)
-inputContainer.Size = UDim2.new(1, -24, 0, 44)
-inputContainer.Position = UDim2.new(0, 12, 1, -52)
-inputContainer.BackgroundColor3 = Colors.Surface
-inputContainer.BackgroundTransparency = 0.16
+inputContainer.Size = UDim2.new(1, -24, 0, 46)
+inputContainer.Position = UDim2.new(0, 12, 1, -54)
+inputContainer.BackgroundColor3 = Color3.fromRGB(13, 18, 29)
+inputContainer.BackgroundTransparency = 0.10
 inputContainer.ZIndex = 12
 Instance.new("UICorner", inputContainer).CornerRadius = UDim.new(1, 0)
 
+local icGrad = Instance.new("UIGradient", inputContainer)
+icGrad.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(195, 208, 230))
+})
+icGrad.Rotation = 90
+
 local inputStroke = Instance.new("UIStroke", inputContainer)
-inputStroke.Thickness = 1.2
-inputStroke.Color = Colors.PrimaryDark
-inputStroke.Transparency = 0.45
+inputStroke.Thickness = 1.3
+inputStroke.Color = Color3.fromRGB(255, 255, 255)
+inputStroke.Transparency = 0.42
+
+inputFocusGrad = Instance.new("UIGradient", inputStroke)
+inputFocusGrad.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Colors.Primary),
+    ColorSequenceKeypoint.new(0.5, Colors.Purple),
+    ColorSequenceKeypoint.new(1, Colors.Primary)
+})
 
 local typingIndicator = Instance.new("Frame", inputContainer)
-typingIndicator.Size = UDim2.new(1, -28, 0, 2)
-typingIndicator.Position = UDim2.new(0, 14, 0, 0)
+typingIndicator.Size = UDim2.new(1, -32, 0, 2)
+typingIndicator.Position = UDim2.new(0, 16, 0, 0)
 typingIndicator.BackgroundColor3 = Colors.Primary
 typingIndicator.BorderSizePixel = 0
 typingIndicator.BackgroundTransparency = 1
 typingIndicator.ZIndex = 16
 Instance.new("UICorner", typingIndicator).CornerRadius = UDim.new(1, 0)
 
+local inputLeadOrb = Instance.new("Frame", inputContainer)
+inputLeadOrb.Size = UDim2.fromOffset(28, 28)
+inputLeadOrb.AnchorPoint = Vector2.new(0, 0.5)
+inputLeadOrb.Position = UDim2.new(0, 9, 0.5, 0)
+inputLeadOrb.BackgroundColor3 = Colors.ActiveTint
+inputLeadOrb.BackgroundTransparency = 0.25
+inputLeadOrb.ZIndex = 13
+Instance.new("UICorner", inputLeadOrb).CornerRadius = UDim.new(1, 0)
+
+local iloStroke = Instance.new("UIStroke", inputLeadOrb)
+iloStroke.Color = Colors.PrimaryDark
+iloStroke.Thickness = 1
+iloStroke.Transparency = 0.45
+
+inputLeadIcon = Instance.new("TextLabel", inputLeadOrb)
+inputLeadIcon.Size = UDim2.fromScale(1, 1)
+inputLeadIcon.BackgroundTransparency = 1
+inputLeadIcon.Text = "✦"
+inputLeadIcon.TextColor3 = Colors.Primary
+inputLeadIcon.Font = Enum.Font.GothamBlack
+inputLeadIcon.TextSize = 12
+inputLeadIcon.ZIndex = 14
+
 local dmBadge = Instance.new("TextButton", inputContainer)
-dmBadge.Size = UDim2.new(0, 0, 1, -12)
+dmBadge.Size = UDim2.new(0, 0, 1, -14)
 dmBadge.AnchorPoint = Vector2.new(0, 0.5)
-dmBadge.Position = UDim2.new(0, 10, 0.5, 0)
+dmBadge.Position = UDim2.new(0, 42, 0.5, 0)
 dmBadge.BackgroundColor3 = Color3.fromRGB(45, 20, 65)
 dmBadge.TextColor3 = Colors.Purple
 dmBadge.Font = Enum.Font.GothamBlack
@@ -2089,10 +2046,10 @@ Instance.new("UICorner", dmBadge).CornerRadius = UDim.new(1, 0)
 
 chatInput = Instance.new("TextBox", inputContainer)
 chatInput.Text = ""
-chatInput.Size = UDim2.new(1, -134, 1, 0)
-chatInput.Position = UDim2.new(0, 16, 0, 0)
+chatInput.Size = UDim2.new(1, -162, 1, 0)
+chatInput.Position = UDim2.new(0, 44, 0, 0)
 chatInput.BackgroundTransparency = 1
-chatInput.PlaceholderText = "Write a message... (Swipe card to reply)"
+chatInput.PlaceholderText = "Message... (@ to mention, ! for commands)"
 chatInput.PlaceholderColor3 = Colors.SubText
 chatInput.TextColor3 = Colors.Text
 chatInput.Font = Enum.Font.GothamMedium
@@ -2100,24 +2057,55 @@ chatInput.TextSize = 11.5
 chatInput.ClearTextOnFocus = false
 chatInput.TextXAlignment = Enum.TextXAlignment.Left
 chatInput.ZIndex = 13
-crispText(chatInput, 0.4)
+crispText(chatInput, 0.38)
+
+local lastTypingBroadcast = 0
+local function broadcastTypingSignal()
+    if tick() - lastTypingBroadcast < 3.2 then return end
+    lastTypingBroadcast = tick()
+    task.spawn(function()
+        if req then
+            pcall(function()
+                req({
+                    Url = SERVER_URL .. "/send",
+                    Method = "POST",
+                    Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" },
+                    Body = HttpService:JSONEncode({ user = lp.Name .. "::" .. lp.DisplayName, msg = "__TYPING__", jobId = game.JobId, hidden = true })
+                })
+            end)
+        end
+    end)
+end
 
 local function sanitizeChatInput()
     if chatInput.Text == "TextBox" then chatInput.Text = "" end
 end
+
 chatInput:GetPropertyChangedSignal("Text"):Connect(function()
     sanitizeChatInput()
-    typingIndicator.BackgroundTransparency = (#chatInput.Text > 0) and 0.2 or 1
+    local txt = chatInput.Text
+    if #txt > 0 then
+        typingIndicator.BackgroundTransparency = 0.15
+        refreshAutoComplete(txt)
+        if not txt:match("^[!/]") then broadcastTypingSignal() end
+    else
+        typingIndicator.BackgroundTransparency = 1
+        autoCompleteBar.Visible = false
+    end
 end)
 task.defer(sanitizeChatInput)
 
 chatInput.Focused:Connect(function()
     sanitizeChatInput()
-    TweenService:Create(inputStroke, TweenInfo.new(0.25), {Color = Colors.Primary, Transparency = 0.12, Thickness = 1.6}):Play()
+    TweenService:Create(inputStroke, TweenInfo.new(0.25), {Transparency = 0.05, Thickness = 1.7}):Play()
+    TweenService:Create(iloStroke, TweenInfo.new(0.25), {Color = Colors.Primary, Transparency = 0.1}):Play()
 end)
+
 chatInput.FocusLost:Connect(function()
     typingIndicator.BackgroundTransparency = 1
-    TweenService:Create(inputStroke, TweenInfo.new(0.25), {Color = Colors.PrimaryDark, Transparency = 0.45, Thickness = 1.2}):Play()
+    task.delay(0.15, function() autoCompleteBar.Visible = false end)
+    TweenService:Create(inputStroke, TweenInfo.new(0.25), {Transparency = 0.42, Thickness = 1.3}):Play()
+    TweenService:Create(iloStroke, TweenInfo.new(0.25), {Color = Colors.PrimaryDark, Transparency = 0.45}):Play()
 end)
 
 updateInputBar = function()
@@ -2126,12 +2114,12 @@ updateInputBar = function()
         local w = TextService:GetTextSize(dmBadge.Text, 10, Enum.Font.GothamBlack, Vector2.new(1000, 30)).X + 16
         dmBadge.Size = UDim2.new(0, w, 1, -14)
         dmBadge.Visible = true
-        chatInput.Position = UDim2.new(0, w + 16, 0, 0)
-        chatInput.Size = UDim2.new(1, -(w + 134), 1, 0)
+        chatInput.Position = UDim2.new(0, w + 48, 0, 0)
+        chatInput.Size = UDim2.new(1, -(w + 166), 1, 0)
     else
         dmBadge.Visible = false
-        chatInput.Position = UDim2.new(0, 16, 0, 0)
-        chatInput.Size = UDim2.new(1, -134, 1, 0)
+        chatInput.Position = UDim2.new(0, 44, 0, 0)
+        chatInput.Size = UDim2.new(1, -162, 1, 0)
     end
 end
 
@@ -2141,11 +2129,11 @@ dmBadge.MouseButton1Click:Connect(function()
 end)
 
 memeBtn = Instance.new("TextButton", inputContainer)
-memeBtn.Size = UDim2.fromOffset(34, 28)
+memeBtn.Size = UDim2.fromOffset(36, 28)
 memeBtn.AnchorPoint = Vector2.new(1, 0.5)
-memeBtn.Position = UDim2.new(1, -78, 0.5, 0)
+memeBtn.Position = UDim2.new(1, -80, 0.5, 0)
 memeBtn.BackgroundColor3 = Colors.Background
-memeBtn.BackgroundTransparency = 0.40
+memeBtn.BackgroundTransparency = 0.30
 memeBtn.Text = "GIF"
 memeBtn.Font = Enum.Font.GothamBlack
 memeBtn.TextColor3 = Colors.Primary
@@ -2153,15 +2141,18 @@ memeBtn.TextSize = 9.5
 memeBtn.AutoButtonColor = false
 memeBtn.ZIndex = 14
 Instance.new("UICorner", memeBtn).CornerRadius = UDim.new(1, 0)
+local mbStr = Instance.new("UIStroke", memeBtn)
+mbStr.Color = Colors.SurfaceHover
+mbStr.Thickness = 1
 crispText(memeBtn, 0.4)
 applySpringHover(memeBtn)
 
 local emojiBtn = Instance.new("TextButton", inputContainer)
 emojiBtn.Size = UDim2.fromOffset(30, 28)
 emojiBtn.AnchorPoint = Vector2.new(1, 0.5)
-emojiBtn.Position = UDim2.new(1, -44, 0.5, 0)
+emojiBtn.Position = UDim2.new(1, -45, 0.5, 0)
 emojiBtn.BackgroundColor3 = Colors.Background
-emojiBtn.BackgroundTransparency = 0.40
+emojiBtn.BackgroundTransparency = 0.30
 emojiBtn.Text = ":)"
 emojiBtn.Font = Enum.Font.GothamBlack
 emojiBtn.TextColor3 = Colors.Text
@@ -2169,21 +2160,28 @@ emojiBtn.TextSize = 12
 emojiBtn.AutoButtonColor = false
 emojiBtn.ZIndex = 14
 Instance.new("UICorner", emojiBtn).CornerRadius = UDim.new(1, 0)
+local ebStr = Instance.new("UIStroke", emojiBtn)
+ebStr.Color = Colors.SurfaceHover
+ebStr.Thickness = 1
 crispText(emojiBtn, 0.4)
 applySpringHover(emojiBtn)
 
 sendBtn = Instance.new("TextButton", inputContainer)
-sendBtn.Size = UDim2.fromOffset(32, 32)
+sendBtn.Size = UDim2.fromOffset(34, 34)
 sendBtn.AnchorPoint = Vector2.new(1, 0.5)
-sendBtn.Position = UDim2.new(1, -7, 0.5, 0)
-sendBtn.BackgroundColor3 = Colors.Primary
-sendBtn.Text = ">"
-sendBtn.TextColor3 = Color3.fromRGB(8, 10, 15)
+sendBtn.Position = UDim2.new(1, -6, 0.5, 0)
+sendBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+sendBtn.Text = "➤"
+sendBtn.TextColor3 = Color3.fromRGB(8, 10, 16)
 sendBtn.Font = Enum.Font.GothamBlack
-sendBtn.TextSize = 14
+sendBtn.TextSize = 13
 sendBtn.AutoButtonColor = false
 sendBtn.ZIndex = 14
 Instance.new("UICorner", sendBtn).CornerRadius = UDim.new(1, 0)
+
+sendBtnGrad = Instance.new("UIGradient", sendBtn)
+sendBtnGrad.Color = ColorSequence.new(Colors.Primary, Colors.Purple)
+sendBtnGrad.Rotation = 45
 applySpringHover(sendBtn)
 
 -- =========================================================
@@ -2320,9 +2318,7 @@ local function makeDraggable(frame, handlesList, ghostAura, isOrb)
         local parentSize = gui.AbsoluteSize
         local frameSize = frame.AbsoluteSize
         local anchor = frame.AnchorPoint
-        if parentSize.X <= 0 or parentSize.Y <= 0 then
-            return UDim2.new(newXScale, newXOffset, newYScale, newYOffset)
-        end
+        if parentSize.X <= 0 or parentSize.Y <= 0 then return UDim2.new(newXScale, newXOffset, newYScale, newYOffset) end
         local absX = (newXScale * parentSize.X) + newXOffset
         local absY = (newYScale * parentSize.Y) + newYOffset
         local minX, maxX, minY, maxY
@@ -2355,12 +2351,8 @@ local function makeDraggable(frame, handlesList, ghostAura, isOrb)
                 targetPos = startPos
                 lastInputPos = Vector2.new(input.Position.X, input.Position.Y)
                 velocity = Vector2.new(0, 0)
-                if not isOrb then
-                    TweenService:Create(dragPill, TweenInfo.new(0.2), {Size = UDim2.fromOffset(62, 4), BackgroundTransparency = 0.08}):Play()
-                else
-                    isDraggingOrb = true
-                    dragThresholdMet = false
-                end
+                if not isOrb then TweenService:Create(dragPill, TweenInfo.new(0.2), {Size = UDim2.fromOffset(62, 4), BackgroundTransparency = 0.08}):Play()
+                else isDraggingOrb = true dragThresholdMet = false end
                 if dragLoop then dragLoop:Disconnect() end
                 dragLoop = RunService.RenderStepped:Connect(function(dt)
                     if _G.TXR_ChatInstanceID ~= currentExecutionID then dragLoop:Disconnect() return end
@@ -2389,12 +2381,8 @@ local function makeDraggable(frame, handlesList, ghostAura, isOrb)
         if input == activeDragInput or input.UserInputType == Enum.UserInputType.MouseButton1 then
             dragging = false
             activeDragInput = nil
-            if not isOrb then
-                TweenService:Create(dragPill, TweenInfo.new(0.25), {Size = UDim2.fromOffset(42, 3), BackgroundTransparency = 0.50}):Play()
-            else
-                isDraggingOrb = false
-                orbHovered = false
-            end
+            if not isOrb then TweenService:Create(dragPill, TweenInfo.new(0.25), {Size = UDim2.fromOffset(42, 3), BackgroundTransparency = 0.50}):Play()
+            else isDraggingOrb = false orbHovered = false end
         end
     end)
 
@@ -2473,7 +2461,7 @@ UserInputService.InputBegan:Connect(function(input, gp)
 end)
 
 -- =========================================================
--- ⚡ 60 FPS ULTRA-SMOOTH TAG GLOW, AI CORE & SHINE ENGINE
+-- ⚡ 60 FPS TAG GLOW, AI CORE, INPUT FOCUS & TYPING WAVE ENGINE
 -- =========================================================
 task.spawn(function()
     local t = 0
@@ -2492,27 +2480,18 @@ task.spawn(function()
                     local sSpeed = item.speed or 1.15
                     local continuousRotation = (t * 58 * sSpeed) % 360
                     local waveOffset = math.sin(t * 1.6 * sSpeed) * 0.35
-                    
                     item.textGrad.Rotation = continuousRotation
                     item.textGrad.Offset = Vector2.new(waveOffset, 0)
                     item.glowGrad.Rotation = continuousRotation
                     item.glowGrad.Offset = Vector2.new(-waveOffset, 0)
-                    
-                    if item.strokeGradGlow and item.strokeGradGlow.Parent then
-                        item.strokeGradGlow.Rotation = (continuousRotation + 180) % 360
-                    end
-                    if item.shineGrad and item.shineGrad.Parent then
-                        local sweep = ((t * 0.8 * sSpeed) % 3.4) - 1.7
-                        item.shineGrad.Offset = Vector2.new(sweep, 0)
-                    end
+                    if item.strokeGradGlow and item.strokeGradGlow.Parent then item.strokeGradGlow.Rotation = (continuousRotation + 180) % 360 end
+                    if item.shineGrad and item.shineGrad.Parent then item.shineGrad.Offset = Vector2.new(((t * 0.8 * sSpeed) % 3.4) - 1.7, 0) end
                     local breathPulse = (math.sin(t * 2.4 * sSpeed) + 1) / 2
                     if item.glowStroke and item.glowStroke.Parent then
                         item.glowStroke.Thickness = 1.0 + (breathPulse * 0.45)
                         item.glowStroke.Transparency = 0.48 + (breathPulse * 0.22)
                     end
-                    if item.badgeGlow and item.badgeGlow.Parent then
-                        item.badgeGlow.TextTransparency = 0.42 + (breathPulse * 0.22)
-                    end
+                    if item.badgeGlow and item.badgeGlow.Parent then item.badgeGlow.TextTransparency = 0.42 + (breathPulse * 0.22) end
                 else
                     table.remove(activeBadgesList, i)
                 end
@@ -2534,13 +2513,34 @@ task.spawn(function()
 
         if mainFrame.Visible then
             strokeGrad.Rotation = (t * 35) % 360
+            inputFocusGrad.Rotation = (t * 65) % 360
+            inputLeadIcon.Rotation = math.sin(t * 3) * 15
             local breath = (math.sin(t * 2.5) + 1) / 2
             aura.ImageTransparency = isGhostMode and 0.90 or (0.65 + (breath * 0.08))
             local ledAlpha = (math.sin(t * 4) + 1) / 2
             ledDot.BackgroundTransparency = 0.1 + (ledAlpha * 0.5)
             local typingWave = (math.sin(t * 8) + 1) / 2
             if typingIndicator.BackgroundTransparency < 1 then
-                typingIndicator.Size = UDim2.new(0.3 + (typingWave * 0.68), 0, 0, 2)
+                typingIndicator.Size = UDim2.new(0.3 + (typingWave * 0.66), 0, 0, 2)
+            end
+
+            -- Feature 5 Live Typing Wave Pill Animation
+            local activeTyperNames = {}
+            local nowTick = tick()
+            for dName, expTick in pairs(remoteTypers) do
+                if nowTick < expTick then table.insert(activeTyperNames, dName) else remoteTypers[dName] = nil end
+            end
+
+            if #activeTyperNames > 0 and not replyBanner.Visible and not autoCompleteBar.Visible then
+                liveTypingPill.Visible = true
+                ltpLabel.Text = (#activeTyperNames == 1) and (activeTyperNames[1] .. " is typing...") or (#activeTyperNames .. " people are typing...")
+                for idx, dot in ipairs(typingDots) do
+                    local bounce = math.sin(t * 9 - (idx * 1.1))
+                    dot.Position = UDim2.new(0, (idx - 1) * 7 + 4, 0.5, bounce * 2.5)
+                    dot.BackgroundColor3 = Colors.Primary:Lerp(Colors.Purple, (bounce + 1) / 2)
+                end
+            else
+                liveTypingPill.Visible = false
             end
         end
 
@@ -2550,7 +2550,6 @@ task.spawn(function()
             local targetRadius = orbHovered and 0.6 or 1
             currentRadiusMod = currentRadiusMod + (targetRadius - currentRadiusMod) * dt * 8
             local activeT = t * 3 * currentSpeedMod
-            
             local baseColor1, baseColor2 = Colors.Primary, Colors.Purple
             local lerpAlpha = (math.sin(activeT * 0.8) + 1) / 2
             
@@ -2657,6 +2656,7 @@ sendMessageFunc = function(overrideText)
     
     if text == "" or (tick() - lastSendTick < 0.15) then return end
     lastSendTick = tick()
+    autoCompleteBar.Visible = false
 
     local pMatch = text:match("^!p%s+(%w+)")
     if pMatch then
@@ -2669,7 +2669,7 @@ sendMessageFunc = function(overrideText)
 
     if text:lower() == "!ai" or text:lower() == "/help" then
         chatInput.Text = ""
-        addMessageToFeed("System::TXR // AI", "Swipe any message right to Reply | '!p username' for Private DM | Tap any card to Copy, TP, or Spectate.", nil, false, game.JobId, chatMode)
+        addMessageToFeed("System::TXR // AI", "Swipe any message right to Reply | Type '@' to mention or '!' for quick commands | Tap any card to Copy, TP, or Spectate.", nil, false, game.JobId, chatMode)
         return
     end
 
@@ -2685,22 +2685,16 @@ sendMessageFunc = function(overrideText)
     if privateTarget then
         finalMsg = "( 🔐 " .. lp.Name .. " Private " .. privateTarget .. ") " .. payloadBodyText
     else
-        if currentScope == "server" then
-            finalMsg = "[SRV:" .. tostring(game.JobId) .. "] " .. payloadBodyText
-        else
-            finalMsg = "[GLB] " .. payloadBodyText
-        end
+        if currentScope == "server" then finalMsg = "[SRV:" .. tostring(game.JobId) .. "] " .. payloadBodyText
+        else finalMsg = "[GLB] " .. payloadBodyText end
     end
 
     if not overrideText then chatInput.Text = "" end
 
     local encodedUserTag = lp.Name .. "::" .. lp.DisplayName
 
-    if privateTarget then
-        addMessageToFeed(encodedUserTag, payloadBodyText, privateTarget, true, game.JobId, currentScope)
-    else
-        addMessageToFeed(encodedUserTag, payloadBodyText, nil, false, game.JobId, currentScope)
-    end
+    if privateTarget then addMessageToFeed(encodedUserTag, payloadBodyText, privateTarget, true, game.JobId, currentScope)
+    else addMessageToFeed(encodedUserTag, payloadBodyText, nil, false, game.JobId, currentScope) end
     displayBubble(lp.Name, text)
 
     local cleanKey = string.lower(finalMsg)
@@ -2710,11 +2704,7 @@ sendMessageFunc = function(overrideText)
 
     task.spawn(function()
         if req then
-            local payload = HttpService:JSONEncode({
-                user = encodedUserTag,
-                msg = finalMsg,
-                jobId = game.JobId
-            })
+            local payload = HttpService:JSONEncode({ user = encodedUserTag, msg = finalMsg, jobId = game.JobId })
             pcall(function()
                 req({
                     Url = SERVER_URL .. "/send",
@@ -2728,18 +2718,14 @@ sendMessageFunc = function(overrideText)
 end
 
 sendBtn.MouseButton1Click:Connect(function() sendMessageFunc() end)
-chatInput.FocusLost:Connect(function(enterPressed)
-    if enterPressed then sendMessageFunc() end
-end)
+chatInput.FocusLost:Connect(function(enterPressed) if enterPressed then sendMessageFunc() end end)
 
 -- =========================================================
 -- 📥 HIGH-FREQUENCY POLLING ENGINE (GLOBAL PERSIST / SERVER WIPE)
 -- =========================================================
 task.spawn(function()
     while _G.TXR_IsPolling and (_G.TXR_ChatInstanceID == currentExecutionID) and task.wait(0.4) do
-        if tostring(game.JobId) ~= CURRENT_SESSION_JOB then
-            filterFeedMode()
-        end
+        if tostring(game.JobId) ~= CURRENT_SESSION_JOB then filterFeedMode() end
 
         if req then
             local success, res = pcall(function()
@@ -2751,9 +2737,7 @@ task.spawn(function()
             end)
 
             if success and res and res.StatusCode == 200 then
-                local decodeSuccess, data = pcall(function()
-                    return HttpService:JSONDecode(res.Body)
-                end)
+                local decodeSuccess, data = pcall(function() return HttpService:JSONDecode(res.Body) end)
 
                 if decodeSuccess and type(data) == "table" then
                     if isInitialSync then
@@ -2762,7 +2746,7 @@ task.spawn(function()
                             local startIndex = math.max(1, #data - 15)
                             for i = startIndex, #data do
                                 local m = data[i]
-                                if not m.hidden and m.msg ~= "Joined" then
+                                if not m.hidden and m.msg ~= "Joined" and m.msg ~= "__TYPING__" then
                                     local initKey = (m.id and tostring(m.id)) or (m.user .. "_" .. tostring(m.time) .. "_" .. m.msg)
                                     processedServerMessageMap[initKey] = true
                                     
@@ -2802,6 +2786,14 @@ task.spawn(function()
                             knownUsers[rawUsernameOnly:lower()] = rawUsernameOnly
                             updateLiveCounter(rawUsernameOnly, rawDispOnly)
 
+                            if m.msg == "__TYPING__" then
+                                processedServerMessageMap[uniqueMsgKey] = true
+                                if rawUsernameOnly:lower() ~= lp.Name:lower() then
+                                    remoteTypers[rawDispOnly] = tick() + 3.6
+                                end
+                                continue
+                            end
+
                             if m.msg == "Joined" then
                                 processedServerMessageMap[uniqueMsgKey] = true
                                 if rawUsernameOnly ~= lp.Name then
@@ -2811,10 +2803,9 @@ task.spawn(function()
                                 continue
                             end
 
-                            if m.hidden then 
-                                processedServerMessageMap[uniqueMsgKey] = true
-                                continue 
-                            end
+                            if m.hidden then processedServerMessageMap[uniqueMsgKey] = true continue end
+
+                            remoteTypers[rawDispOnly] = nil
 
                             if rawUsernameOnly:lower() == lp.Name:lower() then
                                 local lowMsg = string.lower(m.msg)
@@ -2826,10 +2817,7 @@ task.spawn(function()
                                         break
                                     end
                                 end
-                                if isEcho then
-                                    processedServerMessageMap[uniqueMsgKey] = true
-                                    continue
-                                end
+                                if isEcho then processedServerMessageMap[uniqueMsgKey] = true continue end
                             end
 
                             processedServerMessageMap[uniqueMsgKey] = true
@@ -2893,15 +2881,10 @@ task.spawn(function()
             req({
                 Url = SERVER_URL .. "/send", Method = "POST",
                 Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" },
-                Body = HttpService:JSONEncode({ 
-                    user = lp.Name .. "::" .. lp.DisplayName, 
-                    msg = "Joined", 
-                    jobId = game.JobId, 
-                    hidden = false 
-                })
+                Body = HttpService:JSONEncode({ user = lp.Name .. "::" .. lp.DisplayName, msg = "Joined", jobId = game.JobId, hidden = false })
             })
         end)
     end
-    addMessageToFeed("System::TXR // AI", "Neural Link Active! Swipe any card right to quote & reply.", nil, false, game.JobId, "server")
+    addMessageToFeed("System::TXR // AI", "Neural Link Active! Type '@' or '!' to use Smart Auto-Complete, or swipe right to Reply.", nil, false, game.JobId, "server")
     addMessageToFeed("System::TXR // AI", "Global Network Synchronized! Your messages here persist across all servers.", nil, false, game.JobId, "global")
 end)
