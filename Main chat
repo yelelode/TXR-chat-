@@ -12,7 +12,7 @@ pcall(function()
 end)
 
 -- =========================================================
--- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V24.0 LUXURY PRO) 👑
+-- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V25.0 ULTRA-CRISP) 👑
 -- =========================================================
 
 local currentExecutionID = tick()
@@ -97,10 +97,10 @@ local currentThemeIdx = 1
 
 local Colors = {
     Background    = Color3.fromRGB(8, 11, 18),       
-    Surface       = Color3.fromRGB(15, 20, 32),          
-    SurfaceSelf   = Color3.fromRGB(14, 26, 40),
-    SurfaceAI     = Color3.fromRGB(16, 20, 42),
-    SurfaceHover  = Color3.fromRGB(26, 34, 50),     
+    Surface       = Color3.fromRGB(16, 22, 34),          
+    SurfaceSelf   = Color3.fromRGB(14, 28, 42),
+    SurfaceAI     = Color3.fromRGB(18, 22, 44),
+    SurfaceHover  = Color3.fromRGB(28, 36, 54),     
     ActiveTint    = Themes[1].ActiveTint,       
     Primary       = Themes[1].Primary,         
     PrimaryDark   = Themes[1].PrimaryDark,     
@@ -108,7 +108,7 @@ local Colors = {
     Warning       = Color3.fromRGB(255, 175, 20),         
     Purple        = Themes[1].Accent,         
     Text          = Color3.fromRGB(246, 250, 255),          
-    SubText       = Color3.fromRGB(130, 146, 172),       
+    SubText       = Color3.fromRGB(135, 152, 178),       
     TextDark      = Color3.fromRGB(8, 10, 15),
     MentionGold   = Color3.fromRGB(255, 205, 65),
     MentionBg     = Color3.fromRGB(42, 32, 14),
@@ -298,7 +298,7 @@ end
 local function crispText(element, overrideTransparency)
     local stroke = element:FindFirstChildOfClass("UIStroke") or Instance.new("UIStroke", element)
     stroke.Color = Color3.new(0, 0, 0)
-    stroke.Transparency = overrideTransparency or 0.38
+    stroke.Transparency = overrideTransparency or 0.35
     stroke.Thickness = 1.0
 end
 
@@ -956,7 +956,7 @@ ghostBtn = createHeaderBtn("GST", function()
 
         for _, cardWrap in ipairs(messageFeed:GetChildren()) do
             local inner = cardWrap:FindFirstChild("CardSurface")
-            if inner then inner.BackgroundTransparency = 0.54 end
+            if inner then inner.BackgroundTransparency = 0.52 end
         end
     else
         TweenService:Create(mainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quart), {BackgroundTransparency = 0.08}):Play()
@@ -971,7 +971,7 @@ ghostBtn = createHeaderBtn("GST", function()
 
         for _, cardWrap in ipairs(messageFeed:GetChildren()) do
             local inner = cardWrap:FindFirstChild("CardSurface")
-            if inner then inner.BackgroundTransparency = 0.22 end
+            if inner then inner.BackgroundTransparency = 0.20 end
         end
     end
 end)
@@ -1043,7 +1043,6 @@ tsStroke.Thickness = 1
 tsStroke.Color = Colors.SurfaceHover
 tsStroke.Transparency = 0.35
 
--- Animated Sliding Active Pill
 tabActiveSlider = Instance.new("Frame", tabShell)
 tabActiveSlider.Size = UDim2.new(0.5, -4, 1, -4)
 tabActiveSlider.Position = UDim2.new(0, 2, 0, 2)
@@ -1175,15 +1174,15 @@ local function buildLiveBadgeElement(parentContainer, bData, zBase)
     
     local badgeHost = Instance.new("Frame", parentContainer)
     badgeHost.Size = UDim2.fromOffset(tagWidth, 18)
-    badgeHost.BackgroundColor3 = Color3.fromRGB(10, 14, 24)
-    badgeHost.BackgroundTransparency = 0.25
+    badgeHost.BackgroundColor3 = Color3.fromRGB(9, 13, 22)
+    badgeHost.BackgroundTransparency = 0.20
     badgeHost.BorderSizePixel = 0
     badgeHost.ZIndex = zBase
     Instance.new("UICorner", badgeHost).CornerRadius = UDim.new(0, 5)
 
     local pillStroke = Instance.new("UIStroke", badgeHost)
-    pillStroke.Thickness = 1.1
-    pillStroke.Transparency = 0.25
+    pillStroke.Thickness = 1.15
+    pillStroke.Transparency = 0.22
     pillStroke.Color = Color3.fromRGB(255, 255, 255)
 
     local strokeGradGlow = Instance.new("UIGradient", pillStroke)
@@ -1214,9 +1213,9 @@ local function buildLiveBadgeElement(parentContainer, bData, zBase)
     badgeLabel.ZIndex = zBase + 2
 
     local bStroke = Instance.new("UIStroke", badgeLabel)
-    bStroke.Thickness = 0.85
+    bStroke.Thickness = 0.9
     bStroke.Color = Color3.fromRGB(0, 0, 0)
-    bStroke.Transparency = 0.20
+    bStroke.Transparency = 0.18
 
     local badgeShine = Instance.new("TextLabel", badgeHost)
     badgeShine.Size = UDim2.fromScale(1, 1)
@@ -1316,7 +1315,7 @@ messageFeed.AutomaticCanvasSize = Enum.AutomaticSize.Y
 messageFeed.ZIndex = 8
 
 local feedLayout = Instance.new("UIListLayout", messageFeed)
-feedLayout.Padding = UDim.new(0, 7)
+feedLayout.Padding = UDim.new(0, 8)
 feedLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
 local feedPadding = Instance.new("UIPadding", messageFeed)
@@ -1395,7 +1394,7 @@ local function createActionBtn(text, color, onClick)
 end
 
 -- =========================================================
--- 💬 LUXURY MESSAGE PIPELINE (PROFILE NAME ONLY + PRO SWIPE)
+-- 💬 ULTRA-CRISP MESSAGE PIPELINE & SCULPTED QUOTE CARDS
 -- =========================================================
 local function updateLiveCounter(username, dispName)
     activeUsersTable[username:lower()] = { time = os.time(), disp = dispName or username }
@@ -1482,7 +1481,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
 
     -- Outer Wrapper for Elastic Swipe-to-Reply
     local cardWrapper = Instance.new("Frame", messageFeed)
-    cardWrapper.Size = memeIdMatch and UDim2.new(1, 0, 0, 136) or UDim2.new(1, 0, 0, 0)
+    cardWrapper.Size = memeIdMatch and UDim2.new(1, 0, 0, 138) or UDim2.new(1, 0, 0, 0)
     cardWrapper.AutomaticSize = memeIdMatch and Enum.AutomaticSize.None or Enum.AutomaticSize.Y
     cardWrapper.BackgroundTransparency = 1
     cardWrapper.ZIndex = 9
@@ -1495,7 +1494,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         cardWrapper.Visible = (effectiveScope ~= "server")
     end
 
-    -- ⚡ REDESIGNED LUXURY CYBER-CAPSULE SWIPE INDICATOR
+    -- ⚡ ELASTIC CYBER-CAPSULE SWIPE INDICATOR (Zero Ticks/Checkmarks)
     local swipeCapsule = Instance.new("Frame", cardWrapper)
     swipeCapsule.Size = UDim2.fromOffset(38, 26)
     swipeCapsule.AnchorPoint = Vector2.new(0, 0.5)
@@ -1509,7 +1508,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     local scFill = Instance.new("Frame", swipeCapsule)
     scFill.Size = UDim2.fromScale(0, 1)
     scFill.BackgroundColor3 = Colors.Primary
-    scFill.BackgroundTransparency = 0.72
+    scFill.BackgroundTransparency = 0.70
     scFill.BorderSizePixel = 0
     scFill.ZIndex = 8
     Instance.new("UICorner", scFill).CornerRadius = UDim.new(1, 0)
@@ -1525,48 +1524,70 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     local swipeLabel = Instance.new("TextLabel", swipeCapsule)
     swipeLabel.Size = UDim2.fromScale(1, 1)
     swipeLabel.BackgroundTransparency = 1
-    swipeLabel.Text = "REP"
+    swipeLabel.Text = "↩"
     swipeLabel.TextColor3 = Colors.Primary
     swipeLabel.TextTransparency = 1
     swipeLabel.Font = Enum.Font.GothamBlack
-    swipeLabel.TextSize = 8.5
+    swipeLabel.TextSize = 13
     swipeLabel.ZIndex = 9
 
-    -- Main Glass Message Card
+    -- ⚡ ULTRA-CRISP SCULPTED GLASS MESSAGE CARD
     local card = Instance.new("TextButton", cardWrapper)
     card.Name = "CardSurface"
-    card.Size = memeIdMatch and UDim2.new(1, 0, 0, 136) or UDim2.new(1, 0, 0, 0)
+    card.Size = memeIdMatch and UDim2.new(1, 0, 0, 138) or UDim2.new(1, 0, 0, 0)
     card.AutomaticSize = memeIdMatch and Enum.AutomaticSize.None or Enum.AutomaticSize.Y
     card.BackgroundColor3 = isMentioned and Colors.MentionBg or (isSystemAI and Colors.SurfaceAI or (isSelf and Colors.SurfaceSelf or Colors.Surface))
-    card.BackgroundTransparency = isGhostMode and 0.54 or 0.22
+    card.BackgroundTransparency = isGhostMode and 0.52 or 0.20
     card.Text = ""
     card.AutoButtonColor = false
     card.ClipsDescendants = false
     card.ZIndex = 10
     Instance.new("UICorner", card).CornerRadius = UDim.new(0, 12)
 
+    -- Subtle Diagonal Surface Sheen
     local cardGrad = Instance.new("UIGradient", card)
     cardGrad.Color = ColorSequence.new({
         ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 210, 230))
+        ColorSequenceKeypoint.new(0.6, Color3.fromRGB(230, 238, 250)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(190, 202, 222))
     })
     cardGrad.Rotation = 25
+
+    -- Inner Top-Edge Specular Glass Highlight
+    local topSpecular = Instance.new("Frame", card)
+    topSpecular.Size = UDim2.new(1, -24, 0, 1)
+    topSpecular.Position = UDim2.new(0, 12, 0, 1)
+    topSpecular.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    topSpecular.BackgroundTransparency = 0.86
+    topSpecular.BorderSizePixel = 0
+    topSpecular.ZIndex = 11
 
     local cardScale = Instance.new("UIScale", card)
     cardScale.Scale = 0.96
     TweenService:Create(cardScale, TweenInfo.new(0.26, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
 
+    -- Dual-Tone Gradient Left Neon Accent Strip
     local accentStrip = Instance.new("Frame", card)
     accentStrip.Size = UDim2.new(0, 3, 1, -14)
     accentStrip.Position = UDim2.new(0, 5, 0, 7)
     accentStrip.BorderSizePixel = 0
-    accentStrip.BackgroundColor3 = isMentioned and Colors.MentionGold or (isSystemAI and Colors.Purple or (privateUserTarget and Colors.Purple or Colors.Primary))
+    accentStrip.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     accentStrip.ZIndex = 11
     Instance.new("UICorner", accentStrip).CornerRadius = UDim.new(1, 0)
 
+    local stripGrad = Instance.new("UIGradient", accentStrip)
+    if isMentioned then
+        stripGrad.Color = ColorSequence.new(Colors.MentionGold, Color3.fromRGB(255, 130, 20))
+    elseif isSystemAI or privateUserTarget then
+        stripGrad.Color = ColorSequence.new(Colors.Purple, Colors.Primary)
+    else
+        stripGrad.Color = ColorSequence.new(Colors.Primary, Colors.PrimaryDark)
+    end
+    stripGrad.Rotation = 90
+
     local cardStroke = Instance.new("UIStroke", card)
-    cardStroke.Thickness = (isMentioned or isSystemAI) and 1.3 or 1
-    cardStroke.Transparency = isMentioned and 0.22 or (isSystemAI and 0.42 or (isSelf and 0.58 or 0.76))
+    cardStroke.Thickness = (isMentioned or isSystemAI) and 1.3 or 1.1
+    cardStroke.Transparency = isMentioned and 0.20 or (isSystemAI and 0.40 or (isSelf and 0.55 or 0.72))
     cardStroke.Color = isMentioned and Colors.MentionGold or (isSystemAI and Colors.Purple or (isSelf and Colors.PrimaryDark or Colors.SurfaceHover))
 
     -- Avatar Orb (32x32 Crisp Circular Frame)
@@ -1615,13 +1636,13 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         avatarImg.Size = UDim2.fromOffset(32, 32)
         avatarImg.Position = UDim2.fromOffset(14, 9)
         avatarImg.BackgroundColor3 = Colors.Background
-        avatarImg.BackgroundTransparency = 0.20
+        avatarImg.BackgroundTransparency = 0.15
         avatarImg.ZIndex = 12
         Instance.new("UICorner", avatarImg).CornerRadius = UDim.new(1, 0)
         
         local avStroke = Instance.new("UIStroke", avatarImg)
-        avStroke.Thickness = 1.3
-        avStroke.Transparency = 0.28
+        avStroke.Thickness = 1.35
+        avStroke.Transparency = 0.22
         avStroke.Color = isAdminUser and Colors.Primary or Colors.SurfaceHover
 
         local statusDot = Instance.new("Frame", avatarImg)
@@ -1650,21 +1671,32 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         end)
     end
 
-    -- Top-Right Frosted Timestamp Pill
-    local timeLbl = Instance.new("TextLabel", card)
-    timeLbl.AnchorPoint = Vector2.new(1, 0)
-    timeLbl.Position = UDim2.new(1, -10, 0, 8)
-    timeLbl.Size = UDim2.fromOffset(42, 16)
+    -- ⚡ TOP-RIGHT FROSTED TIMESTAMP PILL
+    local timePill = Instance.new("Frame", card)
+    timePill.AnchorPoint = Vector2.new(1, 0)
+    timePill.Position = UDim2.new(1, -8, 0, 7)
+    timePill.Size = UDim2.fromOffset(42, 16)
+    timePill.BackgroundColor3 = Color3.fromRGB(9, 12, 20)
+    timePill.BackgroundTransparency = 0.45
+    timePill.ZIndex = 13
+    Instance.new("UICorner", timePill).CornerRadius = UDim.new(1, 0)
+
+    local tpStroke = Instance.new("UIStroke", timePill)
+    tpStroke.Color = Colors.SurfaceHover
+    tpStroke.Thickness = 0.8
+    tpStroke.Transparency = 0.65
+
+    local timeLbl = Instance.new("TextLabel", timePill)
+    timeLbl.Size = UDim2.fromScale(1, 1)
     timeLbl.BackgroundTransparency = 1
     timeLbl.Text = os.date("%H:%M")
-    timeLbl.TextColor3 = Color3.fromRGB(110, 126, 152)
+    timeLbl.TextColor3 = Color3.fromRGB(125, 142, 168)
     timeLbl.Font = Enum.Font.GothamBold
-    timeLbl.TextSize = 9.5
-    timeLbl.TextXAlignment = Enum.TextXAlignment.Right
-    timeLbl.ZIndex = 13
+    timeLbl.TextSize = 9
+    timeLbl.ZIndex = 14
     crispText(timeLbl, 0.65)
 
-    -- ⚡ CLEAN PROFILE NAME ONLY HEADER + MESSAGE STACK (NO @USERNAME SHOWN)
+    -- ⚡ CLEAN PROFILE NAME ONLY HEADER + MESSAGE STACK
     local cardContent = Instance.new("Frame", card)
     cardContent.Size = UDim2.new(1, -64, 0, 0)
     cardContent.Position = UDim2.fromOffset(54, 8)
@@ -1677,7 +1709,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     ccLayout.Padding = UDim.new(0, 4)
 
     local topIdentityRow = Instance.new("Frame", cardContent)
-    topIdentityRow.Size = UDim2.new(1, -44, 0, 18)
+    topIdentityRow.Size = UDim2.new(1, -48, 0, 18)
     topIdentityRow.BackgroundTransparency = 1
     topIdentityRow.LayoutOrder = 1
     topIdentityRow.ZIndex = 12
@@ -1693,7 +1725,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         bHost.LayoutOrder = 1
     end
 
-    -- Profile DisplayName ONLY (No @username clutter)
+    -- Profile DisplayName ONLY
     local nameLbl = Instance.new("TextLabel", topIdentityRow)
     nameLbl.AutomaticSize = Enum.AutomaticSize.X
     nameLbl.Size = UDim2.new(0, 0, 1, 0)
@@ -1705,7 +1737,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     nameLbl.TextSize = 12.5
     nameLbl.LayoutOrder = 2
     nameLbl.ZIndex = 13
-    crispText(nameLbl, 0.28)
+    crispText(nameLbl, 0.25)
 
     if privateUserTarget then
         local dmLbl = Instance.new("TextLabel", topIdentityRow)
@@ -1722,42 +1754,56 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         crispText(dmLbl, 0.45)
     end
 
-    -- ⚡ REDESIGNED LUXURY FROSTED QUOTE CARD (When Replying)
+    -- ⚡ ULTRA-CRISP SCULPTED QUOTE BOX (When Replying)
     if replyToName and replySnippet then
         local quoteBox = Instance.new("Frame", cardContent)
-        quoteBox.Size = UDim2.new(1, -4, 0, 26)
-        quoteBox.BackgroundColor3 = Color3.fromRGB(9, 13, 22)
-        quoteBox.BackgroundTransparency = 0.25
+        quoteBox.Size = UDim2.new(1, -4, 0, 28)
+        quoteBox.BackgroundColor3 = Color3.fromRGB(8, 11, 19)
+        quoteBox.BackgroundTransparency = 0.18
         quoteBox.LayoutOrder = 2
         quoteBox.ZIndex = 13
         Instance.new("UICorner", quoteBox).CornerRadius = UDim.new(0, 7)
 
         local qbStroke = Instance.new("UIStroke", quoteBox)
         qbStroke.Color = Colors.PrimaryDark
-        qbStroke.Thickness = 0.9
-        qbStroke.Transparency = 0.65
+        qbStroke.Thickness = 1
+        qbStroke.Transparency = 0.55
 
         local qBar = Instance.new("Frame", quoteBox)
         qBar.Size = UDim2.new(0, 3, 1, -8)
         qBar.Position = UDim2.new(0, 5, 0, 4)
         qBar.BorderSizePixel = 0
-        qBar.BackgroundColor3 = Colors.Primary
+        qBar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         qBar.ZIndex = 14
         Instance.new("UICorner", qBar).CornerRadius = UDim.new(1, 0)
 
+        local qBarGrad = Instance.new("UIGradient", qBar)
+        qBarGrad.Color = ColorSequence.new(Colors.Primary, Colors.Purple)
+        qBarGrad.Rotation = 90
+
+        local qIcon = Instance.new("TextLabel", quoteBox)
+        qIcon.Size = UDim2.fromOffset(16, 28)
+        qIcon.Position = UDim2.fromOffset(11, 0)
+        qIcon.BackgroundTransparency = 1
+        qIcon.Text = "↩"
+        qIcon.TextColor3 = Colors.Primary
+        qIcon.Font = Enum.Font.GothamBlack
+        qIcon.TextSize = 11
+        qIcon.ZIndex = 14
+
         local qText = Instance.new("TextLabel", quoteBox)
-        qText.Size = UDim2.new(1, -18, 1, 0)
-        qText.Position = UDim2.fromOffset(13, 0)
+        qText.Size = UDim2.new(1, -32, 1, 0)
+        qText.Position = UDim2.fromOffset(28, 0)
         qText.BackgroundTransparency = 1
         qText.RichText = true
-        qText.Text = string.format("<font color='#00FFCD'><b>%s</b></font>  <font color='#92A4C0'>%s</font>", sanitizeXml(replyToName), sanitizeXml(replySnippet))
+        qText.Text = string.format("<font color='#00FFCD'><b>%s</b></font>  <font color='#A5B8D4'>%s</font>", sanitizeXml(replyToName), sanitizeXml(replySnippet))
         qText.TextColor3 = Colors.SubText
         qText.Font = Enum.Font.GothamMedium
         qText.TextSize = 10
         qText.TextTruncate = Enum.TextTruncate.AtEnd
         qText.TextXAlignment = Enum.TextXAlignment.Left
         qText.ZIndex = 14
-        crispText(qText, 0.5)
+        crispText(qText, 0.45)
     end
 
     -- Message Body or Sticker
@@ -1772,7 +1818,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         memeImg.Size = UDim2.fromOffset(92, 92)
         memeImg.Position = UDim2.fromOffset(0, 2)
         memeImg.BackgroundColor3 = Colors.Background
-        memeImg.BackgroundTransparency = 0.25
+        memeImg.BackgroundTransparency = 0.20
         memeImg.Image = getAssetThumb(memeIdMatch)
         memeImg.ScaleType = Enum.ScaleType.Fit
         memeImg.ZIndex = 13
@@ -1796,7 +1842,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         bodyTxt.LayoutOrder = 3
         bodyTxt.ZIndex = 13
         bodyTxt.Text = sanitizeXml(displayMsg)
-        crispText(bodyTxt, 0.38)
+        crispText(bodyTxt, 0.35)
     end
 
     local padFix = Instance.new("UIPadding", card)
@@ -1808,7 +1854,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         playSFX("meme")
     end
 
-    -- ⚡ ELASTIC RIGHT-SWIPE REPLY GESTURE ENGINE
+    -- ⚡ ELASTIC RIGHT-SWIPE REPLY GESTURE ENGINE (No Checkmarks/Ticks)
     local isSwipingCard = false
     local swipeInputObj = nil
     local swipeStartPos = nil
@@ -1833,7 +1879,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             movedDistance = delta.Magnitude
 
             if delta.X > 6 and math.abs(delta.X) > math.abs(delta.Y) * 1.25 then
-                -- Smooth elastic resistance curve
                 local rawX = math.max(0, delta.X - 6)
                 local dragOffset = math.clamp(rawX ^ 0.85 * 1.35, 0, 58)
                 card.Position = UDim2.fromOffset(dragOffset, 0)
@@ -1847,12 +1892,10 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
 
                 if dragOffset >= 40 and not swipeTriggered then
                     swipeTriggered = true
-                    swipeLabel.Text = "✓"
-                    scFill.BackgroundColor3 = Colors.OnlineGreen
+                    scFill.BackgroundColor3 = Colors.Purple
                     playSFX("default")
                 elseif dragOffset < 40 and swipeTriggered then
                     swipeTriggered = false
-                    swipeLabel.Text = "REP"
                     scFill.BackgroundColor3 = Colors.Primary
                 end
             end
@@ -1940,16 +1983,19 @@ end
 local replyBanner = Instance.new("Frame", mainFrame)
 replyBanner.Size = UDim2.new(1, -28, 0, 30)
 replyBanner.Position = UDim2.new(0, 14, 1, -86)
-replyBanner.BackgroundColor3 = Color3.fromRGB(14, 20, 32)
-replyBanner.BackgroundTransparency = 0.06
+replyBanner.BackgroundColor3 = Color3.fromRGB(12, 17, 28)
+replyBanner.BackgroundTransparency = 0.05
 replyBanner.Visible = false
 replyBanner.ZIndex = 20
 Instance.new("UICorner", replyBanner).CornerRadius = UDim.new(0, 10)
 
+local rbScale = Instance.new("UIScale", replyBanner)
+rbScale.Scale = 1
+
 local rbStroke = Instance.new("UIStroke", replyBanner)
 rbStroke.Color = Colors.Primary
 rbStroke.Thickness = 1.1
-rbStroke.Transparency = 0.40
+rbStroke.Transparency = 0.35
 
 local rbAccent = Instance.new("Frame", replyBanner)
 rbAccent.Size = UDim2.new(0, 3, 1, -10)
@@ -1977,7 +2023,7 @@ rbClose.Size = UDim2.fromOffset(22, 22)
 rbClose.AnchorPoint = Vector2.new(1, 0.5)
 rbClose.Position = UDim2.new(1, -5, 0.5, 0)
 rbClose.BackgroundColor3 = Colors.Background
-rbClose.BackgroundTransparency = 0.4
+rbClose.BackgroundTransparency = 0.35
 rbClose.Text = "✕"
 rbClose.TextColor3 = Colors.SubText
 rbClose.Font = Enum.Font.GothamBlack
@@ -1999,8 +2045,10 @@ activateReplyBanner = function(targetDispName, snippetText)
         disp = targetDispName,
         text = cleanSnippet
     }
-    rbText.Text = string.format("<font color='#00FFCD'><b>Replying to %s</b></font>  •  <font color='#9AB0CE'>%s</font>", sanitizeXml(targetDispName), sanitizeXml(cleanSnippet))
+    rbText.Text = string.format("<font color='#00FFCD'><b>↩ Replying to %s</b></font>  •  <font color='#9AB0CE'>%s</font>", sanitizeXml(targetDispName), sanitizeXml(cleanSnippet))
     replyBanner.Visible = true
+    rbScale.Scale = 0.92
+    TweenService:Create(rbScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
     messageFeed.Size = UDim2.new(1, -24, 1, -180)
     chatInput:CaptureFocus()
 end
