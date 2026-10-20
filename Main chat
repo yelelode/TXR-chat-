@@ -615,72 +615,6 @@ local function createActionBtn(text, color, onClick)
 end
 
 -- =========================================================
--- 🧠 REAL-TIME AI ENGINE (DIRECT HTTP REQUEST + CHINDI PROMPT)
--- =========================================================
-local isAIThinking = false
-local function askAIRealtime(promptQuery)
-    if isAIThinking then return end
-    isAIThinking = true
-    remoteTypers["TXR // AI"] = tick() + 15
-
-    task.spawn(function()
-        local success, res = pcall(function()
-            local payload = HttpService:JSONEncode({
-                model = "deepseek/deepseek-chat",
-                messages = {
-                    {
-                        role = "system",
-                        content = "Aap ho TXR // AI, ek chilled-out, smart aur ultra-friendly gaming assistant jo TXR Global Chat me rehta hai. Tone ekdum bindass Indian Hinglish/chindi dost jaisi honi chahiye (jaise 'Haan bhai', 'Arre tension na le', 'Scene sort hai', 'Bata kya help chahiye'). Har answer bohot chota, funny, sharp aur direct point pe do (maximum 2 lines). Koi faltu formal English ya kitabi bhasha nahi."
-                    },
-                    { role = "user", content = promptQuery }
-                },
-                max_tokens = 150,
-                temperature = 0.8
-            })
-
-            return req({
-                Url = "https://openrouter.ai/api/v1/chat/completions",
-                Method = "POST",
-                Headers = {
-                    ["Authorization"] = "Bearer " .. OPENROUTER_API_KEY,
-                    ["Content-Type"] = "application/json",
-                    ["HTTP-Referer"] = "https://roblox.com",
-                    ["X-Title"] = "TXR Cyber Titan"
-                },
-                Body = payload
-            })
-        end)
-
-        isAIThinking = false
-        remoteTypers["TXR // AI"] = nil
-
-        if success and res and (res.StatusCode == 200 or res.Status == 200) then
-            local decOk, decData = pcall(function() return HttpService:JSONDecode(res.Body) end)
-            if decOk and decData and decData.choices and decData.choices[1] and decData.choices[1].message then
-                local aiAnswer = decData.choices[1].message.content:gsub("^%s+", ""):gsub("%s+$", "")
-                task.spawn(function()
-                    if req then
-                        local serverPayload = HttpService:JSONEncode({
-                            user = "System::TXR // AI",
-                            msg = "[GLB] " .. aiAnswer,
-                            jobId = game.JobId
-                        })
-                        req({
-                            Url = SERVER_URL .. "/send",
-                            Method = "POST",
-                            Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" },
-                            Body = serverPayload
-                        })
-                    end
-                end)
-            end
-        else
-            remoteTypers["TXR // AI"] = nil
-        end
-    end)
-end
-
--- =========================================================
 -- 💬 MICRO-PERFECT MESSAGE PIPELINE (GLOBAL SAVE + SERVER WIPE)
 -- =========================================================
 local function updateLiveCounter(username, dispName)
@@ -944,6 +878,84 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
 end
 
 -- =========================================================
+-- 🧠 REAL-TIME AI ENGINE (DIRECT RESPONSE + BROADCAST)
+-- =========================================================
+local isAIThinking = false
+local function askAIRealtime(promptQuery)
+    if isAIThinking then return end
+    isAIThinking = true
+    remoteTypers["TXR // AI"] = tick() + 18
+
+    task.spawn(function()
+        local success, res = pcall(function()
+            local payload = HttpService:JSONEncode({
+                model = "google/gemma-4-26b-a4b-it:free",
+                messages = {
+                    {
+                        role = "system",
+                        content = "Aap ho TXR // AI, ek chilled-out, smart aur ultra-friendly gaming assistant jo TXR Global Chat me rehta hai. Tone ekdum bindass Indian Hinglish/chindi dost jaisi honi chahiye (jaise 'Haan bhai', 'Arre tension na le', 'Scene sort hai', 'Bata kya help chahiye'). Har answer bohot chota, funny, sharp aur direct point pe do (maximum 2 lines). Koi faltu formal English ya kitabi bhasha nahi."
+                    },
+                    { role = "user", content = promptQuery }
+                },
+                max_tokens = 150,
+                temperature = 0.8
+            })
+
+            return req({
+                Url = "https://openrouter.ai/api/v1/chat/completions",
+                Method = "POST",
+                Headers = {
+                    ["Authorization"] = "Bearer " .. OPENROUTER_API_KEY,
+                    ["Content-Type"] = "application/json",
+                    ["HTTP-Referer"] = "https://roblox.com",
+                    ["X-Title"] = "TXR Cyber Titan"
+                },
+                Body = payload
+            })
+        end)
+
+        isAIThinking = false
+        remoteTypers["TXR // AI"] = nil
+
+        local responseText = nil
+        if success and res then
+            local rawBody = res.Body or res.body
+            local decOk, decData = pcall(function() return HttpService:JSONDecode(rawBody) end)
+            if decOk and decData and decData.choices and decData.choices[1] and decData.choices[1].message then
+                responseText = decData.choices[1].message.content
+            end
+        end
+
+        if responseText and responseText ~= "" then
+            local aiAnswer = responseText:gsub("^%s+", ""):gsub("%s+$", "")
+            -- Direct instant display locally
+            addMessageToFeed("System::TXR // AI", aiAnswer, nil, false, game.JobId, chatMode)
+
+            -- Broadcast to global network
+            task.spawn(function()
+                if req then
+                    local serverPayload = HttpService:JSONEncode({
+                        user = "System::TXR // AI",
+                        msg = "[GLB] " .. aiAnswer,
+                        jobId = game.JobId
+                    })
+                    pcall(function()
+                        req({
+                            Url = SERVER_URL .. "/send",
+                            Method = "POST",
+                            Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" },
+                            Body = serverPayload
+                        })
+                    end)
+                end
+            end)
+        else
+            addMessageToFeed("System::TXR // AI", "Arre bhai network thoda slow hai, dobara try maar!", nil, false, game.JobId, chatMode)
+        end
+    end)
+end
+
+-- =========================================================
 -- ✨ COMPACT LIVE "SOMEONE IS TYPING..." WAVE PILL
 -- =========================================================
 local liveTypingPill = mk("Frame", mainFrame, { AutomaticSize = Enum.AutomaticSize.X, Size = UDim2.fromOffset(0, 22), Position = UDim2.new(0, 14, 1, -82), BackgroundColor3 = rgb(11, 16, 26), BackgroundTransparency = 0.12, Visible = false, ZIndex = 24, Corner = UDim.new(1, 0), Stroke = { Color = Colors.PrimaryDark, Thickness = 1, Transparency = 0.45 } })
@@ -958,7 +970,7 @@ local ltpLabel = mk("TextLabel", liveTypingPill, { AutomaticSize = Enum.Automati
 crispText(ltpLabel, 0.5)
 
 -- =========================================================
--- ⚡ ZERO-BOX SMART AUTO-COMPLETE CHIP BAR
+-- ⚡ ZERO-BOX SMART AUTO-COMPLETE CHIP BAR (SINGLE @AI FIX)
 -- =========================================================
 local autoCompleteBar = mk("Frame", mainFrame, { Size = UDim2.new(1, -28, 0, 30), Position = UDim2.new(0, 14, 1, -88), BackgroundColor3 = rgb(11, 15, 25), BackgroundTransparency = 0.06, Visible = false, ZIndex = 28, Corner = UDim.new(0, 10), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.1, Transparency = 0.35 } })
 local acScale = mk("UIScale", autoCompleteBar)
@@ -1000,6 +1012,8 @@ local function refreshAutoComplete(rawText)
 
         local function considerActiveUser(uName, dName)
             if uName:lower() == lp.Name:lower() or seen[uName:lower()] then return end
+            -- Prevent System/Bot cards from duplicating in player mention list
+            if uName:lower() == "system" or dName:lower():find("ai") then return end
             if q == "" or uName:lower():find(q, 1, true) or dName:lower():find(q, 1, true) then
                 seen[uName:lower()] = true
                 table.insert(suggestions, {
