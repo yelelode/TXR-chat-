@@ -12,7 +12,7 @@ pcall(function()
 end)
 
 -- =========================================================
--- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V30.0 POLISHED PRO) 👑
+-- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V30.0 ULTIMATE PRO) 👑
 -- =========================================================
 local currentExecutionID = tick()
 _G.TXR_ChatInstanceID = currentExecutionID
@@ -85,7 +85,7 @@ local Themes = {
 local currentThemeIdx = 1
 
 local Colors = {
-    Background = rgb(9, 13, 20), Surface = rgb(16, 22, 34), SurfaceSelf = rgb(15, 29, 44),
+    Background = rgb(9, 13, 20), Surface = rgb(16, 22, 34), SurfaceSelf = rgb(15, 31, 48),
     SurfaceAI = rgb(20, 24, 46), SurfaceBroadcast = rgb(36, 27, 13), SurfaceHover = rgb(26, 36, 52), ActiveTint = Themes[1].ActiveTint,
     Primary = Themes[1].Primary, PrimaryDark = Themes[1].PrimaryDark, Danger = rgb(255, 70, 95),
     Warning = rgb(255, 180, 40), Purple = Themes[1].Accent, Text = rgb(240, 246, 255),
@@ -228,16 +228,16 @@ end
 -- 🏗️ ROOT GUI, MAIN ACRYLIC FRAME & AMBIENT AURA
 -- =========================================================
 local gui = mk("ScreenGui", targetGuiParent, { Name = "TXR_OnyxChat_" .. tostring(math.random(100000, 999999)), ResetOnSpawn = false, ZIndexBehavior = Enum.ZIndexBehavior.Sibling })
-local shadow = mk("ImageLabel", gui, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.4, 0.5), Size = UDim2.new(0, 500, 0, 414), BackgroundTransparency = 1, Image = "rbxassetid://1316045217", ImageColor3 = Color3.new(0, 0, 0), ImageTransparency = 0.25, ZIndex = 1 })
-local aura = mk("ImageLabel", gui, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.4, 0.5), Size = UDim2.new(0, 476, 0, 390), BackgroundTransparency = 1, Image = "rbxassetid://1316045217", ImageColor3 = Colors.Primary, ImageTransparency = 0.68, ZIndex = 2 })
+local shadow = mk("ImageLabel", gui, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.4, 0.5), Size = UDim2.new(0, 504, 0, 418), BackgroundTransparency = 1, Image = "rbxassetid://1316045217", ImageColor3 = Color3.new(0, 0, 0), ImageTransparency = 0.22, ZIndex = 1 })
+local aura = mk("ImageLabel", gui, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.4, 0.5), Size = UDim2.new(0, 480, 0, 394), BackgroundTransparency = 1, Image = "rbxassetid://1316045217", ImageColor3 = Colors.Primary, ImageTransparency = 0.65, ZIndex = 2 })
 local auraScale, shadowScale = mk("UIScale", aura), mk("UIScale", shadow)
 
 local mainFrame = mk("Frame", gui, {
-    AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.4, 0.5), Size = UDim2.new(0, 456, 0, 370),
-    BackgroundColor3 = Colors.Background, BackgroundTransparency = 0.08, ClipsDescendants = true, Active = true, ZIndex = 5,
+    AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.4, 0.5), Size = UDim2.new(0, 460, 0, 374),
+    BackgroundColor3 = Colors.Background, BackgroundTransparency = 0.06, ClipsDescendants = true, Active = true, ZIndex = 5,
     Corner = UDim.new(0, 16)
 })
-local mainStroke = mk("UIStroke", mainFrame, { Thickness = 1.4, Transparency = 0.30, Color = Colors.Primary })
+local mainStroke = mk("UIStroke", mainFrame, { Thickness = 1.4, Transparency = 0.25, Color = Colors.Primary })
 local strokeGrad = mk("UIGradient", mainStroke, { Color = ColorSequence.new({ csk(0, Colors.Primary), csk(0.5, Colors.Purple), csk(1, Colors.Primary) }) })
 local mainScale = mk("UIScale", mainFrame)
 
@@ -245,9 +245,9 @@ mainFrame:GetPropertyChangedSignal("Position"):Connect(function()
     aura.Position = mainFrame.Position; shadow.Position = mainFrame.Position
 end)
 
-mk("UIGradient", mainFrame, { Color = ColorSequence.new({ csk(0, rgb(17, 23, 35)), csk(0.5, rgb(12, 16, 25)), csk(1, rgb(9, 12, 19)) }), Rotation = 35 })
-local glassSheen = mk("Frame", mainFrame, { Size = UDim2.new(1, 0, 0, 86), BackgroundTransparency = 0.94, BackgroundColor3 = rgb(255, 255, 255), BorderSizePixel = 0, ZIndex = 6 })
-mk("UIGradient", glassSheen, { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.40), NumberSequenceKeypoint.new(1, 1) }), Rotation = 90 })
+mk("UIGradient", mainFrame, { Color = ColorSequence.new({ csk(0, rgb(18, 24, 37)), csk(0.5, rgb(12, 16, 26)), csk(1, rgb(8, 11, 18)) }), Rotation = 35 })
+local glassSheen = mk("Frame", mainFrame, { Size = UDim2.new(1, 0, 0, 92), BackgroundTransparency = 0.93, BackgroundColor3 = rgb(255, 255, 255), BorderSizePixel = 0, ZIndex = 6 })
+mk("UIGradient", glassSheen, { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.35), NumberSequenceKeypoint.new(1, 1) }), Rotation = 90 })
 
 -- =========================================================
 -- 🌧️ SUBTLE BACKGROUND MATRIX CODE RAIN
@@ -445,7 +445,7 @@ ghostBtn = createHeaderBtn("GST", function()
         mainStroke.Transparency = 0.30; mainStroke.Thickness = 1.4; badgeSelectorModal.BackgroundTransparency = 0.05
         for _, cardWrap in ipairs(messageFeed:GetChildren()) do
             local inner = cardWrap:FindFirstChild("CardSurface")
-            if inner then inner.BackgroundTransparency = 0.20 end
+            if inner then inner.BackgroundTransparency = 0.18 end
         end
     end
 end)
@@ -702,7 +702,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     if hasBroadcastMention then stripGrad.Color = ColorSequence.new(Colors.MentionGold, Colors.Primary)
     elseif isMentioned then stripGrad.Color = ColorSequence.new(Colors.MentionGold, rgb(255, 130, 20))
     elseif isSystemAI or privateUserTarget then stripGrad.Color = ColorSequence.new(Colors.Purple, Colors.Primary)
-    elseif isSelf then stripGrad.Color = ColorSequence.new(Colors.Primary, Colors.Accent or Colors.Purple)
+    elseif isSelf then stripGrad.Color = ColorSequence.new(Colors.Primary, Colors.Purple)
     else stripGrad.Color = ColorSequence.new(Colors.Primary, Colors.PrimaryDark) end
 
     local cStroke = mk("UIStroke", card, {
@@ -890,7 +890,7 @@ local ltpLabel = mk("TextLabel", liveTypingPill, { AutomaticSize = Enum.Automati
 crispText(ltpLabel, 0.5)
 
 -- =========================================================
--- ⚡ ZERO-BOX SMART AUTO-COMPLETE CHIP BAR (SINGLE @AI FIX)
+-- ⚡ ZERO-BOX SMART AUTO-COMPLETE CHIP BAR (MOBILE FOCUS FIX)
 -- =========================================================
 local autoCompleteBar = mk("Frame", mainFrame, { Size = UDim2.new(1, -28, 0, 30), Position = UDim2.new(0, 14, 1, -88), BackgroundColor3 = rgb(11, 15, 25), BackgroundTransparency = 0.06, Visible = false, ZIndex = 28, Corner = UDim.new(0, 10), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.1, Transparency = 0.35 } })
 local acScale = mk("UIScale", autoCompleteBar)
@@ -950,10 +950,19 @@ local function refreshAutoComplete(rawText)
             local chip = mk("TextButton", acScroll, { AutomaticSize = Enum.AutomaticSize.X, Size = UDim2.new(0, 0, 0, 22), BackgroundColor3 = Colors.ActiveTint, BackgroundTransparency = 0.20, Text = "  " .. s.text .. "  ", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 9.5, AutoButtonColor = false, ZIndex = 30, Corner = UDim.new(1, 0), Stroke = { Color = Colors.PrimaryDark, Thickness = 1, Transparency = 0.45 } })
             applySpringHover(chip)
             chip.MouseButton1Click:Connect(function()
-                if s.replaceMode == "full" or s.replaceMode == "dm" then chatInput.Text = s.val
-                elseif s.replaceMode == "mention" then chatInput.Text = string.gsub(chatInput.Text, "@[%w_]*$", s.val) end
-                chatInput.CursorPosition = #chatInput.Text + 1
-                chatInput:CaptureFocus(); autoCompleteBar.Visible = false
+                if s.replaceMode == "full" or s.replaceMode == "dm" then 
+                    chatInput.Text = s.val
+                elseif s.replaceMode == "mention" then 
+                    chatInput.Text = string.gsub(chatInput.Text, "@[%w_]*$", s.val) 
+                end
+                
+                autoCompleteBar.Visible = false
+                
+                -- Mobile-Safe Cursor & Re-Focus Fix (Prevents touch lockout)
+                task.defer(function()
+                    chatInput.CursorPosition = #chatInput.Text + 1
+                    chatInput:CaptureFocus()
+                end)
             end)
         end
         if not autoCompleteBar.Visible then
@@ -987,7 +996,7 @@ activateReplyBanner = function(targetDispName, snippetText)
     replyBanner.Visible = true; rbScale.Scale = 0.92
     TweenService:Create(rbScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
     messageFeed.Size = UDim2.new(1, -24, 1, -184)
-    chatInput:CaptureFocus()
+    task.defer(function() chatInput:CaptureFocus() end)
 end
 
 local inputContainer = mk("Frame", mainFrame, { Size = UDim2.new(1, -24, 0, 46), Position = UDim2.new(0, 12, 1, -54), BackgroundColor3 = rgb(13, 18, 29), BackgroundTransparency = 0.10, ZIndex = 12, Corner = UDim.new(1, 0) })
@@ -1002,6 +1011,15 @@ inputDiamondCore = mk("Frame", inputLeadOrb, { Size = UDim2.fromOffset(8, 8), An
 local dmBadge = mk("TextButton", inputContainer, { Size = UDim2.new(0, 0, 1, -14), AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 42, 0.5, 0), BackgroundColor3 = rgb(45, 20, 65), TextColor3 = Colors.Purple, Font = Enum.Font.GothamBlack, TextSize = 9.5, Visible = false, ZIndex = 14, Corner = UDim.new(1, 0) })
 chatInput = mk("TextBox", inputContainer, { Text = "", Size = UDim2.new(1, -162, 1, 0), Position = UDim2.new(0, 44, 0, 0), BackgroundTransparency = 1, PlaceholderText = "Message... (@all for broadcast alert)", PlaceholderColor3 = Colors.SubText, TextColor3 = Colors.Text, Font = Enum.Font.GothamMedium, TextSize = 11.5, ClearTextOnFocus = false, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 13 })
 crispText(chatInput, 0.38)
+
+-- Input Touch Reliability: Clicking input directly always gives clear cursor
+chatInput.InputBegan:Connect(function(inp)
+    if inp.UserInputType == Enum.UserInputType.MouseButton1 or inp.UserInputType == Enum.UserInputType.Touch then
+        task.defer(function()
+            chatInput:CaptureFocus()
+        end)
+    end
+end)
 
 local lastTypingBroadcast = 0
 local function broadcastTypingSignal()
@@ -1041,7 +1059,7 @@ chatInput.Focused:Connect(function()
 end)
 
 chatInput.FocusLost:Connect(function()
-    task.delay(0.15, function() autoCompleteBar.Visible = false end)
+    task.delay(0.20, function() autoCompleteBar.Visible = false end)
     TweenService:Create(inputStroke, TweenInfo.new(0.25), {Transparency = 0.45, Thickness = 1.2}):Play()
     TweenService:Create(iloStroke, TweenInfo.new(0.25), {Color = Colors.PrimaryDark, Transparency = 0.45}):Play()
 end)
@@ -1098,8 +1116,10 @@ local function loadEmojiCategory(catIdx)
                 local btn = mk("TextButton", emojiScroll, { Text = em, Font = Enum.Font.SourceSans, TextSize = 22, BackgroundColor3 = Colors.Surface, BackgroundTransparency = 0.55, AutoButtonColor = false, ZIndex = 62, Corner = UDim.new(0, 6) })
                 btn.MouseButton1Click:Connect(function()
                     chatInput.Text = chatInput.Text .. em
-                    chatInput.CursorPosition = #chatInput.Text + 1
-                    chatInput:CaptureFocus()
+                    task.defer(function()
+                        chatInput.CursorPosition = #chatInput.Text + 1
+                        chatInput:CaptureFocus()
+                    end)
                 end)
             end
         end
