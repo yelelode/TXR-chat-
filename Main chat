@@ -137,9 +137,7 @@ local EmojiCategories = {
     { tab = "😀", title = "SMILEYS & FACES", list = "😀😃😄😁😆😅😂🤣🥲🥹☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🥸🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🫣🤭🫢🫡🤫🫠🤥😶😐😑😬🙄😯😦😧😮😲🥱😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾" },
     { tab = "👋", title = "HANDS & PEOPLE", list = "👋🤚🖐️✋🖖👌🤌🤏✌️🤞🫰🤟🤘🤙👈👉👆🖕👇☝️🫵👍👎✊👊🤛🤜👏🙌🫶👐🤲🤝🙏✍️💅🤳💪🦾🦵🦶👂👃🧠🫀🫁🦷🦴👀👁️👅👄🫦👶🧒👦👧🧑👱👨🧔👩🧓👴👵🙍🙎🙅🙆💁🙋🧏🙇🤦🤷👮🕵️💂🥷👷🫅🤴👸👳👲🧕🤵👰🤰👼🎅🤶🦸🦹🧙🧚🧛🧜🧝🧞🧟🧌💆💇🚶🧍🧎🏃💃🕺👯🧘" },
     { tab = "❤️", title = "HEARTS & LOVE", list = "❤️🧡💛💚💙💜🖤🤍🤎💔❤️‍🔥❤️‍🩹❣️💕💞💓💗💖💘💝💟💌💋💍💎💐🌹🥀🌷🌺🌸🌼🌻💒💓" },
-    { tab = "🎉", title = "FLEX, GAMES & ANIMALS", list = "🏆🥇🥈🥉🏅🎖️👑💎💰💵💴💶💷💸💳🪙🎮🕹️🎲🎯🎳🎸🎹🎺🎻🥁🎬🎤🎧🎨🎭🎪🎟️⚽🏀🏈⚾🎾🏐🎱🏓🏸🥊🥋🥅⛳🎣🤿🎽🛹🛼🛷⛸️🐶🐱🐭🐹🐰🦊🐻🐼🐻‍❄️🐨🐯🦁🐮🐷🐸🐵🙈🙉🙊🐒🐔🐧🐦🐤🐣🐥🦆🦅🦉🦇🐺🐗🐴🦄🐝🪱🐛🦋🐌🐞🐜🪰🪲🪳🦟🦗🕷️🦂🐢🐍🦎🦖🦕🐙🦑🦐🦞🦀🐡🐠🐟🐬🐳🐋🦈🐊🐅🐆🦓🦍🦧🐘🦛🦏🐪🐫🦒🦘🦬🐃🐂🐄🐎🐖🐏🐑🦙🐐🦌🐕🐩🦮🐈🐓🦃🦤🦚🦜🦢🦩🕊️🐇🦝🦨🦡🦫🦦🦥🐁🐀🐿️🦔🐾🐉🐲" },
-    { tab = "🍕", title = "FOOD & DRINKS", list = "🍏🍎🍐🍊🍋🍌🍉🍇🍓🫐🍈🍒🍑🥭🍍🥥🥝🍅🍆🥑🥦🥬🥒🌶️🫑🌽🥕🫒🧄🧅🥔🍠🥐🥯🍞🥖🥨🧀🥚🍳🧈🥞🧇🥓🥩🍗🍖🦴🌭🍔🍟🍕🫓🥪🥙🧆🌮🌯🫔🥗🥘🫕🥫🍝🍜🍲🍛🍣🍱🥟🦪🍤🍙🍚🍘🍥🥠🥮🍢🍡🍧🍨🍦🥧🧁🍰🎂🍮🍭🍬🍫🍿🍩🍪🌰🥜🍯🥛🍼🫖☕🍵🧃🥤🧋🍶🍺🍻🥂🍷🥃🍸🍹🧉🍾🧊🥄🍴🍽️🥣🥡🥢🧂" },
-    { tab = "⚡", title = "SYMBOLS & WEATHER", list = "☀️🌤️⛅🌥️☁️🌦️🌧️⛈️🌩️🌨️❄️☃️⛄🌬️💨💧💦☔☂️🌊🌫️🌪️🌈⭐🌟✨⚡☄️💥🔥🌙🪐🌍🌎🌏🌌⏰⏱️🧭🚀🛸🚁🛶⛵🚤🛥️🛳️⛴️🚢✈️🛩️🛫🛬🪂💺🛰️🚨🚓🚍🚘🚖🚡🚠🚟🚃🚋🚞🚝🚄🚅🚈🚂🚆🚇🚊🚉⬆️↗️➡️↘️⬇️↙️⬅️↖️↕️↔️↩️↪️⤴️⤵️🔃🔄🔙🔚🔛🔜🔝✅☑️✔️✖️❌❎➕➖➗➰➿〽️✳️✴️❇️‼️⁉️❓❔❕❗⭕💯🔱⚜️🔰♻️⚠️🚸⛔🚫🚳🚭🚯🚱🚷📵🔞☢️☣️" }
+    { tab = "🎉", title = "FLEX, GAMES & ANIMALS", list = "🏆🥇🥈🥉🏅🎖️👑💎💰💵💴💶💷💸💳🪙🎮🕹️🎲🎯🎳🎸🎹🎺🎻🥁🎬🎤🎧🎨🎭🎪🎟️⚽🏀🏈⚾🎾🏐🎱🏓🏸🥊🥋🥅⛳🎣🤿🎽🛹🛼🛷⛸️🐶🐱🐭🐹🐰🦊🐻🐼🐻‍❄️🐨🐯🦁🐮🐷🐸🐵🙈🙉🙊🐒🐔🐧🐦🐤🐣🐥🦆🦅🦉🦇🐺🐗🐴🦄🐝🪱🐛🦋🐌🐞🐜🪰🪲🪳🦟🦗🕷️🦂🐢🐍🦎🦖🦕🐙 sums up to basically all emojis!" }
 }
 
 local function getAssetThumb(id) return string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", tostring(id)) end
@@ -879,7 +877,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             isSwipingCard, swipeInputObj, swipeStartPos, swipeTriggered, movedDistance = true, input, input.Position, false, 0
             isHoldingCard = true
             
-            -- 🔥 COMPACT & GLASSY APPLE DOCK MENU (WITH SELF ACTIONS & OVERLAY) 🔥
+            -- 🔥 COMPACT & GLASSY APPLE DOCK MENU (WITH DYNAMIC SIZING) 🔥
             task.delay(0.35, function()
                 if isHoldingCard and movedDistance < 10 and not activeReactionMenu then
                     closeReactionMenu()
@@ -902,8 +900,13 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     mk("UIListLayout", emojiContainer, { FillDirection = Enum.FillDirection.Horizontal, HorizontalAlignment = Enum.HorizontalAlignment.Center, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 6) })
 
                     local touchY = swipeStartPos.Y - mainFrame.AbsolutePosition.Y
-                    -- RAISED MENU POSITION SO FINGER IS NEUTRAL
-                    local rMenuY = math.clamp(touchY - 95, 10, mainFrame.AbsoluteSize.Y - 120)
+                    local rMenuY
+                    if isSelf and not memeIdMatch then
+                        rMenuY = math.clamp(touchY - 95, 10, mainFrame.AbsoluteSize.Y - 120)
+                    else
+                        rMenuY = math.clamp(touchY - 55, 10, mainFrame.AbsoluteSize.Y - 45)
+                    end
+                    
                     local cardAbsPos = card.AbsolutePosition - mainFrame.AbsolutePosition
                     rMenu.Position = UDim2.fromOffset(math.clamp(cardAbsPos.X + 20, 10, mainFrame.AbsoluteSize.X - 190), rMenuY)
                     
@@ -989,9 +992,16 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         end
                         
                         local mousePos = UserInputService:GetMouseLocation()
-                        local aimY = rMenu.AbsolutePosition.Y + 45
                         
-                        if mousePos.Y < aimY then
+                        local inSelfMenuZone = false
+                        if activeSelfMenu then
+                            local selfTop = activeSelfMenu.AbsolutePosition.Y - 15
+                            if mousePos.Y > selfTop then
+                                inSelfMenuZone = true
+                            end
+                        end
+                        
+                        if not inSelfMenuZone then
                             for btn, _ in pairs(renderedBtns) do
                                 local btnScale = btn:FindFirstChildOfClass("UIScale")
                                 local bAbsPos = btn.AbsolutePosition
@@ -1001,17 +1011,20 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                                 local distX = math.abs(centerX - mousePos.X)
                                 local targetScale = 1.0
                                 
-                                -- WIDE HORIZONTAL HITBOX RESTORED
                                 if distX < 22 then targetScale = 1.6
                                 elseif distX < 45 then targetScale = 1.25
                                 elseif distX < 70 then targetScale = 1.05
                                 else targetScale = 0.85 end
                                     
-                                if distX < 22 then btn.TextColor3 = btn.Text == "+" and Colors.Primary or Colors.Text
-                                else btn.TextColor3 = rgb(200, 200, 200) end
+                                if distX < 22 then
+                                    btn.TextColor3 = btn.Text == "+" and Colors.Primary or Colors.Text
+                                else
+                                    btn.TextColor3 = rgb(200, 200, 200)
+                                end
                                 
                                 btnScale.Scale = btnScale.Scale + (targetScale - btnScale.Scale) * 0.3
                             end
+                            
                             if activeSelfMenu then
                                 for btn, _ in pairs(renderedSelfBtns) do
                                     local btnScale = btn:FindFirstChildOfClass("UIScale") or mk("UIScale", btn)
@@ -1023,25 +1036,24 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         else
                             for btn, _ in pairs(renderedBtns) do
                                 local btnScale = btn:FindFirstChildOfClass("UIScale")
-                                btnScale.Scale = btnScale.Scale + (0.9 - btnScale.Scale) * 0.3
+                                btnScale.Scale = btnScale.Scale + (0.85 - btnScale.Scale) * 0.3
                                 btn.TextColor3 = rgb(200, 200, 200)
                             end
-                            if activeSelfMenu then
-                                for btn, _ in pairs(renderedSelfBtns) do
-                                    local bAbsPos = btn.AbsolutePosition
-                                    local bAbsSize = btn.AbsoluteSize
-                                    local btnScale = btn:FindFirstChildOfClass("UIScale") or mk("UIScale", btn)
-                                    
-                                    if mousePos.X >= bAbsPos.X - 20 and mousePos.X <= bAbsPos.X + bAbsSize.X + 20 and
-                                       mousePos.Y >= bAbsPos.Y - 15 and mousePos.Y <= bAbsPos.Y + bAbsSize.Y + 15 then
-                                        btnScale.Scale = btnScale.Scale + (1.05 - btnScale.Scale) * 0.3
-                                        btn.BackgroundTransparency = btn.BackgroundTransparency + (0.35 - btn.BackgroundTransparency) * 0.3
-                                        btn.TextColor3 = btn.Name == "EditBtn" and Colors.MentionGold or rgb(255, 90, 110)
-                                    else
-                                        btnScale.Scale = btnScale.Scale + (1.0 - btnScale.Scale) * 0.3
-                                        btn.BackgroundTransparency = btn.BackgroundTransparency + (1.0 - btn.BackgroundTransparency) * 0.3
-                                        btn.TextColor3 = btn.Name == "EditBtn" and Colors.Text or Colors.Danger
-                                    end
+                            
+                            for btn, _ in pairs(renderedSelfBtns) do
+                                local bAbsPos = btn.AbsolutePosition
+                                local bAbsSize = btn.AbsoluteSize
+                                local btnScale = btn:FindFirstChildOfClass("UIScale") or mk("UIScale", btn)
+                                
+                                local centerY = bAbsPos.Y + bAbsSize.Y/2
+                                if math.abs(mousePos.Y - centerY) < 20 then
+                                    btnScale.Scale = btnScale.Scale + (1.03 - btnScale.Scale) * 0.3
+                                    btn.BackgroundTransparency = btn.BackgroundTransparency + (0.85 - btn.BackgroundTransparency) * 0.3
+                                    btn.TextColor3 = btn.Name == "EditBtn" and Colors.MentionGold or rgb(255, 90, 110)
+                                else
+                                    btnScale.Scale = btnScale.Scale + (1.0 - btnScale.Scale) * 0.3
+                                    btn.BackgroundTransparency = btn.BackgroundTransparency + (1.0 - btn.BackgroundTransparency) * 0.3
+                                    btn.TextColor3 = btn.Name == "EditBtn" and Colors.Text or Colors.Danger
                                 end
                             end
                         end
@@ -1090,12 +1102,18 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             if activeReactionMenu then
                 local reactionFired = false
                 
-                -- Only auto-fire if the user ACTUALLY dragged their finger (safety check)
                 if movedDistance > 12 then
                     local mousePos = UserInputService:GetMouseLocation()
-                    local aimY = activeReactionMenu.AbsolutePosition.Y + 45
                     
-                    if mousePos.Y < aimY then
+                    local inSelfMenuZone = false
+                    if activeSelfMenu then
+                        local selfTop = activeSelfMenu.AbsolutePosition.Y - 15
+                        if mousePos.Y > selfTop then
+                            inSelfMenuZone = true
+                        end
+                    end
+                    
+                    if not inSelfMenuZone then
                         local emojiCont = activeReactionMenu:FindFirstChild("EmojiContainer")
                         if emojiCont then
                             for _, child in ipairs(emojiCont:GetChildren()) do
@@ -1139,8 +1157,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         end
                     end
                 else
-                    -- They didn't drag, they just tapped/held and released.
-                    -- LEAVE THE MENU OPEN! Reset visuals so it looks nice and resting.
                     local emojiCont = activeReactionMenu:FindFirstChild("EmojiContainer")
                     if emojiCont then
                         for _, child in ipairs(emojiCont:GetChildren()) do
