@@ -40,7 +40,7 @@ local readF = readfile or function() return nil end
 local isF = isfile or function() return false end
 
 -- 🔑 Direct OpenRouter API Key
-local OPENROUTER_API_KEY = "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"
+local OPENROUTER_API_KEY = "Sk-or-v1-15ee4fd12205114a2fd5cb1e3d1793b4526ddb7efd8f0fb3960c5079b3ea948f"
 
 local targetGuiParent
 pcall(function() targetGuiParent = game:GetService("CoreGui") end)
@@ -621,34 +621,46 @@ local isAIThinking = false
 local function askAIRealtime(promptQuery)
     if isAIThinking then return end
     isAIThinking = true
-    remoteTypers["TXR // AI"] = tick() + 18
+    remoteTypers["TXR // AI"] = tick() + 25
 
     task.spawn(function()
-        local success, res = pcall(function()
-            local payload = HttpService:JSONEncode({
-                model = "google/gemma-2-9b-it:free",
-                messages = {
-                    {
-                        role = "system",
-                        content = "Aap ho TXR // AI, ek chilled-out, smart aur ultra-friendly gaming assistant jo TXR Global Chat me rehta hai. Tone ekdum bindass Indian Hinglish/chindi dost jaisi honi chahiye (jaise 'Haan bhai', 'Arre tension na le', 'Scene sort hai', 'Bata kya help chahiye'). Har answer bohot chota, funny, sharp aur direct point pe do (maximum 2 lines). Koi faltu formal English ya kitabi bhasha nahi."
-                    },
-                    { role = "user", content = promptQuery }
+        local payload = HttpService:JSONEncode({
+            model = "google/gemma-2-9b-it:free",
+            models = {
+                "google/gemma-2-9b-it:free",
+                "meta-llama/llama-3.3-70b-instruct:free",
+                "mistralai/mistral-7b-instruct:free"
+            },
+            messages = {
+                {
+                    role = "system",
+                    content = "Aap ho TXR // AI, ek chilled-out, smart aur ultra-friendly gaming assistant jo TXR Global Chat me rehta hai. Tone ekdum bindass Indian Hinglish/chindi dost jaisi honi chahiye (jaise 'Haan bhai', 'Arre tension na le', 'Scene sort hai', 'Bata kya help chahiye'). Har answer bohot chota, funny, sharp aur direct point pe do (maximum 2 lines). Koi faltu formal English ya kitabi bhasha nahi."
                 },
-                max_tokens = 150,
-                temperature = 0.8
-            })
+                { role = "user", content = promptQuery }
+            },
+            max_tokens = 150,
+            temperature = 0.8
+        })
 
-            return req({
-                Url = "https://openrouter.ai/api/v1/chat/completions",
-                Method = "POST",
-                Headers = {
-                    ["Authorization"] = "Bearer " .. OPENROUTER_API_KEY,
-                    ["Content-Type"] = "application/json",
-                    ["HTTP-Referer"] = "https://roblox.com",
-                    ["X-Title"] = "TXR Cyber Titan"
-                },
-                Body = payload
-            })
+        local headersTable = {
+            ["Authorization"] = "Bearer " .. OPENROUTER_API_KEY,
+            ["Content-Type"] = "application/json",
+            ["HTTP-Referer"] = "https://roblox.com",
+            ["X-Title"] = "TXR Cyber Titan"
+        }
+
+        local success, res = pcall(function()
+            if syn and syn.request then
+                return syn.request({ Url = "https://openrouter.ai/api/v1/chat/completions", Method = "POST", Headers = headersTable, Body = payload })
+            elseif http_request then
+                return http_request({ Url = "https://openrouter.ai/api/v1/chat/completions", Method = "POST", Headers = headersTable, Body = payload })
+            elseif request then
+                return request({ Url = "https://openrouter.ai/api/v1/chat/completions", Method = "POST", Headers = headersTable, Body = payload })
+            elseif http and http.request then
+                return http.request({ Url = "https://openrouter.ai/api/v1/chat/completions", Method = "POST", Headers = headersTable, Body = payload })
+            else
+                error("No compatible HTTP request executor function found!")
+            end
         end)
 
         isAIThinking = false
@@ -659,18 +671,22 @@ local function askAIRealtime(promptQuery)
 
         if success and res then
             local rawBody = res.Body or res.body or (type(res) == "string" and res)
+            local statusCode = res.StatusCode or res.status_code or res.Status or 200
+
             local decOk, decData = pcall(function() return HttpService:JSONDecode(rawBody) end)
-            if decOk and decData then
+            if decOk and type(decData) == "table" then
                 if decData.choices and decData.choices[1] and decData.choices[1].message then
                     responseText = decData.choices[1].message.content
                 elseif decData.error and decData.error.message then
-                    errorMessage = decData.error.message
+                    errorMessage = "OpenRouter: " .. tostring(decData.error.message)
+                else
+                    errorMessage = "HTTP " .. tostring(statusCode) .. ": " .. tostring(rawBody):sub(1, 100)
                 end
             else
-                errorMessage = "Status: " .. tostring(res.StatusCode or res.Status or res.status_code or "Unknown")
+                errorMessage = "HTTP " .. tostring(statusCode) .. " (Raw: " .. tostring(rawBody):sub(1, 80) .. ")"
             end
         else
-            errorMessage = tostring(res or "HTTP Request Blocked by Executor")
+            errorMessage = tostring(res or "Executor blocked HTTP")
         end
 
         if responseText and responseText ~= "" then
