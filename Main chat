@@ -39,13 +39,8 @@ local writeF = writefile or function() end
 local readF = readfile or function() return nil end
 local isF = isfile or function() return false end
 
--- 🔑 Direct String Splitted OpenRouter Key (GitHub scanner bypass + zero execution decode errors)
-local k1 = "sk-or-v1"
-local k2 = "-15ee4fd12205114a"
-local k3 = "2fddcb1e3d1793b4"
-local k4 = "526ddb7efd8f0fb3"
-local k5 = "960c5079b3ea948f"
-local OPENROUTER_API_KEY = k1 .. k2 .. k3 .. k4 .. k5
+-- 🔑 Direct OpenRouter API Key (Raw & Unmodified)
+local OPENROUTER_API_KEY = "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"
 
 local targetGuiParent
 pcall(function() targetGuiParent = game:GetService("CoreGui") end)
@@ -659,7 +654,7 @@ local function askAIRealtime(promptQuery)
         isAIThinking = false
         remoteTypers["TXR // AI"] = nil
 
-        if success and res and res.StatusCode == 200 then
+        if success and res and (res.StatusCode == 200 or res.Status == 200) then
             local decOk, decData = pcall(function() return HttpService:JSONDecode(res.Body) end)
             if decOk and decData and decData.choices and decData.choices[1] and decData.choices[1].message then
                 local aiAnswer = decData.choices[1].message.content:gsub("^%s+", ""):gsub("%s+$", "")
@@ -1611,7 +1606,7 @@ task.spawn(function()
                 })
             end)
 
-            if success and res and res.StatusCode == 200 then
+            if success and res and (res.StatusCode == 200 or res.Status == 200) then
                 local decodeSuccess, data = pcall(function() return HttpService:JSONDecode(res.Body) end)
 
                 if decodeSuccess and type(data) == "table" then
