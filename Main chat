@@ -406,30 +406,30 @@ local profileOverlay = mk("TextButton", mainFrame, { Name = "ProfileOverlay", Si
 local profileCard = mk("Frame", mainFrame, { Size = UDim2.fromOffset(280, 330), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), BackgroundColor3 = rgb(17, 20, 29), BackgroundTransparency = 0, ZIndex = 300, Visible = false, Corner = UDim.new(0, 14), Stroke = {Color = Colors.PrimaryDark, Thickness = 1.5, Transparency = 0.4} })
 local pcScale = mk("UIScale", profileCard, {Scale = 0})
 
-local pBanner = mk("Frame", profileCard, {Size = UDim2.new(1, 0, 0, 75), BackgroundColor3 = Colors.Primary, ZIndex = 301, Corner = UDim.new(0, 14)})
+local pBanner = mk("Frame", profileCard, {Name = "Banner", Size = UDim2.new(1, 0, 0, 75), BackgroundColor3 = Colors.Primary, ZIndex = 301, Corner = UDim.new(0, 14)})
 local pBannerGrad = mk("UIGradient", pBanner, {Color = ColorSequence.new(Colors.Primary, Colors.Purple), Rotation = 45})
 local pBannerCover = mk("Frame", pBanner, {Size = UDim2.new(1, 0, 0, 14), AnchorPoint=Vector2.new(0,1), Position=UDim2.new(0,0,1,0), BackgroundColor3 = rgb(17, 20, 29), BorderSizePixel=0, ZIndex=302})
 
-local pAvatarRing = mk("Frame", profileCard, {Size = UDim2.fromOffset(86, 86), Position = UDim2.fromOffset(18, 32), BackgroundColor3 = rgb(17, 20, 29), ZIndex = 303, Corner = UDim.new(1, 0)})
-local pAvatar = mk("ImageLabel", pAvatarRing, {Size = UDim2.fromScale(0.86, 0.86), AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.fromScale(0.5,0.5), BackgroundColor3 = rgb(25, 30, 45), ZIndex=304, Corner = UDim.new(1,0)})
-local pStatus = mk("Frame", pAvatarRing, {Size = UDim2.fromOffset(22, 22), AnchorPoint=Vector2.new(1,1), Position=UDim2.new(1,-4,1,-4), BackgroundColor3 = rgb(17, 20, 29), ZIndex=305, Corner=UDim.new(1,0)})
-local pStatusDot = mk("Frame", pStatus, {Size=UDim2.fromScale(0.65, 0.65), AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.fromScale(0.5,0.5), BackgroundColor3 = Colors.OnlineGreen, ZIndex=306, Corner=UDim.new(1,0)})
+local pAvatarRing = mk("Frame", profileCard, {Name = "AvatarRing", Size = UDim2.fromOffset(86, 86), Position = UDim2.fromOffset(18, 32), BackgroundColor3 = rgb(17, 20, 29), ZIndex = 303, Corner = UDim.new(1, 0)})
+local pAvatar = mk("ImageLabel", pAvatarRing, {Name = "AvatarImg", Size = UDim2.fromScale(0.86, 0.86), AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.fromScale(0.5,0.5), BackgroundColor3 = rgb(25, 30, 45), ZIndex=304, Corner = UDim.new(1,0)})
+local pStatus = mk("Frame", pAvatarRing, {Name = "Status", Size = UDim2.fromOffset(22, 22), AnchorPoint=Vector2.new(1,1), Position=UDim2.new(1,-4,1,-4), BackgroundColor3 = rgb(17, 20, 29), ZIndex=305, Corner=UDim.new(1,0)})
+local pStatusDot = mk("Frame", pStatus, {Name = "StatusDot", Size=UDim2.fromScale(0.65, 0.65), AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.fromScale(0.5,0.5), BackgroundColor3 = Colors.OnlineGreen, ZIndex=306, Corner=UDim.new(1,0)})
 
-local pAiCore = mk("Frame", pAvatarRing, {Size = UDim2.fromScale(0.86, 0.86), AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.fromScale(0.5,0.5), BackgroundColor3 = rgb(14, 18, 30), ZIndex=304, Corner = UDim.new(1,0), Visible = false})
-local pAiRing = mk("Frame", pAiCore, {Size = UDim2.fromOffset(45, 45), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), BackgroundTransparency = 1, ZIndex = 305, Stroke = { Thickness = 2, Color = Colors.Purple, Transparency = 0.1 } })
-local pAiDiamond = mk("Frame", pAiCore, {Size = UDim2.fromOffset(20, 20), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Rotation = 45, BackgroundColor3 = Colors.Primary, ZIndex = 306, Corner = UDim.new(0, 4) })
+local pAiCore = mk("Frame", pAvatarRing, {Name = "AiCore", Size = UDim2.fromScale(0.86, 0.86), AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.fromScale(0.5,0.5), BackgroundColor3 = rgb(14, 18, 30), ZIndex=304, Corner = UDim.new(1,0), Visible = false})
+local pAiRing = mk("Frame", pAiCore, {Name = "AiRing", Size = UDim2.fromOffset(45, 45), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), BackgroundTransparency = 1, ZIndex = 305, Stroke = { Thickness = 2, Color = Colors.Purple, Transparency = 0.1 } })
+local pAiDiamond = mk("Frame", pAiCore, {Name = "AiDiamond", Size = UDim2.fromOffset(20, 20), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Rotation = 45, BackgroundColor3 = Colors.Primary, ZIndex = 306, Corner = UDim.new(0, 4) })
 
-local pDispName = mk("TextLabel", profileCard, {Size = UDim2.new(1, -40, 0, 26), Position = UDim2.fromOffset(22, 125), BackgroundTransparency = 1, Text = "Display Name", TextColor3 = Colors.Text, Font = Enum.Font.GothamBlack, TextSize = 22, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 302})
-local pUserTag = mk("TextLabel", profileCard, {Size = UDim2.new(1, -40, 0, 18), Position = UDim2.fromOffset(22, 150), BackgroundTransparency = 1, Text = "username", TextColor3 = Colors.SubText, Font = Enum.Font.GothamMedium, TextSize = 13, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 302})
+local pDispName = mk("TextLabel", profileCard, {Name = "DisplayName", Size = UDim2.new(1, -40, 0, 26), Position = UDim2.fromOffset(22, 125), BackgroundTransparency = 1, Text = "Display Name", TextColor3 = Colors.Text, Font = Enum.Font.GothamBlack, TextSize = 22, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 302})
+local pUserTag = mk("TextLabel", profileCard, {Name = "UserTag", Size = UDim2.new(1, -40, 0, 18), Position = UDim2.fromOffset(22, 150), BackgroundTransparency = 1, Text = "username", TextColor3 = Colors.SubText, Font = Enum.Font.GothamMedium, TextSize = 13, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 302})
 
 mk("Frame", profileCard, {Size=UDim2.new(1, -40, 0, 1), Position=UDim2.fromOffset(20, 180), BackgroundColor3=Colors.SubText, BackgroundTransparency=0.8, BorderSizePixel=0, ZIndex=302})
 
 mk("TextLabel", profileCard, {Size = UDim2.new(1, -40, 0, 16), Position = UDim2.fromOffset(22, 192), BackgroundTransparency = 1, Text = "ROLES & BADGES", TextColor3 = Colors.SubText, Font = Enum.Font.GothamBold, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 302})
 
-local pBadgeBox = mk("Frame", profileCard, {Size = UDim2.new(1, -40, 0, 26), Position = UDim2.fromOffset(22, 212), BackgroundTransparency = 1, ZIndex = 302})
+local pBadgeBox = mk("Frame", profileCard, {Name = "BadgeBox", Size = UDim2.new(1, -40, 0, 26), Position = UDim2.fromOffset(22, 212), BackgroundTransparency = 1, ZIndex = 302})
 mk("UIListLayout", pBadgeBox, {FillDirection=Enum.FillDirection.Horizontal, Padding=UDim.new(0,6)})
 
-local pDmBtn = mk("TextButton", profileCard, {Size = UDim2.new(1, -40, 0, 38), Position = UDim2.fromOffset(20, 270), BackgroundColor3 = Colors.Primary, Text = "Send Direct Message", TextColor3 = rgb(10,14,24), Font = Enum.Font.GothamBlack, TextSize = 12.5, ZIndex = 302, Corner = UDim.new(0, 8)})
+local pDmBtn = mk("TextButton", profileCard, {Name = "DmBtn", Size = UDim2.new(1, -40, 0, 38), Position = UDim2.fromOffset(20, 270), BackgroundColor3 = Colors.Primary, Text = "Send Direct Message", TextColor3 = rgb(10,14,24), Font = Enum.Font.GothamBlack, TextSize = 12.5, ZIndex = 302, Corner = UDim.new(0, 8)})
 applySpringHover(pDmBtn)
 
 local activeProfileUser = nil
@@ -725,7 +725,7 @@ end
 -- =========================================================
 local function updateLiveCounter(username, dispName)
     activeUsersTable[username:lower()] = { time = os.time(), disp = dispName or username, user = username }
-    local count, now = 0, os.time()
+    local count, now = os.time()
     for u, data in pairs(activeUsersTable) do
         local t = (type(data) == "table" and data.time) or data
         if now - t < 300 then count = count + 1 else activeUsersTable[u] = nil end
@@ -832,11 +832,11 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     local cardScale = mk("UIScale", card, { Scale = 0.96 })
     TweenService:Create(cardScale, TweenInfo.new(0.26, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
 
-    -- 🌟 PERFECT BOTTOM-RIGHT REACTION PILL (FIXED VISIBILITY & POSITION)
+    -- 🌟 PERFECT BOTTOM-RIGHT REACTION PILL (ZERO CRASH POSITIONING)
     local reactionPillContainer = mk("Frame", card, { 
         Size = UDim2.fromOffset(0, 24), 
-        AnchorPoint = Vector2.new(1, 1), 
-        Position = UDim2.new(1, -4, 1, 14), 
+        AnchorPoint = Vector2.new(1, 0.5), 
+        Position = UDim2.new(1, -12, 1, -2), 
         BackgroundColor3 = rgb(20, 25, 38), 
         BackgroundTransparency = 0.05, 
         AutomaticSize = Enum.AutomaticSize.X, 
@@ -1070,7 +1070,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
 
                     local touchY = swipeStartPos.Y - mainFrame.AbsolutePosition.Y
                     
-                    -- 🔥 SMART POSITIONING: IF SELF, OPEN HIGHER. IF OTHER, OPEN LOWER 🔥
                     local rMenuY
                     if isSelf and not memeIdMatch then
                         rMenuY = math.clamp(touchY - 95, 10, mainFrame.AbsoluteSize.Y - 120)
@@ -1157,7 +1156,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     dragHoverConn = RunService.RenderStepped:Connect(function()
                         if not activeReactionMenu or not isHoldingCard then dragHoverConn:Disconnect() return end
                         
-                        -- ABSOLUTE SCROLL FREEZE
                         if messageFeed then
                             if not reactionCanvasLockPos then reactionCanvasLockPos = messageFeed.CanvasPosition end
                             messageFeed.CanvasPosition = reactionCanvasLockPos
@@ -1274,7 +1272,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             if activeReactionMenu then
                 local reactionFired = false
                 
-                -- Only auto-fire if the user ACTUALLY dragged their finger (safety check)
                 if movedDistance > 12 then
                     local mousePos = UserInputService:GetMouseLocation()
                     
@@ -1330,8 +1327,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         end
                     end
                 else
-                    -- They didn't drag, they just tapped/held and released.
-                    -- LEAVE THE MENU OPEN! Reset visuals so it looks nice and resting.
                     local emojiCont = activeReactionMenu:FindFirstChild("EmojiContainer")
                     if emojiCont then
                         for _, child in ipairs(emojiCont:GetChildren()) do
