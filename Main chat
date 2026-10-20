@@ -137,7 +137,9 @@ local EmojiCategories = {
     { tab = "😀", title = "SMILEYS & FACES", list = "😀😃😄😁😆😅😂🤣🥲🥹☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🥸🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🫣🤭🫢🫡🤫🫠🤥😶😐😑😬🙄😯😦😧😮😲🥱😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾" },
     { tab = "👋", title = "HANDS & PEOPLE", list = "👋🤚🖐️✋🖖👌🤌🤏✌️🤞🫰🤟🤘🤙👈👉👆🖕👇☝️🫵👍👎✊👊🤛🤜👏🙌🫶👐🤲🤝🙏✍️💅🤳💪🦾🦵🦶👂👃🧠🫀🫁🦷🦴👀👁️👅👄🫦👶🧒👦👧🧑👱👨🧔👩🧓👴👵🙍🙎🙅🙆💁🙋🧏🙇🤦🤷👮🕵️💂🥷👷🫅🤴👸👳👲🧕🤵👰🤰👼🎅🤶🦸🦹🧙🧚🧛🧜🧝🧞🧟🧌💆💇🚶🧍🧎🏃💃🕺👯🧘" },
     { tab = "❤️", title = "HEARTS & LOVE", list = "❤️🧡💛💚💙💜🖤🤍🤎💔❤️‍🔥❤️‍🩹❣️💕💞💓💗💖💘💝💟💌💋💍💎💐🌹🥀🌷🌺🌸🌼🌻💒💓" },
-    { tab = "🎉", title = "FLEX, GAMES & ANIMALS", list = "🏆🥇🥈🥉🏅🎖️👑💎💰💵💴💶💷💸💳🪙🎮🕹️🎲🎯🎳🎸🎹🎺🎻🥁🎬🎤🎧🎨🎭🎪🎟️⚽🏀🏈⚾🎾🏐🎱🏓🏸🥊🥋🥅⛳🎣🤿🎽🛹🛼🛷⛸️🐶🐱🐭🐹🐰🦊🐻🐼🐻‍❄️🐨🐯🦁🐮🐷🐸🐵🙈🙉🙊🐒🐔🐧🐦🐤🐣🐥🦆🦅🦉🦇🐺🐗🐴🦄🐝🪱🐛🦋🐌🐞🐜🪰🪲🪳🦟🦗🕷️🦂🐢🐍🦎🦖🦕🐙 sums up to basically all emojis!" }
+    { tab = "🎉", title = "FLEX, GAMES & ANIMALS", list = "🏆🥇🥈🥉🏅🎖️👑💎💰💵💴💶💷💸💳🪙🎮🕹️🎲🎯🎳🎸🎹🎺🎻🥁🎬🎤🎧🎨🎭🎪🎟️⚽🏀🏈⚾🎾🏐🎱🏓🏸🥊🥋🥅⛳🎣🤿🎽🛹🛼🛷⛸️🐶🐱🐭🐹🐰🦊🐻🐼🐻‍❄️🐨🐯🦁🐮🐷🐸🐵🙈🙉🙊🐒🐔🐧🐦🐤🐣🐥🦆🦅🦉🦇🐺🐗🐴🦄🐝🪱🐛🦋🐌🐞🐜🪰🪲🪳🦟🦗🕷️🦂🐢🐍🦎🦖🦕🐙🦑🦐🦞🦀🐡🐠🐟🐬🐳🐋🦈🐊🐅🐆🦓🦍🦧🐘🦛🦏🐪🐫🦒🦘🦬🐃🐂🐄🐎🐖🐏🐑🦙🐐🦌🐕🐩🦮🐈🐓🦃🦤🦚🦜🦢🦩🕊️🐇🦝🦨🦡🦫🦦🦥🐁🐀🐿️🦔🐾🐉🐲" },
+    { tab = "🍕", title = "FOOD & DRINKS", list = "🍏🍎🍐🍊🍋🍌🍉🍇🍓🫐🍈🍒🍑🥭🍍🥥🥝🍅🍆🥑🥦🥬🥒🌶️🫑🌽🥕🫒🧄🧅🥔🍠🥐🥯🍞🥖🥨🧀🥚🍳🧈🥞🧇🥓🥩🍗🍖🦴🌭🍔🍟🍕🫓🥪🥙🧆🌮🌯🫔🥗🥘🫕🥫🍝🍜🍲🍛🍣🍱🥟🦪🍤🍙🍚🍘🍥🥠🥮🍢🍡🍧🍨🍦🥧🧁🍰🎂🍮🍭🍬🍫🍿🍩🍪🌰🥜🍯🥛🍼🫖☕🍵🧃🥤🧋🍶🍺🍻🥂🍷🥃🍸🍹🧉🍾🧊🥄🍴🍽️🥣🥡🥢🧂" },
+    { tab = "⚡", title = "SYMBOLS & WEATHER", list = "☀️🌤️⛅🌥️☁️🌦️🌧️⛈️🌩️🌨️❄️☃️⛄🌬️💨💧💦☔☂️🌊🌫️🌪️🌈⭐🌟✨⚡☄️💥🔥🌙🪐🌍🌎🌏🌌⏰⏱️🧭🚀🛸🚁🛶⛵🚤🛥️🛳️⛴️🚢✈️🛩️🛫🛬🪂💺🛰️🚨🚓🚍🚘🚖🚡🚠🚟🚃🚋🚞🚝🚄🚅🚈🚂🚆🚇🚊🚉⬆️↗️➡️↘️⬇️↙️⬅️↖️↕️↔️↩️↪️⤴️⤵️🔃🔄🔙🔚🔛🔜🔝✅☑️✔️✖️❌❎➕➖➗➰➿〽️✳️✴️❇️‼️⁉️❓❔❕❗⭕💯🔱⚜️🔰♻️⚠️🚸⛔🚫🚳🚭🚯🚱🚷📵🔞☢️☣️" }
 }
 
 local function getAssetThumb(id) return string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", tostring(id)) end
@@ -149,12 +151,40 @@ local function crispText(element, overrideTransparency)
     stroke.Thickness = 1.0
 end
 
+-- 🔥 MICRO-SMOOTH HOVER ENGINE UPGRADE 🔥
 local function applySpringHover(btn)
     local btnScale = btn:FindFirstChildOfClass("UIScale") or Instance.new("UIScale", btn)
-    btn.MouseEnter:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1.05}):Play() end)
-    btn.MouseLeave:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.18, Enum.EasingStyle.Quart), {Scale = 1}):Play() end)
-    btn.MouseButton1Down:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.08, Enum.EasingStyle.Sine), {Scale = 0.93}):Play() end)
-    btn.MouseButton1Up:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.25, Enum.EasingStyle.Elastic), {Scale = 1.05}):Play() end)
+    local origTrans = btn.BackgroundTransparency
+    local hoverTrans = math.max(0, origTrans - 0.15)
+    
+    btn.MouseEnter:Connect(function() 
+        TweenService:Create(btnScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1.05}):Play() 
+        TweenService:Create(btn, TweenInfo.new(0.2, Enum.EasingStyle.Quart), {BackgroundTransparency = hoverTrans}):Play()
+    end)
+    btn.MouseLeave:Connect(function() 
+        TweenService:Create(btnScale, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Scale = 1}):Play() 
+        TweenService:Create(btn, TweenInfo.new(0.2, Enum.EasingStyle.Quart), {BackgroundTransparency = origTrans}):Play()
+    end)
+    btn.MouseButton1Down:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.1, Enum.EasingStyle.Sine), {Scale = 0.94}):Play() end)
+    btn.MouseButton1Up:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.3, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1.05}):Play() end)
+end
+
+-- 🔥 TACTILE RIPPLE EFFECT ENGINE 🔥
+local function createRipple(parent)
+    task.spawn(function()
+        local rip = Instance.new("Frame", parent)
+        rip.AnchorPoint = Vector2.new(0.5, 0.5)
+        rip.Position = UDim2.fromScale(0.5, 0.5)
+        rip.Size = UDim2.fromScale(0, 0)
+        rip.BackgroundColor3 = Color3.new(1,1,1)
+        rip.BackgroundTransparency = 0.4
+        rip.ZIndex = parent.ZIndex + 1
+        local uic = Instance.new("UICorner", rip)
+        uic.CornerRadius = UDim.new(1, 0)
+        TweenService:Create(rip, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.fromScale(2.5, 2.5), BackgroundTransparency = 1}):Play()
+        task.wait(0.4)
+        rip:Destroy()
+    end)
 end
 
 local function playSFX(soundType)
@@ -722,7 +752,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     local cardScale = mk("UIScale", card, { Scale = 0.96 })
     TweenService:Create(cardScale, TweenInfo.new(0.26, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
 
-    -- 🌟 PERFECT BOTTOM-RIGHT REACTION PILL (FIXED VISIBILITY & POSITION)
+    -- 🌟 PERFECT BOTTOM-RIGHT REACTION PILL
     local reactionPillContainer = mk("Frame", card, { 
         Size = UDim2.fromOffset(0, 24), 
         AnchorPoint = Vector2.new(1, 1), 
@@ -877,7 +907,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             isSwipingCard, swipeInputObj, swipeStartPos, swipeTriggered, movedDistance = true, input, input.Position, false, 0
             isHoldingCard = true
             
-            -- 🔥 COMPACT & GLASSY APPLE DOCK MENU (WITH DYNAMIC SIZING) 🔥
+            -- 🔥 COMPACT & GLASSY APPLE DOCK MENU (WITH SELF ACTIONS & OVERLAY) 🔥
             task.delay(0.35, function()
                 if isHoldingCard and movedDistance < 10 and not activeReactionMenu then
                     closeReactionMenu()
@@ -900,6 +930,8 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     mk("UIListLayout", emojiContainer, { FillDirection = Enum.FillDirection.Horizontal, HorizontalAlignment = Enum.HorizontalAlignment.Center, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 6) })
 
                     local touchY = swipeStartPos.Y - mainFrame.AbsolutePosition.Y
+                    
+                    -- 🔥 SMART POSITIONING: IF SELF, OPEN HIGHER. IF OTHER, OPEN LOWER 🔥
                     local rMenuY
                     if isSelf and not memeIdMatch then
                         rMenuY = math.clamp(touchY - 95, 10, mainFrame.AbsoluteSize.Y - 120)
@@ -986,6 +1018,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     dragHoverConn = RunService.RenderStepped:Connect(function()
                         if not activeReactionMenu or not isHoldingCard then dragHoverConn:Disconnect() return end
                         
+                        -- ABSOLUTE SCROLL FREEZE
                         if messageFeed then
                             if not reactionCanvasLockPos then reactionCanvasLockPos = messageFeed.CanvasPosition end
                             messageFeed.CanvasPosition = reactionCanvasLockPos
@@ -993,6 +1026,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         
                         local mousePos = UserInputService:GetMouseLocation()
                         
+                        -- 🔥 SMART HITBOX LOGIC: IF SELFMENU EXISTS, SPLIT Y-AXIS. IF NOT, WIDE Y-AXIS. 🔥
                         local inSelfMenuZone = false
                         if activeSelfMenu then
                             local selfTop = activeSelfMenu.AbsolutePosition.Y - 15
@@ -1002,6 +1036,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         end
                         
                         if not inSelfMenuZone then
+                            -- EMOJI ZONE (Huge horizontal hitboxes restored like before!)
                             for btn, _ in pairs(renderedBtns) do
                                 local btnScale = btn:FindFirstChildOfClass("UIScale")
                                 local bAbsPos = btn.AbsolutePosition
@@ -1025,6 +1060,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                                 btnScale.Scale = btnScale.Scale + (targetScale - btnScale.Scale) * 0.3
                             end
                             
+                            -- Reset self menu buttons
                             if activeSelfMenu then
                                 for btn, _ in pairs(renderedSelfBtns) do
                                     local btnScale = btn:FindFirstChildOfClass("UIScale") or mk("UIScale", btn)
@@ -1034,6 +1070,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                                 end
                             end
                         else
+                            -- SELF MENU ZONE (Edit/Delete Highlighting)
                             for btn, _ in pairs(renderedBtns) do
                                 local btnScale = btn:FindFirstChildOfClass("UIScale")
                                 btnScale.Scale = btnScale.Scale + (0.85 - btnScale.Scale) * 0.3
@@ -1102,6 +1139,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             if activeReactionMenu then
                 local reactionFired = false
                 
+                -- Only auto-fire if the user ACTUALLY dragged their finger (safety check)
                 if movedDistance > 12 then
                     local mousePos = UserInputService:GetMouseLocation()
                     
@@ -1157,6 +1195,8 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         end
                     end
                 else
+                    -- They didn't drag, they just tapped/held and released.
+                    -- LEAVE THE MENU OPEN! Reset visuals so it looks nice and resting.
                     local emojiCont = activeReactionMenu:FindFirstChild("EmojiContainer")
                     if emojiCont then
                         for _, child in ipairs(emojiCont:GetChildren()) do
