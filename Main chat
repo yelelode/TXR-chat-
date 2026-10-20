@@ -39,8 +39,8 @@ local writeF = writefile or function() end
 local readF = readfile or function() return nil end
 local isF = isfile or function() return false end
 
--- 🔑 Direct OpenRouter API Key
-local OPENROUTER_API_KEY = "Sk-or-v1-15ee4fd12205114a2fd5cb1e3d1793b4526ddb7efd8f0fb3960c5079b3ea948f"
+-- 🔑 Direct OpenRouter API Key (Fixed lowercase prefix)
+local OPENROUTER_API_KEY = "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"
 
 local targetGuiParent
 pcall(function() targetGuiParent = game:GetService("CoreGui") end)
@@ -624,73 +624,93 @@ local function askAIRealtime(promptQuery)
     remoteTypers["TXR // AI"] = tick() + 25
 
     task.spawn(function()
-        local payload = HttpService:JSONEncode({
-            model = "google/gemma-2-9b-it:free",
-            models = {
-                "google/gemma-2-9b-it:free",
-                "meta-llama/llama-3.3-70b-instruct:free",
-                "mistralai/mistral-7b-instruct:free"
-            },
-            messages = {
-                {
-                    role = "system",
-                    content = "Aap ho TXR // AI, ek chilled-out, smart aur ultra-friendly gaming assistant jo TXR Global Chat me rehta hai. Tone ekdum bindass Indian Hinglish/chindi dost jaisi honi chahiye (jaise 'Haan bhai', 'Arre tension na le', 'Scene sort hai', 'Bata kya help chahiye'). Har answer bohot chota, funny, sharp aur direct point pe do (maximum 2 lines). Koi faltu formal English ya kitabi bhasha nahi."
-                },
-                { role = "user", content = promptQuery }
-            },
-            max_tokens = 150,
-            temperature = 0.8
-        })
+        local sysPrompt = "Aap ho TXR // AI, ek chilled-out, smart aur ultra-friendly gaming assistant jo TXR Global Chat me rehta hai. Tone ekdum bindass Indian Hinglish/chindi dost jaisi honi chahiye (jaise 'Haan bhai', 'Arre tension na le', 'Scene sort hai', 'Bata kya help chahiye'). Har answer bohot chota, funny, sharp aur direct point pe do (maximum 2 lines). Koi faltu formal English ya kitabi bhasha nahi."
+        local cleanQuery = promptQuery:gsub("^%s+", ""):gsub("%s+$", "")
+        
+        local responseText = nil
+        local errorMessage = nil
 
-        local headersTable = {
-            ["Authorization"] = "Bearer " .. OPENROUTER_API_KEY,
-            ["Content-Type"] = "application/json",
-            ["HTTP-Referer"] = "https://roblox.com",
-            ["X-Title"] = "TXR Cyber Titan"
-        }
-
-        local success, res = pcall(function()
-            if syn and syn.request then
-                return syn.request({ Url = "https://openrouter.ai/api/v1/chat/completions", Method = "POST", Headers = headersTable, Body = payload })
-            elseif http_request then
-                return http_request({ Url = "https://openrouter.ai/api/v1/chat/completions", Method = "POST", Headers = headersTable, Body = payload })
-            elseif request then
-                return request({ Url = "https://openrouter.ai/api/v1/chat/completions", Method = "POST", Headers = headersTable, Body = payload })
-            elseif http and http.request then
-                return http.request({ Url = "https://openrouter.ai/api/v1/chat/completions", Method = "POST", Headers = headersTable, Body = payload })
-            else
-                error("No compatible HTTP request executor function found!")
+        local function doReq(opt)
+            if syn and syn.request then return syn.request(opt)
+            elseif http_request then return http_request(opt)
+            elseif request then return request(opt)
+            elseif http and http.request then return http.request(opt)
             end
+            return nil
+        end
+
+        -- Method 1: Primary OpenRouter API with Multiple Fallbacks
+        local success, res = pcall(function()
+            local payload = HttpService:JSONEncode({
+                model = "meta-llama/llama-3.3-70b-instruct:free",
+                models = {
+                    "meta-llama/llama-3.3-70b-instruct:free",
+                    "google/gemma-2-9b-it:free",
+                    "mistralai/mistral-7b-instruct:free",
+                    "qwen/qwen-2.5-coder-32b-instruct:free"
+                },
+                messages = {
+                    { role = "system", content = sysPrompt },
+                    { role = "user", content = cleanQuery }
+                },
+                max_tokens = 120,
+                temperature = 0.7
+            })
+
+            return doReq({
+                Url = "https://openrouter.ai/api/v1/chat/completions",
+                Method = "POST",
+                Headers = {
+                    ["Authorization"] = "Bearer " .. OPENROUTER_API_KEY,
+                    ["Content-Type"] = "application/json",
+                    ["HTTP-Referer"] = "https://roblox.com",
+                    ["X-Title"] = "TXR Cyber Titan"
+                },
+                Body = payload
+            })
         end)
+
+        if success and res then
+            local raw = res.Body or res.body or (type(res) == "string" and res)
+            local decOk, dec = pcall(function() return HttpService:JSONDecode(raw) end)
+            if decOk and dec and dec.choices and dec.choices[1] and dec.choices[1].message then
+                responseText = dec.choices[1].message.content
+            elseif decOk and dec and dec.error and dec.error.message then
+                errorMessage = dec.error.message
+            end
+        else
+            errorMessage = tostring(res or "HTTP Fail")
+        end
+
+        -- Method 2: High Reliability Direct Fallback (Instant Reply Assurance)
+        if not responseText or responseText == "" then
+            pcall(function()
+                local fbPayload = HttpService:JSONEncode({
+                    messages = {
+                        { role = "system", content = sysPrompt },
+                        { role = "user", content = cleanQuery }
+                    }
+                })
+                local fbRes = doReq({
+                    Url = "https://text.pollinations.ai/",
+                    Method = "POST",
+                    Headers = { ["Content-Type"] = "application/json" },
+                    Body = fbPayload
+                })
+                if fbRes then
+                    local rawFb = fbRes.Body or fbRes.body or (type(fbRes) == "string" and fbRes)
+                    if rawFb and #rawFb > 0 and not rawFb:find("<!DOCTYPE") and not rawFb:find("<html>") then
+                        responseText = rawFb
+                    end
+                end
+            end)
+        end
 
         isAIThinking = false
         remoteTypers["TXR // AI"] = nil
 
-        local responseText = nil
-        local errorMessage = nil
-
-        if success and res then
-            local rawBody = res.Body or res.body or (type(res) == "string" and res)
-            local statusCode = res.StatusCode or res.status_code or res.Status or 200
-
-            local decOk, decData = pcall(function() return HttpService:JSONDecode(rawBody) end)
-            if decOk and type(decData) == "table" then
-                if decData.choices and decData.choices[1] and decData.choices[1].message then
-                    responseText = decData.choices[1].message.content
-                elseif decData.error and decData.error.message then
-                    errorMessage = "OpenRouter: " .. tostring(decData.error.message)
-                else
-                    errorMessage = "HTTP " .. tostring(statusCode) .. ": " .. tostring(rawBody):sub(1, 100)
-                end
-            else
-                errorMessage = "HTTP " .. tostring(statusCode) .. " (Raw: " .. tostring(rawBody):sub(1, 80) .. ")"
-            end
-        else
-            errorMessage = tostring(res or "Executor blocked HTTP")
-        end
-
         if responseText and responseText ~= "" then
-            local aiAnswer = responseText:gsub("^%s+", ""):gsub("%s+$", "")
+            local aiAnswer = responseText:gsub("^%s+", ""):gsub("%s+$", ""):gsub("<[^>]+>", "")
             addMessageToFeed("System::TXR // AI", aiAnswer, nil, false, game.JobId, chatMode)
             task.spawn(function()
                 if req then
@@ -710,7 +730,7 @@ local function askAIRealtime(promptQuery)
                 end
             end)
         else
-            local errNotice = "⚡ [AI Offline]: " .. tostring(errorMessage or "Check API Key or Rate Limit")
+            local errNotice = "⚡ [AI Offline]: " .. tostring(errorMessage or "Network Timeout")
             addMessageToFeed("System::TXR // AI", errNotice, nil, false, game.JobId, chatMode)
         end
     end)
@@ -1550,7 +1570,10 @@ sendMessageFunc = function(overrideText)
         return
     end
 
-    local aiPrompt = text:match("^@ai%s+(.+)$") or text:match("^!ai%s+(.+)$")
+    local aiPrompt = text:match("^@ai%s*(.-)$") or text:match("^!ai%s*(.-)$")
+    if text:lower() == "@ai" or text:lower() == "!ai" then
+        aiPrompt = "hello"
+    end
 
     local payloadBodyText = text
     if activeReplyData then
@@ -1597,7 +1620,7 @@ sendMessageFunc = function(overrideText)
         end
     end)
 
-    if aiPrompt then askAIRealtime(aiPrompt) end
+    if aiPrompt and #aiPrompt > 0 then askAIRealtime(aiPrompt) end
 end
 
 sendBtn.MouseButton1Click:Connect(function() sendMessageFunc() end)
