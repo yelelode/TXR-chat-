@@ -637,7 +637,7 @@ end
 local emojiTargetMode = "chat"
 local activeReactionCallback = nil
 local activeReactionMenu = nil
-local reactionCanvasLockPos = nil -- SCROLL FREEZER
+local reactionCanvasLockPos = nil 
 
 local function closeReactionMenu()
     if activeReactionMenu then
@@ -712,7 +712,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     local cardScale = mk("UIScale", card, { Scale = 0.96 })
     TweenService:Create(cardScale, TweenInfo.new(0.26, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
 
-    -- 🌟 PERFECT BOTTOM-RIGHT REACTION PILL
+    -- 🌟 PERFECT BOTTOM-RIGHT REACTION PILL (REMOVABLE BUTTONS)
     local reactionPillContainer = mk("Frame", card, { 
         Size = UDim2.fromOffset(0, 24), 
         AnchorPoint = Vector2.new(1, 0.5),
@@ -731,16 +731,37 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     local function addReactionToCard(emojiStr)
         local existing = false
         for _, child in ipairs(reactionPillContainer:GetChildren()) do
-            if child:IsA("TextLabel") and child.Text == emojiStr then existing = true; break end
+            if child:IsA("TextButton") and child.Name == "React_" .. emojiStr then existing = true; break end
         end
         if not existing then
-            mk("TextLabel", reactionPillContainer, { Size = UDim2.fromOffset(18, 18), BackgroundTransparency = 1, Text = emojiStr, Font = Enum.Font.SourceSans, TextSize = 16, ZIndex = 26 })
+            local rBtn = mk("TextButton", reactionPillContainer, { Name = "React_" .. emojiStr, Size = UDim2.fromOffset(18, 18), BackgroundTransparency = 1, Text = emojiStr, Font = Enum.Font.SourceSans, TextSize = 16, ZIndex = 26, AutoButtonColor = false })
+            local rBtnScale = mk("UIScale", rBtn, {Scale = 0})
+            
             reactionPillContainer.Visible = true
             playSFX("reaction")
             
+            -- Pop in
+            TweenService:Create(rBtnScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
+            
             local rpScale = reactionPillContainer:FindFirstChildOfClass("UIScale") or mk("UIScale", reactionPillContainer)
-            rpScale.Scale = 0.5
+            rpScale.Scale = 0.8
             TweenService:Create(rpScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
+
+            -- UNDO REACTION LOGIC (REMOVAL)
+            rBtn.MouseButton1Click:Connect(function()
+                playSFX("default")
+                TweenService:Create(rBtnScale, TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play()
+                task.delay(0.2, function()
+                    if rBtn and rBtn.Parent then rBtn:Destroy() end
+                    local hasReacts = false
+                    for _, c in ipairs(reactionPillContainer:GetChildren()) do
+                        if c:IsA("TextButton") then hasReacts = true; break end
+                    end
+                    if not hasReacts then
+                        reactionPillContainer.Visible = false
+                    end
+                end)
+            end)
         end
     end
 
@@ -840,24 +861,28 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             isSwipingCard, swipeInputObj, swipeStartPos, swipeTriggered, movedDistance = true, input, input.Position, false, 0
             isHoldingCard = true
             
-            -- 🔥 LONG PRESS REACTION MENU LOGIC (APPLE DOCK + SCROLL FREEZE) 🔥
+            -- 🔥 COMPACT & GLASSY APPLE DOCK MENU 🔥
             task.delay(0.35, function()
                 if isHoldingCard and movedDistance < 10 and not activeReactionMenu then
                     closeReactionMenu()
                     playSFX("default")
                     
-                    -- PREMIUM DOCK MENU
-                    local rMenu = mk("Frame", mainFrame, { Size = UDim2.fromOffset(200, 48), BackgroundColor3 = rgb(15, 20, 30), BackgroundTransparency = 0.08, ZIndex = 200, Corner = UDim.new(1, 0), Stroke = {Color = Colors.Primary, Thickness = 1.2, Transparency = 0.3} })
+                    -- COMPACT & GLASSY BACKGROUND
+                    local rMenu = mk("Frame", mainFrame, { Size = UDim2.fromOffset(164, 38), BackgroundColor3 = rgb(22, 28, 40), BackgroundTransparency = 0.35, ZIndex = 200, Corner = UDim.new(1, 0), Stroke = {Color = rgb(255, 255, 255), Thickness = 1.2, Transparency = 0.6} })
                     
+                    -- GLASS SHEEN EFFECT
+                    local rGlass = mk("Frame", rMenu, { Size = UDim2.new(1, 0, 0.5, 0), BackgroundTransparency = 0.85, BackgroundColor3 = rgb(255, 255, 255), BorderSizePixel = 0, ZIndex = 200, Corner = UDim.new(1, 0) })
+                    mk("UIGradient", rGlass, { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.1), NumberSequenceKeypoint.new(1, 1) }), Rotation = 90 })
+
                     local touchY = swipeStartPos.Y - mainFrame.AbsolutePosition.Y
-                    local rMenuY = math.clamp(touchY - 60, 10, mainFrame.AbsoluteSize.Y - 55)
+                    local rMenuY = math.clamp(touchY - 55, 10, mainFrame.AbsoluteSize.Y - 45)
                     local cardAbsPos = card.AbsolutePosition - mainFrame.AbsolutePosition
-                    rMenu.Position = UDim2.fromOffset(math.clamp(cardAbsPos.X + 15, 10, mainFrame.AbsoluteSize.X - 210), rMenuY)
+                    rMenu.Position = UDim2.fromOffset(math.clamp(cardAbsPos.X + 20, 10, mainFrame.AbsoluteSize.X - 180), rMenuY)
                     
                     local rMenuScale = mk("UIScale", rMenu, {Scale = 0})
                     TweenService:Create(rMenuScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
                     
-                    mk("UIListLayout", rMenu, { FillDirection = Enum.FillDirection.Horizontal, HorizontalAlignment = Enum.HorizontalAlignment.Center, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 4) })
+                    mk("UIListLayout", rMenu, { FillDirection = Enum.FillDirection.Horizontal, HorizontalAlignment = Enum.HorizontalAlignment.Center, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 5) })
                     
                     local reactionItems = {
                         {emoji = "👍", action = function() addReactionToCard("👍") end},
@@ -875,7 +900,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     
                     local renderedBtns = {}
                     for _, rData in ipairs(reactionItems) do
-                        local rBtn = mk("TextLabel", rMenu, { Size = UDim2.fromOffset(34, 34), BackgroundTransparency = 1, Text = rData.emoji, Font = Enum.Font.SourceSansBold, TextColor3 = rData.isIcon and Colors.Primary or Colors.Text, TextSize = rData.isIcon and 26 or 28, ZIndex = 201 })
+                        local rBtn = mk("TextLabel", rMenu, { Size = UDim2.fromOffset(28, 28), BackgroundTransparency = 1, Text = rData.emoji, Font = Enum.Font.SourceSansBold, TextColor3 = rData.isIcon and Colors.Primary or Colors.Text, TextSize = rData.isIcon and 20 or 22, ZIndex = 201 })
                         local rBtnScale = mk("UIScale", rBtn)
                         renderedBtns[rBtn] = rData.action
                     end
@@ -906,12 +931,12 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                             
                             local targetScale = 1.0
                             if distY < 120 then 
-                                if distX < 22 then targetScale = 1.55
-                                elseif distX < 45 then targetScale = 1.25
-                                elseif distX < 70 then targetScale = 1.10
-                                else targetScale = 0.90 end
+                                if distX < 20 then targetScale = 1.6
+                                elseif distX < 40 then targetScale = 1.25
+                                elseif distX < 60 then targetScale = 1.05
+                                else targetScale = 0.85 end
                                 
-                                if distX < 22 then
+                                if distX < 20 then
                                     btn.TextColor3 = btn.Text == "+" and Colors.Primary or Colors.Text
                                 else
                                     btn.TextColor3 = rgb(200, 200, 200)
