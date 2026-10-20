@@ -651,6 +651,9 @@ local function closeReactionMenu()
     end
     reactionCanvasLockPos = nil
     if messageFeed then messageFeed.ScrollingEnabled = true end
+    
+    local overlay = mainFrame:FindFirstChild("ReactionOverlay")
+    if overlay then overlay:Destroy() end
 end
 
 local MAX_MESSAGES_PER_TAB = 60
@@ -873,11 +876,19 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             isSwipingCard, swipeInputObj, swipeStartPos, swipeTriggered, movedDistance = true, input, input.Position, false, 0
             isHoldingCard = true
             
-            -- 🔥 COMPACT & GLASSY APPLE DOCK MENU (WITH SELF ACTIONS) 🔥
-            task.delay(0.30, function()
+            -- 🔥 COMPACT & GLASSY APPLE DOCK MENU (WITH SELF ACTIONS & OVERLAY) 🔥
+            task.delay(0.35, function()
                 if isHoldingCard and movedDistance < 10 and not activeReactionMenu then
                     closeReactionMenu()
                     playSFX("default")
+                    
+                    -- OVERLAY FOR TAP-TO-CLOSE
+                    local menuOverlay = mk("TextButton", mainFrame, { Name = "ReactionOverlay", Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Text = "", ZIndex = 199 })
+                    menuOverlay.MouseButton1Down:Connect(function()
+                        if activeReactionMenu then TweenService:Create(activeReactionMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play() end
+                        if activeSelfMenu then TweenService:Create(activeSelfMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play() end
+                        task.delay(0.2, closeReactionMenu)
+                    end)
                     
                     local rMenu = mk("Frame", mainFrame, { Size = UDim2.fromOffset(180, 40), BackgroundColor3 = rgb(15, 20, 30), BackgroundTransparency = 0.25, ZIndex = 200, Corner = UDim.new(1, 0), Stroke = {Color = rgb(255, 255, 255), Thickness = 1.2, Transparency = 0.5} })
                     local rGlass = mk("Frame", rMenu, { Size = UDim2.new(1, 0, 0.5, 0), BackgroundTransparency = 0.85, BackgroundColor3 = rgb(255, 255, 255), BorderSizePixel = 0, ZIndex = 200, Corner = UDim.new(1, 0) })
@@ -935,7 +946,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         local smScale = mk("UIScale", selfMenu, {Scale = 0})
                         TweenService:Create(smScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
                         
-                        -- Buttons configured for hit detection hover + standard click
                         local editBtn = mk("TextButton", selfMenu, { Name = "EditBtn", Size = UDim2.new(1, 0, 0, 32), Position = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 1, BackgroundColor3 = rgb(45, 55, 75), Text = "   ✏️ Edit Message", Font = Enum.Font.GothamMedium, TextSize = 11, TextColor3 = Colors.Primary, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 202, Corner = UDim.new(0, 8) })
                         mk("Frame", selfMenu, { Size = UDim2.new(1, -16, 0, 1), Position = UDim2.new(0, 8, 0, 32), BackgroundColor3 = rgb(255, 255, 255), BackgroundTransparency = 0.85, BorderSizePixel = 0, ZIndex = 203 })
                         local delBtn = mk("TextButton", selfMenu, { Name = "DelBtn", Size = UDim2.new(1, 0, 0, 32), Position = UDim2.new(0, 0, 0, 33), BackgroundTransparency = 1, BackgroundColor3 = rgb(45, 55, 75), Text = "   🗑️ Delete Message", Font = Enum.Font.GothamMedium, TextSize = 11, TextColor3 = Colors.Danger, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 202, Corner = UDim.new(0, 8) })
@@ -953,14 +963,11 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                             task.delay(0.3, function() cardWrapper:Destroy() end)
                         end
                         
-                        -- Keep standard clicks functional for quick taps
                         editBtn.MouseButton1Click:Connect(function()
-                            closeReactionMenu()
-                            renderedSelfBtns[editBtn]()
+                            closeReactionMenu(); renderedSelfBtns[editBtn]()
                         end)
                         delBtn.MouseButton1Click:Connect(function()
-                            closeReactionMenu()
-                            renderedSelfBtns[delBtn]()
+                            closeReactionMenu(); renderedSelfBtns[delBtn]()
                         end)
                         
                         activeSelfMenu = selfMenu
@@ -976,51 +983,57 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         end
                         
                         local mousePos = UserInputService:GetMouseLocation()
+                        local aimY = rMenu.AbsolutePosition.Y + 42
                         
-                        -- Emoji Drag Check
-                        for btn, _ in pairs(renderedBtns) do
-                            local btnScale = btn:FindFirstChildOfClass("UIScale")
-                            local bAbsPos = btn.AbsolutePosition
-                            local bAbsSize = btn.AbsoluteSize
-                            local centerX = bAbsPos.X + bAbsSize.X/2
-                            
-                            local distX = math.abs(centerX - mousePos.X)
-                            local distY = math.abs((bAbsPos.Y + bAbsSize.Y/2) - mousePos.Y)
-                            
-                            local targetScale = 1.0
-                            if distY < 120 then 
+                        if mousePos.Y < aimY then
+                            for btn, _ in pairs(renderedBtns) do
+                                local btnScale = btn:FindFirstChildOfClass("UIScale")
+                                local bAbsPos = btn.AbsolutePosition
+                                local bAbsSize = btn.AbsoluteSize
+                                local centerX = bAbsPos.X + bAbsSize.X/2
+                                
+                                local distX = math.abs(centerX - mousePos.X)
+                                local targetScale = 1.0
+                                
                                 if distX < 20 then targetScale = 1.6
                                 elseif distX < 40 then targetScale = 1.25
                                 elseif distX < 60 then targetScale = 1.05
                                 else targetScale = 0.85 end
+                                    
+                                if distX < 20 then btn.TextColor3 = btn.Text == "+" and Colors.Primary or Colors.Text
+                                else btn.TextColor3 = rgb(200, 200, 200) end
                                 
-                                if distX < 20 then
-                                    btn.TextColor3 = btn.Text == "+" and Colors.Primary or Colors.Text
-                                else
-                                    btn.TextColor3 = rgb(200, 200, 200)
-                                end
-                            else
-                                targetScale = 1.0
-                                btn.TextColor3 = btn.Text == "+" and Colors.Primary or Colors.Text
+                                btnScale.Scale = btnScale.Scale + (targetScale - btnScale.Scale) * 0.3
                             end
-                            
-                            btnScale.Scale = btnScale.Scale + (targetScale - btnScale.Scale) * 0.3
-                        end
-
-                        -- Self Menu Drag Check (Smooth Hitbox highlight)
-                        if activeSelfMenu then
-                            for btn, _ in pairs(renderedSelfBtns) do
-                                local bAbsPos = btn.AbsolutePosition
-                                local bAbsSize = btn.AbsoluteSize
-                                local btnScale = btn:FindFirstChildOfClass("UIScale") or mk("UIScale", btn)
-                                
-                                if mousePos.X >= bAbsPos.X - 10 and mousePos.X <= bAbsPos.X + bAbsSize.X + 10 and
-                                   mousePos.Y >= bAbsPos.Y - 10 and mousePos.Y <= bAbsPos.Y + bAbsSize.Y + 10 then
-                                    btnScale.Scale = btnScale.Scale + (1.05 - btnScale.Scale) * 0.3
-                                    btn.BackgroundTransparency = btn.BackgroundTransparency + (0.6 - btn.BackgroundTransparency) * 0.3
-                                else
+                            if activeSelfMenu then
+                                for btn, _ in pairs(renderedSelfBtns) do
+                                    local btnScale = btn:FindFirstChildOfClass("UIScale") or mk("UIScale", btn)
                                     btnScale.Scale = btnScale.Scale + (1.0 - btnScale.Scale) * 0.3
                                     btn.BackgroundTransparency = btn.BackgroundTransparency + (1.0 - btn.BackgroundTransparency) * 0.3
+                                end
+                            end
+                        else
+                            for btn, _ in pairs(renderedBtns) do
+                                local btnScale = btn:FindFirstChildOfClass("UIScale")
+                                btnScale.Scale = btnScale.Scale + (0.9 - btnScale.Scale) * 0.3
+                                btn.TextColor3 = rgb(200, 200, 200)
+                            end
+                            if activeSelfMenu then
+                                for btn, _ in pairs(renderedSelfBtns) do
+                                    local bAbsPos = btn.AbsolutePosition
+                                    local bAbsSize = btn.AbsoluteSize
+                                    local btnScale = btn:FindFirstChildOfClass("UIScale") or mk("UIScale", btn)
+                                    
+                                    if mousePos.X >= bAbsPos.X - 20 and mousePos.X <= bAbsPos.X + bAbsSize.X + 20 and
+                                       mousePos.Y >= bAbsPos.Y - 15 and mousePos.Y <= bAbsPos.Y + bAbsSize.Y + 15 then
+                                        btnScale.Scale = btnScale.Scale + (1.05 - btnScale.Scale) * 0.3
+                                        btn.BackgroundTransparency = btn.BackgroundTransparency + (0.4 - btn.BackgroundTransparency) * 0.3
+                                        btn.TextColor3 = btn.Name == "EditBtn" and Colors.MentionGold or Colors.Danger
+                                    else
+                                        btnScale.Scale = btnScale.Scale + (1.0 - btnScale.Scale) * 0.3
+                                        btn.BackgroundTransparency = btn.BackgroundTransparency + (1.0 - btn.BackgroundTransparency) * 0.3
+                                        btn.TextColor3 = btn.Name == "EditBtn" and Colors.Primary or rgb(255, 90, 110)
+                                    end
                                 end
                             end
                         end
@@ -1068,36 +1081,43 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             
             if activeReactionMenu then
                 local reactionFired = false
+                local mousePos = UserInputService:GetMouseLocation()
+                local aimY = activeReactionMenu.AbsolutePosition.Y + 45
                 
-                -- Check Emoji Release
-                local emojiCont = activeReactionMenu:FindFirstChild("EmojiContainer")
-                if emojiCont then
-                    for _, child in ipairs(emojiCont:GetChildren()) do
-                        if child:IsA("TextLabel") then
-                            local btnScale = child:FindFirstChildOfClass("UIScale")
-                            if btnScale and btnScale.Scale > 1.2 then 
-                                if child.Text == "+" then
-                                    if emojiFrame then 
-                                        emojiTargetMode = "reaction"
-                                        activeReactionCallback = function(em) addReactionToCard(em) end
-                                        emojiFrame.Visible = true 
+                if mousePos.Y < aimY then
+                    local emojiCont = activeReactionMenu:FindFirstChild("EmojiContainer")
+                    if emojiCont then
+                        for _, child in ipairs(emojiCont:GetChildren()) do
+                            if child:IsA("TextLabel") then
+                                local bAbsPos = child.AbsolutePosition
+                                local bAbsSize = child.AbsoluteSize
+                                local centerX = bAbsPos.X + bAbsSize.X/2
+                                local distX = math.abs(centerX - mousePos.X)
+                                local distY = math.abs((bAbsPos.Y + bAbsSize.Y/2) - mousePos.Y)
+                                
+                                if distY < 120 and distX < 30 then 
+                                    if child.Text == "+" then
+                                        if emojiFrame then 
+                                            emojiTargetMode = "reaction"
+                                            activeReactionCallback = function(em) addReactionToCard(em) end
+                                            emojiFrame.Visible = true 
+                                        end
+                                    else
+                                        addReactionToCard(child.Text)
                                     end
-                                else
-                                    addReactionToCard(child.Text)
+                                    reactionFired = true
+                                    break
                                 end
-                                reactionFired = true
-                                break
                             end
                         end
                     end
-                end
-                
-                -- Check Self Action Drag Release
-                if not reactionFired and activeSelfMenu then
+                elseif activeSelfMenu then
                     for _, child in ipairs(activeSelfMenu:GetChildren()) do
                         if child:IsA("TextButton") then
-                            local btnScale = child:FindFirstChildOfClass("UIScale")
-                            if btnScale and btnScale.Scale > 1.02 then
+                            local bAbsPos = child.AbsolutePosition
+                            local bAbsSize = child.AbsoluteSize
+                            if mousePos.X >= bAbsPos.X - 25 and mousePos.X <= bAbsPos.X + bAbsSize.X + 25 and
+                               mousePos.Y >= bAbsPos.Y - 20 and mousePos.Y <= bAbsPos.Y + bAbsSize.Y + 20 then
                                 if child.Name == "EditBtn" then
                                     playSFX("default")
                                     chatInput.Text = displayMsg
@@ -1115,10 +1135,18 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     end
                 end
                 
-                TweenService:Create(activeReactionMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
-                if activeSelfMenu then TweenService:Create(activeSelfMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play() end
-                task.delay(0.2, closeReactionMenu)
-                if reactionFired then return end
+                if reactionFired then
+                    TweenService:Create(activeReactionMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
+                    if activeSelfMenu then TweenService:Create(activeSelfMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play() end
+                    task.delay(0.2, closeReactionMenu)
+                    return
+                else
+                    if movedDistance > 25 then
+                        TweenService:Create(activeReactionMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
+                        if activeSelfMenu then TweenService:Create(activeSelfMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play() end
+                        task.delay(0.2, closeReactionMenu)
+                    end
+                end
             end
         end
 
