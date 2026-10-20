@@ -932,23 +932,25 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     local renderedSelfBtns = {}
                     if isSelf and not memeIdMatch then
                         local selfMenu = mk("Frame", mainFrame, {
-                            Size = UDim2.fromOffset(140, 65),
-                            BackgroundColor3 = rgb(15, 20, 30),
-                            BackgroundTransparency = 0.25,
+                            Size = UDim2.fromOffset(160, 68),
+                            BackgroundColor3 = rgb(22, 28, 40),
+                            BackgroundTransparency = 0.35,
                             ZIndex = 200,
                             Corner = UDim.new(0, 10),
-                            Stroke = {Color = rgb(255, 255, 255), Thickness = 1.2, Transparency = 0.5}
+                            Stroke = {Color = rgb(255, 255, 255), Thickness = 1.2, Transparency = 0.6}
                         })
                         local selfGlass = mk("Frame", selfMenu, { Size = UDim2.new(1, 0, 0.5, 0), BackgroundTransparency = 0.85, BackgroundColor3 = rgb(255, 255, 255), BorderSizePixel = 0, ZIndex = 200, Corner = UDim.new(1, 0) })
                         mk("UIGradient", selfGlass, { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.1), NumberSequenceKeypoint.new(1, 1) }), Rotation = 90 })
                         
-                        selfMenu.Position = UDim2.fromOffset(rMenu.Position.X.Offset, rMenu.Position.Y.Offset + 48)
+                        -- Faint Separator
+                        mk("Frame", selfMenu, { Size = UDim2.new(1, -16, 0, 1), Position = UDim2.new(0, 8, 0.5, 0), BackgroundColor3 = rgb(255, 255, 255), BackgroundTransparency = 0.92, BorderSizePixel = 0, ZIndex = 203 })
+                        
+                        selfMenu.Position = UDim2.fromOffset(rMenu.Position.X.Offset + 10, rMenu.Position.Y.Offset + 48)
                         local smScale = mk("UIScale", selfMenu, {Scale = 0})
                         TweenService:Create(smScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
                         
-                        local editBtn = mk("TextButton", selfMenu, { Name = "EditBtn", Size = UDim2.new(1, 0, 0, 32), Position = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 1, BackgroundColor3 = rgb(45, 55, 75), Text = "   ✏️ Edit Message", Font = Enum.Font.GothamMedium, TextSize = 11, TextColor3 = Colors.Primary, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 202, Corner = UDim.new(0, 8) })
-                        mk("Frame", selfMenu, { Size = UDim2.new(1, -16, 0, 1), Position = UDim2.new(0, 8, 0, 32), BackgroundColor3 = rgb(255, 255, 255), BackgroundTransparency = 0.85, BorderSizePixel = 0, ZIndex = 203 })
-                        local delBtn = mk("TextButton", selfMenu, { Name = "DelBtn", Size = UDim2.new(1, 0, 0, 32), Position = UDim2.new(0, 0, 0, 33), BackgroundTransparency = 1, BackgroundColor3 = rgb(45, 55, 75), Text = "   🗑️ Delete Message", Font = Enum.Font.GothamMedium, TextSize = 11, TextColor3 = Colors.Danger, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 202, Corner = UDim.new(0, 8) })
+                        local editBtn = mk("TextButton", selfMenu, { Name = "EditBtn", Size = UDim2.new(1, -12, 0, 30), Position = UDim2.new(0, 6, 0, 2), BackgroundTransparency = 1, BackgroundColor3 = Colors.Primary, Text = "  ✏️ Edit Message", Font = Enum.Font.GothamMedium, TextSize = 11, TextColor3 = Colors.Text, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 202, Corner = UDim.new(0, 6) })
+                        local delBtn = mk("TextButton", selfMenu, { Name = "DelBtn", Size = UDim2.new(1, -12, 0, 30), Position = UDim2.new(0, 6, 0, 35), BackgroundTransparency = 1, BackgroundColor3 = rgb(255, 70, 95), Text = "  🗑️ Delete Message", Font = Enum.Font.GothamMedium, TextSize = 11, TextColor3 = Colors.Danger, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 202, Corner = UDim.new(0, 6) })
                         
                         renderedSelfBtns[editBtn] = function()
                             playSFX("default")
@@ -963,6 +965,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                             task.delay(0.3, function() cardWrapper:Destroy() end)
                         end
                         
+                        -- Keep standard clicks functional for quick taps
                         editBtn.MouseButton1Click:Connect(function()
                             closeReactionMenu(); renderedSelfBtns[editBtn]()
                         end)
@@ -977,15 +980,24 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     dragHoverConn = RunService.RenderStepped:Connect(function()
                         if not activeReactionMenu or not isHoldingCard then dragHoverConn:Disconnect() return end
                         
+                        -- ABSOLUTE SCROLL FREEZE
                         if messageFeed then
                             if not reactionCanvasLockPos then reactionCanvasLockPos = messageFeed.CanvasPosition end
                             messageFeed.CanvasPosition = reactionCanvasLockPos
                         end
                         
                         local mousePos = UserInputService:GetMouseLocation()
-                        local aimY = rMenu.AbsolutePosition.Y + 42
                         
-                        if mousePos.Y < aimY then
+                        local inSelfMenuZone = false
+                        if activeSelfMenu then
+                            local selfTop = activeSelfMenu.AbsolutePosition.Y - 15
+                            if mousePos.Y > selfTop then
+                                inSelfMenuZone = true
+                            end
+                        end
+                        
+                        if not inSelfMenuZone then
+                            -- EMOJI ZONE (Huge horizontal hitboxes restored like before!)
                             for btn, _ in pairs(renderedBtns) do
                                 local btnScale = btn:FindFirstChildOfClass("UIScale")
                                 local bAbsPos = btn.AbsolutePosition
@@ -995,45 +1007,51 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                                 local distX = math.abs(centerX - mousePos.X)
                                 local targetScale = 1.0
                                 
-                                if distX < 20 then targetScale = 1.6
-                                elseif distX < 40 then targetScale = 1.25
-                                elseif distX < 60 then targetScale = 1.05
+                                if distX < 22 then targetScale = 1.6
+                                elseif distX < 45 then targetScale = 1.25
+                                elseif distX < 70 then targetScale = 1.05
                                 else targetScale = 0.85 end
                                     
-                                if distX < 20 then btn.TextColor3 = btn.Text == "+" and Colors.Primary or Colors.Text
-                                else btn.TextColor3 = rgb(200, 200, 200) end
+                                if distX < 22 then
+                                    btn.TextColor3 = btn.Text == "+" and Colors.Primary or Colors.Text
+                                else
+                                    btn.TextColor3 = rgb(200, 200, 200)
+                                end
                                 
                                 btnScale.Scale = btnScale.Scale + (targetScale - btnScale.Scale) * 0.3
                             end
+                            
+                            -- Reset self menu buttons
                             if activeSelfMenu then
                                 for btn, _ in pairs(renderedSelfBtns) do
                                     local btnScale = btn:FindFirstChildOfClass("UIScale") or mk("UIScale", btn)
                                     btnScale.Scale = btnScale.Scale + (1.0 - btnScale.Scale) * 0.3
                                     btn.BackgroundTransparency = btn.BackgroundTransparency + (1.0 - btn.BackgroundTransparency) * 0.3
+                                    btn.TextColor3 = btn.Name == "EditBtn" and Colors.Text or Colors.Danger
                                 end
                             end
                         else
+                            -- SELF MENU ZONE (Edit/Delete Highlighting)
                             for btn, _ in pairs(renderedBtns) do
                                 local btnScale = btn:FindFirstChildOfClass("UIScale")
-                                btnScale.Scale = btnScale.Scale + (0.9 - btnScale.Scale) * 0.3
+                                btnScale.Scale = btnScale.Scale + (0.85 - btnScale.Scale) * 0.3
                                 btn.TextColor3 = rgb(200, 200, 200)
                             end
-                            if activeSelfMenu then
-                                for btn, _ in pairs(renderedSelfBtns) do
-                                    local bAbsPos = btn.AbsolutePosition
-                                    local bAbsSize = btn.AbsoluteSize
-                                    local btnScale = btn:FindFirstChildOfClass("UIScale") or mk("UIScale", btn)
-                                    
-                                    if mousePos.X >= bAbsPos.X - 20 and mousePos.X <= bAbsPos.X + bAbsSize.X + 20 and
-                                       mousePos.Y >= bAbsPos.Y - 15 and mousePos.Y <= bAbsPos.Y + bAbsSize.Y + 15 then
-                                        btnScale.Scale = btnScale.Scale + (1.05 - btnScale.Scale) * 0.3
-                                        btn.BackgroundTransparency = btn.BackgroundTransparency + (0.4 - btn.BackgroundTransparency) * 0.3
-                                        btn.TextColor3 = btn.Name == "EditBtn" and Colors.MentionGold or Colors.Danger
-                                    else
-                                        btnScale.Scale = btnScale.Scale + (1.0 - btnScale.Scale) * 0.3
-                                        btn.BackgroundTransparency = btn.BackgroundTransparency + (1.0 - btn.BackgroundTransparency) * 0.3
-                                        btn.TextColor3 = btn.Name == "EditBtn" and Colors.Primary or rgb(255, 90, 110)
-                                    end
+                            
+                            for btn, _ in pairs(renderedSelfBtns) do
+                                local bAbsPos = btn.AbsolutePosition
+                                local bAbsSize = btn.AbsoluteSize
+                                local btnScale = btn:FindFirstChildOfClass("UIScale") or mk("UIScale", btn)
+                                
+                                local centerY = bAbsPos.Y + bAbsSize.Y/2
+                                if math.abs(mousePos.Y - centerY) < 20 then
+                                    btnScale.Scale = btnScale.Scale + (1.03 - btnScale.Scale) * 0.3
+                                    btn.BackgroundTransparency = btn.BackgroundTransparency + (0.85 - btn.BackgroundTransparency) * 0.3
+                                    btn.TextColor3 = btn.Name == "EditBtn" and Colors.MentionGold or rgb(255, 90, 110)
+                                else
+                                    btnScale.Scale = btnScale.Scale + (1.0 - btnScale.Scale) * 0.3
+                                    btn.BackgroundTransparency = btn.BackgroundTransparency + (1.0 - btn.BackgroundTransparency) * 0.3
+                                    btn.TextColor3 = btn.Name == "EditBtn" and Colors.Text or Colors.Danger
                                 end
                             end
                         end
@@ -1082,20 +1100,22 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             if activeReactionMenu then
                 local reactionFired = false
                 local mousePos = UserInputService:GetMouseLocation()
-                local aimY = activeReactionMenu.AbsolutePosition.Y + 45
                 
-                if mousePos.Y < aimY then
+                local inSelfMenuZone = false
+                if activeSelfMenu then
+                    local selfTop = activeSelfMenu.AbsolutePosition.Y - 15
+                    if mousePos.Y > selfTop then
+                        inSelfMenuZone = true
+                    end
+                end
+                
+                if not inSelfMenuZone then
                     local emojiCont = activeReactionMenu:FindFirstChild("EmojiContainer")
                     if emojiCont then
                         for _, child in ipairs(emojiCont:GetChildren()) do
                             if child:IsA("TextLabel") then
-                                local bAbsPos = child.AbsolutePosition
-                                local bAbsSize = child.AbsoluteSize
-                                local centerX = bAbsPos.X + bAbsSize.X/2
-                                local distX = math.abs(centerX - mousePos.X)
-                                local distY = math.abs((bAbsPos.Y + bAbsSize.Y/2) - mousePos.Y)
-                                
-                                if distY < 120 and distX < 30 then 
+                                local btnScale = child:FindFirstChildOfClass("UIScale")
+                                if btnScale and btnScale.Scale > 1.2 then 
                                     if child.Text == "+" then
                                         if emojiFrame then 
                                             emojiTargetMode = "reaction"
@@ -1114,10 +1134,8 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                 elseif activeSelfMenu then
                     for _, child in ipairs(activeSelfMenu:GetChildren()) do
                         if child:IsA("TextButton") then
-                            local bAbsPos = child.AbsolutePosition
-                            local bAbsSize = child.AbsoluteSize
-                            if mousePos.X >= bAbsPos.X - 25 and mousePos.X <= bAbsPos.X + bAbsSize.X + 25 and
-                               mousePos.Y >= bAbsPos.Y - 20 and mousePos.Y <= bAbsPos.Y + bAbsSize.Y + 20 then
+                            local btnScale = child:FindFirstChildOfClass("UIScale")
+                            if btnScale and btnScale.Scale > 1.01 then
                                 if child.Name == "EditBtn" then
                                     playSFX("default")
                                     chatInput.Text = displayMsg
