@@ -285,7 +285,6 @@ task.spawn(function()
             local offsetX = (mouseLoc.X - screenCenter.X) / 80
             local offsetY = (mouseLoc.Y - screenCenter.Y) / 80
             
-            -- Smoothly shift aura and shadow based on mouse
             TweenService:Create(aura, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
                 Position = UDim2.new(mainFrame.Position.X.Scale, mainFrame.Position.X.Offset - offsetX, mainFrame.Position.Y.Scale, mainFrame.Position.Y.Offset - offsetY)
             }):Play()
@@ -725,7 +724,7 @@ end
 -- =========================================================
 local function updateLiveCounter(username, dispName)
     activeUsersTable[username:lower()] = { time = os.time(), disp = dispName or username, user = username }
-    local count, now = os.time()
+    local count, now = 0, os.time()
     for u, data in pairs(activeUsersTable) do
         local t = (type(data) == "table" and data.time) or data
         if now - t < 300 then count = count + 1 else activeUsersTable[u] = nil end
@@ -831,64 +830,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
 
     local cardScale = mk("UIScale", card, { Scale = 0.96 })
     TweenService:Create(cardScale, TweenInfo.new(0.26, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
-
-    -- 🌟 PERFECT BOTTOM-RIGHT REACTION PILL (ZERO CRASH POSITIONING)
-    local reactionPillContainer = mk("Frame", card, { 
-        Size = UDim2.fromOffset(0, 24), 
-        AnchorPoint = Vector2.new(1, 0.5), 
-        Position = UDim2.new(1, -12, 1, -2), 
-        BackgroundColor3 = rgb(20, 25, 38), 
-        BackgroundTransparency = 0.05, 
-        AutomaticSize = Enum.AutomaticSize.X, 
-        Visible = false, 
-        ZIndex = 50, 
-        Corner = UDim.new(1, 0), 
-        Stroke = {Color = Colors.Primary, Thickness = 1.2, Transparency = 0.3} 
-    })
-    mk("UIPadding", reactionPillContainer, { PaddingLeft = UDim.new(0, 8), PaddingRight = UDim.new(0, 8) })
-    mk("UIListLayout", reactionPillContainer, { FillDirection = Enum.FillDirection.Horizontal, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 4) })
-    
-    local function addReactionToCard(emojiStr)
-        local existing = false
-        for _, child in ipairs(reactionPillContainer:GetChildren()) do
-            if child:IsA("TextButton") and child.Name == "React_" .. emojiStr then existing = true; break end
-        end
-        if not existing then
-            local rBtn = mk("TextButton", reactionPillContainer, { Name = "React_" .. emojiStr, Size = UDim2.fromOffset(18, 18), BackgroundTransparency = 1, Text = emojiStr, Font = Enum.Font.SourceSans, TextSize = 16, ZIndex = 51, AutoButtonColor = false })
-            local rBtnScale = mk("UIScale", rBtn, {Scale = 0})
-            
-            reactionPillContainer.Visible = true
-            playSFX("reaction")
-            
-            TweenService:Create(rBtnScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
-            
-            local rpScale = reactionPillContainer:FindFirstChildOfClass("UIScale") or mk("UIScale", reactionPillContainer)
-            rpScale.Scale = 0.4
-            TweenService:Create(rpScale, TweenInfo.new(0.4, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1}):Play()
-
-            rBtn.MouseButton1Click:Connect(function()
-                playSFX("default")
-                TweenService:Create(rBtnScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play()
-                TweenService:Create(rBtn, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Rotation = -25}):Play()
-                
-                task.delay(0.25, function()
-                    if rBtn and rBtn.Parent then rBtn:Destroy() end
-                    local hasReacts = false
-                    for _, c in ipairs(reactionPillContainer:GetChildren()) do
-                        if c:IsA("TextButton") then hasReacts = true; break end
-                    end
-                    if not hasReacts then
-                        TweenService:Create(reactionPillContainer:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play()
-                        task.delay(0.2, function() reactionPillContainer.Visible = false end)
-                    else
-                        local rpScale = reactionPillContainer:FindFirstChildOfClass("UIScale")
-                        rpScale.Scale = 0.85
-                        TweenService:Create(rpScale, TweenInfo.new(0.3, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1}):Play()
-                    end
-                end)
-            end)
-        end
-    end
 
     local accentStrip = mk("Frame", card, { Size = UDim2.new(0, 3, 1, -14), Position = UDim2.new(0, 5, 0, 7), BorderSizePixel = 0, BackgroundColor3 = rgb(255, 255, 255), ZIndex = 11, Corner = UDim.new(1, 0) })
     local stripGrad = mk("UIGradient", accentStrip, { Rotation = 90 })
@@ -1035,6 +976,68 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         crispText(bodyTxt, 0.35)
     end
 
+    -- 🔥 THE ULTIMATE ZERO-CRASH REACTION PILL FIX 🔥
+    local reactionRow = mk("Frame", cardContent, { Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, LayoutOrder = 4, Visible = false })
+    mk("UIPadding", reactionRow, { PaddingTop = UDim.new(0, 4) })
+    
+    local reactionPillContainer = mk("Frame", reactionRow, { 
+        Size = UDim2.fromOffset(0, 24), 
+        AnchorPoint = Vector2.new(1, 0), 
+        Position = UDim2.new(1, 0, 0, 0), 
+        BackgroundColor3 = rgb(20, 25, 38), 
+        BackgroundTransparency = 0.05, 
+        AutomaticSize = Enum.AutomaticSize.X, 
+        Visible = false, 
+        ZIndex = 50, 
+        Corner = UDim.new(1, 0), 
+        Stroke = {Color = Colors.Primary, Thickness = 1.2, Transparency = 0.3} 
+    })
+    mk("UIPadding", reactionPillContainer, { PaddingLeft = UDim.new(0, 8), PaddingRight = UDim.new(0, 8) })
+    mk("UIListLayout", reactionPillContainer, { FillDirection = Enum.FillDirection.Horizontal, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 4) })
+    
+    local function addReactionToCard(emojiStr)
+        local existing = false
+        for _, child in ipairs(reactionPillContainer:GetChildren()) do
+            if child:IsA("TextButton") and child.Name == "React_" .. emojiStr then existing = true; break end
+        end
+        if not existing then
+            local rBtn = mk("TextButton", reactionPillContainer, { Name = "React_" .. emojiStr, Size = UDim2.fromOffset(18, 18), BackgroundTransparency = 1, Text = emojiStr, Font = Enum.Font.SourceSans, TextSize = 16, ZIndex = 51, AutoButtonColor = false })
+            local rBtnScale = mk("UIScale", rBtn, {Scale = 0})
+            
+            reactionRow.Visible = true
+            reactionPillContainer.Visible = true
+            playSFX("reaction")
+            
+            TweenService:Create(rBtnScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
+            
+            local rpScale = reactionPillContainer:FindFirstChildOfClass("UIScale") or mk("UIScale", reactionPillContainer)
+            rpScale.Scale = 0.4
+            TweenService:Create(rpScale, TweenInfo.new(0.4, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1}):Play()
+
+            rBtn.MouseButton1Click:Connect(function()
+                playSFX("default")
+                TweenService:Create(rBtnScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play()
+                TweenService:Create(rBtn, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Rotation = -25}):Play()
+                
+                task.delay(0.25, function()
+                    if rBtn and rBtn.Parent then rBtn:Destroy() end
+                    local hasReacts = false
+                    for _, c in ipairs(reactionPillContainer:GetChildren()) do
+                        if c:IsA("TextButton") then hasReacts = true; break end
+                    end
+                    if not hasReacts then
+                        TweenService:Create(reactionPillContainer:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play()
+                        task.delay(0.2, function() reactionPillContainer.Visible = false; reactionRow.Visible = false end)
+                    else
+                        local rpScale = reactionPillContainer:FindFirstChildOfClass("UIScale")
+                        rpScale.Scale = 0.85
+                        TweenService:Create(rpScale, TweenInfo.new(0.3, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1}):Play()
+                    end
+                end)
+            end)
+        end
+    end
+
     mk("UIPadding", card, { PaddingBottom = UDim.new(0, 9) })
     if not hasBroadcastMention and isMentioned and not isSelf then playSFX("mention") elseif memeIdMatch and not isSelf then playSFX("meme") end
 
@@ -1046,13 +1049,11 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             isSwipingCard, swipeInputObj, swipeStartPos, swipeTriggered, movedDistance = true, input, input.Position, false, 0
             isHoldingCard = true
             
-            -- 🔥 COMPACT & GLASSY APPLE DOCK MENU (WITH SELF ACTIONS & OVERLAY) 🔥
             task.delay(0.35, function()
                 if isHoldingCard and movedDistance < 10 and not activeReactionMenu then
                     closeReactionMenu()
                     playSFX("default")
                     
-                    -- OVERLAY FOR TAP-TO-CLOSE & CINEMATIC DIM
                     local menuOverlay = mk("TextButton", mainFrame, { Name = "ReactionOverlay", Size = UDim2.fromScale(1, 1), BackgroundColor3 = rgb(5, 8, 14), BackgroundTransparency = 1, Text = "", ZIndex = 199 })
                     TweenService:Create(menuOverlay, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundTransparency = 0.45}):Play()
                     menuOverlay.MouseButton1Down:Connect(function()
@@ -1106,7 +1107,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     
                     activeReactionMenu = rMenu
 
-                    -- 🌟 SELF ACTION MENU (EDIT & DELETE) 🌟
                     local renderedSelfBtns = {}
                     if isSelf and not memeIdMatch then
                         local selfMenu = mk("Frame", mainFrame, {
