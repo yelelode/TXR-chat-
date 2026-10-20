@@ -166,6 +166,7 @@ local function playSFX(soundType)
             if soundType == "mention" or soundType == "broadcast" then s.SoundId = "rbxassetid://9114223177"; s.Volume = 0.85
             elseif soundType == "dm" then s.SoundId = "rbxassetid://9114223177"; s.Volume = 0.75
             elseif soundType == "meme" then s.SoundId = "rbxassetid://9069609268"; s.Volume = 0.55
+            elseif soundType == "reaction" then s.SoundId = "rbxassetid://6895079853"; s.Volume = 0.5 -- New sound for reaction
             else s.SoundId = "rbxassetid://6518811702"; s.Volume = 0.35 end
             s.Parent = SoundService; s:Play()
             task.delay(1.5, function() pcall(function() s:Destroy() end) end)
@@ -632,6 +633,14 @@ local function addJoinNotice(dispName)
     crispText(lbl, 0.6)
 end
 
+local activeReactionMenu = nil
+local function closeReactionMenu()
+    if activeReactionMenu then
+        activeReactionMenu:Destroy()
+        activeReactionMenu = nil
+    end
+end
+
 local MAX_MESSAGES_PER_TAB = 60
 local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSender, msgJobId, scopeType, customTimeStr)
     local effectiveScope = scopeType or "global"
@@ -696,6 +705,28 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
 
     local cardScale = mk("UIScale", card, { Scale = 0.96 })
     TweenService:Create(cardScale, TweenInfo.new(0.26, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
+
+    -- 🌟 REACTION PILL CONTAINER (New Feature)
+    local reactionPillContainer = mk("Frame", card, { Size = UDim2.fromOffset(0, 20), AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, -6, 1, 8), BackgroundColor3 = Colors.Surface, BackgroundTransparency = 0.05, AutomaticSize = Enum.AutomaticSize.X, Visible = false, ZIndex = 15, Corner = UDim.new(0, 10), Stroke = {Color = Colors.PrimaryDark, Thickness = 1, Transparency = 0.4} })
+    mk("UIPadding", reactionPillContainer, { PaddingLeft = UDim.new(0, 6), PaddingRight = UDim.new(0, 6) })
+    local reactionListLayout = mk("UIListLayout", reactionPillContainer, { FillDirection = Enum.FillDirection.Horizontal, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 4) })
+    
+    local function addReactionToCard(emojiStr)
+        local existing = false
+        for _, child in ipairs(reactionPillContainer:GetChildren()) do
+            if child:IsA("TextLabel") and child.Text == emojiStr then existing = true; break end
+        end
+        if not existing then
+            mk("TextLabel", reactionPillContainer, { Size = UDim2.fromOffset(16, 16), BackgroundTransparency = 1, Text = emojiStr, Font = Enum.Font.SourceSans, TextSize = 14, ZIndex = 16 })
+            reactionPillContainer.Visible = true
+            playSFX("reaction")
+            
+            -- Little pop animation for pill
+            local rpScale = reactionPillContainer:FindFirstChildOfClass("UIScale") or mk("UIScale", reactionPillContainer)
+            rpScale.Scale = 0.5
+            TweenService:Create(rpScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
+        end
+    end
 
     local accentStrip = mk("Frame", card, { Size = UDim2.new(0, 3, 1, -14), Position = UDim2.new(0, 5, 0, 7), BorderSizePixel = 0, BackgroundColor3 = rgb(255, 255, 255), ZIndex = 11, Corner = UDim.new(1, 0) })
     local stripGrad = mk("UIGradient", accentStrip, { Rotation = 90 })
@@ -786,9 +817,68 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     if not hasBroadcastMention and isMentioned and not isSelf then playSFX("mention") elseif memeIdMatch and not isSelf then playSFX("meme") end
 
     local isSwipingCard, swipeInputObj, swipeStartPos, swipeTriggered, movedDistance = false, nil, nil, false, 0
+    local isHoldingCard = false
+    local holdStartTick = 0
+
     card.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             isSwipingCard, swipeInputObj, swipeStartPos, swipeTriggered, movedDistance = true, input, input.Position, false, 0
+            isHoldingCard = true
+            holdStartTick = tick()
+            
+            -- 🔥 LONG PRESS REACTION MENU LOGIC 🔥
+            task.delay(0.35, function()
+                if isHoldingCard and movedDistance < 10 and not activeReactionMenu then
+                    closeReactionMenu()
+                    playSFX("default")
+                    
+                    local rMenu = mk("Frame", mainFrame, { Size = UDim2.fromOffset(190, 44), BackgroundColor3 = rgb(12, 16, 26), BackgroundTransparency = 0.1, ZIndex = 200, Corner = UDim.new(1, 0), Stroke = {Color = Colors.Primary, Thickness = 1.5, Transparency = 0.2} })
+                    local cardAbsPos = card.AbsolutePosition - mainFrame.AbsolutePosition
+                    rMenu.Position = UDim2.fromOffset(math.clamp(cardAbsPos.X + 20, 10, mainFrame.AbsoluteSize.X - 200), math.clamp(cardAbsPos.Y - 50, 10, mainFrame.AbsoluteSize.Y - 50))
+                    
+                    local rMenuScale = mk("UIScale", rMenu, {Scale = 0})
+                    TweenService:Create(rMenuScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
+                    
+                    mk("UIListLayout", rMenu, { FillDirection = Enum.FillDirection.Horizontal, HorizontalAlignment = Enum.HorizontalAlignment.Center, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 8) })
+                    
+                    local reactionItems = {
+                        {emoji = "👍", action = function() addReactionToCard("👍") end},
+                        {emoji = "❤️", action = function() addReactionToCard("❤️") end},
+                        {emoji = "😂", action = function() addReactionToCard("😂") end},
+                        {emoji = "😮", action = function() addReactionToCard("😮") end},
+                        {emoji = "+", isIcon = true, action = function() if emojiBtn then emojiFrame.Visible = true end end}
+                    }
+                    
+                    local renderedBtns = {}
+                    for _, rData in ipairs(reactionItems) do
+                        local rBtn = mk("TextLabel", rMenu, { Size = UDim2.fromOffset(30, 30), BackgroundTransparency = 1, Text = rData.emoji, Font = Enum.Font.SourceSansBold, TextColor3 = rData.isIcon and Colors.Primary or Colors.Text, TextSize = rData.isIcon and 24 or 22, ZIndex = 201 })
+                        local rBtnScale = mk("UIScale", rBtn)
+                        renderedBtns[rBtn] = rData.action
+                    end
+                    
+                    activeReactionMenu = rMenu
+                    
+                    -- Real-time Drag Highlight Logic
+                    local dragHoverConn
+                    dragHoverConn = RunService.RenderStepped:Connect(function()
+                        if not activeReactionMenu or not isHoldingCard then dragHoverConn:Disconnect() return end
+                        local mousePos = UserInputService:GetMouseLocation()
+                        for btn, _ in pairs(renderedBtns) do
+                            local btnScale = btn:FindFirstChildOfClass("UIScale")
+                            local bAbsPos = btn.AbsolutePosition
+                            local bAbsSize = btn.AbsoluteSize
+                            
+                            -- Simple bounding box check with slight padding
+                            if mousePos.X >= bAbsPos.X - 10 and mousePos.X <= bAbsPos.X + bAbsSize.X + 10 and
+                               mousePos.Y >= bAbsPos.Y - 40 and mousePos.Y <= bAbsPos.Y + bAbsSize.Y + 10 then
+                                btnScale.Scale = 1.35
+                            else
+                                btnScale.Scale = 1.0
+                            end
+                        end
+                    end)
+                end
+            end)
         end
     end)
 
@@ -798,7 +888,11 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         if isSwipingCard and (input == swipeInputObj or input.UserInputType == Enum.UserInputType.MouseMovement) then
             local delta = input.Position - swipeStartPos
             movedDistance = delta.Magnitude
+            
+            if activeReactionMenu then return end -- Disable swipe if reaction menu is open
+            
             if delta.X > 6 and math.abs(delta.X) > math.abs(delta.Y) * 1.25 then
+                isHoldingCard = false -- Cancel long press
                 local dragOffset = math.clamp((math.max(0, delta.X - 6)) ^ 0.85 * 1.35, 0, 58)
                 card.Position = UDim2.fromOffset(dragOffset, 0)
                 local progress = math.clamp(dragOffset / 40, 0, 1)
@@ -820,13 +914,44 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     local endConn
     endConn = UserInputService.InputEnded:Connect(function(input)
         if not card.Parent then endConn:Disconnect(); return end
+        if isHoldingCard and (input == swipeInputObj or input.UserInputType == Enum.UserInputType.MouseButton1) then
+            isHoldingCard = false
+            
+            -- Handle Drag-to-Select Reaction Release
+            if activeReactionMenu then
+                local mousePos = UserInputService:GetMouseLocation()
+                local reactionFired = false
+                
+                for _, child in ipairs(activeReactionMenu:GetChildren()) do
+                    if child:IsA("TextLabel") then
+                        local btnScale = child:FindFirstChildOfClass("UIScale")
+                        if btnScale and btnScale.Scale > 1.1 then
+                            if child.Text == "+" then
+                                if emojiFrame then emojiFrame.Visible = true end
+                            else
+                                addReactionToCard(child.Text)
+                            end
+                            reactionFired = true
+                            break
+                        end
+                    end
+                end
+                
+                TweenService:Create(activeReactionMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
+                task.delay(0.2, closeReactionMenu)
+                if reactionFired then return end
+            end
+        end
+
         if isSwipingCard and (input == swipeInputObj or input.UserInputType == Enum.UserInputType.MouseButton1) then
             isSwipingCard, swipeInputObj = false, nil
-            TweenService:Create(card, TweenInfo.new(0.32, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.fromOffset(0, 0)}):Play()
-            TweenService:Create(swipeCapsule, TweenInfo.new(0.22), {BackgroundTransparency = 1}):Play()
-            TweenService:Create(scStroke, TweenInfo.new(0.22), {Transparency = 1}):Play()
-            TweenService:Create(swipeLabel, TweenInfo.new(0.22), {TextTransparency = 1}):Play()
-            TweenService:Create(scScale, TweenInfo.new(0.22), {Scale = 0.5}):Play()
+            if not activeReactionMenu then
+                TweenService:Create(card, TweenInfo.new(0.32, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.fromOffset(0, 0)}):Play()
+                TweenService:Create(swipeCapsule, TweenInfo.new(0.22), {BackgroundTransparency = 1}):Play()
+                TweenService:Create(scStroke, TweenInfo.new(0.22), {Transparency = 1}):Play()
+                TweenService:Create(swipeLabel, TweenInfo.new(0.22), {TextTransparency = 1}):Play()
+                TweenService:Create(scScale, TweenInfo.new(0.22), {Scale = 0.5}):Play()
+            end
 
             if swipeTriggered then
                 swipeTriggered = false
@@ -835,7 +960,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     if #cleanPreview > 38 then cleanPreview = string.sub(cleanPreview, 1, 38) .. "..." end
                     activateReplyBanner(dispName, cleanPreview)
                 end
-            elseif movedDistance < 10 then
+            elseif movedDistance < 10 and not activeReactionMenu then
                 if isSelf or isSystemAI then return end
                 for _, c in ipairs(actionMenu:GetChildren()) do if c:IsA("TextButton") then c:Destroy() end end
                 createActionBtn("REPLY", Colors.Primary, function()
