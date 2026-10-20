@@ -181,7 +181,7 @@ local SERVER_URL = "https://my-roblox-private-chat.onrender.com"
 local CURRENT_SESSION_JOB = tostring(game.JobId)
 local GLOBAL_SAVE_FILE = "TXR_GlobalChat_SavedV28.json"
 local lastSyncTime, isInitialSync, chatMode = 0, true, "server"
-local privateTarget, activeReplyData = nil, nil
+local privateTarget, activeReplyData, activeEditData = nil, nil, nil
 local knownUsers, activeUsersTable, remoteTypers = {}, {}, {}
 local unreadCount, isGhostMode, ghostDebounce = 0, false, false
 local userIdCache, activeBadgesList, activeAICoresList, modalSelectionIndicators, broadcastGlowCards = {}, {}, {}, {}, {}
@@ -603,7 +603,7 @@ messageFeed:GetPropertyChangedSignal("CanvasPosition"):Connect(function()
     if maxOffset - messageFeed.CanvasPosition.Y < 35 then jumpBottomBtn.Visible = false end
 end)
 
-local sendMessageFunc, chatInput, activateReplyBanner
+local sendMessageFunc, chatInput, activateReplyBanner, activateEditBanner
 actionMenu = mk("Frame", mainFrame, { Size = UDim2.fromOffset(225, 32), BackgroundColor3 = Colors.Surface, Visible = false, ZIndex = 50, Corner = UDim.new(0, 8), Stroke = { Color = Colors.Primary, Thickness = 1.2, Transparency = 0.4 } })
 mk("UIListLayout", actionMenu, { FillDirection = Enum.FillDirection.Horizontal, HorizontalAlignment = Enum.HorizontalAlignment.Center, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 4) })
 
@@ -633,10 +633,11 @@ local function addJoinNotice(dispName)
     crispText(lbl, 0.6)
 end
 
--- 🌟 REACTION ROUTING SYSTEM
+-- 🌟 REACTION & SELF-ACTION ROUTING SYSTEM
 local emojiTargetMode = "chat"
 local activeReactionCallback = nil
 local activeReactionMenu = nil
+local activeSelfMenu = nil
 local reactionCanvasLockPos = nil 
 
 local function closeReactionMenu()
@@ -644,7 +645,12 @@ local function closeReactionMenu()
         activeReactionMenu:Destroy()
         activeReactionMenu = nil
     end
+    if activeSelfMenu then
+        activeSelfMenu:Destroy()
+        activeSelfMenu = nil
+    end
     reactionCanvasLockPos = nil
+    if messageFeed then messageFeed.ScrollingEnabled = true end
 end
 
 local MAX_MESSAGES_PER_TAB = 60
@@ -715,13 +721,13 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     -- 🌟 PERFECT BOTTOM-RIGHT REACTION PILL (FIXED VISIBILITY & POSITION)
     local reactionPillContainer = mk("Frame", card, { 
         Size = UDim2.fromOffset(0, 24), 
-        AnchorPoint = Vector2.new(1, 1), -- Fixed Anchor to keep it completely visible
-        Position = UDim2.new(1, -4, 1, 14), -- Perfect placement mapping to "1000045634.jpg" layout
+        AnchorPoint = Vector2.new(1, 1), 
+        Position = UDim2.new(1, -4, 1, 14), 
         BackgroundColor3 = rgb(20, 25, 38), 
         BackgroundTransparency = 0.05, 
         AutomaticSize = Enum.AutomaticSize.X, 
         Visible = false, 
-        ZIndex = 50, -- Boosted ZIndex
+        ZIndex = 50, 
         Corner = UDim.new(1, 0), 
         Stroke = {Color = Colors.Primary, Thickness = 1.2, Transparency = 0.3} 
     })
@@ -740,17 +746,14 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             reactionPillContainer.Visible = true
             playSFX("reaction")
             
-            -- Pop in
             TweenService:Create(rBtnScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
             
             local rpScale = reactionPillContainer:FindFirstChildOfClass("UIScale") or mk("UIScale", reactionPillContainer)
             rpScale.Scale = 0.4
             TweenService:Create(rpScale, TweenInfo.new(0.4, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1}):Play()
 
-            -- UNDO REACTION LOGIC (ULTRA SMOOTH SPINING POP OUT)
             rBtn.MouseButton1Click:Connect(function()
                 playSFX("default")
-                -- Make it pop and spin out
                 TweenService:Create(rBtnScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play()
                 TweenService:Create(rBtn, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Rotation = -25}):Play()
                 
@@ -764,7 +767,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         TweenService:Create(reactionPillContainer:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play()
                         task.delay(0.2, function() reactionPillContainer.Visible = false end)
                     else
-                        -- Pop the container slightly to react to removal
                         local rpScale = reactionPillContainer:FindFirstChildOfClass("UIScale")
                         rpScale.Scale = 0.85
                         TweenService:Create(rpScale, TweenInfo.new(0.3, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1}):Play()
@@ -849,13 +851,14 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         crispText(qText, 0.45)
     end
 
+    local bodyTxt
     if memeIdMatch then
         local memeHolder = mk("Frame", cardContent, { Size = UDim2.new(1, 0, 0, 96), BackgroundTransparency = 1, LayoutOrder = 3, ZIndex = 13 })
         mk("ImageLabel", memeHolder, { Size = UDim2.fromOffset(92, 92), Position = UDim2.fromOffset(0, 2), BackgroundColor3 = Colors.Background, BackgroundTransparency = 0.20, Image = getAssetThumb(memeIdMatch), ScaleType = Enum.ScaleType.Fit, ZIndex = 13, Corner = UDim.new(0, 8), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.2 } })
     else
         local formattedBody = sanitizeXml(displayMsg)
         formattedBody = formattedBody:gsub("(@%w+)", "<font color='#FFCD46'><b>%1</b></font>")
-        local bodyTxt = mk("TextLabel", cardContent, { Name = "MsgContent", Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, TextColor3 = isSystemAI and rgb(220, 235, 255) or Colors.Text, Font = Enum.Font.GothamMedium, TextSize = 11.5, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, RichText = true, LayoutOrder = 3, ZIndex = 13, Text = formattedBody })
+        bodyTxt = mk("TextLabel", cardContent, { Name = "MsgContent", Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, TextColor3 = isSystemAI and rgb(220, 235, 255) or Colors.Text, Font = Enum.Font.GothamMedium, TextSize = 11.5, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, RichText = true, LayoutOrder = 3, ZIndex = 13, Text = formattedBody })
         crispText(bodyTxt, 0.35)
     end
 
@@ -870,25 +873,21 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             isSwipingCard, swipeInputObj, swipeStartPos, swipeTriggered, movedDistance = true, input, input.Position, false, 0
             isHoldingCard = true
             
-            -- 🔥 COMPACT & GLASSY APPLE DOCK MENU 🔥
-            task.delay(0.35, function()
+            -- 🔥 COMPACT & GLASSY APPLE DOCK MENU (WITH SELF ACTIONS) 🔥
+            task.delay(0.30, function()
                 if isHoldingCard and movedDistance < 10 and not activeReactionMenu then
                     closeReactionMenu()
                     playSFX("default")
                     
-                    -- COMPACT & GLASSY BACKGROUND
                     local rMenu = mk("Frame", mainFrame, { Size = UDim2.fromOffset(180, 40), BackgroundColor3 = rgb(15, 20, 30), BackgroundTransparency = 0.25, ZIndex = 200, Corner = UDim.new(1, 0), Stroke = {Color = rgb(255, 255, 255), Thickness = 1.2, Transparency = 0.5} })
-                    
-                    -- GLASS SHEEN EFFECT (SEPARATED FROM LAYOUT)
                     local rGlass = mk("Frame", rMenu, { Size = UDim2.new(1, 0, 0.5, 0), BackgroundTransparency = 0.85, BackgroundColor3 = rgb(255, 255, 255), BorderSizePixel = 0, ZIndex = 200, Corner = UDim.new(1, 0) })
                     mk("UIGradient", rGlass, { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.1), NumberSequenceKeypoint.new(1, 1) }), Rotation = 90 })
 
-                    -- EMOJI CONTAINER (FIX FOR THE BUG: Emojis render safely here)
                     local emojiContainer = mk("Frame", rMenu, { Name = "EmojiContainer", Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, ZIndex = 201 })
                     mk("UIListLayout", emojiContainer, { FillDirection = Enum.FillDirection.Horizontal, HorizontalAlignment = Enum.HorizontalAlignment.Center, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 6) })
 
                     local touchY = swipeStartPos.Y - mainFrame.AbsolutePosition.Y
-                    local rMenuY = math.clamp(touchY - 55, 10, mainFrame.AbsoluteSize.Y - 45)
+                    local rMenuY = math.clamp(touchY - 55, 10, mainFrame.AbsoluteSize.Y - 110)
                     local cardAbsPos = card.AbsolutePosition - mainFrame.AbsolutePosition
                     rMenu.Position = UDim2.fromOffset(math.clamp(cardAbsPos.X + 20, 10, mainFrame.AbsoluteSize.X - 190), rMenuY)
                     
@@ -917,13 +916,52 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     end
                     
                     activeReactionMenu = rMenu
+
+                    -- 🌟 SELF ACTION MENU (EDIT & DELETE) 🌟
+                    if isSelf and not memeIdMatch then
+                        local selfMenu = mk("Frame", mainFrame, {
+                            Size = UDim2.fromOffset(140, 65),
+                            BackgroundColor3 = rgb(15, 20, 30),
+                            BackgroundTransparency = 0.25,
+                            ZIndex = 200,
+                            Corner = UDim.new(0, 10),
+                            Stroke = {Color = rgb(255, 255, 255), Thickness = 1.2, Transparency = 0.5}
+                        })
+                        local selfGlass = mk("Frame", selfMenu, { Size = UDim2.new(1, 0, 0.5, 0), BackgroundTransparency = 0.85, BackgroundColor3 = rgb(255, 255, 255), BorderSizePixel = 0, ZIndex = 200, Corner = UDim.new(1, 0) })
+                        mk("UIGradient", selfGlass, { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.1), NumberSequenceKeypoint.new(1, 1) }), Rotation = 90 })
+                        
+                        selfMenu.Position = UDim2.fromOffset(rMenu.Position.X.Offset, rMenu.Position.Y.Offset + 48)
+                        local smScale = mk("UIScale", selfMenu, {Scale = 0})
+                        TweenService:Create(smScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
+                        
+                        local editBtn = mk("TextButton", selfMenu, { Size = UDim2.new(1, 0, 0, 32), Position = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 1, Text = "   ✏️ Edit Message", Font = Enum.Font.GothamMedium, TextSize = 11, TextColor3 = Colors.Primary, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 202 })
+                        mk("Frame", selfMenu, { Size = UDim2.new(1, -16, 0, 1), Position = UDim2.new(0, 8, 0, 32), BackgroundColor3 = rgb(255, 255, 255), BackgroundTransparency = 0.85, BorderSizePixel = 0, ZIndex = 203 })
+                        local delBtn = mk("TextButton", selfMenu, { Size = UDim2.new(1, 0, 0, 32), Position = UDim2.new(0, 0, 0, 33), BackgroundTransparency = 1, Text = "   🗑️ Delete Message", Font = Enum.Font.GothamMedium, TextSize = 11, TextColor3 = Colors.Danger, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 202 })
+                        
+                        applySpringHover(editBtn); applySpringHover(delBtn)
+
+                        editBtn.MouseButton1Click:Connect(function()
+                            playSFX("default")
+                            closeReactionMenu()
+                            chatInput.Text = displayMsg
+                            chatInput:CaptureFocus()
+                            if activateEditBanner then activateEditBanner(bodyTxt, displayMsg) end
+                        end)
+
+                        delBtn.MouseButton1Click:Connect(function()
+                            playSFX("default")
+                            closeReactionMenu()
+                            TweenService:Create(cardScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play()
+                            task.delay(0.3, function() cardWrapper:Destroy() end)
+                        end)
+                        
+                        activeSelfMenu = selfMenu
+                    end
                     
-                    -- ULTRA SMOOTH APPLE MAC DOCK 90FPS PHYSICS
                     local dragHoverConn
                     dragHoverConn = RunService.RenderStepped:Connect(function()
                         if not activeReactionMenu or not isHoldingCard then dragHoverConn:Disconnect() return end
                         
-                        -- ABSOLUTE SCROLL FREEZE
                         if messageFeed then
                             if not reactionCanvasLockPos then reactionCanvasLockPos = messageFeed.CanvasPosition end
                             messageFeed.CanvasPosition = reactionCanvasLockPos
@@ -1004,7 +1042,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             if activeReactionMenu then
                 local reactionFired = false
                 
-                -- PROPER EMOJI LOOKUP (BUG FIXED HERE)
                 local emojiCont = activeReactionMenu:FindFirstChild("EmojiContainer")
                 if emojiCont then
                     for _, child in ipairs(emojiCont:GetChildren()) do
@@ -1027,9 +1064,12 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     end
                 end
                 
-                TweenService:Create(activeReactionMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
-                task.delay(0.2, closeReactionMenu)
-                if reactionFired then return end
+                if reactionFired then
+                    TweenService:Create(activeReactionMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
+                    if activeSelfMenu then TweenService:Create(activeSelfMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play() end
+                    task.delay(0.2, closeReactionMenu)
+                    return
+                end
             end
         end
 
@@ -1051,7 +1091,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     if #cleanPreview > 38 then cleanPreview = string.sub(cleanPreview, 1, 38) .. "..." end
                     activateReplyBanner(dispName, cleanPreview)
                 end
-            elseif movedDistance < 10 and not activeReactionMenu then
+            elseif movedDistance < 10 and not activeReactionMenu and not activeSelfMenu then
                 if isSelf or isSystemAI then return end
                 for _, c in ipairs(actionMenu:GetChildren()) do if c:IsA("TextButton") then c:Destroy() end end
                 createActionBtn("REPLY", Colors.Primary, function()
@@ -1200,19 +1240,30 @@ local rbText = mk("TextLabel", replyBanner, { Size = UDim2.new(1, -44, 1, 0), Po
 local rbClose = mk("TextButton", replyBanner, { Size = UDim2.fromOffset(22, 22), AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -5, 0.5, 0), BackgroundColor3 = Colors.Background, BackgroundTransparency = 0.35, Text = "X", TextColor3 = Colors.SubText, Font = Enum.Font.GothamBlack, TextSize = 9.5, ZIndex = 22, Corner = UDim.new(1, 0) })
 
 local function clearReplyBanner()
-    activeReplyData = nil; replyBanner.Visible = false
+    activeReplyData = nil; activeEditData = nil
+    replyBanner.Visible = false
     messageFeed.Size = UDim2.new(1, -24, 1, -152)
 end
 rbClose.MouseButton1Click:Connect(clearReplyBanner)
 
 activateReplyBanner = function(targetDispName, snippetText)
     local cleanSnippet = string.gsub(snippetText, "[%[%]\n\r|]", " ")
-    activeReplyData = { disp = targetDispName, text = cleanSnippet }
+    activeReplyData = { disp = targetDispName, text = cleanSnippet }; activeEditData = nil
     rbText.Text = string.format("<font color='#00E6C3'><b>RE: %s</b></font>  •  <font color='#9AB0CE'>%s</font>", sanitizeXml(targetDispName), sanitizeXml(cleanSnippet))
     replyBanner.Visible = true; rbScale.Scale = 0.92
     TweenService:Create(rbScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
     messageFeed.Size = UDim2.new(1, -24, 1, -184)
     task.defer(function() chatInput:CaptureFocus() end)
+end
+
+activateEditBanner = function(msgLabel, oldText)
+    local cleanSnippet = string.gsub(oldText, "[%[%]\n\r|]", " ")
+    if #cleanSnippet > 38 then cleanSnippet = string.sub(cleanSnippet, 1, 38) .. "..." end
+    activeEditData = { label = msgLabel }; activeReplyData = nil
+    rbText.Text = string.format("<font color='#FFCD46'><b>✏️ EDITING:</b></font>  •  <font color='#9AB0CE'>%s</font>", sanitizeXml(cleanSnippet))
+    replyBanner.Visible = true; rbScale.Scale = 0.92
+    TweenService:Create(rbScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
+    messageFeed.Size = UDim2.new(1, -24, 1, -184)
 end
 
 local inputContainer = mk("Frame", mainFrame, { Size = UDim2.new(1, -24, 0, 46), Position = UDim2.new(0, 12, 1, -54), BackgroundColor3 = rgb(13, 18, 29), BackgroundTransparency = 0.10, ZIndex = 12, Corner = UDim.new(1, 0) })
@@ -1683,6 +1734,16 @@ sendMessageFunc = function(overrideText)
     if text:lower() == "/help" then
         chatInput.Text = ""
         addMessageToFeed("System::TXR // AI", "Commands: '@all' for Global Mention | '!p <user>' for Private DM.", nil, false, game.JobId, chatMode)
+        return
+    end
+
+    if activeEditData then
+        local formattedBody = sanitizeXml(text)
+        formattedBody = formattedBody:gsub("(@%w+)", "<font color='#FFCD46'><b>%1</b></font>")
+        activeEditData.label.Text = formattedBody .. "  <font color='#8A9AB5' size='9'><i>(edited)</i></font>"
+        clearReplyBanner()
+        chatInput.Text = ""
+        playSFX("default")
         return
     end
 
