@@ -633,13 +633,18 @@ local function addJoinNotice(dispName)
     crispText(lbl, 0.6)
 end
 
+-- 🌟 REACTION ROUTING SYSTEM
+local emojiTargetMode = "chat"
+local activeReactionCallback = nil
 local activeReactionMenu = nil
+local reactionCanvasLockPos = nil -- SCROLL FREEZER
+
 local function closeReactionMenu()
     if activeReactionMenu then
         activeReactionMenu:Destroy()
         activeReactionMenu = nil
     end
-    if messageFeed then messageFeed.ScrollingEnabled = true end
+    reactionCanvasLockPos = nil
 end
 
 local MAX_MESSAGES_PER_TAB = 60
@@ -710,8 +715,8 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
     -- 🌟 PERFECT BOTTOM-RIGHT REACTION PILL
     local reactionPillContainer = mk("Frame", card, { 
         Size = UDim2.fromOffset(0, 24), 
-        AnchorPoint = Vector2.new(1, 0.5), -- Half inside, half outside
-        Position = UDim2.new(1, -12, 1, -2), -- Positioned exactly at the bottom-right border
+        AnchorPoint = Vector2.new(1, 0.5),
+        Position = UDim2.new(1, -12, 1, -2),
         BackgroundColor3 = rgb(20, 25, 38), 
         BackgroundTransparency = 0.05, 
         AutomaticSize = Enum.AutomaticSize.X, 
@@ -835,66 +840,88 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             isSwipingCard, swipeInputObj, swipeStartPos, swipeTriggered, movedDistance = true, input, input.Position, false, 0
             isHoldingCard = true
             
-            -- 🔥 LONG PRESS REACTION MENU LOGIC (UPDATED PHYSICS & HITBOX) 🔥
+            -- 🔥 LONG PRESS REACTION MENU LOGIC (APPLE DOCK + SCROLL FREEZE) 🔥
             task.delay(0.35, function()
                 if isHoldingCard and movedDistance < 10 and not activeReactionMenu then
-                    if messageFeed then messageFeed.ScrollingEnabled = false end
                     closeReactionMenu()
                     playSFX("default")
                     
-                    -- SLEEK APPLE/TELEGRAM STYLE PILL
-                    local rMenu = mk("Frame", mainFrame, { Size = UDim2.fromOffset(180, 42), BackgroundColor3 = Colors.SurfaceHover, BackgroundTransparency = 0.15, ZIndex = 200, Corner = UDim.new(1, 0), Stroke = {Color = rgb(255, 255, 255), Thickness = 1, Transparency = 0.8} })
+                    -- PREMIUM DOCK MENU
+                    local rMenu = mk("Frame", mainFrame, { Size = UDim2.fromOffset(200, 48), BackgroundColor3 = rgb(15, 20, 30), BackgroundTransparency = 0.08, ZIndex = 200, Corner = UDim.new(1, 0), Stroke = {Color = Colors.Primary, Thickness = 1.2, Transparency = 0.3} })
                     
-                    -- Dynamic Position based on Touch (Not too high!)
                     local touchY = swipeStartPos.Y - mainFrame.AbsolutePosition.Y
-                    local rMenuY = math.clamp(touchY - 55, 10, mainFrame.AbsoluteSize.Y - 50)
+                    local rMenuY = math.clamp(touchY - 60, 10, mainFrame.AbsoluteSize.Y - 55)
                     local cardAbsPos = card.AbsolutePosition - mainFrame.AbsolutePosition
-                    rMenu.Position = UDim2.fromOffset(math.clamp(cardAbsPos.X + 20, 10, mainFrame.AbsoluteSize.X - 190), rMenuY)
+                    rMenu.Position = UDim2.fromOffset(math.clamp(cardAbsPos.X + 15, 10, mainFrame.AbsoluteSize.X - 210), rMenuY)
                     
                     local rMenuScale = mk("UIScale", rMenu, {Scale = 0})
                     TweenService:Create(rMenuScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
                     
-                    mk("UIListLayout", rMenu, { FillDirection = Enum.FillDirection.Horizontal, HorizontalAlignment = Enum.HorizontalAlignment.Center, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 6) })
+                    mk("UIListLayout", rMenu, { FillDirection = Enum.FillDirection.Horizontal, HorizontalAlignment = Enum.HorizontalAlignment.Center, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 4) })
                     
                     local reactionItems = {
                         {emoji = "👍", action = function() addReactionToCard("👍") end},
                         {emoji = "❤️", action = function() addReactionToCard("❤️") end},
                         {emoji = "😂", action = function() addReactionToCard("😂") end},
                         {emoji = "😮", action = function() addReactionToCard("😮") end},
-                        {emoji = "+", isIcon = true, action = function() if emojiBtn then emojiFrame.Visible = true end end}
+                        {emoji = "+", isIcon = true, action = function() 
+                            if emojiFrame then 
+                                emojiTargetMode = "reaction"
+                                activeReactionCallback = function(em) addReactionToCard(em) end
+                                emojiFrame.Visible = true 
+                            end 
+                        end}
                     }
                     
                     local renderedBtns = {}
                     for _, rData in ipairs(reactionItems) do
-                        local rBtn = mk("TextLabel", rMenu, { Size = UDim2.fromOffset(30, 30), BackgroundTransparency = 1, Text = rData.emoji, Font = Enum.Font.SourceSansBold, TextColor3 = rData.isIcon and Colors.Primary or Colors.Text, TextSize = rData.isIcon and 24 or 26, ZIndex = 201 })
+                        local rBtn = mk("TextLabel", rMenu, { Size = UDim2.fromOffset(34, 34), BackgroundTransparency = 1, Text = rData.emoji, Font = Enum.Font.SourceSansBold, TextColor3 = rData.isIcon and Colors.Primary or Colors.Text, TextSize = rData.isIcon and 26 or 28, ZIndex = 201 })
                         local rBtnScale = mk("UIScale", rBtn)
                         renderedBtns[rBtn] = rData.action
                     end
                     
                     activeReactionMenu = rMenu
                     
-                    -- ULTRA SMOOTH 90FPS LERP HITBOX
+                    -- ULTRA SMOOTH APPLE MAC DOCK 90FPS PHYSICS
                     local dragHoverConn
                     dragHoverConn = RunService.RenderStepped:Connect(function()
                         if not activeReactionMenu or not isHoldingCard then dragHoverConn:Disconnect() return end
+                        
+                        -- ABSOLUTE SCROLL FREEZE
+                        if messageFeed then
+                            if not reactionCanvasLockPos then reactionCanvasLockPos = messageFeed.CanvasPosition end
+                            messageFeed.CanvasPosition = reactionCanvasLockPos
+                        end
+                        
                         local mousePos = UserInputService:GetMouseLocation()
                         
                         for btn, _ in pairs(renderedBtns) do
                             local btnScale = btn:FindFirstChildOfClass("UIScale")
                             local bAbsPos = btn.AbsolutePosition
                             local bAbsSize = btn.AbsoluteSize
+                            local centerX = bAbsPos.X + bAbsSize.X/2
                             
-                            -- MASSIVE FORGIVING HITBOX (No need to place finger exactly on it)
-                            local distX = math.abs((bAbsPos.X + bAbsSize.X/2) - mousePos.X)
+                            local distX = math.abs(centerX - mousePos.X)
                             local distY = math.abs((bAbsPos.Y + bAbsSize.Y/2) - mousePos.Y)
                             
                             local targetScale = 1.0
-                            if distX < 28 and distY < 120 then -- 120px forgiveness vertically!
-                                targetScale = 1.45
+                            if distY < 120 then 
+                                if distX < 22 then targetScale = 1.55
+                                elseif distX < 45 then targetScale = 1.25
+                                elseif distX < 70 then targetScale = 1.10
+                                else targetScale = 0.90 end
+                                
+                                if distX < 22 then
+                                    btn.TextColor3 = btn.Text == "+" and Colors.Primary or Colors.Text
+                                else
+                                    btn.TextColor3 = rgb(200, 200, 200)
+                                end
+                            else
+                                targetScale = 1.0
+                                btn.TextColor3 = btn.Text == "+" and Colors.Primary or Colors.Text
                             end
                             
-                            -- Buttery smooth scale lerping
-                            btnScale.Scale = btnScale.Scale + (targetScale - btnScale.Scale) * 0.25
+                            btnScale.Scale = btnScale.Scale + (targetScale - btnScale.Scale) * 0.3
                         end
                     end)
                 end
@@ -913,7 +940,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             
             if delta.X > 6 and math.abs(delta.X) > math.abs(delta.Y) * 1.25 then
                 isHoldingCard = false
-                if messageFeed then messageFeed.ScrollingEnabled = false end
                 local dragOffset = math.clamp((math.max(0, delta.X - 6)) ^ 0.85 * 1.35, 0, 58)
                 card.Position = UDim2.fromOffset(dragOffset, 0)
                 local progress = math.clamp(dragOffset / 40, 0, 1)
@@ -937,7 +963,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         if not card.Parent then endConn:Disconnect(); return end
         if isHoldingCard and (input == swipeInputObj or input.UserInputType == Enum.UserInputType.MouseButton1) then
             isHoldingCard = false
-            if not activeReactionMenu and messageFeed then messageFeed.ScrollingEnabled = true end
+            reactionCanvasLockPos = nil
             
             if activeReactionMenu then
                 local reactionFired = false
@@ -945,9 +971,13 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                 for _, child in ipairs(activeReactionMenu:GetChildren()) do
                     if child:IsA("TextLabel") then
                         local btnScale = child:FindFirstChildOfClass("UIScale")
-                        if btnScale and btnScale.Scale > 1.2 then -- Easy select detection
+                        if btnScale and btnScale.Scale > 1.2 then 
                             if child.Text == "+" then
-                                if emojiFrame then emojiFrame.Visible = true end
+                                if emojiFrame then 
+                                    emojiTargetMode = "reaction"
+                                    activeReactionCallback = function(em) addReactionToCard(em) end
+                                    emojiFrame.Visible = true 
+                                end
                             else
                                 addReactionToCard(child.Text)
                             end
@@ -965,7 +995,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
 
         if isSwipingCard and (input == swipeInputObj or input.UserInputType == Enum.UserInputType.MouseButton1) then
             isSwipingCard, swipeInputObj = false, nil
-            if messageFeed then messageFeed.ScrollingEnabled = true end
             
             if not activeReactionMenu then
                 TweenService:Create(card, TweenInfo.new(0.32, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.fromOffset(0, 0)}):Play()
@@ -1262,11 +1291,17 @@ local function loadEmojiCategory(catIdx)
             if em ~= " " and em ~= "" then
                 local btn = mk("TextButton", emojiScroll, { Text = em, Font = Enum.Font.SourceSans, TextSize = 22, BackgroundColor3 = Colors.Surface, BackgroundTransparency = 0.55, AutoButtonColor = false, ZIndex = 62, Corner = UDim.new(0, 6) })
                 btn.MouseButton1Click:Connect(function()
-                    chatInput.Text = chatInput.Text .. em
-                    task.defer(function()
-                        chatInput.CursorPosition = #chatInput.Text + 1
-                        chatInput:CaptureFocus()
-                    end)
+                    if emojiTargetMode == "reaction" and activeReactionCallback then
+                        activeReactionCallback(em)
+                        emojiFrame.Visible = false
+                        emojiTargetMode = "chat"
+                    else
+                        chatInput.Text = chatInput.Text .. em
+                        task.defer(function()
+                            chatInput.CursorPosition = #chatInput.Text + 1
+                            chatInput:CaptureFocus()
+                        end)
+                    end
                 end)
             end
         end
@@ -1282,6 +1317,7 @@ end
 loadEmojiCategory(1)
 
 emojiBtn.MouseButton1Click:Connect(function()
+    emojiTargetMode = "chat"
     emojiFrame.Visible = not emojiFrame.Visible
     if memeFrame then memeFrame.Visible = false end
     if badgeSelectorModal then isBadgeModalOpen = false; badgeSelectorModal:FindFirstChildOfClass("UIScale").Scale = 0; badgeSelectorModal.Visible = false end
