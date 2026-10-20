@@ -918,6 +918,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     activeReactionMenu = rMenu
 
                     -- 🌟 SELF ACTION MENU (EDIT & DELETE) 🌟
+                    local renderedSelfBtns = {}
                     if isSelf and not memeIdMatch then
                         local selfMenu = mk("Frame", mainFrame, {
                             Size = UDim2.fromOffset(140, 65),
@@ -934,25 +935,32 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         local smScale = mk("UIScale", selfMenu, {Scale = 0})
                         TweenService:Create(smScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
                         
-                        local editBtn = mk("TextButton", selfMenu, { Size = UDim2.new(1, 0, 0, 32), Position = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 1, Text = "   ✏️ Edit Message", Font = Enum.Font.GothamMedium, TextSize = 11, TextColor3 = Colors.Primary, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 202 })
+                        -- Buttons configured for hit detection hover + standard click
+                        local editBtn = mk("TextButton", selfMenu, { Name = "EditBtn", Size = UDim2.new(1, 0, 0, 32), Position = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 1, BackgroundColor3 = rgb(45, 55, 75), Text = "   ✏️ Edit Message", Font = Enum.Font.GothamMedium, TextSize = 11, TextColor3 = Colors.Primary, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 202, Corner = UDim.new(0, 8) })
                         mk("Frame", selfMenu, { Size = UDim2.new(1, -16, 0, 1), Position = UDim2.new(0, 8, 0, 32), BackgroundColor3 = rgb(255, 255, 255), BackgroundTransparency = 0.85, BorderSizePixel = 0, ZIndex = 203 })
-                        local delBtn = mk("TextButton", selfMenu, { Size = UDim2.new(1, 0, 0, 32), Position = UDim2.new(0, 0, 0, 33), BackgroundTransparency = 1, Text = "   🗑️ Delete Message", Font = Enum.Font.GothamMedium, TextSize = 11, TextColor3 = Colors.Danger, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 202 })
+                        local delBtn = mk("TextButton", selfMenu, { Name = "DelBtn", Size = UDim2.new(1, 0, 0, 32), Position = UDim2.new(0, 0, 0, 33), BackgroundTransparency = 1, BackgroundColor3 = rgb(45, 55, 75), Text = "   🗑️ Delete Message", Font = Enum.Font.GothamMedium, TextSize = 11, TextColor3 = Colors.Danger, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 202, Corner = UDim.new(0, 8) })
                         
-                        applySpringHover(editBtn); applySpringHover(delBtn)
-
-                        editBtn.MouseButton1Click:Connect(function()
+                        renderedSelfBtns[editBtn] = function()
                             playSFX("default")
-                            closeReactionMenu()
                             chatInput.Text = displayMsg
                             chatInput:CaptureFocus()
                             if activateEditBanner then activateEditBanner(bodyTxt, displayMsg) end
-                        end)
-
-                        delBtn.MouseButton1Click:Connect(function()
+                        end
+                        
+                        renderedSelfBtns[delBtn] = function()
                             playSFX("default")
-                            closeReactionMenu()
                             TweenService:Create(cardScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play()
                             task.delay(0.3, function() cardWrapper:Destroy() end)
+                        end
+                        
+                        -- Keep standard clicks functional for quick taps
+                        editBtn.MouseButton1Click:Connect(function()
+                            closeReactionMenu()
+                            renderedSelfBtns[editBtn]()
+                        end)
+                        delBtn.MouseButton1Click:Connect(function()
+                            closeReactionMenu()
+                            renderedSelfBtns[delBtn]()
                         end)
                         
                         activeSelfMenu = selfMenu
@@ -969,6 +977,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         
                         local mousePos = UserInputService:GetMouseLocation()
                         
+                        -- Emoji Drag Check
                         for btn, _ in pairs(renderedBtns) do
                             local btnScale = btn:FindFirstChildOfClass("UIScale")
                             local bAbsPos = btn.AbsolutePosition
@@ -996,6 +1005,24 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                             end
                             
                             btnScale.Scale = btnScale.Scale + (targetScale - btnScale.Scale) * 0.3
+                        end
+
+                        -- Self Menu Drag Check (Smooth Hitbox highlight)
+                        if activeSelfMenu then
+                            for btn, _ in pairs(renderedSelfBtns) do
+                                local bAbsPos = btn.AbsolutePosition
+                                local bAbsSize = btn.AbsoluteSize
+                                local btnScale = btn:FindFirstChildOfClass("UIScale") or mk("UIScale", btn)
+                                
+                                if mousePos.X >= bAbsPos.X - 10 and mousePos.X <= bAbsPos.X + bAbsSize.X + 10 and
+                                   mousePos.Y >= bAbsPos.Y - 10 and mousePos.Y <= bAbsPos.Y + bAbsSize.Y + 10 then
+                                    btnScale.Scale = btnScale.Scale + (1.05 - btnScale.Scale) * 0.3
+                                    btn.BackgroundTransparency = btn.BackgroundTransparency + (0.6 - btn.BackgroundTransparency) * 0.3
+                                else
+                                    btnScale.Scale = btnScale.Scale + (1.0 - btnScale.Scale) * 0.3
+                                    btn.BackgroundTransparency = btn.BackgroundTransparency + (1.0 - btn.BackgroundTransparency) * 0.3
+                                end
+                            end
                         end
                     end)
                 end
@@ -1042,6 +1069,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             if activeReactionMenu then
                 local reactionFired = false
                 
+                -- Check Emoji Release
                 local emojiCont = activeReactionMenu:FindFirstChild("EmojiContainer")
                 if emojiCont then
                     for _, child in ipairs(emojiCont:GetChildren()) do
@@ -1064,12 +1092,33 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     end
                 end
                 
-                if reactionFired then
-                    TweenService:Create(activeReactionMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
-                    if activeSelfMenu then TweenService:Create(activeSelfMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play() end
-                    task.delay(0.2, closeReactionMenu)
-                    return
+                -- Check Self Action Drag Release
+                if not reactionFired and activeSelfMenu then
+                    for _, child in ipairs(activeSelfMenu:GetChildren()) do
+                        if child:IsA("TextButton") then
+                            local btnScale = child:FindFirstChildOfClass("UIScale")
+                            if btnScale and btnScale.Scale > 1.02 then
+                                if child.Name == "EditBtn" then
+                                    playSFX("default")
+                                    chatInput.Text = displayMsg
+                                    chatInput:CaptureFocus()
+                                    if activateEditBanner then activateEditBanner(bodyTxt, displayMsg) end
+                                elseif child.Name == "DelBtn" then
+                                    playSFX("default")
+                                    TweenService:Create(cardScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play()
+                                    task.delay(0.3, function() cardWrapper:Destroy() end)
+                                end
+                                reactionFired = true
+                                break
+                            end
+                        end
+                    end
                 end
+                
+                TweenService:Create(activeReactionMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
+                if activeSelfMenu then TweenService:Create(activeSelfMenu:FindFirstChildOfClass("UIScale"), TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play() end
+                task.delay(0.2, closeReactionMenu)
+                if reactionFired then return end
             end
         end
 
