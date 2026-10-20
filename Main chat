@@ -12,7 +12,7 @@ pcall(function()
 end)
 
 -- =========================================================
--- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V28.0 iOS REAL-CHAT) 👑
+-- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V29.0 AI PRO MAX) 👑
 -- =========================================================
 local currentExecutionID = tick()
 _G.TXR_ChatInstanceID = currentExecutionID
@@ -39,6 +39,7 @@ local writeF = writefile or function() end
 local readF = readfile or function() return nil end
 local isF = isfile or function() return false end
 
+-- 🔑 Direct OpenRouter API Key
 local OPENROUTER_API_KEY = "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"
 
 local targetGuiParent
@@ -50,7 +51,7 @@ for _, v in pairs(targetGuiParent:GetChildren()) do
     if v.Name:find("TXR_OnyxChat") or v.Name:find("HiddenChatUI") then v:Destroy() end
 end
 
--- ⚡ COMPACT UI BUILDER ENGINE
+-- ⚡ COMPACT UI BUILDER ENGINE (Prevents Token Overflow & Crashes)
 local function mk(class, parent, props)
     local inst = Instance.new(class)
     if props then
@@ -87,8 +88,8 @@ local Themes = {
 local currentThemeIdx = 1
 
 local Colors = {
-    Background = rgb(10, 14, 22), Surface = rgb(17, 23, 35), SurfaceSelf = rgb(15, 29, 42),
-    SurfaceAI = rgb(19, 23, 44), SurfaceHover = rgb(28, 37, 54), ActiveTint = Themes[1].ActiveTint,
+    Background = rgb(10, 14, 22), Surface = rgb(17, 23, 35), SurfaceSelf = rgb(15, 36, 52),
+    SurfaceAI = rgb(19, 23, 44), SurfaceBroadcast = rgb(35, 26, 12), SurfaceHover = rgb(28, 37, 54), ActiveTint = Themes[1].ActiveTint,
     Primary = Themes[1].Primary, PrimaryDark = Themes[1].PrimaryDark, Danger = rgb(255, 70, 95),
     Warning = rgb(255, 180, 40), Purple = Themes[1].Accent, Text = rgb(240, 246, 255),
     SubText = rgb(135, 152, 178), TextDark = rgb(8, 11, 18), MentionGold = rgb(255, 205, 70),
@@ -96,7 +97,7 @@ local Colors = {
 }
 
 -- =========================================================
--- 👑 BADGE PRESETS
+-- 👑 16 SILK-SMOOTH BALANCED BADGE PRESETS (+ AI CORE)
 -- =========================================================
 local BadgePresets = {
     ["AICORE"]   = { Title = "AI CORE", Speed = 1.2, Colors = { csk(0, rgb(0,240,225)), csk(0.5, rgb(160,90,255)), csk(1, rgb(0,240,225)) } },
@@ -119,6 +120,9 @@ local BadgePresets = {
 }
 local currentOwnerBadge = "OWNER"
 
+-- =========================================================
+-- 🎭 MEME PACK & 📱 300+ iOS CATEGORIZED EMOJI PACK
+-- =========================================================
 local MemeLibrary = {
     { name = "Mewing Shhh", id = 15632128790 }, { name = "Skibidi Toilet", id = 13809623197 },
     { name = "Smurf Cat", id = 14757657984 }, { name = "Josh Hutcherson", id = 15469032734 },
@@ -162,7 +166,8 @@ local function playSFX(soundType)
     task.spawn(function()
         pcall(function()
             local s = Instance.new("Sound")
-            if soundType == "mention" or soundType == "dm" then s.SoundId = "rbxassetid://9114223177"; s.Volume = 0.75
+            if soundType == "mention" or soundType == "broadcast" then s.SoundId = "rbxassetid://9114223177"; s.Volume = 0.85
+            elseif soundType == "dm" then s.SoundId = "rbxassetid://9114223177"; s.Volume = 0.75
             elseif soundType == "meme" then s.SoundId = "rbxassetid://9069609268"; s.Volume = 0.55
             else s.SoundId = "rbxassetid://6518811702"; s.Volume = 0.35 end
             s.Parent = SoundService; s:Play()
@@ -172,7 +177,7 @@ local function playSFX(soundType)
 end
 
 -- =========================================================
--- 💾 CACHE & STORAGE
+-- 💾 PERMANENT GLOBAL CACHE & EPHEMERAL SERVER SESSION ENGINE
 -- =========================================================
 local SERVER_URL = "https://my-roblox-private-chat.onrender.com"
 local CURRENT_SESSION_JOB = tostring(game.JobId)
@@ -181,7 +186,7 @@ local lastSyncTime, isInitialSync, chatMode = 0, true, "server"
 local privateTarget, activeReplyData = nil, nil
 local knownUsers, activeUsersTable, remoteTypers = {}, {}, {}
 local unreadCount, isGhostMode, ghostDebounce = 0, false, false
-local userIdCache, activeBadgesList, activeAICoresList, modalSelectionIndicators = {}, {}, {}, {}
+local userIdCache, activeBadgesList, activeAICoresList, modalSelectionIndicators, broadcastGlowCards = {}, {}, {}, {}, {}
 local processedServerMessageMap, recentLocalSentMap = {}, {}
 
 _G.TXR_GlobalHistoryCache = _G.TXR_GlobalHistoryCache or {}
@@ -223,7 +228,7 @@ local function displayBubble(userName, msg)
 end
 
 -- =========================================================
--- 🏗️ ROOT GUI
+-- 🏗️ ROOT GUI, MAIN ACRYLIC FRAME & AMBIENT AURA
 -- =========================================================
 local gui = mk("ScreenGui", targetGuiParent, { Name = "TXR_OnyxChat_" .. tostring(math.random(100000, 999999)), ResetOnSpawn = false, ZIndexBehavior = Enum.ZIndexBehavior.Sibling })
 local shadow = mk("ImageLabel", gui, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.4, 0.5), Size = UDim2.new(0, 500, 0, 414), BackgroundTransparency = 1, Image = "rbxassetid://1316045217", ImageColor3 = Color3.new(0, 0, 0), ImageTransparency = 0.25, ZIndex = 1 })
@@ -247,7 +252,9 @@ mk("UIGradient", mainFrame, { Color = ColorSequence.new({ csk(0, rgb(17, 23, 35)
 local glassSheen = mk("Frame", mainFrame, { Size = UDim2.new(1, 0, 0, 86), BackgroundTransparency = 0.94, BackgroundColor3 = rgb(255, 255, 255), BorderSizePixel = 0, ZIndex = 6 })
 mk("UIGradient", glassSheen, { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.40), NumberSequenceKeypoint.new(1, 1) }), Rotation = 90 })
 
--- 🌧️ MATRIX RAIN
+-- =========================================================
+-- 🌧️ SUBTLE BACKGROUND MATRIX CODE RAIN
+-- =========================================================
 local matrixBox = mk("Frame", mainFrame, { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, ZIndex = 6, ClipsDescendants = true })
 local matrixChars = {"0", "1", "X", "Z", "9", "A", "F", "TXR", "7", "3"}
 local matrixColumns = {}
@@ -270,7 +277,9 @@ task.spawn(function()
     end
 end)
 
--- 🛸 REOPEN ORB
+-- =========================================================
+-- 🛸 REOPEN ORB ENGINE
+-- =========================================================
 local openBtnContainer = mk("Frame", gui, { Size = UDim2.fromOffset(86, 86), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.08, 0.5), BackgroundTransparency = 1, Visible = false, Active = true, ZIndex = 100 })
 local coreGlow = mk("ImageLabel", openBtnContainer, { Size = UDim2.fromScale(1.8, 1.8), Position = UDim2.fromScale(0.5, 0.5), AnchorPoint = Vector2.new(0.5, 0.5), BackgroundTransparency = 1, Image = "rbxassetid://10470601783", ImageColor3 = Colors.Primary, ImageTransparency = 0.6, ZIndex = 98, Corner = UDim.new(1, 0) })
 local eventGlow = mk("ImageLabel", openBtnContainer, { Size = UDim2.fromScale(1.2, 1.2), Position = UDim2.fromScale(0.5, 0.5), AnchorPoint = Vector2.new(0.5, 0.5), BackgroundTransparency = 1, Image = "rbxassetid://10470601783", ImageColor3 = Colors.Purple, ImageTransparency = 0.4, ZIndex = 98, Corner = UDim.new(1, 0) })
@@ -316,9 +325,11 @@ openBtnContainer:GetPropertyChangedSignal("Visible"):Connect(function()
     if openBtnContainer.Visible then openPulseScale:Play() else openPulseScale:Cancel(); openBtnScale.Scale = 1 end
 end)
 
--- 👥 ROSTER (ONLINE SCRIPT USERS ONLY)
+-- =========================================================
+-- 👥 ONLINE ACTIVE ROSTER (ZERO-BOX UI DOT DRAWER)
+-- =========================================================
 local rosterFrame = mk("Frame", mainFrame, { Size = UDim2.new(0, 152, 1, -50), Position = UDim2.new(1, 10, 0, 46), BackgroundColor3 = Colors.Surface, BackgroundTransparency = 0.05, Visible = false, ZIndex = 40, Corner = UDim.new(0, 12), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.2, Transparency = 0.40 } })
-mk("TextLabel", rosterFrame, { Size = UDim2.new(1, 0, 0, 26), BackgroundTransparency = 1, Text = "ONLINE USERS", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 9.5, ZIndex = 41 })
+mk("TextLabel", rosterFrame, { Size = UDim2.new(1, 0, 0, 26), BackgroundTransparency = 1, Text = "ONLINE PLAYERS", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 9.5, ZIndex = 41 })
 local rosterScroll = mk("ScrollingFrame", rosterFrame, { Size = UDim2.new(1, -10, 1, -30), Position = UDim2.fromOffset(5, 26), BackgroundTransparency = 1, ScrollBarThickness = 2, CanvasSize = UDim2.new(0, 0, 0, 0), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 41 })
 mk("UIListLayout", rosterScroll, { Padding = UDim.new(0, 4) })
 
@@ -340,7 +351,9 @@ local function refreshRosterUI()
     end
 end
 
--- 🌟 HEADER BAR
+-- =========================================================
+-- 🌟 HEADER BAR, GRAB HANDLE & BALANCED CONTROLS
+-- =========================================================
 local header = mk("Frame", mainFrame, { Size = UDim2.new(1, 0, 0, 46), BackgroundTransparency = 1, Active = true, ZIndex = 10 })
 local dragPill = mk("Frame", header, { Size = UDim2.fromOffset(40, 3), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 4), BackgroundColor3 = Colors.Primary, BackgroundTransparency = 0.55, BorderSizePixel = 0, ZIndex = 12, Corner = UDim.new(1, 0) })
 local headerLeftCluster = mk("Frame", header, { Size = UDim2.new(0, 225, 1, 0), Position = UDim2.fromOffset(14, 2), BackgroundTransparency = 1, ZIndex = 11 })
@@ -466,7 +479,7 @@ closeBtn.TextColor3 = Colors.Danger
 mk("Frame", header, { Size = UDim2.new(1, -24, 0, 1), Position = UDim2.new(0, 12, 1, 0), BorderSizePixel = 0, BackgroundColor3 = rgb(34, 44, 64), BackgroundTransparency = 0.45, ZIndex = 12 })
 
 -- =========================================================
--- 🔀 TABS
+-- 🔀 LUXURY SLIDING SEGMENTED TABS (SERVER FIRST, GLOBAL SECOND)
 -- =========================================================
 local channelFrame = mk("Frame", mainFrame, { Size = UDim2.new(1, -24, 0, 32), Position = UDim2.new(0, 12, 0, 52), BackgroundTransparency = 1, ZIndex = 8 })
 local tabShell = mk("Frame", channelFrame, { Size = UDim2.new(1, 0, 1, 0), BackgroundColor3 = Colors.Surface, BackgroundTransparency = 0.25, ZIndex = 9, Corner = UDim.new(0, 10), Stroke = { Thickness = 1, Color = Colors.SurfaceHover, Transparency = 0.40 } })
@@ -519,7 +532,9 @@ globalBtn.MouseButton1Click:Connect(function()
     filterFeedMode()
 end)
 
--- 🏷️ BADGE SELECTOR
+-- =========================================================
+-- 🏷️ 16 ELITE LIVE ANIMATED BADGE PRESET SELECTOR
+-- =========================================================
 badgeSelectorModal = mk("Frame", mainFrame, { Size = UDim2.fromOffset(242, 252), Position = UDim2.new(1, -254, 0, 48), BackgroundColor3 = rgb(11, 15, 24), BackgroundTransparency = 0.04, Visible = false, ZIndex = 70, Corner = UDim.new(0, 12), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.3, Transparency = 0.35 } })
 local bsmScale = mk("UIScale", badgeSelectorModal, { Scale = 0 })
 mk("TextLabel", badgeSelectorModal, { Size = UDim2.new(1, 0, 0, 28), BackgroundTransparency = 1, Text = "SELECT LIVE TAG", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 71 })
@@ -574,7 +589,9 @@ for _, bKey in ipairs(badgeKeysOrder) do
     end)
 end
 
--- 💬 CHAT FEED
+-- =========================================================
+-- 💬 CHAT FEED & AUTOSCROLL DOCK
+-- =========================================================
 messageFeed = mk("ScrollingFrame", mainFrame, { Size = UDim2.new(1, -24, 1, -152), Position = UDim2.new(0, 12, 0, 90), BackgroundTransparency = 1, ScrollBarThickness = 2, ScrollBarImageColor3 = Colors.PrimaryDark, CanvasSize = UDim2.new(0, 0, 0, 0), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 8 })
 mk("UIListLayout", messageFeed, { Padding = UDim.new(0, 7), SortOrder = Enum.SortOrder.LayoutOrder })
 mk("UIPadding", messageFeed, { PaddingTop = UDim.new(0, 2), PaddingLeft = UDim.new(0, 2), PaddingRight = UDim.new(0, 5), PaddingBottom = UDim.new(0, 6) })
@@ -598,76 +615,163 @@ local function createActionBtn(text, color, onClick)
 end
 
 -- =========================================================
--- 🧠 REAL-TIME AI ENGINE (OPENROUTER)
+-- 🌐 UNIVERSAL CHAT TRANSLATOR ENGINE (HINGLISH DEFAULT)
 -- =========================================================
-local isAIBusy = false
-local function queryAIRealtime(promptText)
-    if isAIBusy then return end
-    isAIBusy = true
+local function urlEncodeString(str)
+    if not str then return "" end
+    str = string.gsub(str, "\n", " ")
+    return string.gsub(str, "([^%w _%%%-%.~])", function(c)
+        return string.format("%%%02X", string.byte(c))
+    end):gsub(" ", "%%20")
+end
+
+local function translateChatText(rawText, targetLangCode, callback)
     task.spawn(function()
-        if not req then
-            isAIBusy = false
-            return
-        end
-        local success, response = pcall(function()
-            local requestBody = HttpService:JSONEncode({
-                model = "deepseek/deepseek-chat",
-                messages = {
-                    { role = "system", content = "You are TXR // AI, a sharp, elite, cyberpunk AI co-pilot inside TXR Global Chat. Keep answers short, punchy, witty, and directly useful. No robotic filler. Speak like a cybernetic mastermind." },
-                    { role = "user", content = promptText }
-                },
-                max_tokens = 220,
-                temperature = 0.7
-            })
-
-            return req({
-                Url = "https://openrouter.ai/api/v1/chat/completions",
-                Method = "POST",
-                Headers = {
-                    ["Authorization"] = "Bearer " .. OPENROUTER_API_KEY,
-                    ["Content-Type"] = "application/json",
-                    ["HTTP-Referer"] = "https://roblox.com",
-                    ["X-Title"] = "TXR Cyber Titan Chat"
-                },
-                Body = requestBody
-            })
-        end)
-
-        isAIBusy = false
-        if success and response and response.StatusCode == 200 then
-            local decSuccess, parsed = pcall(function() return HttpService:JSONDecode(response.Body) end)
-            if decSuccess and parsed and parsed.choices and parsed.choices[1] and parsed.choices[1].message then
-                local aiReply = parsed.choices[1].message.content:gsub("^%s+", ""):gsub("%s+$", "")
-                -- Broadcast to global server so everybody sees AI's answer
-                if sendMessageFunc then
-                    task.spawn(function()
-                        if req then
-                            local payload = HttpService:JSONEncode({
-                                user = "System::TXR // AI",
-                                msg = "[GLB] " .. aiReply,
-                                jobId = game.JobId
-                            })
-                            pcall(function()
-                                req({
-                                    Url = SERVER_URL .. "/send",
-                                    Method = "POST",
-                                    Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" },
-                                    Body = payload
-                                })
-                            end)
-                        end
-                    end)
+        local translatedResult = nil
+        
+        -- Priority 1: Instant Hinglish / Multilingual AI Translation Bridge
+        if targetLangCode == "hinglish" then
+            pcall(function()
+                local prompt = "Translate this text directly into casual Roman Hindi / Hinglish only (no Hindi script, no explanation): " .. rawText
+                local encoded = urlEncodeString(prompt)
+                local targetUrl = "https://text.pollinations.ai/" .. encoded .. "?model=mistral&temperature=0.3"
+                local s, res = pcall(function() return game:HttpGet(targetUrl) end)
+                if s and res and #res > 0 and not res:find("<html") then
+                    translatedResult = res:gsub('^"', ''):gsub('"$', ''):gsub("^%s+", ""):gsub("%s+$", "")
                 end
-            end
-        else
-            local errNotice = "⚡ [AI Link Malfunction]: Unable to establish quantum neural link."
-            if addMessageToFeed then addMessageToFeed("System::TXR // AI", errNotice, nil, false, game.JobId, chatMode) end
+            end)
+        end
+
+        -- Priority 2: Google Translate API fallback for pure languages
+        if not translatedResult or translatedResult == "" then
+            pcall(function()
+                local target = (targetLangCode == "hinglish") and "hi" or targetLangCode
+                local encText = urlEncodeString(rawText)
+                local url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" .. target .. "&dt=t&q=" .. encText
+                local s, res = pcall(function() return game:HttpGet(url) end)
+                if s and res then
+                    local decOk, dec = pcall(function() return HttpService:JSONDecode(res) end)
+                    if decOk and dec and dec[1] and dec[1][1] and dec[1][1][1] then
+                        translatedResult = dec[1][1][1]
+                    end
+                end
+            end)
+        end
+
+        if callback then
+            callback(translatedResult or "[Translation Failed]")
         end
     end)
 end
 
 -- =========================================================
--- 💬 MESSAGE PIPELINE
+-- 🧠 REAL-TIME AI ENGINE (DIRECT RESPONSE + PROPER PARSING)
+-- =========================================================
+local isAIThinking = false
+local function askAIRealtime(promptQuery)
+    if isAIThinking then return end
+    isAIThinking = true
+    remoteTypers["TXR // AI"] = tick() + 20
+
+    task.spawn(function()
+        local sysPrompt = "Aap TXR // AI ho, friendly Hinglish gaming assistant. Chhota, funny aur max 2 lines me answer do. Kitabi bhasha mat bolo."
+        local cleanQuery = promptQuery:gsub("^%s+", ""):gsub("%s+$", "")
+        if cleanQuery == "" then cleanQuery = "Hello bhai" end
+        
+        local responseText = nil
+
+        local function doReq(opt)
+            local fn = (syn and syn.request) or (http and http.request) or http_request or request
+            if fn then
+                local s, r = pcall(function() return fn(opt) end)
+                if s and r then return r end
+            end
+            return nil
+        end
+
+        pcall(function()
+            local encodedPrompt = urlEncodeString("System: " .. sysPrompt .. "\nUser: " .. cleanQuery)
+            local targetUrl = "https://text.pollinations.ai/" .. encodedPrompt .. "?model=mistral&temperature=0.7"
+            
+            local directGetSuccess, directResult = pcall(function()
+                return game:HttpGet(targetUrl)
+            end)
+
+            if directGetSuccess and directResult and #directResult > 0 and not directResult:find("<html") then
+                responseText = directResult
+            else
+                local httpRes = doReq({ Url = targetUrl, Method = "GET" })
+                if httpRes then
+                    local b = httpRes.Body or httpRes.body or (type(httpRes) == "string" and httpRes)
+                    if b and #b > 0 and not b:find("<html") then
+                        responseText = b
+                    end
+                end
+            end
+        end)
+
+        if not responseText or responseText == "" then
+            pcall(function()
+                local payload = HttpService:JSONEncode({
+                    model = "meta-llama/llama-3.3-70b-instruct:free",
+                    messages = {
+                        { role = "system", content = sysPrompt },
+                        { role = "user", content = cleanQuery }
+                    },
+                    max_tokens = 120
+                })
+
+                local res = doReq({
+                    Url = "https://openrouter.ai/api/v1/chat/completions",
+                    Method = "POST",
+                    Headers = {
+                        ["Authorization"] = "Bearer " .. OPENROUTER_API_KEY,
+                        ["Content-Type"] = "application/json"
+                    },
+                    Body = payload
+                })
+
+                if res then
+                    local raw = res.Body or res.body
+                    local decOk, dec = pcall(function() return HttpService:JSONDecode(raw) end)
+                    if decOk and dec and dec.choices and dec.choices[1] and dec.choices[1].message then
+                        responseText = dec.choices[1].message.content
+                    end
+                end
+            end)
+        end
+
+        isAIThinking = false
+        remoteTypers["TXR // AI"] = nil
+
+        if responseText and responseText ~= "" then
+            local aiAnswer = responseText:gsub("^%s+", ""):gsub("%s+$", ""):gsub("<[^>]+>", "")
+            addMessageToFeed("System::TXR // AI", aiAnswer, nil, false, game.JobId, chatMode)
+            task.spawn(function()
+                local fn = (syn and syn.request) or (http and http.request) or http_request or request
+                if fn then
+                    pcall(function()
+                        fn({
+                            Url = SERVER_URL .. "/send",
+                            Method = "POST",
+                            Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" },
+                            Body = HttpService:JSONEncode({
+                                user = "System::TXR // AI",
+                                msg = "[GLB] " .. aiAnswer,
+                                jobId = game.JobId
+                            })
+                        })
+                    end)
+                end
+            end)
+        else
+            addMessageToFeed("System::TXR // AI", "Arre bhai server connect nahi ho pa raha. Ek baar retry kar!", nil, false, game.JobId, chatMode)
+        end
+    end)
+end
+
+-- =========================================================
+-- 💬 MICRO-PERFECT MESSAGE PIPELINE (GLOBAL SAVE + SERVER WIPE)
 -- =========================================================
 local function updateLiveCounter(username, dispName)
     activeUsersTable[username:lower()] = { time = os.time(), disp = dispName or username, user = username }
@@ -688,7 +792,7 @@ local function addJoinNotice(dispName)
 end
 
 local MAX_MESSAGES_PER_TAB = 60
-function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSender, msgJobId, scopeType, customTimeStr)
+local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSender, msgJobId, scopeType, customTimeStr)
     local effectiveScope = scopeType or "global"
     local effectiveJob = tostring(msgJobId or game.JobId)
     if effectiveScope == "server" and effectiveJob ~= "" and effectiveJob ~= tostring(game.JobId) then return end
@@ -708,11 +812,11 @@ function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSender, 
     if isSystemAI then dispName = "TXR // AI" end
 
     local isSelf = (actualUsername:lower() == lp.Name:lower())
-    
-    -- Network Wide & User Mentions
-    local hasGlobalMention = string.find(string.lower(displayMsg), "@all", 1, true) or string.find(string.lower(displayMsg), "@network", 1, true)
+
+    -- VIP Mention Detection (@all / @here)
+    local hasBroadcastMention = string.find(string.lower(displayMsg), "@all", 1, true) or string.find(string.lower(displayMsg), "@here", 1, true)
     local isMentioned = (not isSystemAI) and (
-        hasGlobalMention or
+        hasBroadcastMention or
         string.find(string.lower(displayMsg), string.lower(lp.Name), 1, true) or 
         string.find(string.lower(displayMsg), string.lower(lp.DisplayName), 1, true) or
         (replyToName and (replyToName:lower() == lp.DisplayName:lower() or replyToName:lower() == lp.Name:lower()))
@@ -740,29 +844,41 @@ function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSender, 
     local scScale = mk("UIScale", swipeCapsule, { Scale = 0.5 })
     local swipeLabel = mk("TextLabel", swipeCapsule, { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Text = "REP", TextColor3 = Colors.Primary, TextTransparency = 1, Font = Enum.Font.GothamBlack, TextSize = 8.5, ZIndex = 9 })
 
+    -- Social Media Style: Self message sits to Right, Other sits to Left
+    local cardWidthScale = isSelf and 0.88 or 0.94
     local card = mk("TextButton", cardWrapper, {
-        Name = "CardSurface", Size = memeIdMatch and UDim2.new(1, 0, 0, 138) or UDim2.new(1, 0, 0, 0),
+        Name = "CardSurface",
+        AnchorPoint = isSelf and Vector2.new(1, 0) or Vector2.new(0, 0),
+        Position = isSelf and UDim2.new(1, -2, 0, 0) or UDim2.new(0, 2, 0, 0),
+        Size = memeIdMatch and UDim2.new(cardWidthScale, 0, 0, 138) or UDim2.new(cardWidthScale, 0, 0, 0),
         AutomaticSize = memeIdMatch and Enum.AutomaticSize.None or Enum.AutomaticSize.Y,
-        BackgroundColor3 = isMentioned and Colors.MentionBg or (isSystemAI and Colors.SurfaceAI or (isSelf and Colors.SurfaceSelf or Colors.Surface)),
+        BackgroundColor3 = hasBroadcastMention and Colors.SurfaceBroadcast or (isMentioned and Colors.MentionBg or (isSystemAI and Colors.SurfaceAI or (isSelf and Colors.SurfaceSelf or Colors.Surface))),
         BackgroundTransparency = isGhostMode and 0.52 or 0.20, Text = "", AutoButtonColor = false, ClipsDescendants = false, ZIndex = 10, Corner = UDim.new(0, 11)
     })
-    mk("UIGradient", card, { Color = ColorSequence.new({ csk(0, rgb(255, 255, 255)), csk(0.6, rgb(232, 240, 252)), csk(1, rgb(195, 206, 225)) }), Rotation = 25 })
+    mk("UIGradient", card, { Color = ColorSequence.new({ csk(0, rgb(255, 255, 255)), csk(0.6, rgb(232, 240, 252)), csk(1, rgb(195, 206, 225)) }), Rotation = isSelf and 155 or 25 })
     mk("Frame", card, { Size = UDim2.new(1, -24, 0, 1), Position = UDim2.new(0, 12, 0, 1), BackgroundColor3 = rgb(255, 255, 255), BackgroundTransparency = 0.88, BorderSizePixel = 0, ZIndex = 11 })
 
     local cardScale = mk("UIScale", card, { Scale = 0.96 })
     TweenService:Create(cardScale, TweenInfo.new(0.26, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
 
-    local accentStrip = mk("Frame", card, { Size = UDim2.new(0, 3, 1, -14), Position = UDim2.new(0, 5, 0, 7), BorderSizePixel = 0, BackgroundColor3 = rgb(255, 255, 255), ZIndex = 11, Corner = UDim.new(1, 0) })
+    local accentStrip = mk("Frame", card, { Size = UDim2.new(0, 3, 1, -14), Position = isSelf and UDim2.new(1, -6, 0, 7) or UDim2.new(0, 5, 0, 7), BorderSizePixel = 0, BackgroundColor3 = rgb(255, 255, 255), ZIndex = 11, Corner = UDim.new(1, 0) })
     local stripGrad = mk("UIGradient", accentStrip, { Rotation = 90 })
-    if isMentioned then stripGrad.Color = ColorSequence.new(Colors.MentionGold, rgb(255, 130, 20))
+    if hasBroadcastMention then stripGrad.Color = ColorSequence.new(Colors.MentionGold, Colors.Primary)
+    elseif isMentioned then stripGrad.Color = ColorSequence.new(Colors.MentionGold, rgb(255, 130, 20))
     elseif isSystemAI or privateUserTarget then stripGrad.Color = ColorSequence.new(Colors.Purple, Colors.Primary)
     else stripGrad.Color = ColorSequence.new(Colors.Primary, Colors.PrimaryDark) end
 
-    mk("UIStroke", card, {
-        Thickness = (isMentioned or isSystemAI) and 1.25 or 1.0,
-        Transparency = isMentioned and 0.22 or (isSystemAI and 0.42 or (isSelf and 0.58 or 0.74)),
-        Color = isMentioned and Colors.MentionGold or (isSystemAI and Colors.Purple or (isSelf and Colors.PrimaryDark or Colors.SurfaceHover))
+    local cStroke = mk("UIStroke", card, {
+        Thickness = (hasBroadcastMention and 1.8) or ((isMentioned or isSystemAI) and 1.25 or 1.0),
+        Transparency = isMentioned and 0.22 or (isSystemAI and 0.42 or (isSelf and 0.50 or 0.74)),
+        Color = hasBroadcastMention and Colors.MentionGold or (isMentioned and Colors.MentionGold or (isSystemAI and Colors.Purple or (isSelf and Colors.Primary or Colors.SurfaceHover)))
     })
+
+    if hasBroadcastMention then
+        local broadGrad = mk("UIGradient", cStroke, { Color = ColorSequence.new({ csk(0, Colors.MentionGold), csk(0.5, Colors.Primary), csk(1, Colors.MentionGold) }) })
+        table.insert(broadcastGlowCards, broadGrad)
+        playSFX("broadcast")
+    end
 
     if isSystemAI then
         local aiAvatar = mk("Frame", card, { Size = UDim2.fromOffset(32, 32), Position = UDim2.fromOffset(14, 9), BackgroundColor3 = rgb(14, 18, 30), ZIndex = 12, Corner = UDim.new(1, 0) })
@@ -772,7 +888,8 @@ function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSender, 
         local aiCoreDiamond = mk("Frame", aiAvatar, { Size = UDim2.fromOffset(9, 9), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Rotation = 45, BackgroundColor3 = Colors.Primary, ZIndex = 14, Corner = UDim.new(0, 2) })
         table.insert(activeAICoresList, { grad = aiStrokeGrad, ring = aiRing, icon = aiCoreDiamond })
     else
-        local avatarImg = mk("ImageLabel", card, { Size = UDim2.fromOffset(32, 32), Position = UDim2.fromOffset(14, 9), BackgroundColor3 = Colors.Background, BackgroundTransparency = 0.15, ZIndex = 12, Corner = UDim.new(1, 0), Stroke = { Thickness = 1.3, Transparency = 0.25, Color = isAdminUser and Colors.Primary or Colors.SurfaceHover } })
+        local avatarPos = isSelf and UDim2.new(1, -44, 0, 9) or UDim2.fromOffset(14, 9)
+        local avatarImg = mk("ImageLabel", card, { Size = UDim2.fromOffset(32, 32), Position = avatarPos, BackgroundColor3 = Colors.Background, BackgroundTransparency = 0.15, ZIndex = 12, Corner = UDim.new(1, 0), Stroke = { Thickness = 1.3, Transparency = 0.25, Color = isAdminUser and Colors.Primary or Colors.SurfaceHover } })
         mk("Frame", avatarImg, { Size = UDim2.fromOffset(8, 8), AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, 0, 1, 0), BackgroundColor3 = Colors.OnlineGreen, ZIndex = 14, Corner = UDim.new(1, 0), Stroke = { Color = Colors.Background, Thickness = 1.5 } })
         task.spawn(function()
             local targetPlr = Players:FindFirstChild(actualUsername)
@@ -782,11 +899,12 @@ function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSender, 
         end)
     end
 
-    local timePill = mk("Frame", card, { AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -8, 0, 7), Size = UDim2.fromOffset(42, 16), BackgroundColor3 = rgb(9, 12, 20), BackgroundTransparency = 0.45, ZIndex = 13, Corner = UDim.new(1, 0), Stroke = { Color = Colors.SurfaceHover, Thickness = 0.8, Transparency = 0.65 } })
+    local timePill = mk("Frame", card, { AnchorPoint = isSelf and Vector2.new(0, 0) or Vector2.new(1, 0), Position = isSelf and UDim2.new(0, 10, 0, 7) or UDim2.new(1, -8, 0, 7), Size = UDim2.fromOffset(42, 16), BackgroundColor3 = rgb(9, 12, 20), BackgroundTransparency = 0.45, ZIndex = 13, Corner = UDim.new(1, 0), Stroke = { Color = Colors.SurfaceHover, Thickness = 0.8, Transparency = 0.65 } })
     local timeLbl = mk("TextLabel", timePill, { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Text = customTimeStr or os.date("%H:%M"), TextColor3 = rgb(125, 142, 168), Font = Enum.Font.GothamBold, TextSize = 9, ZIndex = 14 })
     crispText(timeLbl, 0.65)
 
-    local cardContent = mk("Frame", card, { Size = UDim2.new(1, -64, 0, 0), Position = UDim2.fromOffset(54, 8), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, ZIndex = 12 })
+    local cardContentPos = isSelf and UDim2.new(0, 12, 0, 8) or UDim2.fromOffset(54, 8)
+    local cardContent = mk("Frame", card, { Size = UDim2.new(1, -68, 0, 0), Position = cardContentPos, AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, ZIndex = 12 })
     mk("UIListLayout", cardContent, { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 4) })
 
     local topIdentityRow = mk("Frame", cardContent, { Size = UDim2.new(1, -48, 0, 18), BackgroundTransparency = 1, LayoutOrder = 1, ZIndex = 12 })
@@ -800,8 +918,13 @@ function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSender, 
     local nameLbl = mk("TextLabel", topIdentityRow, { AutomaticSize = Enum.AutomaticSize.X, Size = UDim2.new(0, 0, 1, 0), BackgroundTransparency = 1, RichText = true, Text = sanitizeXml(dispName), TextColor3 = isSystemAI and rgb(0, 235, 255) or (currentThemeIdx == 2 and rgb(255, 65, 100) or Colors.Primary), Font = Enum.Font.GothamBlack, TextSize = 12.5, LayoutOrder = 2, ZIndex = 13 })
     crispText(nameLbl, 0.25)
 
+    if hasBroadcastMention then
+        local bBadge = mk("TextLabel", topIdentityRow, { AutomaticSize = Enum.AutomaticSize.X, Size = UDim2.new(0, 0, 1, 0), BackgroundTransparency = 1, RichText = true, Text = "[BROADCAST ALERT]", TextColor3 = Colors.MentionGold, Font = Enum.Font.GothamBlack, TextSize = 9.5, LayoutOrder = 3, ZIndex = 13 })
+        crispText(bBadge, 0.3)
+    end
+
     if privateUserTarget then
-        local dmLbl = mk("TextLabel", topIdentityRow, { AutomaticSize = Enum.AutomaticSize.X, Size = UDim2.new(0, 0, 1, 0), BackgroundTransparency = 1, RichText = true, Text = isPrivateSender and ("• [DM Sent]") or ("• [Direct DM]"), TextColor3 = Colors.Purple, Font = Enum.Font.GothamBlack, TextSize = 9.5, LayoutOrder = 3, ZIndex = 13 })
+        local dmLbl = mk("TextLabel", topIdentityRow, { AutomaticSize = Enum.AutomaticSize.X, Size = UDim2.new(0, 0, 1, 0), BackgroundTransparency = 1, RichText = true, Text = isPrivateSender and ("• [DM Sent]") or ("• [Direct DM]"), TextColor3 = Colors.Purple, Font = Enum.Font.GothamBlack, TextSize = 9.5, LayoutOrder = 4, ZIndex = 13 })
         crispText(dmLbl, 0.45)
     end
 
@@ -818,16 +941,53 @@ function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSender, 
         local memeHolder = mk("Frame", cardContent, { Size = UDim2.new(1, 0, 0, 96), BackgroundTransparency = 1, LayoutOrder = 3, ZIndex = 13 })
         mk("ImageLabel", memeHolder, { Size = UDim2.fromOffset(92, 92), Position = UDim2.fromOffset(0, 2), BackgroundColor3 = Colors.Background, BackgroundTransparency = 0.20, Image = getAssetThumb(memeIdMatch), ScaleType = Enum.ScaleType.Fit, ZIndex = 13, Corner = UDim.new(0, 8), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.2 } })
     else
-        -- Highlight @mentions in body
         local formattedBody = sanitizeXml(displayMsg)
         formattedBody = formattedBody:gsub("(@%w+)", "<font color='#FFCD46'><b>%1</b></font>")
         
-        local bodyTxt = mk("TextLabel", cardContent, { Name = "MsgContent", Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, TextColor3 = isSystemAI and rgb(220, 235, 255) or Colors.Text, Font = Enum.Font.GothamMedium, TextSize = 11.5, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, RichText = true, LayoutOrder = 3, ZIndex = 13, Text = formattedBody })
+        local bodyContainer = mk("Frame", cardContent, { Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, LayoutOrder = 3, ZIndex = 13 })
+        local bodyTxt = mk("TextLabel", bodyContainer, { Name = "MsgContent", Size = UDim2.new(1, -38, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, TextColor3 = isSystemAI and rgb(220, 235, 255) or Colors.Text, Font = Enum.Font.GothamMedium, TextSize = 11.5, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, RichText = true, ZIndex = 13, Text = formattedBody })
         crispText(bodyTxt, 0.35)
+
+        -- 🌐 Inline Chat Translator Toggle Button
+        local trBtn = mk("TextButton", bodyContainer, {
+            Size = UDim2.fromOffset(28, 18), AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -2, 0, 0),
+            BackgroundColor3 = Colors.ActiveTint, BackgroundTransparency = 0.3, Text = "TR", TextColor3 = Colors.Primary,
+            Font = Enum.Font.GothamBlack, TextSize = 8.5, AutoButtonColor = false, ZIndex = 14, Corner = UDim.new(0, 4),
+            Stroke = { Color = Colors.PrimaryDark, Thickness = 0.8, Transparency = 0.5 }
+        })
+        applySpringHover(trBtn)
+
+        local currentTransState = 0
+        local originalRaw = displayMsg
+        trBtn.MouseButton1Click:Connect(function()
+            currentTransState = (currentTransState + 1) % 4
+            if currentTransState == 1 then
+                trBtn.Text = "..."
+                translateChatText(originalRaw, "hinglish", function(translated)
+                    trBtn.Text = "HN"
+                    bodyTxt.Text = "<font color='#00E6C3'>[Hinglish]:</font> " .. sanitizeXml(translated)
+                end)
+            elseif currentTransState == 2 then
+                trBtn.Text = "..."
+                translateChatText(originalRaw, "en", function(translated)
+                    trBtn.Text = "EN"
+                    bodyTxt.Text = "<font color='#8C55FF'>[English]:</font> " .. sanitizeXml(translated)
+                end)
+            elseif currentTransState == 3 then
+                trBtn.Text = "..."
+                translateChatText(originalRaw, "ja", function(translated)
+                    trBtn.Text = "JA"
+                    bodyTxt.Text = "<font color='#FF4164'>[Japanese]:</font> " .. sanitizeXml(translated)
+                end)
+            else
+                trBtn.Text = "TR"
+                bodyTxt.Text = formattedBody
+            end
+        end)
     end
 
     mk("UIPadding", card, { PaddingBottom = UDim.new(0, 9) })
-    if isMentioned and not isSelf then playSFX("mention") elseif memeIdMatch and not isSelf then playSFX("meme") end
+    if not hasBroadcastMention and isMentioned and not isSelf then playSFX("mention") elseif memeIdMatch and not isSelf then playSFX("meme") end
 
     local isSwipingCard, swipeInputObj, swipeStartPos, swipeTriggered, movedDistance = false, nil, nil, false, 0
     card.InputBegan:Connect(function(input)
@@ -844,7 +1004,7 @@ function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSender, 
             movedDistance = delta.Magnitude
             if delta.X > 6 and math.abs(delta.X) > math.abs(delta.Y) * 1.25 then
                 local dragOffset = math.clamp((math.max(0, delta.X - 6)) ^ 0.85 * 1.35, 0, 58)
-                card.Position = UDim2.fromOffset(dragOffset, 0)
+                card.Position = isSelf and UDim2.new(1, -2 + dragOffset, 0, 0) or UDim2.new(0, 2 + dragOffset, 0, 0)
                 local progress = math.clamp(dragOffset / 40, 0, 1)
                 swipeCapsule.BackgroundTransparency = 1 - (progress * 0.90)
                 scFill.Size = UDim2.fromScale(progress, 1)
@@ -866,7 +1026,8 @@ function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSender, 
         if not card.Parent then endConn:Disconnect(); return end
         if isSwipingCard and (input == swipeInputObj or input.UserInputType == Enum.UserInputType.MouseButton1) then
             isSwipingCard, swipeInputObj = false, nil
-            TweenService:Create(card, TweenInfo.new(0.32, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.fromOffset(0, 0)}):Play()
+            local defaultPos = isSelf and UDim2.new(1, -2, 0, 0) or UDim2.new(0, 2, 0, 0)
+            TweenService:Create(card, TweenInfo.new(0.32, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = defaultPos}):Play()
             TweenService:Create(swipeCapsule, TweenInfo.new(0.22), {BackgroundTransparency = 1}):Play()
             TweenService:Create(scStroke, TweenInfo.new(0.22), {Transparency = 1}):Play()
             TweenService:Create(swipeLabel, TweenInfo.new(0.22), {TextTransparency = 1}):Play()
@@ -920,7 +1081,7 @@ function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSender, 
 end
 
 -- =========================================================
--- ⚡ TYPING PILL & AUTO-COMPLETE (ONLY SCRIPT USERS & SPECIAL TAGS)
+-- ✨ COMPACT LIVE "SOMEONE IS TYPING..." WAVE PILL
 -- =========================================================
 local liveTypingPill = mk("Frame", mainFrame, { AutomaticSize = Enum.AutomaticSize.X, Size = UDim2.fromOffset(0, 22), Position = UDim2.new(0, 14, 1, -82), BackgroundColor3 = rgb(11, 16, 26), BackgroundTransparency = 0.12, Visible = false, ZIndex = 24, Corner = UDim.new(1, 0), Stroke = { Color = Colors.PrimaryDark, Thickness = 1, Transparency = 0.45 } })
 mk("UIPadding", liveTypingPill, { PaddingLeft = UDim.new(0, 10), PaddingRight = UDim.new(0, 10) })
@@ -933,6 +1094,9 @@ end
 local ltpLabel = mk("TextLabel", liveTypingPill, { AutomaticSize = Enum.AutomaticSize.X, Size = UDim2.new(0, 0, 1, 0), BackgroundTransparency = 1, Text = "", TextColor3 = Colors.SubText, Font = Enum.Font.GothamBold, TextSize = 9.5, ZIndex = 25 })
 crispText(ltpLabel, 0.5)
 
+-- =========================================================
+-- ⚡ ZERO-BOX SMART AUTO-COMPLETE CHIP BAR (SINGLE @AI FIX)
+-- =========================================================
 local autoCompleteBar = mk("Frame", mainFrame, { Size = UDim2.new(1, -28, 0, 30), Position = UDim2.new(0, 14, 1, -88), BackgroundColor3 = rgb(11, 15, 25), BackgroundTransparency = 0.06, Visible = false, ZIndex = 28, Corner = UDim.new(0, 10), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.1, Transparency = 0.35 } })
 local acScale = mk("UIScale", autoCompleteBar)
 local acScroll = mk("ScrollingFrame", autoCompleteBar, { Size = UDim2.new(1, -12, 1, -6), Position = UDim2.fromOffset(6, 3), BackgroundTransparency = 1, ScrollBarThickness = 0, ScrollingDirection = Enum.ScrollingDirection.X, AutomaticCanvasSize = Enum.AutomaticSize.X, CanvasSize = UDim2.new(0, 0, 0, 0), ZIndex = 29 })
@@ -948,7 +1112,7 @@ local function refreshAutoComplete(rawText)
     if cmdPrefix then
         local q = cmdPrefix:sub(2):lower()
         local cmds = {
-            { label = "!ai <query>  •  Ask Real AI", fill = "!ai " },
+            { label = "!ai <query>  •  Ask Bot", fill = "!ai " },
             { label = "!p <user>  •  Direct DM", fill = "!p " },
             { label = "/help  •  Commands", fill = "/help" }
         }
@@ -959,18 +1123,21 @@ local function refreshAutoComplete(rawText)
         local q = (dmUserPrefix or mentionPrefix or ""):lower()
         local isDM, seen = (dmUserPrefix ~= nil), {}
 
-        -- Add Network Mentions & AI to suggestion if user triggers '@'
         if not isDM then
-            if q == "" or ("all"):find(q, 1, true) or ("network"):find(q, 1, true) then
-                table.insert(suggestions, { text = "@all  •  Ping Everyone", replaceMode = "mention", val = "@all " })
+            if q == "" or ("ai"):find(q, 1, true) then
+                table.insert(suggestions, { text = "@ai  •  Ask Bot", replaceMode = "mention", val = "@ai " })
             end
-            if q == "" or ("txr_ai"):find(q, 1, true) or ("ai"):find(q, 1, true) then
-                table.insert(suggestions, { text = "@TXR_AI  •  Ask Bot", replaceMode = "mention", val = "@TXR_AI " })
+            if q == "" or ("all"):find(q, 1, true) then
+                table.insert(suggestions, { text = "@all  •  Global Ping", replaceMode = "mention", val = "@all " })
+            end
+            if q == "" or ("here"):find(q, 1, true) then
+                table.insert(suggestions, { text = "@here  •  Active Ping", replaceMode = "mention", val = "@here " })
             end
         end
 
         local function considerActiveUser(uName, dName)
             if uName:lower() == lp.Name:lower() or seen[uName:lower()] then return end
+            if uName:lower() == "system" or dName:lower():find("ai") then return end
             if q == "" or uName:lower():find(q, 1, true) or dName:lower():find(q, 1, true) then
                 seen[uName:lower()] = true
                 table.insert(suggestions, {
@@ -981,11 +1148,8 @@ local function refreshAutoComplete(rawText)
             end
         end
 
-        -- ONLY USERS RUNNING THE SCRIPT
         for _, info in pairs(activeUsersTable) do
-            if type(info) == "table" and info.user then
-                considerActiveUser(info.user, info.disp)
-            end
+            if type(info) == "table" and info.user then considerActiveUser(info.user, info.disp) end
         end
     end
 
@@ -1011,7 +1175,7 @@ local function refreshAutoComplete(rawText)
 end
 
 -- =========================================================
--- ↩️ REPLY DOCK & INPUT BAR
+-- ↩️ ZERO-BOX REPLY DOCK & CLEAN PILL INPUT BAR
 -- =========================================================
 local replyBanner = mk("Frame", mainFrame, { Size = UDim2.new(1, -28, 0, 30), Position = UDim2.new(0, 14, 1, -88), BackgroundColor3 = rgb(12, 17, 28), BackgroundTransparency = 0.05, Visible = false, ZIndex = 20, Corner = UDim.new(0, 10), Stroke = { Color = Colors.Primary, Thickness = 1.1, Transparency = 0.35 } })
 local rbScale = mk("UIScale", replyBanner)
@@ -1045,7 +1209,7 @@ local iloStroke = mk("UIStroke", inputLeadOrb, { Color = Colors.PrimaryDark, Thi
 inputDiamondCore = mk("Frame", inputLeadOrb, { Size = UDim2.fromOffset(8, 8), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Rotation = 45, BackgroundColor3 = Colors.Primary, ZIndex = 14, Corner = UDim.new(0, 2) })
 
 local dmBadge = mk("TextButton", inputContainer, { Size = UDim2.new(0, 0, 1, -14), AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 42, 0.5, 0), BackgroundColor3 = rgb(45, 20, 65), TextColor3 = Colors.Purple, Font = Enum.Font.GothamBlack, TextSize = 9.5, Visible = false, ZIndex = 14, Corner = UDim.new(1, 0) })
-chatInput = mk("TextBox", inputContainer, { Text = "", Size = UDim2.new(1, -162, 1, 0), Position = UDim2.new(0, 44, 0, 0), BackgroundTransparency = 1, PlaceholderText = "Message... (@ for users/all, !ai for AI)", PlaceholderColor3 = Colors.SubText, TextColor3 = Colors.Text, Font = Enum.Font.GothamMedium, TextSize = 11.5, ClearTextOnFocus = false, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 13 })
+chatInput = mk("TextBox", inputContainer, { Text = "", Size = UDim2.new(1, -162, 1, 0), Position = UDim2.new(0, 44, 0, 0), BackgroundTransparency = 1, PlaceholderText = "Message... (@ai for bot, @all for alert)", PlaceholderColor3 = Colors.SubText, TextColor3 = Colors.Text, Font = Enum.Font.GothamMedium, TextSize = 11.5, ClearTextOnFocus = false, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 13 })
 crispText(chatInput, 0.38)
 
 local lastTypingBroadcast = 0
@@ -1053,9 +1217,10 @@ local function broadcastTypingSignal()
     if tick() - lastTypingBroadcast < 3.2 then return end
     lastTypingBroadcast = tick()
     task.spawn(function()
-        if req then
+        local fn = (syn and syn.request) or (http and http.request) or http_request or request
+        if fn then
             pcall(function()
-                req({
+                fn({
                     Url = SERVER_URL .. "/send", Method = "POST",
                     Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" },
                     Body = HttpService:JSONEncode({ user = lp.Name .. "::" .. lp.DisplayName, msg = "__TYPING__", jobId = game.JobId, hidden = true })
@@ -1113,7 +1278,7 @@ sendBtnGrad = mk("UIGradient", sendBtn, { Color = ColorSequence.new(Colors.Prima
 applySpringHover(sendBtn)
 
 -- =========================================================
--- 📱 EMOJI & MEME DRAWER
+-- 📱 300+ iOS CATEGORIZED EMOJI KEYBOARD & 🎭 MEME DRAWER
 -- =========================================================
 emojiFrame = mk("Frame", mainFrame, { Size = UDim2.new(0, 310, 0, 210), Position = UDim2.new(0.5, -155, 1, -270), BackgroundColor3 = rgb(14, 19, 30), BackgroundTransparency = 0.04, Visible = false, ZIndex = 60, Corner = UDim.new(0, 14), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.2, Transparency = 0.35 } })
 local emojiCatHeader = mk("TextLabel", emojiFrame, { Size = UDim2.new(1, -16, 0, 22), Position = UDim2.fromOffset(10, 4), BackgroundTransparency = 1, Text = "POPULAR & HYPE", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 9.5, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 61 })
@@ -1184,7 +1349,9 @@ memeBtn.MouseButton1Click:Connect(function()
     if badgeSelectorModal then isBadgeModalOpen = false; badgeSelectorModal:FindFirstChildOfClass("UIScale").Scale = 0; badgeSelectorModal.Visible = false end
 end)
 
--- 🚀 DRAGGING
+-- =========================================================
+-- 🚀 MULTI-TOUCH SAFE DRAG ENGINE (FULL WINDOW DRAGGABLE)
+-- =========================================================
 local function makeDraggable(frame, handlesList, ghostAura, isOrb)
     local dragging, activeDragInput, dragStart, startPos, dragLoop = false, nil, nil, nil, nil
     local targetPos, velocity, lastInputPos = frame.Position, Vector2.new(0, 0), Vector2.new(0, 0)
@@ -1295,7 +1462,9 @@ UserInputService.InputBegan:Connect(function(input, gp)
     end
 end)
 
--- ⚡ 60 FPS EFFECTS
+-- =========================================================
+-- ⚡ 60 FPS TAG GLOW, AI CORE, INPUT FOCUS & TYPING WAVE ENGINE
+-- =========================================================
 task.spawn(function()
     local t, sonarTimer, currentSpeedMod, currentRadiusMod = 0, 0, 1, 1
     RunService.RenderStepped:Connect(function(dt)
@@ -1336,6 +1505,14 @@ task.spawn(function()
             end
         end
 
+        if #broadcastGlowCards > 0 then
+            for i = #broadcastGlowCards, 1, -1 do
+                local bg = broadcastGlowCards[i]
+                if bg and bg.Parent then bg.Rotation = (t * 85) % 360
+                else table.remove(broadcastGlowCards, i) end
+            end
+        end
+
         if mainFrame.Visible then
             strokeGrad.Rotation = (t * 35) % 360
             inputFocusGrad.Rotation = (t * 65) % 360
@@ -1351,7 +1528,11 @@ task.spawn(function()
 
             if #activeTyperNames > 0 and not replyBanner.Visible and not autoCompleteBar.Visible then
                 liveTypingPill.Visible = true
-                ltpLabel.Text = (#activeTyperNames == 1) and (activeTyperNames[1] .. " is typing...") or (#activeTyperNames .. " people are typing...")
+                if remoteTypers["TXR // AI"] then
+                    ltpLabel.Text = "TXR // AI is thinking..."
+                else
+                    ltpLabel.Text = (#activeTyperNames == 1) and (activeTyperNames[1] .. " is typing...") or (#activeTyperNames .. " people are typing...")
+                end
                 for idx, dot in ipairs(typingDots) do
                     local bounce = math.sin(t * 9 - (idx * 1.1))
                     dot.Position = UDim2.new(0, (idx - 1) * 7 + 4, 0.5, bounce * 2.5)
@@ -1445,7 +1626,7 @@ task.spawn(function()
 end)
 
 -- =========================================================
--- 📡 SEND MESSAGE & AI PARSER
+-- 📡 SEND MESSAGE (WITH GLOBAL PERSISTENCE & SWIPE QUOTE)
 -- =========================================================
 local lastSendTick = 0
 sendMessageFunc = function(overrideText)
@@ -1467,20 +1648,11 @@ sendMessageFunc = function(overrideText)
 
     if text:lower() == "/help" then
         chatInput.Text = ""
-        addMessageToFeed("System::TXR // AI", "Commands: '!ai <query>' or '@TXR_AI' for Real AI | '@all' for Global Mention | '!p <user>' for Private DM.", nil, false, game.JobId, chatMode)
+        addMessageToFeed("System::TXR // AI", "Commands: '@ai <sawal>' for Chat Bot | '@all' for Global Mention | '!p <user>' for Private DM.", nil, false, game.JobId, chatMode)
         return
     end
 
-    -- Real AI Check via '!ai <msg>' or '@TXR_AI <msg>'
-    local aiPrompt = text:match("^!ai%s+(.+)$") or text:match("^@TXR_AI%s*(.+)$")
-    if aiPrompt then
-        if not overrideText then chatInput.Text = "" end
-        local encodedUserTag = lp.Name .. "::" .. lp.DisplayName
-        addMessageToFeed(encodedUserTag, text, nil, false, game.JobId, chatMode)
-        displayBubble(lp.Name, text)
-        queryAIRealtime(aiPrompt)
-        return
-    end
+    local aiPrompt = text:match("^[@!]a[ij]%s*(.*)$")
 
     local payloadBodyText = text
     if activeReplyData then
@@ -1515,10 +1687,11 @@ sendMessageFunc = function(overrideText)
     recentLocalSentMap[string.lower(text)] = tick()
 
     task.spawn(function()
-        if req then
+        local fn = (syn and syn.request) or (http and http.request) or http_request or request
+        if fn then
             local payload = HttpService:JSONEncode({ user = encodedUserTag, msg = finalMsg, jobId = game.JobId })
             pcall(function()
-                req({
+                fn({
                     Url = SERVER_URL .. "/send", Method = "POST",
                     Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" },
                     Body = payload
@@ -1526,13 +1699,36 @@ sendMessageFunc = function(overrideText)
             end)
         end
     end)
+
+    if aiPrompt then
+        if aiPrompt == "" then aiPrompt = "hello" end
+        askAIRealtime(aiPrompt)
+    end
 end
 
 sendBtn.MouseButton1Click:Connect(function() sendMessageFunc() end)
 chatInput.FocusLost:Connect(function(enterPressed) if enterPressed then sendMessageFunc() end end)
 
 -- =========================================================
--- 📥 POLLING ENGINE
+-- 📢 HAR 5 MINUTE AUTOMATIC ANNOUNCEMENT SYSTEM
+-- =========================================================
+local autoAnnouncements = {
+    "📢 Join our official Discord community for early script updates, executor keys, and custom tags! discord.gg/yelelode",
+    "⚡ Pro Tip: Type '@ai <question>' anytime to chat with our cyber bot, or use '@all' to ping the whole network!",
+    "🛡️ TXR Titan Apex v29.0 is online. Clean UI, ghost mode & zero lag enabled."
+}
+task.spawn(function()
+    local annIndex = 1
+    while _G.TXR_ChatInstanceID == currentExecutionID do
+        task.wait(300)
+        local chosenAnn = autoAnnouncements[annIndex]
+        annIndex = (annIndex % #autoAnnouncements) + 1
+        addMessageToFeed("System::TXR // AI", chosenAnn, nil, false, game.JobId, "global")
+    end
+end)
+
+-- =========================================================
+-- 📥 POLLING ENGINE (GLOBAL PERMANENT SAVE / SERVER AUTO-RESET)
 -- =========================================================
 for _, item in ipairs(_G.TXR_GlobalHistoryCache) do
     if item.user and item.msg then
@@ -1545,15 +1741,16 @@ task.spawn(function()
     while _G.TXR_IsPolling and (_G.TXR_ChatInstanceID == currentExecutionID) and task.wait(0.4) do
         if tostring(game.JobId) ~= CURRENT_SESSION_JOB then filterFeedMode() end
 
-        if req then
+        local fn = (syn and syn.request) or (http and http.request) or http_request or request
+        if fn then
             local success, res = pcall(function()
-                return req({
+                return fn({
                     Url = SERVER_URL .. "/messages?since=" .. tostring(lastSyncTime),
                     Method = "GET", Headers = { ["User-Agent"] = "Roblox/WinInet" }
                 })
             end)
 
-            if success and res and res.StatusCode == 200 then
+            if success and res and (res.StatusCode == 200 or res.Status == 200) then
                 local decodeSuccess, data = pcall(function() return HttpService:JSONDecode(res.Body) end)
 
                 if decodeSuccess and type(data) == "table" then
@@ -1671,16 +1868,17 @@ end)
 
 -- Handshake
 task.spawn(function()
-    if req then
+    local fn = (syn and syn.request) or (http and http.request) or http_request or request
+    if fn then
         pcall(function()
-            req({
+            fn({
                 Url = SERVER_URL .. "/send", Method = "POST",
                 Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" },
                 Body = HttpService:JSONEncode({ user = lp.Name .. "::" .. lp.DisplayName, msg = "Joined", jobId = game.JobId, hidden = false })
             })
         end)
     end
-    addMessageToFeed("System::TXR // AI", "Cyber-Titan Apex Initialized. Ask questions with '!ai <query>' or '@TXR_AI'.", nil, false, game.JobId, "server")
+    addMessageToFeed("System::TXR // AI", "Arre bhai! TXR Cyber Assistant ready hai. Bindass sawal puchne ke liye '@ai' lagao!", nil, false, game.JobId, "server")
     if #_G.TXR_GlobalHistoryCache == 0 then
         addMessageToFeed("System::TXR // AI", "Global Network Synchronized! Permanent chat storage online.", nil, false, game.JobId, "global")
     end
