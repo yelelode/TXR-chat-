@@ -48,7 +48,7 @@ for _, v in pairs(targetGuiParent:GetChildren()) do
     if v.Name:find("TXR_OnyxChat") or v.Name:find("HiddenChatUI") then v:Destroy() end
 end
 
--- ⚡ COMPACT UI BUILDER ENGINE (Prevents Token Overflow & Crashes)
+-- ⚡ COMPACT UI BUILDER ENGINE
 local function mk(class, parent, props)
     local inst = Instance.new(class)
     if props then
@@ -151,7 +151,6 @@ local function crispText(element, overrideTransparency)
     stroke.Thickness = 1.0
 end
 
--- 🔥 MICRO-SMOOTH HOVER ENGINE UPGRADE 🔥
 local function applySpringHover(btn)
     local btnScale = btn:FindFirstChildOfClass("UIScale") or Instance.new("UIScale", btn)
     local origTrans = btn.BackgroundTransparency
@@ -169,7 +168,6 @@ local function applySpringHover(btn)
     btn.MouseButton1Up:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.3, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1.05}):Play() end)
 end
 
--- 🔥 TACTILE RIPPLE EFFECT ENGINE 🔥
 local function createRipple(parent)
     task.spawn(function()
         local rip = Instance.new("Frame", parent)
@@ -214,7 +212,9 @@ local knownUsers, activeUsersTable, remoteTypers = {}, {}, {}
 local unreadCount, isGhostMode, ghostDebounce = 0, false, false
 local userIdCache, activeBadgesList, activeAICoresList, modalSelectionIndicators, broadcastGlowCards = {}, {}, {}, {}, {}
 local processedServerMessageMap, recentLocalSentMap = {}, {}
+
 local customUserBios = {} -- Store user edited bios locally
+local customUserBanners = {} -- 🔥 Store user edited banners locally 🔥
 
 _G.TXR_GlobalHistoryCache = _G.TXR_GlobalHistoryCache or {}
 pcall(function()
@@ -353,7 +353,7 @@ openBtnContainer:GetPropertyChangedSignal("Visible"):Connect(function()
 end)
 
 -- =========================================================
--- 👥 ONLINE ACTIVE ROSTER (ZERO-BOX UI DOT DRAWER)
+-- 👥 ONLINE ACTIVE ROSTER
 -- =========================================================
 local rosterFrame = mk("Frame", mainFrame, { Size = UDim2.new(0, 152, 1, -50), Position = UDim2.new(1, 10, 0, 46), BackgroundColor3 = Colors.Surface, BackgroundTransparency = 0.05, Visible = false, ZIndex = 40, Corner = UDim.new(0, 12), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.2, Transparency = 0.40 } })
 mk("TextLabel", rosterFrame, { Size = UDim2.new(1, 0, 0, 26), BackgroundTransparency = 1, Text = "ONLINE PLAYERS", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 9.5, ZIndex = 41 })
@@ -508,7 +508,7 @@ closeBtn.TextColor3 = Colors.Danger
 mk("Frame", header, { Size = UDim2.new(1, -24, 0, 1), Position = UDim2.new(0, 12, 1, 0), BorderSizePixel = 0, BackgroundColor3 = rgb(34, 44, 64), BackgroundTransparency = 0.45, ZIndex = 12 })
 
 -- =========================================================
--- 🔀 LUXURY SLIDING SEGMENTED TABS (SERVER FIRST, GLOBAL SECOND)
+-- 🔀 LUXURY SLIDING SEGMENTED TABS
 -- =========================================================
 local channelFrame = mk("Frame", mainFrame, { Size = UDim2.new(1, -24, 0, 32), Position = UDim2.new(0, 12, 0, 52), BackgroundTransparency = 1, ZIndex = 8 })
 local tabShell = mk("Frame", channelFrame, { Size = UDim2.new(1, 0, 1, 0), BackgroundColor3 = Colors.Surface, BackgroundTransparency = 0.25, ZIndex = 9, Corner = UDim.new(0, 10), Stroke = { Thickness = 1, Color = Colors.SurfaceHover, Transparency = 0.40 } })
@@ -644,7 +644,7 @@ local function createActionBtn(text, color, onClick)
 end
 
 -- =========================================================
--- 🪪 DISCORD-STYLE COMPACT PROFILE MODAL (+ CUSTOM BIO)
+-- 🪪 DISCORD-STYLE COMPACT PROFILE MODAL (+ CUSTOM BIO & BANNER)
 -- =========================================================
 profileModal = mk("Frame", mainFrame, {
     Size = UDim2.fromOffset(255, 335),
@@ -659,9 +659,51 @@ profileModal = mk("Frame", mainFrame, {
 })
 pmScale = mk("UIScale", profileModal, {Scale = 0})
 
-local pBanner = mk("Frame", profileModal, { Size = UDim2.new(1, 0, 0, 75), BackgroundColor3 = Colors.Primary, ZIndex = 301, Corner = UDim.new(0, 14) })
+-- 🔥 NEW BANNER UI 🔥
+local pBanner = mk("ImageLabel", profileModal, { Size = UDim2.new(1, 0, 0, 75), BackgroundColor3 = Colors.Primary, Image = "", ScaleType = Enum.ScaleType.Crop, ClipsDescendants = true, ZIndex = 301, Corner = UDim.new(0, 14) })
 mk("Frame", pBanner, {Size = UDim2.new(1,0,0,14), Position = UDim2.new(0,0,1,-14), BorderSizePixel=0, BackgroundColor3=Colors.Primary, ZIndex=301})
 local pBannerGrad = mk("UIGradient", pBanner, { Color = ColorSequence.new(Colors.Primary, Colors.Purple), Rotation = 25 })
+
+local pBannerEditBtn = mk("TextButton", profileModal, { Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, -38, 0, 10), BackgroundTransparency = 1, Text = "🖼️", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 11, Visible = false, ZIndex = 305 })
+applySpringHover(pBannerEditBtn)
+
+local pBannerInput = mk("TextBox", profileModal, { Size = UDim2.new(1, -28, 0, 24), Position = UDim2.fromOffset(14, 40), BackgroundColor3 = rgb(10, 13, 19), BackgroundTransparency = 0.2, Text = "", PlaceholderText = "Enter Roblox Image ID...", TextColor3 = Colors.Text, Font = Enum.Font.GothamMedium, TextSize = 11, ClearTextOnFocus = false, Visible = false, ZIndex = 306, Corner = UDim.new(0, 4), Stroke = {Color = Colors.PrimaryDark, Thickness = 1, Transparency = 0.6} })
+
+pBannerEditBtn.MouseButton1Click:Connect(function()
+    pBannerInput.Visible = not pBannerInput.Visible
+    if pBannerInput.Visible then pBannerInput:CaptureFocus() end
+    playSFX("default")
+end)
+
+pBannerInput.FocusLost:Connect(function()
+    local inputId = pBannerInput.Text:match("%d+")
+    if inputId then
+        local assetStr = "rbxthumb://type=Asset&id=" .. inputId .. "&w=420&h=420"
+        customUserBanners[lp.Name] = assetStr
+        pBanner.Image = assetStr
+        pBannerGrad.Transparency = NumberSequence.new(0.5)
+        
+        -- Send updated banner to Server
+        task.spawn(function()
+            local fn = (syn and syn.request) or (http and http.request) or http_request or request
+            if fn then
+                pcall(function()
+                    fn({
+                        Url = SERVER_URL .. "/update_profile",
+                        Method = "POST",
+                        Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" },
+                        Body = HttpService:JSONEncode({ 
+                            username = lp.Name, 
+                            bannerId = assetStr, 
+                            bio = customUserBios[lp.Name] or "TXR Cyber Titan Network User."
+                        })
+                    })
+                end)
+            end
+        end)
+    end
+    pBannerInput.Visible = false
+end)
 
 local pAvatarContainer = mk("Frame", profileModal, { Size = UDim2.fromOffset(76, 76), Position = UDim2.fromOffset(14, 34), BackgroundColor3 = rgb(15, 18, 26), ZIndex = 302, Corner = UDim.new(1, 0) })
 local pAvatar = mk("ImageLabel", pAvatarContainer, { Size = UDim2.fromOffset(66, 66), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), BackgroundColor3 = Colors.Background, ZIndex = 303, Corner = UDim.new(1, 0) })
@@ -679,7 +721,7 @@ local pBioEditBtn = mk("TextButton", profileModal, { Size = UDim2.fromOffset(24,
 applySpringHover(pBioEditBtn)
 
 local pBioBox = mk("Frame", profileModal, { Size = UDim2.new(1, -28, 0, 68), Position = UDim2.fromOffset(14, 198), BackgroundColor3 = rgb(10, 13, 19), BackgroundTransparency = 0.4, ZIndex = 302, Corner = UDim.new(0, 6), Stroke = {Color = Colors.PrimaryDark, Thickness = 1, Transparency = 0.6} })
-local pBioText = mk("TextLabel", pBioBox, { Size = UDim2.new(1, -12, 1, -12), Position = UDim2.fromOffset(6, 6), BackgroundTransparency = 1, Text = "TXR Cyber Titan Network User.\nExploring the virtual realm.", TextColor3 = Colors.SubText, Font = Enum.Font.GothamMedium, TextSize = 11, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, ZIndex = 303 })
+local pBioText = mk("TextLabel", pBioBox, { Size = UDim2.new(1, -12, 1, -12), Position = UDim2.fromOffset(6, 6), BackgroundTransparency = 1, Text = "Loading profile data...", TextColor3 = Colors.SubText, Font = Enum.Font.GothamMedium, TextSize = 11, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, ZIndex = 303 })
 local pBioInput = mk("TextBox", pBioBox, { Size = UDim2.new(1, -12, 1, -12), Position = UDim2.fromOffset(6, 6), BackgroundTransparency = 1, Text = "", PlaceholderText = "Write your custom bio here...", TextColor3 = Colors.Text, Font = Enum.Font.GothamMedium, TextSize = 11, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, ClearTextOnFocus = false, Visible = false, ZIndex = 304 })
 
 pBioEditBtn.MouseButton1Click:Connect(function()
@@ -695,6 +737,25 @@ pBioInput.FocusLost:Connect(function()
     pBioText.Text = pBioInput.Text
     pBioInput.Visible = false
     pBioText.Visible = true
+    
+    -- Send updated bio to Server
+    task.spawn(function()
+        local fn = (syn and syn.request) or (http and http.request) or http_request or request
+        if fn then
+            pcall(function()
+                fn({
+                    Url = SERVER_URL .. "/update_profile",
+                    Method = "POST",
+                    Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" },
+                    Body = HttpService:JSONEncode({ 
+                        username = lp.Name, 
+                        bannerId = customUserBanners[lp.Name] or "", 
+                        bio = customUserBios[lp.Name]
+                    })
+                })
+            end)
+        end
+    end)
 end)
 
 local pMessageBtn = mk("TextButton", profileModal, { Size = UDim2.new(1, -28, 0, 32), Position = UDim2.new(0, 14, 1, -44), BackgroundColor3 = Colors.Primary, Text = "Direct Message", TextColor3 = rgb(10, 14, 22), Font = Enum.Font.GothamBlack, TextSize = 11.5, ZIndex = 302, Corner = UDim.new(0, 6) })
@@ -727,19 +788,58 @@ openProfile = function(username, dispName, uId, isAdmin, isAI)
         pAvatar.BackgroundColor3 = Colors.Background
     end
 
-    if customUserBios[username] then
-        pBioText.Text = customUserBios[username]
+    -- Clear UI before loading
+    pBioText.Text = "Loading profile data..."
+    pBanner.Image = ""
+    pBannerGrad.Transparency = NumberSequence.new(0)
+    
+    -- 🔥 FETCH PROFILE DATA FROM SERVER 🔥
+    if not isAI then
+        task.spawn(function()
+            local fn = (syn and syn.request) or (http and http.request) or http_request or request
+            if fn then
+                local success, res = pcall(function()
+                    return fn({
+                        Url = SERVER_URL .. "/get_profile/" .. username,
+                        Method = "GET", 
+                        Headers = { ["User-Agent"] = "Roblox/WinInet" }
+                    })
+                end)
+
+                if success and res and (res.StatusCode == 200 or res.Status == 200) then
+                    local decodeSuccess, data = pcall(function() return HttpService:JSONDecode(res.Body) end)
+                    if decodeSuccess and type(data) == "table" then
+                        pBioText.Text = data.bio or "TXR Cyber Titan Network User."
+                        if data.bannerId and data.bannerId ~= "" then
+                            pBanner.Image = data.bannerId
+                            pBannerGrad.Transparency = NumberSequence.new(0.5)
+                        else
+                            pBanner.Image = ""
+                            pBannerGrad.Transparency = NumberSequence.new(0)
+                        end
+                    else
+                        pBioText.Text = "TXR Cyber Titan Network User."
+                    end
+                else
+                    pBioText.Text = "TXR Cyber Titan Network User."
+                end
+            end
+        end)
     else
-        pBioText.Text = isAI and "TXR Artificial Intelligence Core.\nMonitoring network anomalies." or "TXR Cyber Titan Network User.\nExploring the virtual realm."
+        pBioText.Text = "TXR Artificial Intelligence Core.\nMonitoring network anomalies."
     end
     
     if username == lp.Name then
         pBioEditBtn.Visible = true
-        pMessageBtn.Text = "Your Profile (Edit Bio Above)"
+        pBannerEditBtn.Visible = true
+        pMessageBtn.Text = "Your Profile (Edit Info Above)"
         pMessageBtn.BackgroundColor3 = Colors.SurfaceHover
         pMessageBtn.TextColor3 = Colors.SubText
     else
         pBioEditBtn.Visible = false
+        pBannerEditBtn.Visible = false
+        pBannerInput.Visible = false
+        pBioInput.Visible = false
         pMessageBtn.Text = "Direct Message"
         pMessageBtn.BackgroundColor3 = isAI and Colors.Purple or Colors.Primary
         pMessageBtn.TextColor3 = rgb(10, 14, 22)
@@ -769,7 +869,7 @@ end)
 
 
 -- =========================================================
--- 💬 MICRO-PERFECT MESSAGE PIPELINE (CLEAN UNIFIED POLISHED CARDS)
+-- 💬 MICRO-PERFECT MESSAGE PIPELINE
 -- =========================================================
 local function updateLiveCounter(username, dispName)
     activeUsersTable[username:lower()] = { time = os.time(), disp = dispName or username, user = username }
@@ -837,7 +937,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
 
     local isSelf = (actualUsername:lower() == lp.Name:lower())
 
-    -- VIP Mention Detection (@all / @here)
     local hasBroadcastMention = string.find(string.lower(displayMsg), "@all", 1, true) or string.find(string.lower(displayMsg), "@here", 1, true)
     local isMentioned = (not isSystemAI) and (
         hasBroadcastMention or
@@ -1045,13 +1144,11 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             isSwipingCard, swipeInputObj, swipeStartPos, swipeTriggered, movedDistance = true, input, input.Position, false, 0
             isHoldingCard = true
             
-            -- 🔥 COMPACT & GLASSY APPLE DOCK MENU (WITH SELF ACTIONS & OVERLAY) 🔥
             task.delay(0.35, function()
                 if isHoldingCard and movedDistance < 10 and not activeReactionMenu then
                     closeReactionMenu()
                     playSFX("default")
                     
-                    -- OVERLAY FOR TAP-TO-CLOSE & CINEMATIC DIM
                     local menuOverlay = mk("TextButton", mainFrame, { Name = "ReactionOverlay", Size = UDim2.fromScale(1, 1), BackgroundColor3 = rgb(5, 8, 14), BackgroundTransparency = 1, Text = "", ZIndex = 199 })
                     TweenService:Create(menuOverlay, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundTransparency = 0.45}):Play()
                     menuOverlay.MouseButton1Down:Connect(function()
@@ -1068,8 +1165,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     mk("UIListLayout", emojiContainer, { FillDirection = Enum.FillDirection.Horizontal, HorizontalAlignment = Enum.HorizontalAlignment.Center, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 6) })
 
                     local touchY = swipeStartPos.Y - mainFrame.AbsolutePosition.Y
-                    
-                    -- 🔥 SMART POSITIONING: IF SELF, OPEN HIGHER. IF OTHER, OPEN LOWER 🔥
                     local rMenuY
                     if isSelf and not memeIdMatch then
                         rMenuY = math.clamp(touchY - 95, 10, mainFrame.AbsoluteSize.Y - 120)
@@ -1106,7 +1201,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     
                     activeReactionMenu = rMenu
 
-                    -- 🌟 SELF ACTION MENU (EDIT & DELETE) 🌟
                     local renderedSelfBtns = {}
                     if isSelf and not memeIdMatch then
                         local selfMenu = mk("Frame", mainFrame, {
@@ -1142,12 +1236,8 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                             task.delay(0.3, function() cardWrapper:Destroy() end)
                         end
                         
-                        editBtn.MouseButton1Click:Connect(function()
-                            closeReactionMenu(); renderedSelfBtns[editBtn]()
-                        end)
-                        delBtn.MouseButton1Click:Connect(function()
-                            closeReactionMenu(); renderedSelfBtns[delBtn]()
-                        end)
+                        editBtn.MouseButton1Click:Connect(function() closeReactionMenu(); renderedSelfBtns[editBtn]() end)
+                        delBtn.MouseButton1Click:Connect(function() closeReactionMenu(); renderedSelfBtns[delBtn]() end)
                         
                         activeSelfMenu = selfMenu
                     end
@@ -1156,31 +1246,24 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     dragHoverConn = RunService.RenderStepped:Connect(function()
                         if not activeReactionMenu or not isHoldingCard then dragHoverConn:Disconnect() return end
                         
-                        -- ABSOLUTE SCROLL FREEZE
                         if messageFeed then
                             if not reactionCanvasLockPos then reactionCanvasLockPos = messageFeed.CanvasPosition end
                             messageFeed.CanvasPosition = reactionCanvasLockPos
                         end
                         
                         local mousePos = UserInputService:GetMouseLocation()
-                        
-                        -- 🔥 SMART HITBOX LOGIC: IF SELFMENU EXISTS, SPLIT Y-AXIS. IF NOT, WIDE Y-AXIS. 🔥
                         local inSelfMenuZone = false
                         if activeSelfMenu then
                             local selfTop = activeSelfMenu.AbsolutePosition.Y - 15
-                            if mousePos.Y > selfTop then
-                                inSelfMenuZone = true
-                            end
+                            if mousePos.Y > selfTop then inSelfMenuZone = true end
                         end
                         
                         if not inSelfMenuZone then
-                            -- EMOJI ZONE (Huge horizontal hitboxes restored like before!)
                             for btn, _ in pairs(renderedBtns) do
                                 local btnScale = btn:FindFirstChildOfClass("UIScale")
                                 local bAbsPos = btn.AbsolutePosition
                                 local bAbsSize = btn.AbsoluteSize
                                 local centerX = bAbsPos.X + bAbsSize.X/2
-                                
                                 local distX = math.abs(centerX - mousePos.X)
                                 local targetScale = 1.0
                                 
@@ -1189,16 +1272,12 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                                 elseif distX < 70 then targetScale = 1.05
                                 else targetScale = 0.85 end
                                     
-                                if distX < 22 then
-                                    btn.TextColor3 = btn.Text == "+" and Colors.Primary or Colors.Text
-                                else
-                                    btn.TextColor3 = rgb(200, 200, 200)
-                                end
+                                if distX < 22 then btn.TextColor3 = btn.Text == "+" and Colors.Primary or Colors.Text
+                                else btn.TextColor3 = rgb(200, 200, 200) end
                                 
                                 btnScale.Scale = btnScale.Scale + (targetScale - btnScale.Scale) * 0.3
                             end
                             
-                            -- Reset self menu buttons
                             if activeSelfMenu then
                                 for btn, _ in pairs(renderedSelfBtns) do
                                     local btnScale = btn:FindFirstChildOfClass("UIScale") or mk("UIScale", btn)
@@ -1208,7 +1287,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                                 end
                             end
                         else
-                            -- SELF MENU ZONE (Edit/Delete Highlighting)
                             for btn, _ in pairs(renderedBtns) do
                                 local btnScale = btn:FindFirstChildOfClass("UIScale")
                                 btnScale.Scale = btnScale.Scale + (0.85 - btnScale.Scale) * 0.3
@@ -1219,8 +1297,8 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                                 local bAbsPos = btn.AbsolutePosition
                                 local bAbsSize = btn.AbsoluteSize
                                 local btnScale = btn:FindFirstChildOfClass("UIScale") or mk("UIScale", btn)
-                                
                                 local centerY = bAbsPos.Y + bAbsSize.Y/2
+                                
                                 if math.abs(mousePos.Y - centerY) < 20 then
                                     btnScale.Scale = btnScale.Scale + (1.03 - btnScale.Scale) * 0.3
                                     btn.BackgroundTransparency = btn.BackgroundTransparency + (0.85 - btn.BackgroundTransparency) * 0.3
@@ -1276,17 +1354,12 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             
             if activeReactionMenu then
                 local reactionFired = false
-                
-                -- Only auto-fire if the user ACTUALLY dragged their finger (safety check)
                 if movedDistance > 12 then
                     local mousePos = UserInputService:GetMouseLocation()
-                    
                     local inSelfMenuZone = false
                     if activeSelfMenu then
                         local selfTop = activeSelfMenu.AbsolutePosition.Y - 15
-                        if mousePos.Y > selfTop then
-                            inSelfMenuZone = true
-                        end
+                        if mousePos.Y > selfTop then inSelfMenuZone = true end
                     end
                     
                     if not inSelfMenuZone then
@@ -1333,8 +1406,6 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         end
                     end
                 else
-                    -- They didn't drag, they just tapped/held and released.
-                    -- LEAVE THE MENU OPEN! Reset visuals so it looks nice and resting.
                     local emojiCont = activeReactionMenu:FindFirstChild("EmojiContainer")
                     if emojiCont then
                         for _, child in ipairs(emojiCont:GetChildren()) do
@@ -1439,7 +1510,7 @@ local ltpLabel = mk("TextLabel", liveTypingPill, { AutomaticSize = Enum.Automati
 crispText(ltpLabel, 0.5)
 
 -- =========================================================
--- ⚡ ZERO-BOX SMART AUTO-COMPLETE CHIP BAR (MOBILE FOCUS FIX)
+-- ⚡ ZERO-BOX SMART AUTO-COMPLETE CHIP BAR
 -- =========================================================
 local autoCompleteBar = mk("Frame", mainFrame, { Size = UDim2.new(1, -28, 0, 30), Position = UDim2.new(0, 14, 1, -88), BackgroundColor3 = rgb(11, 15, 25), BackgroundTransparency = 0.06, Visible = false, ZIndex = 28, Corner = UDim.new(0, 10), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.1, Transparency = 0.35 } })
 local acScale = mk("UIScale", autoCompleteBar)
@@ -1504,10 +1575,7 @@ local function refreshAutoComplete(rawText)
                 elseif s.replaceMode == "mention" then 
                     chatInput.Text = string.gsub(chatInput.Text, "@[%w_]*$", s.val) 
                 end
-                
                 autoCompleteBar.Visible = false
-                
-                -- Mobile-Safe Cursor & Re-Focus Fix (Prevents touch lockout)
                 task.defer(function()
                     chatInput.CursorPosition = #chatInput.Text + 1
                     chatInput:CaptureFocus()
@@ -1572,12 +1640,9 @@ local dmBadge = mk("TextButton", inputContainer, { Size = UDim2.new(0, 0, 1, -14
 chatInput = mk("TextBox", inputContainer, { Text = "", Size = UDim2.new(1, -162, 1, 0), Position = UDim2.new(0, 44, 0, 0), BackgroundTransparency = 1, PlaceholderText = "Message... (@all for broadcast alert)", PlaceholderColor3 = Colors.SubText, TextColor3 = Colors.Text, Font = Enum.Font.GothamMedium, TextSize = 11.5, ClearTextOnFocus = false, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 13 })
 crispText(chatInput, 0.38)
 
--- Input Touch Reliability: Clicking input directly always gives clear cursor
 chatInput.InputBegan:Connect(function(inp)
     if inp.UserInputType == Enum.UserInputType.MouseButton1 or inp.UserInputType == Enum.UserInputType.Touch then
-        task.defer(function()
-            chatInput:CaptureFocus()
-        end)
+        task.defer(function() chatInput:CaptureFocus() end)
     end
 end)
 
