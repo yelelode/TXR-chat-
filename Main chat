@@ -48,7 +48,7 @@ for _, v in pairs(targetGuiParent:GetChildren()) do
     if v.Name:find("TXR_OnyxChat") or v.Name:find("HiddenChatUI") then v:Destroy() end
 end
 
--- ⚡ COMPACT UI BUILDER ENGINE (Prevents Token Overflow & Crashes)
+-- ⚡ COMPACT UI BUILDER ENGINE
 local function mk(class, parent, props)
     local inst = Instance.new(class)
     if props then
@@ -132,21 +132,48 @@ local MemeLibrary = {
     { name = "Clown License", id = 4905389658 }, { name = "Capybara Pull Up", id = 9811566897 }
 }
 
+-- Aab isme tumhari nayi IDs daal di hain
 local BannerLibrary = {
     "89029276214098", "94450999640109", "123353792272313", 
     "119180147580623", "117025306703595", "107996850969959", "84391094747008"
 }
 local customUserBanners = {}
+local customUserBios = {} 
 
 local EmojiCategories = {
     { tab = "🔥", title = "POPULAR & HYPE", list = "😂🤣😭💀🔥❤️💯✨👑😎🫡🗿🤝🙏🐐⚡🎉🚀💎💸😈👀🤡🧢🥀💔🥶🥵🤓👻👾🤖🎃💥💫💦💤💢💣💬" },
     { tab = "😀", title = "SMILEYS & FACES", list = "😀😃😄😁😆😅😂🤣🥲🥹☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🥸🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🫣🤭🫢🫡🤫🫠🤥😶😐😑😬🙄😯😦😧😮😲🥱😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾" },
     { tab = "👋", title = "HANDS & PEOPLE", list = "👋🤚🖐️✋🖖👌🤌🤏✌️🤞🫰🤟🤘🤙👈👉👆🖕👇☝️🫵👍👎✊👊🤛🤜👏🙌🫶👐🤲🤝🙏✍️💅🤳💪🦾🦵🦶👂👃🧠🫀🫁🦷🦴👀👁️👅👄🫦👶🧒👦👧🧑👱👨🧔👩🧓👴👵🙍🙎🙅🙆💁🙋🧏🙇🤦🤷👮🕵️💂🥷👷🫅🤴👸👳👲🧕🤵👰🤰👼🎅🤶🦸🦹🧙🧚🧛🧜🧝🧞🧟🧌💆💇🚶🧍🧎🏃💃🕺👯🧘" },
     { tab = "❤️", title = "HEARTS & LOVE", list = "❤️🧡💛💚💙💜🖤🤍🤎💔❤️‍🔥❤️‍🩹❣️💕💞💓💗💖💘💝💟💌💋💍💎💐🌹🥀🌷🌺🌸🌼🌻💒💓" },
-    { tab = "🎉", title = "FLEX, GAMES & ANIMALS", list = "🏆🥇🥈🥉🏅🎖️👑💎💰💵💴💶💷💸💳🪙🎮🕹️🎲🎯🎳🎸🎹🎺🎻🥁🎬🎤🎧🎨🎭🎪🎟️⚽🏀🏈⚾🎾🏐🎱🏓🏸🥊🥋🥅⛳🎣🤿🎽🛹🛼🛷⛸️🐶🐱🐭🐹🐰🦊🐻🐼🐻‍❄️🐨🐯🦁🐮🐷🐸🐵🙈🙉🙊🐒🐔🐧🐦🐤🐣🐥🦆🦅🦉🦇🐺🐗🐴🦄🐝🪱🐛🦋🐌🐞🐜🪰🪲🪳🦟🦗🕷️🦂🐢🐍🦎🦖🦕🐙🦑🦐🦞🦀🐡🐠🐟🐬🐳🐋🦈🐊🐅🐆🦓🦍🦧🐘🦛🦏🐪🐫🦒🦘🦬🐃🐂🐄🐎🐖🐏🐑🦙🐐🦌🐕🐩🦮🐈🐓🦃🦤🦚🦜🦢🦩🕊️🐇🦝🦨🦡🦫🦦🦥🐁🐀🐿️🦔🐾🐉🐲" },
+    { tab = "🎉", title = "FLEX, GAMES & ANIMALS", list = "🏆🥇🥈🥉🏅🎖️👑💎💰💵💴💶💷💸💳🪙🎮🕹️🎲🎯🎳🎸🎹🎺🎻🥁🎬🎤🎧🎨🎭🎪🎟️⚽🏀🏈⚾🎾🏐🎱🏓🏸🥊🥋🥅⛳🎣🤿🎽🛹🛼🛷⛸️🐶🐱🐭🐹🐰🦊桂🐼🐻‍❄️🐨🐯🦁🐮🐷🐸🐵🙈🙉🙊🐒🐔🐧🐦🐤🐣🐥🦆🦅🦉🦇🐺🐗🐴🦄🐝🪱🐛🦋🐌🐞🐜🪰🪲🪳🦟🦗🕷️🦂🐢🐍🦎🦖🦕🐙🦑🦐🦞🦀🐡🐠🐟🐬🐳🐋🦈🐊🐅🐆🦓🦍🦧🐘🦛🦏🐪🐫🦒🦘🦬🐃🐂🐄🐎🐖🐏🐑🦙🐐🦌🐕🐩🦮🐈🐓🦃🦤🦚🦜🦢🦩🕊️🐇🦝🦨🦡🦫🦦🦥🐁🐀🐿️🦔🐾🐉🐲" },
     { tab = "🍕", title = "FOOD & DRINKS", list = "🍏🍎🍐🍊🍋🍌🍉🍇🍓🫐🍈🍒🍑🥭🍍🥥🥝🍅🍆🥑🥦🥬🥒🌶️🫑🌽🥕🫒🧄🧅🥔🍠🥐🥯🍞🥖🥨🧀🥚🍳🧈🥞🧇🥓🥩🍗🍖🦴🌭🍔🍟🍕🫓🥪🥙🧆🌮🌯🫔🥗🥘🫕🥫🍝🍜🍲🍛🍣🍱🥟🦪🍤🍙🍚🍘🍥🥠🥮🍢🍡🍧🍨🍦🥧🧁🍰🎂🍮🍭🍬🍫🍿🍩🍪🌰🥜🍯🥛🍼🫖☕🍵🧃🥤🧋🍶🍺🍻🥂🍷🥃🍸🍹🧉🍾🧊🥄🍴🍽️🥣🥡🥢🧂" },
     { tab = "⚡", title = "SYMBOLS & WEATHER", list = "☀️🌤️⛅🌥️☁️🌦️🌧️⛈️🌩️🌨️❄️☃️⛄🌬️💨💧💦☔☂️🌊🌫️🌪️🌈⭐🌟✨⚡☄️💥🔥🌙🪐🌍🌎🌏🌌⏰⏱️🧭🚀🛸🚁🛶⛵🚤🛥️🛳️⛴️🚢✈️🛩️🛫🛬🪂💺🛰️🚨🚓🚍🚘🚖🚡🚠🚟🚃🚋🚞🚝🚄🚅🚈🚂🚆🚇🚊🚉⬆️↗️➡️↘️⬇️↙️⬅️↖️↕️↔️↩️↪️⤴️⤵️🔃🔄🔙🔚🔛🔜🔝✅☑️✔️✖️❌❎➕➖➗➰➿〽️✳️✴️❇️‼️⁉️❓❔❕❗⭕💯🔱⚜️🔰♻️⚠️🚸⛔🚫🚳🚭🚯🚱🚷📵🔞☢️☣️" }
 }
+
+-- 🌟 GOD-LEVEL AUTO-CONVERTER (Decal ID -> Image ID without Studio)
+local resolvedBanners = {}
+local function fetchRealBanner(id, imgElement)
+    if resolvedBanners[id] then
+        imgElement.Image = resolvedBanners[id]; return
+    end
+    imgElement.Image = "" 
+    task.spawn(function()
+        local url = string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", tostring(id))
+        pcall(function()
+            -- Mobile executor bypass (Fetches actual image texture from Decal instance)
+            local objs = game:GetObjects("rbxassetid://" .. id)
+            if objs and objs[1] and objs[1]:IsA("Decal") then
+                url = objs[1].Texture
+            elseif objs and objs[1] and objs[1]:IsA("Texture") then
+                url = objs[1].Texture
+            end
+        end)
+        resolvedBanners[id] = url
+        if imgElement and imgElement.Parent then
+            imgElement.Image = url
+        end
+    end)
+end
 
 local function getAssetThumb(id) return string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", tostring(id)) end
 
@@ -220,7 +247,6 @@ local knownUsers, activeUsersTable, remoteTypers = {}, {}, {}
 local unreadCount, isGhostMode, ghostDebounce = 0, false, false
 local userIdCache, activeBadgesList, activeAICoresList, modalSelectionIndicators, broadcastGlowCards = {}, {}, {}, {}, {}
 local processedServerMessageMap, recentLocalSentMap = {}, {}
-local customUserBios = {} -- Store user edited bios locally
 
 _G.TXR_GlobalHistoryCache = _G.TXR_GlobalHistoryCache or {}
 pcall(function()
@@ -713,7 +739,7 @@ applySpringHover(pMessageBtn)
 local pCloseBtn = mk("TextButton", profileModal, { Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, -10, 0, 8), AnchorPoint = Vector2.new(1, 0), BackgroundColor3 = rgb(0,0,0), BackgroundTransparency = 0.6, Text = "X", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 306, Corner = UDim.new(1, 0) })
 applySpringHover(pCloseBtn)
 
--- 🌟 BANNER SELECTION MODAL
+-- 🌟 BANNER SELECTION MODAL (Fully Automated Engine)
 bannerModal = mk("Frame", mainFrame, { Size = UDim2.fromOffset(220, 240), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), BackgroundColor3 = rgb(15, 18, 26), BackgroundTransparency = 0.05, Visible = false, ZIndex = 350, Corner = UDim.new(0, 14), Stroke = {Color = Colors.PrimaryDark, Thickness = 1.2, Transparency = 0.3} })
 local bmScale = mk("UIScale", bannerModal, {Scale = 0})
 mk("TextLabel", bannerModal, { Size = UDim2.new(1, 0, 0, 28), BackgroundTransparency = 1, Text = "SELECT BANNER", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 11, ZIndex = 351 })
@@ -747,11 +773,12 @@ bannerNoneBtn.MouseButton1Click:Connect(function()
 end)
 
 for _, bId in ipairs(BannerLibrary) do
-    local btn = mk("ImageButton", bmScroll, { BackgroundColor3 = rgb(20, 25, 35), Image = getAssetThumb(bId), ScaleType = Enum.ScaleType.Crop, AutoButtonColor = false, ZIndex = 352, Corner = UDim.new(0, 8), Stroke = {Color = Colors.PrimaryDark, Thickness=1, Transparency=0.4} })
+    local btn = mk("ImageButton", bmScroll, { BackgroundColor3 = rgb(20, 25, 35), ScaleType = Enum.ScaleType.Crop, AutoButtonColor = false, ZIndex = 352, Corner = UDim.new(0, 8), Stroke = {Color = Colors.PrimaryDark, Thickness=1, Transparency=0.4} })
+    fetchRealBanner(bId, btn)
     applySpringHover(btn)
     btn.MouseButton1Click:Connect(function()
         customUserBanners[lp.Name] = bId
-        pBannerImage.Image = getAssetThumb(bId)
+        fetchRealBanner(bId, pBannerImage)
         pBannerImage.Visible = true
         TweenService:Create(bmScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
         task.delay(0.2, function() bannerModal.Visible = false end)
@@ -784,7 +811,7 @@ openProfile = function(username, dispName, uId, isAdmin, isAI)
     end
 
     if customUserBanners[username] then
-        pBannerImage.Image = getAssetThumb(customUserBanners[username])
+        fetchRealBanner(customUserBanners[username], pBannerImage)
         pBannerImage.Visible = true
     else
         pBannerImage.Visible = false
