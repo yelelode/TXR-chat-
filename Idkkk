@@ -216,6 +216,20 @@ local userIdCache, activeBadgesList, activeAICoresList, modalSelectionIndicators
 local processedServerMessageMap, recentLocalSentMap = {}, {}
 local customUserBios = {} -- Store user edited bios locally
 
+-- =========================================================
+-- 🖼️ CUSTOM AVATARS & BANNERS (ASSET IDs)
+-- =========================================================
+local customAvatars = {
+    ["kausarali2"] = "rbxassetid://0000000",
+    ["cutie143198"] = "rbxassetid://0000000",
+    ["YourUsername"] = "rbxassetid://0000000" 
+}
+local customBanners = {
+    ["kausarali2"] = "rbxassetid://0000000",
+    ["cutie143198"] = "rbxassetid://0000000",
+    ["YourUsername"] = "rbxassetid://0000000"
+}
+
 _G.TXR_GlobalHistoryCache = _G.TXR_GlobalHistoryCache or {}
 pcall(function()
     if #_G.TXR_GlobalHistoryCache == 0 and isF(GLOBAL_SAVE_FILE) then
@@ -644,7 +658,7 @@ local function createActionBtn(text, color, onClick)
 end
 
 -- =========================================================
--- 🪪 DISCORD-STYLE COMPACT PROFILE MODAL (+ CUSTOM BIO)
+-- 🪪 DISCORD-STYLE COMPACT PROFILE MODAL (+ CUSTOM BIO, AVATAR & BANNER)
 -- =========================================================
 profileModal = mk("Frame", mainFrame, {
     Size = UDim2.fromOffset(255, 335),
@@ -659,7 +673,8 @@ profileModal = mk("Frame", mainFrame, {
 })
 pmScale = mk("UIScale", profileModal, {Scale = 0})
 
-local pBanner = mk("Frame", profileModal, { Size = UDim2.new(1, 0, 0, 75), BackgroundColor3 = Colors.Primary, ZIndex = 301, Corner = UDim.new(0, 14) })
+local pBanner = mk("Frame", profileModal, { Size = UDim2.new(1, 0, 0, 75), BackgroundColor3 = Colors.Primary, ZIndex = 301, Corner = UDim.new(0, 14), ClipsDescendants = true })
+local pBannerImage = mk("ImageLabel", pBanner, { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Image = "", ScaleType = Enum.ScaleType.Crop, ZIndex = 301, Visible = false })
 mk("Frame", pBanner, {Size = UDim2.new(1,0,0,14), Position = UDim2.new(0,0,1,-14), BorderSizePixel=0, BackgroundColor3=Colors.Primary, ZIndex=301})
 local pBannerGrad = mk("UIGradient", pBanner, { Color = ColorSequence.new(Colors.Primary, Colors.Purple), Rotation = 25 })
 
@@ -709,17 +724,31 @@ openProfile = function(username, dispName, uId, isAdmin, isAI)
     pName.Text = dispName
     pUser.Text = "@" .. username
     
-    if isAI then
-        pBannerGrad.Color = ColorSequence.new(Colors.Purple, rgb(80, 40, 120))
-        pAvatar.Image = ""
-        pAvatar.BackgroundColor3 = rgb(14, 18, 30)
-    elseif isAdmin then
-        pBannerGrad.Color = ColorSequence.new(Colors.Primary, Colors.MentionGold)
+    -- 🔥 CUSTOM BANNER LOGIC 🔥
+    if customBanners[username] and customBanners[username] ~= "" and customBanners[username] ~= "rbxassetid://0000000" then
+        pBannerImage.Image = customBanners[username]
+        pBannerImage.Visible = true
+        pBannerGrad.Enabled = false
     else
-        pBannerGrad.Color = ColorSequence.new(Colors.Primary, Colors.Purple)
+        pBannerImage.Visible = false
+        pBannerGrad.Enabled = true
+        if isAI then
+            pBannerGrad.Color = ColorSequence.new(Colors.Purple, rgb(80, 40, 120))
+        elseif isAdmin then
+            pBannerGrad.Color = ColorSequence.new(Colors.Primary, Colors.MentionGold)
+        else
+            pBannerGrad.Color = ColorSequence.new(Colors.Primary, Colors.Purple)
+        end
     end
     
-    if not isAI and uId then
+    -- 🔥 CUSTOM AVATAR LOGIC 🔥
+    if customAvatars[username] and customAvatars[username] ~= "" and customAvatars[username] ~= "rbxassetid://0000000" then
+        pAvatar.Image = customAvatars[username]
+        pAvatar.BackgroundColor3 = Colors.Background
+    elseif isAI then
+        pAvatar.Image = ""
+        pAvatar.BackgroundColor3 = rgb(14, 18, 30)
+    elseif not isAI and uId then
         pAvatar.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=150&h=150", uId)
         pAvatar.BackgroundColor3 = Colors.Background
     elseif not isAI then
@@ -977,7 +1006,13 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             local targetPlr = Players:FindFirstChild(actualUsername)
             local uId = targetPlr and targetPlr.UserId or userIdCache[actualUsername:lower()]
             if not uId then pcall(function() uId = Players:GetUserIdFromNameAsync(actualUsername); userIdCache[actualUsername:lower()] = uId end) end
-            if uId and avatarImg and avatarImg.Parent then avatarImg.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=48&h=48", uId) end
+            
+            -- 🔥 CUSTOM AVATAR CHECK FOR CARD 🔥
+            if customAvatars[actualUsername] and customAvatars[actualUsername] ~= "" and customAvatars[actualUsername] ~= "rbxassetid://0000000" then
+                if avatarImg and avatarImg.Parent then avatarImg.Image = customAvatars[actualUsername] end
+            else
+                if uId and avatarImg and avatarImg.Parent then avatarImg.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=48&h=48", uId) end
+            end
         end)
         
         avatarImg.MouseButton1Click:Connect(function()
@@ -1931,7 +1966,7 @@ task.spawn(function()
             local lerpAlpha = (math.sin(activeT * 0.8) + 1) / 2
             
             coreGlow.ImageColor3 = baseColor1:Lerp(baseColor2, lerpAlpha)
-            coreGlow.ImageTransparency = 0.4 + (math.sin(activeT) * 0.25)
+            coreGlow.ImageTransparency = 0.4 + (math.sin(activeT * 0.25))
             eventGlow.ImageColor3 = baseColor2:Lerp(Color3.new(1,1,1), lerpAlpha)
             openStroke.Color = baseColor1:Lerp(baseColor2, lerpAlpha)
             goGrad.Rotation = (activeT * 50) % 360
