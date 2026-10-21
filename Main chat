@@ -1,6 +1,14 @@
 -- =========================================================
--- 🌐 UNIVERSAL EXECUTOR & STORAGE COMPATIBILITY SHIM
+-- 🌐 UNIVERSAL EXECUTOR ANTI-CRASH SHIM (MOBILE OPTIMIZED)
 -- =========================================================
+pcall(function()
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "TXR CYBER TITAN",
+        Text = "Injecting UI... Please wait.",
+        Duration = 3
+    })
+end)
+
 pcall(function()
     local g = (getgenv and getgenv()) or _G or shared
     if not g.gethui then
@@ -16,9 +24,9 @@ end)
 -- =========================================================
 local currentExecutionID = tick()
 _G.TXR_ChatInstanceID = currentExecutionID
-if _G.TXR_ChatConnection then _G.TXR_ChatConnection:Disconnect() end
+if _G.TXR_ChatConnection then pcall(function() _G.TXR_ChatConnection:Disconnect() end) end
 _G.TXR_IsPolling = false
-task.wait(0.05)
+task.wait(0.1)
 _G.TXR_IsPolling = true
 
 local Players = game:GetService("Players")
@@ -45,7 +53,9 @@ if gethui then pcall(function() targetGuiParent = gethui() end) end
 if not targetGuiParent then targetGuiParent = lp:WaitForChild("PlayerGui") end
 
 for _, v in pairs(targetGuiParent:GetChildren()) do
-    if v.Name:find("TXR_OnyxChat") or v.Name:find("HiddenChatUI") then v:Destroy() end
+    if v.Name:find("TXR_OnyxChat") or v.Name:find("HiddenChatUI") then 
+        pcall(function() v:Destroy() end) 
+    end
 end
 
 -- ⚡ COMPACT UI BUILDER ENGINE
@@ -132,7 +142,6 @@ local MemeLibrary = {
     { name = "Clown License", id = 4905389658 }, { name = "Capybara Pull Up", id = 9811566897 }
 }
 
--- Aab isme tumhari nayi IDs daal di hain
 local BannerLibrary = {
     "89029276214098", "94450999640109", "123353792272313", 
     "119180147580623", "117025306703595", "107996850969959", "84391094747008"
@@ -145,37 +154,21 @@ local EmojiCategories = {
     { tab = "😀", title = "SMILEYS & FACES", list = "😀😃😄😁😆😅😂🤣🥲🥹☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🥸🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🫣🤭🫢🫡🤫🫠🤥😶😐😑😬🙄😯😦😧😮😲🥱😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾" },
     { tab = "👋", title = "HANDS & PEOPLE", list = "👋🤚🖐️✋🖖👌🤌🤏✌️🤞🫰🤟🤘🤙👈👉👆🖕👇☝️🫵👍👎✊👊🤛🤜👏🙌🫶👐🤲🤝🙏✍️💅🤳💪🦾🦵🦶👂👃🧠🫀🫁🦷🦴👀👁️👅👄🫦👶🧒👦👧🧑👱👨🧔👩🧓👴👵🙍🙎🙅🙆💁🙋🧏🙇🤦🤷👮🕵️💂🥷👷🫅🤴👸👳👲🧕🤵👰🤰👼🎅🤶🦸🦹🧙🧚🧛🧜🧝🧞🧟🧌💆💇🚶🧍🧎🏃💃🕺👯🧘" },
     { tab = "❤️", title = "HEARTS & LOVE", list = "❤️🧡💛💚💙💜🖤🤍🤎💔❤️‍🔥❤️‍🩹❣️💕💞💓💗💖💘💝💟💌💋💍💎💐🌹🥀🌷🌺🌸🌼🌻💒💓" },
-    { tab = "🎉", title = "FLEX, GAMES & ANIMALS", list = "🏆🥇🥈🥉🏅🎖️👑💎💰💵💴💶💷💸💳🪙🎮🕹️🎲🎯🎳🎸🎹🎺🎻🥁🎬🎤🎧🎨🎭🎪🎟️⚽🏀🏈⚾🎾🏐🎱🏓🏸🥊🥋🥅⛳🎣🤿🎽🛹🛼🛷⛸️🐶🐱🐭🐹🐰🦊桂🐼🐻‍❄️🐨🐯🦁🐮🐷🐸🐵🙈🙉🙊🐒🐔🐧🐦🐤🐣🐥🦆🦅🦉🦇🐺🐗🐴🦄🐝🪱🐛🦋🐌🐞🐜🪰🪲🪳🦟🦗🕷️🦂🐢🐍🦎🦖🦕🐙🦑🦐🦞🦀🐡🐠🐟🐬🐳🐋🦈🐊🐅🐆🦓🦍🦧🐘🦛🦏🐪🐫🦒🦘🦬🐃🐂🐄🐎🐖🐏🐑🦙🐐🦌🐕🐩🦮🐈🐓🦃🦤🦚🦜🦢🦩🕊️🐇🦝🦨🦡🦫🦦🦥🐁🐀🐿️🦔🐾🐉🐲" },
+    { tab = "🎉", title = "FLEX, GAMES & ANIMALS", list = "🏆🥇🥈🥉🏅🎖️👑💎💰💵💴💶💷💸💳🪙🎮🕹️🎲🎯🎳🎸🎹🎺🎻🥁🎬🎤🎧🎨🎭🎪🎟️⚽🏀🏈⚾🎾🏐🎱🏓🏸🥊🥋🥅⛳🎣🤿🎽🛹🛼🛷⛸️🐶🐱🐭🐹🐰🦊🐻🐼🐻‍❄️🐨🐯🦁🐮🐷🐸🐵🙈🙉🙊🐒🐔🐧🐦🐤🐣🐥🦆🦅🦉🦇🐺🐗🐴🦄🐝🪱🐛🦋🐌🐞🐜🪰🪲🪳🦟🦗🕷️🦂🐢🐍🦎🦖🦕🐙🦑🦐🦞🦀🐡🐠🐟🐬🐳🐋🦈🐊🐅🐆🦓🦍🦧🐘🦛🦏🐪🐫🦒🦘🦬🐃🐂🐄🐎🐖🐏🐑🦙🐐🦌🐕🐩🦮🐈🐓🦃🦤🦚🦜🦢🦩🕊️🐇🦝🦨🦡🦫🦦🦥🐁🐀🐿️🦔🐾🐉🐲" },
     { tab = "🍕", title = "FOOD & DRINKS", list = "🍏🍎🍐🍊🍋🍌🍉🍇🍓🫐🍈🍒🍑🥭🍍🥥🥝🍅🍆🥑🥦🥬🥒🌶️🫑🌽🥕🫒🧄🧅🥔🍠🥐🥯🍞🥖🥨🧀🥚🍳🧈🥞🧇🥓🥩🍗🍖🦴🌭🍔🍟🍕🫓🥪🥙🧆🌮🌯🫔🥗🥘🫕🥫🍝🍜🍲🍛🍣🍱🥟🦪🍤🍙🍚🍘🍥🥠🥮🍢🍡🍧🍨🍦🥧🧁🍰🎂🍮🍭🍬🍫🍿🍩🍪🌰🥜🍯🥛🍼🫖☕🍵🧃🥤🧋🍶🍺🍻🥂🍷🥃🍸🍹🧉🍾🧊🥄🍴🍽️🥣🥡🥢🧂" },
     { tab = "⚡", title = "SYMBOLS & WEATHER", list = "☀️🌤️⛅🌥️☁️🌦️🌧️⛈️🌩️🌨️❄️☃️⛄🌬️💨💧💦☔☂️🌊🌫️🌪️🌈⭐🌟✨⚡☄️💥🔥🌙🪐🌍🌎🌏🌌⏰⏱️🧭🚀🛸🚁🛶⛵🚤🛥️🛳️⛴️🚢✈️🛩️🛫🛬🪂💺🛰️🚨🚓🚍🚘🚖🚡🚠🚟🚃🚋🚞🚝🚄🚅🚈🚂🚆🚇🚊🚉⬆️↗️➡️↘️⬇️↙️⬅️↖️↕️↔️↩️↪️⤴️⤵️🔃🔄🔙🔚🔛🔜🔝✅☑️✔️✖️❌❎➕➖➗➰➿〽️✳️✴️❇️‼️⁉️❓❔❕❗⭕💯🔱⚜️🔰♻️⚠️🚸⛔🚫🚳🚭🚯🚱🚷📵🔞☢️☣️" }
 }
 
--- 🌟 GOD-LEVEL AUTO-CONVERTER (Decal ID -> Image ID without Studio)
-local resolvedBanners = {}
-local function fetchRealBanner(id, imgElement)
-    if resolvedBanners[id] then
-        imgElement.Image = resolvedBanners[id]; return
-    end
-    imgElement.Image = "" 
-    task.spawn(function()
-        local url = string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", tostring(id))
-        pcall(function()
-            -- Mobile executor bypass (Fetches actual image texture from Decal instance)
-            local objs = game:GetObjects("rbxassetid://" .. id)
-            if objs and objs[1] and objs[1]:IsA("Decal") then
-                url = objs[1].Texture
-            elseif objs and objs[1] and objs[1]:IsA("Texture") then
-                url = objs[1].Texture
-            end
-        end)
-        resolvedBanners[id] = url
-        if imgElement and imgElement.Parent then
-            imgElement.Image = url
-        end
-    end)
+-- 🌟 MOBILE-SAFE BANNER RENDERER (Uses pure rbxthumb, no dangerous GetObjects)
+local function getAssetThumb(id) 
+    return string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", tostring(id)) 
 end
 
-local function getAssetThumb(id) return string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", tostring(id)) end
+local function fetchRealBanner(id, imgElement)
+    if imgElement and imgElement.Parent then
+        imgElement.Image = getAssetThumb(id)
+    end
+end
 
 local function crispText(element, overrideTransparency)
     local stroke = element:FindFirstChildOfClass("UIStroke") or Instance.new("UIStroke", element)
@@ -200,24 +193,6 @@ local function applySpringHover(btn)
     end)
     btn.MouseButton1Down:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.1, Enum.EasingStyle.Sine), {Scale = 0.94}):Play() end)
     btn.MouseButton1Up:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.3, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1.05}):Play() end)
-end
-
--- 🔥 TACTILE RIPPLE EFFECT ENGINE 🔥
-local function createRipple(parent)
-    task.spawn(function()
-        local rip = Instance.new("Frame", parent)
-        rip.AnchorPoint = Vector2.new(0.5, 0.5)
-        rip.Position = UDim2.fromScale(0.5, 0.5)
-        rip.Size = UDim2.fromScale(0, 0)
-        rip.BackgroundColor3 = Color3.new(1,1,1)
-        rip.BackgroundTransparency = 0.4
-        rip.ZIndex = parent.ZIndex + 1
-        local uic = Instance.new("UICorner", rip)
-        uic.CornerRadius = UDim.new(1, 0)
-        TweenService:Create(rip, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.fromScale(2.5, 2.5), BackgroundTransparency = 1}):Play()
-        task.wait(0.4)
-        rip:Destroy()
-    end)
 end
 
 local function playSFX(soundType)
@@ -739,7 +714,7 @@ applySpringHover(pMessageBtn)
 local pCloseBtn = mk("TextButton", profileModal, { Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, -10, 0, 8), AnchorPoint = Vector2.new(1, 0), BackgroundColor3 = rgb(0,0,0), BackgroundTransparency = 0.6, Text = "X", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 306, Corner = UDim.new(1, 0) })
 applySpringHover(pCloseBtn)
 
--- 🌟 BANNER SELECTION MODAL (Fully Automated Engine)
+-- 🌟 BANNER SELECTION MODAL
 bannerModal = mk("Frame", mainFrame, { Size = UDim2.fromOffset(220, 240), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), BackgroundColor3 = rgb(15, 18, 26), BackgroundTransparency = 0.05, Visible = false, ZIndex = 350, Corner = UDim.new(0, 14), Stroke = {Color = Colors.PrimaryDark, Thickness = 1.2, Transparency = 0.3} })
 local bmScale = mk("UIScale", bannerModal, {Scale = 0})
 mk("TextLabel", bannerModal, { Size = UDim2.new(1, 0, 0, 28), BackgroundTransparency = 1, Text = "SELECT BANNER", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 11, ZIndex = 351 })
@@ -2186,7 +2161,7 @@ chatInput.FocusLost:Connect(function(enterPressed) if enterPressed then sendMess
 -- 📢 HAR 5 MINUTE AUTOMATIC ANNOUNCEMENT SYSTEM
 -- =========================================================
 local autoAnnouncements = {
-    "📢 Join our official Discord community for early script updates, executor keys, and custom tags! discord.gg/yelelode",
+    "📢 Join our official Discord community for early script updates! discord.gg/yelelode",
     "⚡ Pro Tip: Type '@all' anytime to ping the whole network!",
     "🛡️ TXR Titan Apex v30.0 is online. Clean UI, ghost mode & zero lag enabled."
 }
@@ -2351,7 +2326,7 @@ task.spawn(function()
             })
         end)
     end
-    addMessageToFeed("System::TXR // AI", "TXR Cyber Titan online hai! Chat box ekdum clean aur smooth optimized hai.", nil, false, game.JobId, "server")
+    addMessageToFeed("System::TXR // AI", "TXR Cyber Titan online hai! Script 100% inject ho chuki hai.", nil, false, game.JobId, "server")
     if #_G.TXR_GlobalHistoryCache == 0 then
         addMessageToFeed("System::TXR // AI", "Global Network Synchronized! Permanent chat storage online.", nil, false, game.JobId, "global")
     end
