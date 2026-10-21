@@ -214,7 +214,6 @@ local knownUsers, activeUsersTable, remoteTypers = {}, {}, {}
 local unreadCount, isGhostMode, ghostDebounce = 0, false, false
 local userIdCache, activeBadgesList, activeAICoresList, modalSelectionIndicators, broadcastGlowCards = {}, {}, {}, {}, {}
 local processedServerMessageMap, recentLocalSentMap = {}, {}
-local customUserBios = {} -- Store user edited bios locally
 
 _G.TXR_GlobalHistoryCache = _G.TXR_GlobalHistoryCache or {}
 pcall(function()
@@ -644,105 +643,60 @@ local function createActionBtn(text, color, onClick)
 end
 
 -- =========================================================
--- 🪪 DISCORD-STYLE COMPACT PROFILE MODAL (+ CUSTOM BIO)
+-- 🪪 DISCORD-STYLE PROFESSIONAL PROFILE MODAL
 -- =========================================================
 profileModal = mk("Frame", mainFrame, {
-    Size = UDim2.fromOffset(255, 335),
+    Size = UDim2.fromOffset(280, 360),
     AnchorPoint = Vector2.new(0.5, 0.5),
     Position = UDim2.fromScale(0.5, 0.5),
-    BackgroundColor3 = rgb(15, 18, 26),
-    BackgroundTransparency = 0.05,
+    BackgroundColor3 = rgb(17, 20, 28),
+    BackgroundTransparency = 0,
     Visible = false,
     ZIndex = 300,
-    Corner = UDim.new(0, 14),
-    Stroke = {Color = Colors.PrimaryDark, Thickness = 1.2, Transparency = 0.3}
+    Corner = UDim.new(0, 12),
+    Stroke = {Color = Colors.Primary, Thickness = 1.5, Transparency = 0.2}
 })
 pmScale = mk("UIScale", profileModal, {Scale = 0})
 
-local pBanner = mk("Frame", profileModal, { Size = UDim2.new(1, 0, 0, 75), BackgroundColor3 = Colors.Primary, ZIndex = 301, Corner = UDim.new(0, 14) })
-mk("Frame", pBanner, {Size = UDim2.new(1,0,0,14), Position = UDim2.new(0,0,1,-14), BorderSizePixel=0, BackgroundColor3=Colors.Primary, ZIndex=301})
-local pBannerGrad = mk("UIGradient", pBanner, { Color = ColorSequence.new(Colors.Primary, Colors.Purple), Rotation = 25 })
+local pBanner = mk("Frame", profileModal, { Size = UDim2.new(1, 0, 0, 90), BackgroundColor3 = Colors.Primary, ZIndex = 301, Corner = UDim.new(0, 12) })
+mk("Frame", pBanner, {Size = UDim2.new(1,0,0,12), Position = UDim2.new(0,0,1,-12), BorderSizePixel=0, BackgroundColor3=Colors.Primary, ZIndex=301})
 
-local pAvatarContainer = mk("Frame", profileModal, { Size = UDim2.fromOffset(76, 76), Position = UDim2.fromOffset(14, 34), BackgroundColor3 = rgb(15, 18, 26), ZIndex = 302, Corner = UDim.new(1, 0) })
-local pAvatar = mk("ImageLabel", pAvatarContainer, { Size = UDim2.fromOffset(66, 66), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), BackgroundColor3 = Colors.Background, ZIndex = 303, Corner = UDim.new(1, 0) })
-local pStatus = mk("Frame", pAvatarContainer, { Size = UDim2.fromOffset(18, 18), AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, -2, 1, -2), BackgroundColor3 = Colors.OnlineGreen, ZIndex = 304, Corner = UDim.new(1, 0), Stroke = {Color = rgb(15, 18, 26), Thickness = 3.5} })
+local pAvatarContainer = mk("Frame", profileModal, { Size = UDim2.fromOffset(80, 80), Position = UDim2.fromOffset(16, 46), BackgroundColor3 = rgb(17, 20, 28), ZIndex = 302, Corner = UDim.new(1, 0) })
+local pAvatar = mk("ImageLabel", pAvatarContainer, { Size = UDim2.fromOffset(68, 68), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), BackgroundColor3 = Colors.Background, ZIndex = 303, Corner = UDim.new(1, 0) })
+local pStatus = mk("Frame", pAvatarContainer, { Size = UDim2.fromOffset(18, 18), AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, -2, 1, -2), BackgroundColor3 = Colors.OnlineGreen, ZIndex = 304, Corner = UDim.new(1, 0), Stroke = {Color = rgb(17, 20, 28), Thickness = 4} })
 
-local pName = mk("TextLabel", profileModal, { Size = UDim2.new(1, -28, 0, 24), Position = UDim2.fromOffset(14, 116), BackgroundTransparency = 1, Text = "DisplayName", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 16, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 302 })
+local pName = mk("TextLabel", profileModal, { Size = UDim2.new(1, -32, 0, 28), Position = UDim2.fromOffset(16, 134), BackgroundTransparency = 1, Text = "DisplayName", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 18, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 302 })
 crispText(pName, 0.6)
-local pUser = mk("TextLabel", profileModal, { Size = UDim2.new(1, -28, 0, 16), Position = UDim2.fromOffset(14, 140), BackgroundTransparency = 1, Text = "@username", TextColor3 = Colors.SubText, Font = Enum.Font.GothamMedium, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 302 })
+local pUser = mk("TextLabel", profileModal, { Size = UDim2.new(1, -32, 0, 20), Position = UDim2.fromOffset(16, 160), BackgroundTransparency = 1, Text = "@username", TextColor3 = Colors.SubText, Font = Enum.Font.GothamMedium, TextSize = 13, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 302 })
 
-mk("Frame", profileModal, { Size = UDim2.new(1, -28, 0, 1), Position = UDim2.fromOffset(14, 166), BackgroundColor3 = rgb(255, 255, 255), BackgroundTransparency = 0.9, BorderSizePixel = 0, ZIndex = 302 })
+mk("Frame", profileModal, { Size = UDim2.new(1, -32, 0, 1), Position = UDim2.fromOffset(16, 195), BackgroundColor3 = rgb(255, 255, 255), BackgroundTransparency = 0.85, BorderSizePixel = 0, ZIndex = 302 })
+mk("TextLabel", profileModal, { Size = UDim2.new(1, -32, 0, 20), Position = UDim2.fromOffset(16, 205), BackgroundTransparency = 1, Text = "ABOUT ME", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 302 })
+mk("TextLabel", profileModal, { Size = UDim2.new(1, -32, 0, 40), Position = UDim2.fromOffset(16, 228), BackgroundTransparency = 1, Text = "TXR Cyber Titan Network User.\nExploring the virtual realm.", TextColor3 = Colors.SubText, Font = Enum.Font.GothamMedium, TextSize = 12, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, ZIndex = 302 })
 
-local bioHeader = mk("TextLabel", profileModal, { Size = UDim2.new(1, -28, 0, 18), Position = UDim2.fromOffset(14, 175), BackgroundTransparency = 1, Text = "ABOUT ME", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 10, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 302 })
-
-local pBioEditBtn = mk("TextButton", profileModal, { Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, -38, 0, 172), BackgroundTransparency = 1, Text = "✏️", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 11, Visible = false, ZIndex = 303 })
-applySpringHover(pBioEditBtn)
-
-local pBioBox = mk("Frame", profileModal, { Size = UDim2.new(1, -28, 0, 68), Position = UDim2.fromOffset(14, 198), BackgroundColor3 = rgb(10, 13, 19), BackgroundTransparency = 0.4, ZIndex = 302, Corner = UDim.new(0, 6), Stroke = {Color = Colors.PrimaryDark, Thickness = 1, Transparency = 0.6} })
-local pBioText = mk("TextLabel", pBioBox, { Size = UDim2.new(1, -12, 1, -12), Position = UDim2.fromOffset(6, 6), BackgroundTransparency = 1, Text = "TXR Cyber Titan Network User.\nExploring the virtual realm.", TextColor3 = Colors.SubText, Font = Enum.Font.GothamMedium, TextSize = 11, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, ZIndex = 303 })
-local pBioInput = mk("TextBox", pBioBox, { Size = UDim2.new(1, -12, 1, -12), Position = UDim2.fromOffset(6, 6), BackgroundTransparency = 1, Text = "", PlaceholderText = "Write your custom bio here...", TextColor3 = Colors.Text, Font = Enum.Font.GothamMedium, TextSize = 11, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, ClearTextOnFocus = false, Visible = false, ZIndex = 304 })
-
-pBioEditBtn.MouseButton1Click:Connect(function()
-    pBioText.Visible = false
-    pBioInput.Visible = true
-    pBioInput.Text = customUserBios[lp.Name] or "TXR Cyber Titan Network User."
-    pBioInput:CaptureFocus()
-    playSFX("default")
-end)
-
-pBioInput.FocusLost:Connect(function()
-    customUserBios[lp.Name] = pBioInput.Text
-    pBioText.Text = pBioInput.Text
-    pBioInput.Visible = false
-    pBioText.Visible = true
-end)
-
-local pMessageBtn = mk("TextButton", profileModal, { Size = UDim2.new(1, -28, 0, 32), Position = UDim2.new(0, 14, 1, -44), BackgroundColor3 = Colors.Primary, Text = "Direct Message", TextColor3 = rgb(10, 14, 22), Font = Enum.Font.GothamBlack, TextSize = 11.5, ZIndex = 302, Corner = UDim.new(0, 6) })
+local pMessageBtn = mk("TextButton", profileModal, { Size = UDim2.new(1, -32, 0, 36), Position = UDim2.fromOffset(16, 305), BackgroundColor3 = Colors.Primary, Text = "Send Direct Message", TextColor3 = rgb(0,0,0), Font = Enum.Font.GothamBlack, TextSize = 13, ZIndex = 302, Corner = UDim.new(0, 6) })
 applySpringHover(pMessageBtn)
 
-local pCloseBtn = mk("TextButton", profileModal, { Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, -10, 0, 8), AnchorPoint = Vector2.new(1, 0), BackgroundColor3 = rgb(0,0,0), BackgroundTransparency = 0.6, Text = "X", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 305, Corner = UDim.new(1, 0) })
-applySpringHover(pCloseBtn)
+local pCloseBtn = mk("TextButton", profileModal, { Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, -12, 0, 8), AnchorPoint = Vector2.new(1, 0), BackgroundTransparency = 1, Text = "X", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 14, ZIndex = 305 })
+crispText(pCloseBtn, 0.2)
 
 local activeProfileUser = nil
 openProfile = function(username, dispName, uId, isAdmin, isAI)
     activeProfileUser = username
     pName.Text = dispName
     pUser.Text = "@" .. username
+    pBanner.BackgroundColor3 = isAI and Colors.Purple or (isAdmin and Colors.Primary or rgb(40, 45, 60))
+    pBanner:FindFirstChildOfClass("Frame").BackgroundColor3 = pBanner.BackgroundColor3
+    pMessageBtn.BackgroundColor3 = isAI and Colors.Purple or Colors.Primary
     
     if isAI then
-        pBannerGrad.Color = ColorSequence.new(Colors.Purple, rgb(80, 40, 120))
         pAvatar.Image = ""
         pAvatar.BackgroundColor3 = rgb(14, 18, 30)
-    elseif isAdmin then
-        pBannerGrad.Color = ColorSequence.new(Colors.Primary, Colors.MentionGold)
-    else
-        pBannerGrad.Color = ColorSequence.new(Colors.Primary, Colors.Purple)
-    end
-    
-    if not isAI and uId then
+    elseif uId then
         pAvatar.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=150&h=150", uId)
         pAvatar.BackgroundColor3 = Colors.Background
-    elseif not isAI then
+    else
         pAvatar.Image = ""
         pAvatar.BackgroundColor3 = Colors.Background
-    end
-
-    if customUserBios[username] then
-        pBioText.Text = customUserBios[username]
-    else
-        pBioText.Text = isAI and "TXR Artificial Intelligence Core.\nMonitoring network anomalies." or "TXR Cyber Titan Network User.\nExploring the virtual realm."
-    end
-    
-    if username == lp.Name then
-        pBioEditBtn.Visible = true
-        pMessageBtn.Text = "Your Profile (Edit Bio Above)"
-        pMessageBtn.BackgroundColor3 = Colors.SurfaceHover
-        pMessageBtn.TextColor3 = Colors.SubText
-    else
-        pBioEditBtn.Visible = false
-        pMessageBtn.Text = "Direct Message"
-        pMessageBtn.BackgroundColor3 = isAI and Colors.Purple or Colors.Primary
-        pMessageBtn.TextColor3 = rgb(10, 14, 22)
     end
     
     profileModal.Visible = true
@@ -757,7 +711,7 @@ pCloseBtn.MouseButton1Click:Connect(function()
 end)
 
 pMessageBtn.MouseButton1Click:Connect(function()
-    if activeProfileUser and activeProfileUser ~= lp.Name then
+    if activeProfileUser then
         privateTarget = activeProfileUser
         if updateInputBar then updateInputBar() end
         playSFX("dm")
