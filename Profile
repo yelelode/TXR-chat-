@@ -1,139 +1,131 @@
--- =========================================================
--- 🌟 TXR TITAN: STANDALONE FOLLOWERS VIEWER MODULE
--- =========================================================
-return function(config)
-    local profileFrame = config.ProfileFrame
-    local userId = config.UserId
-    local totalCount = config.Count or "--"
-    local Colors = config.Colors
-    local onUserSelected = config.OnUserSelected or function() end
+-- ==========================================
+-- 🎨 TXR CYBER TITAN - PROFILE ADDON MODULE 
+-- ==========================================
 
-    if not profileFrame then return end
+-- 👇 YAHAN DAALNE HAIN APNE PHOTOS / AVATAR KE CODES 👇
+local CustomAvatarIDs = {
+    "1316045217",  -- Example 1 (Matrix Rain)
+    "10470601783", -- Example 2 (Glow Orb)
+    "13110903323", -- Example 3 (Crosshair)
+    -- Naya code aise daalna:
+    -- "1234567890",
+}
+-- 👆 KHALI YAHAN CODES ADD KARNA HAI FUTURE MEIN 👆
 
-    -- Existing modal clean up
-    local oldModal = profileFrame:FindFirstChild("TXR_FollowersModal")
-    if oldModal then oldModal:Destroy() end
-
-    local TweenService = game:GetService("TweenService")
-    local HttpService = game:GetService("HttpService")
-    local req = (syn and syn.request) or (http and http.request) or http_request or request
-
-    -- Main modal drawer
-    local modal = Instance.new("Frame", profileFrame)
-    modal.Name = "TXR_FollowersModal"
-    modal.Size = UDim2.new(1, 0, 1, 0)
-    modal.Position = UDim2.new(0, 0, 1, 0)
-    modal.BackgroundColor3 = Colors.Background or Color3.fromRGB(2, 3, 5)
-    modal.BackgroundTransparency = 0.02
-    modal.ZIndex = 140
-    Instance.new("UICorner", modal).CornerRadius = UDim.new(0, 16)
-
-    local header = Instance.new("Frame", modal)
-    header.Size = UDim2.new(1, 0, 0, 40)
-    header.BackgroundTransparency = 1
-    header.ZIndex = 141
-
-    local backBtn = Instance.new("TextButton", header)
-    backBtn.Size = UDim2.fromOffset(30, 30)
-    backBtn.Position = UDim2.fromOffset(10, 5)
-    backBtn.BackgroundTransparency = 1
-    backBtn.Text = "←"
-    backBtn.TextColor3 = Colors.Primary or Color3.fromRGB(0, 255, 220)
-    backBtn.Font = Enum.Font.GothamBlack
-    backBtn.TextSize = 14
-    backBtn.ZIndex = 142
-
-    local title = Instance.new("TextLabel", header)
-    title.Size = UDim2.new(1, -80, 1, 0)
-    title.Position = UDim2.fromOffset(40, 0)
-    title.BackgroundTransparency = 1
-    title.Text = "FOLLOWERS (" .. tostring(totalCount) .. ")"
-    title.TextColor3 = Colors.Text or Color3.fromRGB(255, 255, 255)
-    title.Font = Enum.Font.GothamBlack
-    title.TextSize = 11
-    title.TextXAlignment = Enum.TextXAlignment.Left
-    title.ZIndex = 142
-
-    local scroll = Instance.new("ScrollingFrame", modal)
-    scroll.Size = UDim2.new(1, -20, 1, -50)
-    scroll.Position = UDim2.fromOffset(10, 44)
-    scroll.BackgroundTransparency = 1
-    scroll.ScrollBarThickness = 2
-    scroll.ScrollBarImageColor3 = Colors.Primary or Color3.fromRGB(0, 255, 220)
-    scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
-    scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
-    scroll.ZIndex = 142
-
-    local layout = Instance.new("UIListLayout", scroll)
-    layout.Padding = UDim.new(0, 6)
-
-    local function closeModal()
-        pcall(function()
-            local tw = TweenService:Create(modal, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Position = UDim2.new(0, 0, 1, 0)})
-            tw:Play()
-            tw.Completed:Connect(function()
-                modal:Destroy()
-            end)
-        end)
-    end
-    backBtn.MouseButton1Click:Connect(closeModal)
-
-    -- Open Animation
-    pcall(function()
-        TweenService:Create(modal, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0, 0, 0, 0)}):Play()
-    end)
-
-    -- Data Fetch Thread
-    task.spawn(function()
-        if not req or not userId or userId == 0 then return end
-
-        local r = req({
-            Url = "https://friends.roblox.com/v1/users/" .. tostring(userId) .. "/followers?limit=18&sortOrder=Desc",
-            Method = "GET"
-        })
-
-        if r and r.StatusCode == 200 then
-            local data = HttpService:JSONDecode(r.Body)
-            if data and data.data then
-                for _, fUser in ipairs(data.data) do
-                    local row = Instance.new("TextButton", scroll)
-                    row.Size = UDim2.new(1, 0, 0, 34)
-                    row.BackgroundColor3 = Color3.fromRGB(15, 18, 24)
-                    row.BackgroundTransparency = 0.2
-                    row.Text = ""
-                    row.AutoButtonColor = false
-                    row.ZIndex = 143
-                    Instance.new("UICorner", row).CornerRadius = UDim.new(0, 6)
-
-                    local rStroke = Instance.new("UIStroke", row)
-                    rStroke.Color = Colors.SurfaceHover or Color3.fromRGB(16, 20, 26)
-                    rStroke.Thickness = 1.0
-
-                    local rAvatar = Instance.new("ImageLabel", row)
-                    rAvatar.Size = UDim2.fromOffset(26, 26)
-                    rAvatar.Position = UDim2.fromOffset(4, 4)
-                    rAvatar.BackgroundTransparency = 1
-                    rAvatar.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=48&h=48", fUser.id)
-                    rAvatar.ZIndex = 144
-                    Instance.new("UICorner", rAvatar).CornerRadius = UDim.new(1, 0)
-
-                    local rName = Instance.new("TextLabel", row)
-                    rName.Size = UDim2.new(1, -40, 1, 0)
-                    rName.Position = UDim2.fromOffset(36, 0)
-                    rName.BackgroundTransparency = 1
-                    rName.Text = fUser.displayName .. " (@" .. fUser.name .. ")"
-                    rName.TextColor3 = Colors.Text or Color3.fromRGB(255, 255, 255)
-                    rName.Font = Enum.Font.GothamBold
-                    rName.TextSize = 10
-                    rName.TextXAlignment = Enum.TextXAlignment.Left
-                    rName.ZIndex = 144
-
-                    row.MouseButton1Click:Connect(function()
-                        closeModal()
-                        onUserSelected(fUser.name)
-                    end)
-                end
-            end
+local function mk(class, parent, props)
+    local inst = Instance.new(class)
+    if props then
+        for k, v in pairs(props) do
+            if k == "Corner" then Instance.new("UICorner", inst).CornerRadius = v
+            elseif k == "Stroke" then
+                local s = Instance.new("UIStroke", inst)
+                for sk, sv in pairs(v) do s[sk] = sv end
+            else inst[k] = v end
         end
+    end
+    if parent then inst.Parent = parent end
+    return inst
+end
+
+local rgb = Color3.fromRGB
+local Colors = { Primary = rgb(0, 230, 195), PrimaryDark = rgb(0, 150, 130), Background = rgb(9, 13, 20), Surface = rgb(16, 22, 34) }
+local lp = game:GetService("Players").LocalPlayer
+
+-- 1. DELTA HIDDEN GUI BYPASS
+local targetGuiParent
+pcall(function() targetGuiParent = game:GetService("CoreGui") end)
+local gh = (getgenv and getgenv().gethui) or gethui
+if gh then pcall(function() targetGuiParent = gh() end) end
+if not targetGuiParent then targetGuiParent = lp:WaitForChild("PlayerGui") end
+
+-- 2. ORIGINAL CHAT UI KO DHOONDHNA
+local gui, mainFrame, profileModal, pAvatarContainer, pUserLabel
+for _, v in pairs(targetGuiParent:GetChildren()) do
+    if v.Name:find("TXR_OnyxChat") then gui = v; break end
+end
+
+if gui then
+    for _, c in ipairs(gui:GetChildren()) do
+        if c:IsA("Frame") and c.Size == UDim2.new(0, 460, 0, 374) then mainFrame = c; break end
+    end
+end
+
+if mainFrame then
+    for _, c in ipairs(mainFrame:GetChildren()) do
+        if c.Size == UDim2.fromOffset(255, 335) then 
+            profileModal = c
+            for _, ac in ipairs(profileModal:GetChildren()) do
+                if ac.Size == UDim2.fromOffset(76, 76) then pAvatarContainer = ac end
+            end
+            for _, lbl in ipairs(profileModal:GetChildren()) do
+                if lbl:IsA("TextLabel") and lbl.Size == UDim2.new(1, -28, 0, 16) then pUserLabel = lbl end
+            end
+            break 
+        end
+    end
+end
+
+if not mainFrame or not profileModal or not pAvatarContainer then 
+    warn("TXR ADDON ERROR: Chat UI not found in Delta!")
+    return 
+end
+if mainFrame:FindFirstChild("TXR_CustomProfileFrame") then return end
+
+-- 3. CUSTOM PROFILE UI BANANA
+local customProfileFrame = mk("Frame", mainFrame, { Name = "TXR_CustomProfileFrame", Size = UDim2.new(0, 290, 0, 220), Position = UDim2.new(0.5, -145, 0.5, -110), BackgroundColor3 = rgb(15, 18, 26), BackgroundTransparency = 0.05, Visible = false, ZIndex = 350, Corner = UDim.new(0, 14), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.2, Transparency = 0.3 } })
+mk("TextLabel", customProfileFrame, { Size = UDim2.new(1, 0, 0, 30), BackgroundTransparency = 1, Text = "CUSTOM AVATAR SELECTOR", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 351 })
+
+local cpCloseBtn = mk("TextButton", customProfileFrame, { Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, -10, 0, 8), AnchorPoint = Vector2.new(1, 0), BackgroundColor3 = rgb(0,0,0), BackgroundTransparency = 0.6, Text = "X", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 355, Corner = UDim.new(1, 0) })
+cpCloseBtn.MouseButton1Click:Connect(function() customProfileFrame.Visible = false end)
+
+local cpScroll = mk("ScrollingFrame", customProfileFrame, { Size = UDim2.new(1, -12, 1, -40), Position = UDim2.fromOffset(6, 34), BackgroundTransparency = 1, ScrollBarThickness = 2, CanvasSize = UDim2.new(0, 0, 0, 0), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 351 })
+mk("UIGridLayout", cpScroll, { CellSize = UDim2.new(0, 65, 0, 65), CellPadding = UDim2.new(0, 6, 0, 6) })
+
+-- ⚡ AUTOMATIC IMAGE BUTTON MAKER (Jo code upar dalega uski photo banayega) ⚡
+for _, imgId in ipairs(CustomAvatarIDs) do
+    local imgBtn = mk("ImageButton", cpScroll, {
+        BackgroundColor3 = Colors.Surface,
+        Image = "rbxassetid://" .. imgId,
+        ScaleType = Enum.ScaleType.Crop,
+        ZIndex = 352,
+        Corner = UDim.new(0, 8),
+        Stroke = { Color = Colors.PrimaryDark, Thickness = 1, Transparency = 0.5 }
+    })
+    
+    imgBtn.MouseButton1Click:Connect(function()
+        local actualAvatarImg = pAvatarContainer:FindFirstChildOfClass("ImageLabel")
+        if actualAvatarImg then
+            actualAvatarImg.Image = "rbxassetid://" .. imgId
+        end
+        customProfileFrame.Visible = false
+        pcall(function() local s = Instance.new("Sound", game:GetService("SoundService")); s.SoundId = "rbxassetid://6895079853"; s.Volume = 0.5; s:Play(); game.Debris:AddItem(s, 2) end)
     end)
 end
+
+-- 4. EDIT AVATAR BUTTON CHIPKANA MAIN PROFILE PAR
+local pAvatarEditBtn = mk("TextButton", pAvatarContainer, { Name = "EditProfileBtn", Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, 4, 1, -20), AnchorPoint = Vector2.new(1, 1), BackgroundColor3 = Colors.Background, Text = "✏️", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 10, Visible = false, ZIndex = 310, Corner = UDim.new(1, 0), Stroke = {Color = Colors.PrimaryDark, Thickness = 1} })
+
+pAvatarEditBtn.MouseButton1Click:Connect(function() 
+    customProfileFrame.Visible = not customProfileFrame.Visible 
+    pcall(function() local s = Instance.new("Sound", game:GetService("SoundService")); s.SoundId = "rbxassetid://6518811702"; s.Volume = 0.35; s:Play(); game.Debris:AddItem(s, 2) end)
+end)
+
+-- 5. VISIBILITY LOGIC (Sirf tumhari profile pe dikhega)
+if pUserLabel then
+    pUserLabel:GetPropertyChangedSignal("Text"):Connect(function()
+        pAvatarEditBtn.Visible = (pUserLabel.Text == "@" .. lp.Name)
+    end)
+end
+
+profileModal:GetPropertyChangedSignal("Visible"):Connect(function()
+    if not profileModal.Visible then customProfileFrame.Visible = false end
+end)
+
+-- 6. SUCCESS BEEP (Taki pata chale load ho gaya)
+pcall(function()
+    local s = Instance.new("Sound", game:GetService("SoundService"))
+    s.SoundId = "rbxassetid://8503529139" -- Success chime
+    s.Volume = 0.5
+    s:Play()
+    game.Debris:AddItem(s, 2)
+end)
