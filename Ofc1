@@ -94,15 +94,12 @@ local Colors = {
 }
 
 -- =========================================================
--- 📸 CUSTOM AVATAR LIST (Baad me IDs yahan dalna)
+-- 📸 MOBILE-SAFE CUSTOM AVATAR LIST (ZERO LAG)
 -- =========================================================
+-- Bhai idhar apne Roblox Asset IDs dalna baad mein ("rbxassetid://123456"). 
+-- MISTAKE SE BHI "rbxassetid://0" MAT DALNA warna Delta crash ho jayega.
 local CustomAvatarsList = {
-    "rbxassetid://0", -- Image 1 Placeholder
-    "rbxassetid://0", -- Image 2 Placeholder
-    "rbxassetid://0", -- Image 3 Placeholder
-    "rbxassetid://0", -- Image 4 Placeholder
-    "rbxassetid://0", -- Image 5 Placeholder
-    "rbxassetid://0", -- Image 6 Placeholder
+    "", "", "", "", "", "" 
 }
 
 -- =========================================================
@@ -209,7 +206,7 @@ local unreadCount, isGhostMode, ghostDebounce = 0, false, false
 local userIdCache, activeBadgesList, activeAICoresList, modalSelectionIndicators, broadcastGlowCards = {}, {}, {}, {}, {}
 local processedServerMessageMap, recentLocalSentMap = {}, {}
 local customUserBios = {} 
-local customUserAvatars = {} -- Store user custom avatars locally
+local customUserAvatars = {} 
 
 _G.TXR_GlobalHistoryCache = _G.TXR_GlobalHistoryCache or {}
 pcall(function()
@@ -409,7 +406,7 @@ local function createHeaderBtn(text, onClick)
 end
 
 local badgeSelectorModal
-local avatarSelectorModal -- Declare early
+local avatarSelectorModal 
 local isBadgeModalOpen = false
 if Admin[lp.Name:lower()] then
     createHeaderBtn("TAG", function()
@@ -706,7 +703,7 @@ applySpringHover(pCloseBtn)
 
 
 -- =========================================================
--- 🖼️ CUSTOM AVATAR SELECTOR MODAL
+-- 🖼️ ZERO-LAG AVATAR SELECTOR MODAL (MOBILE FIXED)
 -- =========================================================
 avatarSelectorModal = mk("Frame", mainFrame, {
     Size = UDim2.fromOffset(250, 260),
@@ -728,16 +725,28 @@ mk("UIGridLayout", asScroll, { CellSize = UDim2.new(0, 65, 0, 65), CellPadding =
 local activeProfileUser = nil
 
 for i, imgId in ipairs(CustomAvatarsList) do
-    local aBtn = mk("ImageButton", asScroll, { BackgroundColor3 = Colors.Surface, BackgroundTransparency = 0.2, Image = imgId, ScaleType = Enum.ScaleType.Crop, ZIndex = 312, Corner = UDim.new(1, 0), Stroke = {Color = Colors.PrimaryDark, Thickness = 1} })
+    local aBtn = mk("ImageButton", asScroll, { BackgroundColor3 = Colors.Surface, BackgroundTransparency = 0.2, ScaleType = Enum.ScaleType.Crop, ZIndex = 312, Corner = UDim.new(1, 0), Stroke = {Color = Colors.PrimaryDark, Thickness = 1} })
+    
+    if imgId ~= "" then 
+        aBtn.Image = imgId 
+    else
+        mk("TextLabel", aBtn, {Size = UDim2.fromScale(1,1), BackgroundTransparency = 1, Text = "ADD\nIMG", TextColor3 = Colors.SubText, Font = Enum.Font.GothamBold, TextSize = 9, ZIndex = 313})
+    end
+
     applySpringHover(aBtn)
     aBtn.MouseButton1Click:Connect(function()
-        customUserAvatars[lp.Name] = imgId
-        if activeProfileUser == lp.Name then
-            pAvatar.Image = imgId
+        if imgId ~= "" then
+            customUserAvatars[lp.Name] = imgId
+            if activeProfileUser == lp.Name then
+                pAvatar.Image = imgId
+            end
+            TweenService:Create(asmScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
+            task.delay(0.2, function() avatarSelectorModal.Visible = false end)
+            playSFX("default")
+        else
+            -- Tells the user they need to add real IDs in the script file first
+            playSFX("meme")
         end
-        TweenService:Create(asmScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
-        task.delay(0.2, function() avatarSelectorModal.Visible = false end)
-        playSFX("default")
     end)
 end
 
@@ -781,7 +790,7 @@ openProfile = function(username, dispName, uId, isAdmin, isAI)
     end
     
     if not isAI and uId then
-        if customUserAvatars[username] then
+        if customUserAvatars[username] and customUserAvatars[username] ~= "" then
             pAvatar.Image = customUserAvatars[username]
         else
             pAvatar.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=150&h=150", uId)
@@ -840,7 +849,8 @@ end)
 -- =========================================================
 local function updateLiveCounter(username, dispName)
     activeUsersTable[username:lower()] = { time = os.time(), disp = dispName or username, user = username }
-    local count, now = 0, os.time()
+    local count, now = os.time()
+    count = 0
     for u, data in pairs(activeUsersTable) do
         local t = (type(data) == "table" and data.time) or data
         if now - t < 300 then count = count + 1 else activeUsersTable[u] = nil end
@@ -1047,7 +1057,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             if not uId then pcall(function() uId = Players:GetUserIdFromNameAsync(actualUsername); userIdCache[actualUsername:lower()] = uId end) end
             
             if avatarImg and avatarImg.Parent then
-                if customUserAvatars[actualUsername] then
+                if customUserAvatars[actualUsername] and customUserAvatars[actualUsername] ~= "" then
                     avatarImg.Image = customUserAvatars[actualUsername]
                 elseif uId then 
                     avatarImg.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=48&h=48", uId) 
