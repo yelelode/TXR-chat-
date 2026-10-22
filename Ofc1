@@ -480,14 +480,13 @@ ghostBtn = createHeaderBtn("GST", function()
     end
 end)
 
-local actionMenu, memeFrame, emojiFrame, customProfileFrame
+local actionMenu, memeFrame, emojiFrame
 local profileModal, pmScale, openProfile
 createHeaderBtn("-", function()
     if actionMenu then actionMenu.Visible = false end
     if rosterFrame then rosterFrame.Visible = false end
     if memeFrame then memeFrame.Visible = false end
     if emojiFrame then emojiFrame.Visible = false end
-    if customProfileFrame then customProfileFrame.Visible = false end
     if profileModal then profileModal.Visible = false; pmScale.Scale = 0 end
     if badgeSelectorModal then isBadgeModalOpen = false; badgeSelectorModal:FindFirstChildOfClass("UIScale").Scale = 0; badgeSelectorModal.Visible = false end
     local tInfo1 = TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.In)
@@ -698,26 +697,6 @@ pBioInput.FocusLost:Connect(function()
     pBioText.Visible = true
 end)
 
--- =========================================================
--- 🎨 CUSTOM PROFILE AVATAR/BANNER SELECTOR
--- =========================================================
-local customProfileFrame = mk("Frame", mainFrame, { Name = "TXR_CustomProfileFrame", Size = UDim2.new(0, 290, 0, 220), Position = UDim2.new(0.5, -145, 0.5, -110), BackgroundColor3 = rgb(15, 18, 26), BackgroundTransparency = 0.05, Visible = false, ZIndex = 350, Corner = UDim.new(0, 14), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.2, Transparency = 0.3 } })
-mk("TextLabel", customProfileFrame, { Size = UDim2.new(1, 0, 0, 30), BackgroundTransparency = 1, Text = "CUSTOM AVATAR SELECTOR", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 351 })
-
-local cpCloseBtn = mk("TextButton", customProfileFrame, { Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, -10, 0, 8), AnchorPoint = Vector2.new(1, 0), BackgroundColor3 = rgb(0,0,0), BackgroundTransparency = 0.6, Text = "X", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 355, Corner = UDim.new(1, 0) })
-applySpringHover(cpCloseBtn)
-cpCloseBtn.MouseButton1Click:Connect(function() customProfileFrame.Visible = false end)
-
-local cpScroll = mk("ScrollingFrame", customProfileFrame, { Size = UDim2.new(1, -12, 1, -40), Position = UDim2.fromOffset(6, 34), BackgroundTransparency = 1, ScrollBarThickness = 2, CanvasSize = UDim2.new(0, 0, 0, 0), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 351 })
-mk("UIGridLayout", cpScroll, { CellSize = UDim2.new(0, 65, 0, 65), CellPadding = UDim2.new(0, 6, 0, 6) })
-
-local pAvatarEditBtn = mk("TextButton", pAvatarContainer, { Name = "EditProfileBtn", Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, 4, 1, -20), AnchorPoint = Vector2.new(1, 1), BackgroundColor3 = Colors.Background, Text = "✏️", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 10, Visible = false, ZIndex = 310, Corner = UDim.new(1, 0), Stroke = {Color = Colors.PrimaryDark, Thickness = 1} })
-applySpringHover(pAvatarEditBtn)
-pAvatarEditBtn.MouseButton1Click:Connect(function() 
-    customProfileFrame.Visible = not customProfileFrame.Visible 
-    playSFX("default")
-end)
-
 local pMessageBtn = mk("TextButton", profileModal, { Size = UDim2.new(1, -28, 0, 32), Position = UDim2.new(0, 14, 1, -44), BackgroundColor3 = Colors.Primary, Text = "Direct Message", TextColor3 = rgb(10, 14, 22), Font = Enum.Font.GothamBlack, TextSize = 11.5, ZIndex = 302, Corner = UDim.new(0, 6) })
 applySpringHover(pMessageBtn)
 
@@ -756,13 +735,11 @@ openProfile = function(username, dispName, uId, isAdmin, isAI)
     
     if username == lp.Name then
         pBioEditBtn.Visible = true
-        pAvatarEditBtn.Visible = true
         pMessageBtn.Text = "Your Profile (Edit Bio Above)"
         pMessageBtn.BackgroundColor3 = Colors.SurfaceHover
         pMessageBtn.TextColor3 = Colors.SubText
     else
         pBioEditBtn.Visible = false
-        pAvatarEditBtn.Visible = false
         pMessageBtn.Text = "Direct Message"
         pMessageBtn.BackgroundColor3 = isAI and Colors.Purple or Colors.Primary
         pMessageBtn.TextColor3 = rgb(10, 14, 22)
@@ -775,7 +752,7 @@ end
 
 pCloseBtn.MouseButton1Click:Connect(function()
     TweenService:Create(pmScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
-    task.delay(0.2, function() profileModal.Visible = false; customProfileFrame.Visible = false end)
+    task.delay(0.2, function() profileModal.Visible = false end)
     playSFX("default")
 end)
 
@@ -785,7 +762,7 @@ pMessageBtn.MouseButton1Click:Connect(function()
         if updateInputBar then updateInputBar() end
         playSFX("dm")
         TweenService:Create(pmScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
-        task.delay(0.2, function() profileModal.Visible = false; customProfileFrame.Visible = false end)
+        task.delay(0.2, function() profileModal.Visible = false end)
         chatInput:CaptureFocus()
     end
 end)
@@ -2285,5 +2262,18 @@ task.spawn(function()
     addMessageToFeed("System::TXR // AI", "TXR Cyber Titan online hai! Chat box ekdum clean aur smooth optimized hai.", nil, false, game.JobId, "server")
     if #_G.TXR_GlobalHistoryCache == 0 then
         addMessageToFeed("System::TXR // AI", "Global Network Synchronized! Permanent chat storage online.", nil, false, game.JobId, "global")
+    end
+end)
+
+-- =========================================================
+-- 🚀 AUTO-LOAD CUSTOM PROFILE ADDON
+-- =========================================================
+task.spawn(function()
+    task.wait(3) -- Wait for main UI to fully initialize
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/yelelode/TXR-chat-/refs/heads/main/Profile?t=" .. tostring(tick())))()
+    end)
+    if not success then
+        warn("TXR Profile Addon Failed to Load: " .. tostring(err))
     end
 end)
