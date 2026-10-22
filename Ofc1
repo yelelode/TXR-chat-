@@ -31,23 +31,23 @@ _G.TXR_IsPolling = false
 task.wait(0.05)
 _G.TXR_IsPolling = true
 
-local Players = game:GetService("Players")
-local HttpService = game:GetService("HttpService")
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
-local TextService = game:GetService("TextService")
-local TextChatService = game:GetService("TextChatService")
-local ChatService = game:GetService("Chat")
-local SoundService = game:GetService("SoundService")
+Players = game:GetService("Players")
+HttpService = game:GetService("HttpService")
+RunService = game:GetService("RunService")
+UserInputService = game:GetService("UserInputService")
+TweenService = game:GetService("TweenService")
+TextService = game:GetService("TextService")
+TextChatService = game:GetService("TextChatService")
+ChatService = game:GetService("Chat")
+SoundService = game:GetService("SoundService")
 
-local lp = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
-local setClip = setclipboard or toclipboard or function() end
-local req = (syn and syn.request) or (http and http.request) or http_request or request
-local writeF = writefile or function() end
-local readF = readfile or function() return nil end
-local isF = isfile or function() return false end
+lp = Players.LocalPlayer
+Camera = workspace.CurrentCamera
+setClip = setclipboard or toclipboard or function() end
+req = (syn and syn.request) or (http and http.request) or http_request or request
+writeF = writefile or function() end
+readF = readfile or function() return nil end
+isF = isfile or function() return false end
 
 targetGuiParent = nil
 pcall(function() targetGuiParent = game:GetService("CoreGui") end)
@@ -59,7 +59,7 @@ for _, v in pairs(targetGuiParent:GetChildren()) do
 end
 
 -- ⚡ COMPACT UI BUILDER ENGINE
-local function mk(class, parent, props)
+function mk(class, parent, props)
     local inst = Instance.new(class)
     if props then
         for k, v in pairs(props) do
@@ -77,7 +77,7 @@ local function mk(class, parent, props)
     return inst
 end
 
-local function sanitizeXml(str)
+function sanitizeXml(str)
     if not str then return "" end
     return (str:gsub("&", "&amp;"):gsub("<", "&lt;"):gsub(">", "&gt;"):gsub('"', "&quot;"):gsub("'", "&apos;"))
 end
@@ -85,8 +85,8 @@ end
 -- =========================================================
 -- 🎨 EYE-SOOTHING MICRO-PERFECT PALETTE & THEMES
 -- =========================================================
-local rgb, csk = Color3.fromRGB, ColorSequenceKeypoint.new
-local Themes = {
+rgb, csk = Color3.fromRGB, ColorSequenceKeypoint.new
+Themes = {
     [1] = { Primary = rgb(0, 230, 195), PrimaryDark = rgb(0, 150, 130), Accent = rgb(140, 85, 255), ActiveTint = rgb(14, 34, 44) },
     [2] = { Primary = rgb(255, 65, 100), PrimaryDark = rgb(175, 30, 60), Accent = rgb(255, 150, 40), ActiveTint = rgb(44, 14, 24) },
     [3] = { Primary = rgb(175, 95, 255), PrimaryDark = rgb(115, 45, 180), Accent = rgb(40, 200, 255), ActiveTint = rgb(32, 16, 48) },
@@ -94,7 +94,7 @@ local Themes = {
 }
 currentThemeIdx = 1
 
-local Colors = {
+Colors = {
     Background = rgb(9, 13, 20), Surface = rgb(16, 22, 34), SurfaceSelf = rgb(15, 31, 48),
     SurfaceAI = rgb(20, 24, 46), SurfaceBroadcast = rgb(36, 27, 13), SurfaceHover = rgb(26, 36, 52), ActiveTint = Themes[1].ActiveTint,
     Primary = Themes[1].Primary, PrimaryDark = Themes[1].PrimaryDark, Danger = rgb(255, 70, 95),
@@ -106,7 +106,7 @@ local Colors = {
 -- =========================================================
 -- 👑 16 SILK-SMOOTH BALANCED BADGE PRESETS (+ AI CORE)
 -- =========================================================
-local BadgePresets = {
+BadgePresets = {
     ["AICORE"]   = { Title = "AI CORE", Speed = 1.2, Colors = { csk(0, rgb(0,240,225)), csk(0.5, rgb(160,90,255)), csk(1, rgb(0,240,225)) } },
     ["OWNER"]    = { Title = "OWNER", Speed = 1.15, Colors = { csk(0, rgb(255,50,95)), csk(0.2, rgb(255,165,40)), csk(0.4, rgb(0,240,195)), csk(0.6, rgb(55,160,255)), csk(0.8, rgb(180,70,255)), csk(1, rgb(255,50,95)) } },
     ["DADDY"]    = { Title = "DADDY", Speed = 1.1, Colors = { csk(0, rgb(255,35,85)), csk(0.35, rgb(255,120,50)), csk(0.7, rgb(255,220,55)), csk(1, rgb(255,35,85)) } },
@@ -127,7 +127,7 @@ local BadgePresets = {
 }
 currentOwnerBadge = "OWNER"
 
-local MemeLibrary = {
+MemeLibrary = {
     { name = "Mewing Shhh", id = 15632128790 }, { name = "Skibidi Toilet", id = 13809623197 },
     { name = "Smurf Cat", id = 14757657984 }, { name = "Josh Hutcherson", id = 15469032734 },
     { name = "The Wok / Social Credit", id = 7872621021 }, { name = "Walter Dog (Nelson)", id = 3698717882 },
@@ -139,7 +139,7 @@ local MemeLibrary = {
     { name = "Clown License", id = 4905389658 }, { name = "Capybara Pull Up", id = 9811566897 }
 }
 
-local EmojiCategories = {
+EmojiCategories = {
     { tab = "🔥", title = "POPULAR & HYPE", list = "😂🤣😭💀🔥❤️💯✨👑😎🫡🗿🤝🙏🐐⚡🎉🚀💎💸😈👀🤡🧢🥀💔🥶🥵🤓👻👾🤖🎃💥💫💦💤💢💣💬" },
     { tab = "😀", title = "SMILEYS & FACES", list = "😀😃😄😁😆😅😂🤣🥲🥹☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🥸🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🫣🤭🫢🫡🤫🫠🤥😶😐😑😬🙄😯😦😧😮😲🥱😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾" },
     { tab = "👋", title = "HANDS & PEOPLE", list = "👋🤚🖐️✋🖖👌🤌🤏✌️🤞🫰🤟🤘🤙👈👉👆🖕👇☝️🫵👍👎✊👊🤛🤜👏🙌🫶👐🤲🤝🙏✍️💅🤳💪🦾🦵🦶👂👃🧠🫀🫁🦷🦴👀👁️👅👄🫦👶🧒👦👧🧑👱👨🧔👩🧓👴👵🙍🙎🙅🙆💁🙋🧏🙇🤦🤷👮🕵️💂🥷👷🫅🤴👸👳👲🧕🤵👰🤰👼🎅🤶🦸🦹🧙🧚🧛🧜🧝🧞🧟🧌💆💇🚶🧍🧎🏃💃🕺👯🧘" },
@@ -149,16 +149,16 @@ local EmojiCategories = {
     { tab = "⚡", title = "SYMBOLS & WEATHER", list = "☀️🌤️⛅🌥️☁️🌦️🌧️⛈️🌩️🌨️❄️☃️⛄🌬️💨💧💦☔☂️🌊🌫️🌪️🌈⭐🌟✨⚡☄️💥🔥🌙🪐🌍🌎🌏🌌⏰⏱️🧭🚀🛸🚁🛶⛵🚤🛥️🛳️⛴️🚢✈️🛩️🛫🛬🪂💺🛰️🚨🚓🚍🚘🚖🚡🚠🚟🚃🚋🚞🚝🚄🚅🚈🚂🚆🚇🚊🚉⬆️↗️➡️↘️⬇️↙️⬅️↖️↕️↔️↩️↪️⤴️⤵️🔃🔄🔙🔚🔛🔜🔝✅☑️✔️✖️❌❎➕➖➗➰➿〽️✳️✴️❇️‼️⁉️❓❔❕❗⭕💯🔱⚜️🔰♻️⚠️🚸⛔🚫🚳🚭🚯🚱🚷📵🔞☢️☣️" }
 }
 
-local function getAssetThumb(id) return string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", tostring(id)) end
+function getAssetThumb(id) return string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", tostring(id)) end
 
-local function crispText(element, overrideTransparency)
+function crispText(element, overrideTransparency)
     local stroke = element:FindFirstChildOfClass("UIStroke") or Instance.new("UIStroke", element)
     stroke.Color = Color3.new(0, 0, 0)
     stroke.Transparency = overrideTransparency or 0.40
     stroke.Thickness = 1.0
 end
 
-local function applySpringHover(btn)
+function applySpringHover(btn)
     local btnScale = btn:FindFirstChildOfClass("UIScale") or Instance.new("UIScale", btn)
     local origTrans = btn.BackgroundTransparency
     local hoverTrans = math.max(0, origTrans - 0.15)
@@ -175,7 +175,7 @@ local function applySpringHover(btn)
     btn.MouseButton1Up:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.3, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1.05}):Play() end)
 end
 
-local function playSFX(soundType)
+function playSFX(soundType)
     task.spawn(function()
         pcall(function()
             local s = Instance.new("Sound")
@@ -215,7 +215,7 @@ pcall(function()
     end
 end)
 
-local function saveGlobalMessageToDisk(userTag, cleanMsg, msgIdKey)
+function saveGlobalMessageToDisk(userTag, cleanMsg, msgIdKey)
     for _, item in ipairs(_G.TXR_GlobalHistoryCache) do
         if item.key == msgIdKey then return end
     end
@@ -228,7 +228,7 @@ MY_VIP_ID = 9685785248
 Admin = { ["kausarali2"] = true, ["cutie143198"] = true }
 if lp.UserId == MY_VIP_ID then Admin[lp.Name:lower()] = true end
 
-local function displayBubble(userName, msg)
+function displayBubble(userName, msg)
     local speaker = Players:FindFirstChild(userName)
     if not speaker or not speaker.Character then return end
     local cleanMsg = msg:find("%[MEME:") and "[Sticker / Meme]" or msg
@@ -243,7 +243,7 @@ local function displayBubble(userName, msg)
 end
 
 -- =========================================================
--- 🏗️ ROOT GUI, MAIN ACRYLIC FRAME & AMBIENT AURA (GLOBAL TO SAVE REGISTERS)
+-- 🏗️ ROOT GUI, MAIN ACRYLIC FRAME & AMBIENT AURA
 -- =========================================================
 gui = mk("ScreenGui", targetGuiParent, { Name = "TXR_OnyxChat_" .. tostring(math.random(100000, 999999)), ResetOnSpawn = false, ZIndexBehavior = Enum.ZIndexBehavior.Sibling })
 shadow = mk("ImageLabel", gui, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.4, 0.5), Size = UDim2.new(0, 504, 0, 418), BackgroundTransparency = 1, Image = "rbxassetid://1316045217", ImageColor3 = Color3.new(0, 0, 0), ImageTransparency = 0.22, ZIndex = 1 })
@@ -313,7 +313,7 @@ baseOrbScale, baseCenterPos = UDim2.fromScale(0.85, 0.85), UDim2.fromScale(0.5, 
 openBtn.MouseEnter:Connect(function() orbHovered = true end)
 openBtn.MouseLeave:Connect(function() orbHovered = false end)
 
-local function spawnSonar(pulseColor)
+function spawnSonar(pulseColor)
     if not openBtnContainer.Visible then return end
     local ring = mk("Frame", openBtn, { Size = UDim2.fromOffset(12, 12), Position = UDim2.fromScale(0.5, 0.5), AnchorPoint = Vector2.new(0.5, 0.5), BackgroundTransparency = 1, ZIndex = 101, Corner = UDim.new(1, 0) })
     local rs = mk("UIStroke", ring, { Color = pulseColor, Thickness = 2 })
@@ -334,8 +334,7 @@ mk("TextLabel", rosterFrame, { Size = UDim2.new(1, 0, 0, 26), BackgroundTranspar
 rosterScroll = mk("ScrollingFrame", rosterFrame, { Size = UDim2.new(1, -10, 1, -30), Position = UDim2.fromOffset(5, 26), BackgroundTransparency = 1, ScrollBarThickness = 2, CanvasSize = UDim2.new(0, 0, 0, 0), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 41 })
 mk("UIListLayout", rosterScroll, { Padding = UDim.new(0, 4) })
 
-local updateInputBar
-local function refreshRosterUI()
+function refreshRosterUI()
     for _, c in ipairs(rosterScroll:GetChildren()) do
         if c:IsA("GuiObject") and c.Name ~= "UIListLayout" then c:Destroy() end
     end
@@ -378,7 +377,7 @@ end)
 headerRightCluster = mk("Frame", header, { AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -12, 0.5, 1), Size = UDim2.new(0, 180, 0, 24), BackgroundTransparency = 1, ZIndex = 12 })
 mk("UIListLayout", headerRightCluster, { FillDirection = Enum.FillDirection.Horizontal, HorizontalAlignment = Enum.HorizontalAlignment.Right, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 6) })
 
-local function createHeaderBtn(text, onClick)
+function createHeaderBtn(text, onClick)
     local b = mk("TextButton", headerRightCluster, { Size = UDim2.fromOffset(30, 24), BackgroundColor3 = Colors.Surface, BackgroundTransparency = 0.25, Text = text, TextColor3 = Colors.Text, Font = Enum.Font.GothamBlack, TextSize = 9.5, AutoButtonColor = false, ZIndex = 15, Corner = UDim.new(0, 7), Stroke = { Thickness = 1, Color = Colors.PrimaryDark, Transparency = 0.55 } })
     crispText(b, 0.35); applySpringHover(b)
     b.MouseButton1Click:Connect(function() pcall(onClick) end)
@@ -500,7 +499,7 @@ serverBtn = mk("TextButton", tabShell, { Size = UDim2.new(0.5, 0, 1, 0), Positio
 globalBtn = mk("TextButton", tabShell, { Size = UDim2.new(0.5, 0, 1, 0), Position = UDim2.new(0.5, 0, 0, 0), BackgroundTransparency = 1, Text = "GLOBAL CHAT", TextColor3 = Colors.SubText, Font = Enum.Font.GothamBold, TextSize = 10.5, AutoButtonColor = false, ZIndex = 10 })
 crispText(serverBtn, 0.35); crispText(globalBtn, 0.35)
 
-local function scrollToFeedBottom()
+function scrollToFeedBottom()
     task.defer(function()
         if messageFeed then
             messageFeed.CanvasPosition = Vector2.new(0, math.max(0, messageFeed.AbsoluteCanvasSize.Y - messageFeed.AbsoluteWindowSize.Y))
@@ -509,7 +508,7 @@ local function scrollToFeedBottom()
     end)
 end
 
-local function filterFeedMode()
+function filterFeedMode()
     CURRENT_SESSION_JOB = tostring(game.JobId)
     for _, card in ipairs(messageFeed:GetChildren()) do
         if card:IsA("GuiObject") and card.Name ~= "UIListLayout" and card.Name ~= "UIPadding" then
@@ -550,7 +549,7 @@ mk("UIListLayout", bsScroll, { HorizontalAlignment = Enum.HorizontalAlignment.Ce
 
 badgeKeysOrder = { "OWNER", "DADDY", "TITAN", "OVERLORD", "PHANTOM", "DEV", "VIP", "GOD", "CYBER", "VOID", "ZENITH", "APEX", "LUCIFER", "SUPREME", "ROYAL", "DEMON" }
 
-local function buildLiveBadgeElement(parentContainer, bData, zBase)
+function buildLiveBadgeElement(parentContainer, bData, zBase)
     local tagWidth = TextService:GetTextSize(bData.Title, 10.5, Enum.Font.GothamBlack, Vector2.new(1000, 20)).X + 14
     local badgeHost = mk("Frame", parentContainer, { Size = UDim2.fromOffset(tagWidth, 18), BackgroundColor3 = rgb(9, 13, 22), BackgroundTransparency = 0.22, BorderSizePixel = 0, ZIndex = zBase, Corner = UDim.new(0, 5) })
     local pillStroke = mk("UIStroke", badgeHost, { Thickness = 1.1, Transparency = 0.25, Color = rgb(255, 255, 255) })
@@ -613,13 +612,23 @@ end)
 actionMenu = mk("Frame", mainFrame, { Size = UDim2.fromOffset(225, 32), BackgroundColor3 = Colors.Surface, Visible = false, ZIndex = 50, Corner = UDim.new(0, 8), Stroke = { Color = Colors.Primary, Thickness = 1.2, Transparency = 0.4 } })
 mk("UIListLayout", actionMenu, { FillDirection = Enum.FillDirection.Horizontal, HorizontalAlignment = Enum.HorizontalAlignment.Center, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 4) })
 
-local function createActionBtn(text, color, onClick)
+function createActionBtn(text, color, onClick)
     local b = mk("TextButton", actionMenu, { Size = UDim2.new(0, 40, 0, 22), BackgroundColor3 = Colors.Background, Text = text, TextColor3 = color, Font = Enum.Font.GothamBlack, TextSize = 8.5, AutoButtonColor = false, ZIndex = 51, Corner = UDim.new(0, 5) })
     b.MouseButton1Click:Connect(function() actionMenu.Visible = false; pcall(onClick) end)
 end
 
 -- 🪪 PROFILE MODAL
-profileModal = mk("Frame", mainFrame, { Size = UDim2.fromOffset(255, 335), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), BackgroundColor3 = rgb(15, 18, 26), BackgroundTransparency = 0.05, Visible = false, ZIndex = 300, Corner = UDim.new(0, 14), Stroke = {Color = Colors.PrimaryDark, Thickness = 1.2, Transparency = 0.3} })
+profileModal = mk("Frame", mainFrame, {
+    Size = UDim2.fromOffset(255, 335),
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.fromScale(0.5, 0.5),
+    BackgroundColor3 = rgb(15, 18, 26),
+    BackgroundTransparency = 0.05,
+    Visible = false,
+    ZIndex = 300,
+    Corner = UDim.new(0, 14),
+    Stroke = {Color = Colors.PrimaryDark, Thickness = 1.2, Transparency = 0.3}
+})
 pmScale = mk("UIScale", profileModal, {Scale = 0})
 
 pBanner = mk("Frame", profileModal, { Size = UDim2.new(1, 0, 0, 75), BackgroundColor3 = Colors.Primary, ZIndex = 301, Corner = UDim.new(0, 14) })
@@ -754,9 +763,9 @@ for _, imgId in ipairs(CustomAvatarIDs) do
 end
 
 -- =========================================================
--- 💬 MICRO-PERFECT MESSAGE PIPELINE
+-- 💬 MICRO-PERFECT MESSAGE PIPELINE (CLEAN UNIFIED POLISHED CARDS)
 -- =========================================================
-local function updateLiveCounter(username, dispName)
+function updateLiveCounter(username, dispName)
     activeUsersTable[username:lower()] = { time = os.time(), disp = dispName or username, user = username }
     local count, now = 0, os.time()
     for u, data in pairs(activeUsersTable) do
@@ -766,7 +775,7 @@ local function updateLiveCounter(username, dispName)
     liveText.Text = string.format("%d Active", math.max(1, count))
 end
 
-local function addJoinNotice(dispName)
+function addJoinNotice(dispName)
     local pill = mk("Frame", messageFeed, { Size = UDim2.new(1, 0, 0, 20), BackgroundTransparency = 1, ZIndex = 9 })
     pill:SetAttribute("ChatScope", "global"); pill:SetAttribute("JobId", game.JobId)
     pill.Visible = (chatMode == "global")
@@ -780,7 +789,7 @@ activeReactionMenu = nil
 activeSelfMenu = nil
 reactionCanvasLockPos = nil 
 
-local function closeReactionMenu()
+function closeReactionMenu()
     if activeReactionMenu then activeReactionMenu:Destroy(); activeReactionMenu = nil end
     if activeSelfMenu then activeSelfMenu:Destroy(); activeSelfMenu = nil end
     reactionCanvasLockPos = nil
@@ -794,7 +803,7 @@ local function closeReactionMenu()
 end
 
 MAX_MESSAGES_PER_TAB = 60
-local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSender, msgJobId, scopeType, customTimeStr)
+function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSender, msgJobId, scopeType, customTimeStr)
     local effectiveScope = scopeType or "global"
     local effectiveJob = tostring(msgJobId or game.JobId)
     if effectiveScope == "server" and effectiveJob ~= "" and effectiveJob ~= tostring(game.JobId) then return end
@@ -1046,11 +1055,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         {emoji = "😂", action = function() addReactionToCard("😂") end},
                         {emoji = "😮", action = function() addReactionToCard("😮") end},
                         {emoji = "+", isIcon = true, action = function() 
-                            if emojiFrame then 
-                                emojiTargetMode = "reaction"
-                                activeReactionCallback = function(em) addReactionToCard(em) end
-                                emojiFrame.Visible = true 
-                            end 
+                            if emojiFrame then emojiTargetMode = "reaction"; activeReactionCallback = function(em) addReactionToCard(em) end; emojiFrame.Visible = true end 
                         end}
                     }
                     
@@ -1077,18 +1082,8 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         local editBtn = mk("TextButton", selfMenu, { Name = "EditBtn", Size = UDim2.new(1, -12, 0, 30), Position = UDim2.new(0, 6, 0, 2), BackgroundTransparency = 1, BackgroundColor3 = Colors.Primary, Text = "  ✏️ Edit Message", Font = Enum.Font.GothamMedium, TextSize = 11.5, TextColor3 = Colors.Text, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 202, Corner = UDim.new(0, 6) })
                         local delBtn = mk("TextButton", selfMenu, { Name = "DelBtn", Size = UDim2.new(1, -12, 0, 30), Position = UDim2.new(0, 6, 0, 35), BackgroundTransparency = 1, BackgroundColor3 = rgb(255, 70, 95), Text = "  🗑️ Delete Message", Font = Enum.Font.GothamMedium, TextSize = 11.5, TextColor3 = Colors.Danger, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 202, Corner = UDim.new(0, 6) })
                         
-                        renderedSelfBtns[editBtn] = function()
-                            playSFX("default")
-                            chatInput.Text = displayMsg
-                            chatInput:CaptureFocus()
-                            if activateEditBanner then activateEditBanner(bodyTxt, displayMsg) end
-                        end
-                        
-                        renderedSelfBtns[delBtn] = function()
-                            playSFX("default")
-                            TweenService:Create(cardScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play()
-                            task.delay(0.3, function() cardWrapper:Destroy() end)
-                        end
+                        renderedSelfBtns[editBtn] = function() playSFX("default"); chatInput.Text = displayMsg; chatInput:CaptureFocus(); if activateEditBanner then activateEditBanner(bodyTxt, displayMsg) end end
+                        renderedSelfBtns[delBtn] = function() playSFX("default"); TweenService:Create(cardScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play(); task.delay(0.3, function() cardWrapper:Destroy() end) end
                         
                         editBtn.MouseButton1Click:Connect(function() closeReactionMenu(); renderedSelfBtns[editBtn]() end)
                         delBtn.MouseButton1Click:Connect(function() closeReactionMenu(); renderedSelfBtns[delBtn]() end)
@@ -1098,17 +1093,11 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                     local dragHoverConn
                     dragHoverConn = RunService.RenderStepped:Connect(function()
                         if not activeReactionMenu or not isHoldingCard then dragHoverConn:Disconnect() return end
-                        if messageFeed then
-                            if not reactionCanvasLockPos then reactionCanvasLockPos = messageFeed.CanvasPosition end
-                            messageFeed.CanvasPosition = reactionCanvasLockPos
-                        end
+                        if messageFeed then if not reactionCanvasLockPos then reactionCanvasLockPos = messageFeed.CanvasPosition end; messageFeed.CanvasPosition = reactionCanvasLockPos end
                         
                         local mousePos = UserInputService:GetMouseLocation()
                         local inSelfMenuZone = false
-                        if activeSelfMenu then
-                            local selfTop = activeSelfMenu.AbsolutePosition.Y - 15
-                            if mousePos.Y > selfTop then inSelfMenuZone = true end
-                        end
+                        if activeSelfMenu then if mousePos.Y > (activeSelfMenu.AbsolutePosition.Y - 15) then inSelfMenuZone = true end end
                         
                         if not inSelfMenuZone then
                             for btn, _ in pairs(renderedBtns) do
@@ -1131,21 +1120,16 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                         else
                             for btn, _ in pairs(renderedBtns) do
                                 local btnScale = btn:FindFirstChildOfClass("UIScale")
-                                btnScale.Scale = btnScale.Scale + (0.85 - btnScale.Scale) * 0.3
-                                btn.TextColor3 = rgb(200, 200, 200)
+                                btnScale.Scale = btnScale.Scale + (0.85 - btnScale.Scale) * 0.3; btn.TextColor3 = rgb(200, 200, 200)
                             end
                             for btn, _ in pairs(renderedSelfBtns) do
                                 local bAbsPos, bAbsSize = btn.AbsolutePosition, btn.AbsoluteSize
                                 local btnScale = btn:FindFirstChildOfClass("UIScale") or mk("UIScale", btn)
                                 local centerY = bAbsPos.Y + bAbsSize.Y/2
                                 if math.abs(mousePos.Y - centerY) < 20 then
-                                    btnScale.Scale = btnScale.Scale + (1.03 - btnScale.Scale) * 0.3
-                                    btn.BackgroundTransparency = btn.BackgroundTransparency + (0.85 - btn.BackgroundTransparency) * 0.3
-                                    btn.TextColor3 = btn.Name == "EditBtn" and Colors.MentionGold or rgb(255, 90, 110)
+                                    btnScale.Scale = btnScale.Scale + (1.03 - btnScale.Scale) * 0.3; btn.BackgroundTransparency = btn.BackgroundTransparency + (0.85 - btn.BackgroundTransparency) * 0.3; btn.TextColor3 = btn.Name == "EditBtn" and Colors.MentionGold or rgb(255, 90, 110)
                                 else
-                                    btnScale.Scale = btnScale.Scale + (1.0 - btnScale.Scale) * 0.3
-                                    btn.BackgroundTransparency = btn.BackgroundTransparency + (1.0 - btn.BackgroundTransparency) * 0.3
-                                    btn.TextColor3 = btn.Name == "EditBtn" and Colors.Text or Colors.Danger
+                                    btnScale.Scale = btnScale.Scale + (1.0 - btnScale.Scale) * 0.3; btn.BackgroundTransparency = btn.BackgroundTransparency + (1.0 - btn.BackgroundTransparency) * 0.3; btn.TextColor3 = btn.Name == "EditBtn" and Colors.Text or Colors.Danger
                                 end
                             end
                         end
@@ -1173,11 +1157,8 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                 swipeLabel.TextTransparency = 1 - progress
                 scScale.Scale = 0.65 + (progress * 0.40)
 
-                if dragOffset >= 40 and not swipeTriggered then
-                    swipeTriggered = true; scFill.BackgroundColor3 = Colors.Purple; playSFX("default")
-                elseif dragOffset < 40 and swipeTriggered then
-                    swipeTriggered = false; scFill.BackgroundColor3 = Colors.Primary
-                end
+                if dragOffset >= 40 and not swipeTriggered then swipeTriggered = true; scFill.BackgroundColor3 = Colors.Purple; playSFX("default")
+                elseif dragOffset < 40 and swipeTriggered then swipeTriggered = false; scFill.BackgroundColor3 = Colors.Primary end
             end
         end
     end)
@@ -1192,9 +1173,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                 if movedDistance > 12 then
                     local mousePos = UserInputService:GetMouseLocation()
                     local inSelfMenuZone = false
-                    if activeSelfMenu then
-                        if mousePos.Y > (activeSelfMenu.AbsolutePosition.Y - 15) then inSelfMenuZone = true end
-                    end
+                    if activeSelfMenu then if mousePos.Y > (activeSelfMenu.AbsolutePosition.Y - 15) then inSelfMenuZone = true end end
                     if not inSelfMenuZone then
                         local emojiCont = activeReactionMenu:FindFirstChild("EmojiContainer")
                         if emojiCont then
@@ -1202,8 +1181,7 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                                 if child:IsA("TextLabel") then
                                     local btnScale = child:FindFirstChildOfClass("UIScale")
                                     if btnScale and btnScale.Scale > 1.2 then 
-                                        if child.Text == "+" then
-                                            if emojiFrame then emojiTargetMode = "reaction"; activeReactionCallback = function(em) addReactionToCard(em) end; emojiFrame.Visible = true end
+                                        if child.Text == "+" then if emojiFrame then emojiTargetMode = "reaction"; activeReactionCallback = function(em) addReactionToCard(em) end; emojiFrame.Visible = true end
                                         else addReactionToCard(child.Text) end
                                         reactionFired = true; break
                                     end
@@ -1215,13 +1193,8 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
                             if child:IsA("TextButton") then
                                 local btnScale = child:FindFirstChildOfClass("UIScale")
                                 if btnScale and btnScale.Scale > 1.01 then
-                                    if child.Name == "EditBtn" then
-                                        playSFX("default"); chatInput.Text = displayMsg; chatInput:CaptureFocus()
-                                        if activateEditBanner then activateEditBanner(bodyTxt, displayMsg) end
-                                    elseif child.Name == "DelBtn" then
-                                        playSFX("default"); TweenService:Create(cardScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play()
-                                        task.delay(0.3, function() cardWrapper:Destroy() end)
-                                    end
+                                    if child.Name == "EditBtn" then playSFX("default"); chatInput.Text = displayMsg; chatInput:CaptureFocus(); if activateEditBanner then activateEditBanner(bodyTxt, displayMsg) end
+                                    elseif child.Name == "DelBtn" then playSFX("default"); TweenService:Create(cardScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play(); task.delay(0.3, function() cardWrapper:Destroy() end) end
                                     reactionFired = true; break
                                 end
                             end
@@ -1327,14 +1300,14 @@ ltpLabel = mk("TextLabel", liveTypingPill, { AutomaticSize = Enum.AutomaticSize.
 crispText(ltpLabel, 0.5)
 
 -- =========================================================
--- ⚡ AUTO-COMPLETE CHIP BAR
+-- ⚡ ZERO-BOX SMART AUTO-COMPLETE CHIP BAR
 -- =========================================================
 autoCompleteBar = mk("Frame", mainFrame, { Size = UDim2.new(1, -28, 0, 30), Position = UDim2.new(0, 14, 1, -88), BackgroundColor3 = rgb(11, 15, 25), BackgroundTransparency = 0.06, Visible = false, ZIndex = 28, Corner = UDim.new(0, 10), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.1, Transparency = 0.35 } })
 acScale = mk("UIScale", autoCompleteBar)
 acScroll = mk("ScrollingFrame", autoCompleteBar, { Size = UDim2.new(1, -12, 1, -6), Position = UDim2.fromOffset(6, 3), BackgroundTransparency = 1, ScrollBarThickness = 0, ScrollingDirection = Enum.ScrollingDirection.X, AutomaticCanvasSize = Enum.AutomaticSize.X, CanvasSize = UDim2.new(0, 0, 0, 0), ZIndex = 29 })
 mk("UIListLayout", acScroll, { FillDirection = Enum.FillDirection.Horizontal, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 6) })
 
-local function refreshAutoComplete(rawText)
+function refreshAutoComplete(rawText)
     for _, c in ipairs(acScroll:GetChildren()) do if c:IsA("TextButton") then c:Destroy() end end
     local cmdPrefix = rawText:match("^([!/][%w_]*)$")
     local dmUserPrefix = rawText:match("^!p%s+([%w_]*)$")
@@ -1382,9 +1355,158 @@ local function refreshAutoComplete(rawText)
 end
 
 -- =========================================================
--- 🚀 MULTI-TOUCH SAFE DRAG ENGINE (FULL WINDOW DRAGGABLE)
+-- ↩️ REPLY DOCK & INPUT BAR
 -- =========================================================
-local function makeDraggable(frame, handlesList, ghostAura, isOrb)
+replyBanner = mk("Frame", mainFrame, { Size = UDim2.new(1, -28, 0, 30), Position = UDim2.new(0, 14, 1, -88), BackgroundColor3 = rgb(12, 17, 28), BackgroundTransparency = 0.05, Visible = false, ZIndex = 20, Corner = UDim.new(0, 10), Stroke = { Color = Colors.Primary, Thickness = 1.1, Transparency = 0.35 } })
+rbScale = mk("UIScale", replyBanner)
+mk("Frame", replyBanner, { Size = UDim2.new(0, 3, 1, -10), Position = UDim2.new(0, 6, 0, 5), BorderSizePixel = 0, BackgroundColor3 = Colors.Primary, ZIndex = 21, Corner = UDim.new(1, 0) })
+rbText = mk("TextLabel", replyBanner, { Size = UDim2.new(1, -44, 1, 0), Position = UDim2.fromOffset(15, 0), BackgroundTransparency = 1, RichText = true, Text = "", TextColor3 = Colors.Text, Font = Enum.Font.GothamMedium, TextSize = 10, TextTruncate = Enum.TextTruncate.AtEnd, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 21 })
+rbClose = mk("TextButton", replyBanner, { Size = UDim2.fromOffset(22, 22), AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -5, 0.5, 0), BackgroundColor3 = Colors.Background, BackgroundTransparency = 0.35, Text = "X", TextColor3 = Colors.SubText, Font = Enum.Font.GothamBlack, TextSize = 9.5, ZIndex = 22, Corner = UDim.new(1, 0) })
+
+function clearReplyBanner()
+    activeReplyData = nil; activeEditData = nil; replyBanner.Visible = false; messageFeed.Size = UDim2.new(1, -24, 1, -152)
+end
+rbClose.MouseButton1Click:Connect(clearReplyBanner)
+
+activateReplyBanner = function(targetDispName, snippetText)
+    local cleanSnippet = string.gsub(snippetText, "[%[%]\n\r|]", " ")
+    activeReplyData = { disp = targetDispName, text = cleanSnippet }; activeEditData = nil
+    rbText.Text = string.format("<font color='#00E6C3'><b>RE: %s</b></font>  •  <font color='#9AB0CE'>%s</font>", sanitizeXml(targetDispName), sanitizeXml(cleanSnippet))
+    replyBanner.Visible = true; rbScale.Scale = 0.92; TweenService:Create(rbScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
+    messageFeed.Size = UDim2.new(1, -24, 1, -184); task.defer(function() chatInput:CaptureFocus() end)
+end
+
+activateEditBanner = function(msgLabel, oldText)
+    local cleanSnippet = string.gsub(oldText, "[%[%]\n\r|]", " ")
+    if #cleanSnippet > 38 then cleanSnippet = string.sub(cleanSnippet, 1, 38) .. "..." end
+    activeEditData = { label = msgLabel }; activeReplyData = nil
+    rbText.Text = string.format("<font color='#FFCD46'><b>✏️ EDITING:</b></font>  •  <font color='#9AB0CE'>%s</font>", sanitizeXml(cleanSnippet))
+    replyBanner.Visible = true; rbScale.Scale = 0.92; TweenService:Create(rbScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
+    messageFeed.Size = UDim2.new(1, -24, 1, -184)
+end
+
+inputContainer = mk("Frame", mainFrame, { Size = UDim2.new(1, -24, 0, 46), Position = UDim2.new(0, 12, 1, -54), BackgroundColor3 = rgb(13, 18, 29), BackgroundTransparency = 0.10, ZIndex = 12, Corner = UDim.new(1, 0) })
+mk("UIGradient", inputContainer, { Color = ColorSequence.new({ csk(0, rgb(255, 255, 255)), csk(1, rgb(195, 208, 230)) }), Rotation = 90 })
+inputStroke = mk("UIStroke", inputContainer, { Thickness = 1.2, Color = rgb(255, 255, 255), Transparency = 0.45 })
+inputFocusGrad = mk("UIGradient", inputStroke, { Color = ColorSequence.new({ csk(0, Colors.Primary), csk(0.5, Colors.Purple), csk(1, Colors.Primary) }) })
+
+inputLeadOrb = mk("Frame", inputContainer, { Size = UDim2.fromOffset(28, 28), AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 9, 0.5, 0), BackgroundColor3 = Colors.ActiveTint, BackgroundTransparency = 0.25, ZIndex = 13, Corner = UDim.new(1, 0) })
+iloStroke = mk("UIStroke", inputLeadOrb, { Color = Colors.PrimaryDark, Thickness = 1, Transparency = 0.45 })
+inputDiamondCore = mk("Frame", inputLeadOrb, { Size = UDim2.fromOffset(8, 8), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Rotation = 45, BackgroundColor3 = Colors.Primary, ZIndex = 14, Corner = UDim.new(0, 2) })
+
+dmBadge = mk("TextButton", inputContainer, { Size = UDim2.new(0, 0, 1, -14), AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 42, 0.5, 0), BackgroundColor3 = rgb(45, 20, 65), TextColor3 = Colors.Purple, Font = Enum.Font.GothamBlack, TextSize = 9.5, Visible = false, ZIndex = 14, Corner = UDim.new(1, 0) })
+chatInput = mk("TextBox", inputContainer, { Text = "", Size = UDim2.new(1, -162, 1, 0), Position = UDim2.new(0, 44, 0, 0), BackgroundTransparency = 1, PlaceholderText = "Message... (@all for broadcast alert)", PlaceholderColor3 = Colors.SubText, TextColor3 = Colors.Text, Font = Enum.Font.GothamMedium, TextSize = 11.5, ClearTextOnFocus = false, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 13 })
+crispText(chatInput, 0.38)
+
+chatInput.InputBegan:Connect(function(inp)
+    if inp.UserInputType == Enum.UserInputType.MouseButton1 or inp.UserInputType == Enum.UserInputType.Touch then
+        task.defer(function() chatInput:CaptureFocus() end)
+    end
+end)
+
+lastTypingBroadcast = 0
+function broadcastTypingSignal()
+    if tick() - lastTypingBroadcast < 3.2 then return end
+    lastTypingBroadcast = tick()
+    task.spawn(function()
+        local fn = (syn and syn.request) or (http and http.request) or http_request or request
+        if fn then pcall(function() fn({Url = SERVER_URL .. "/send", Method = "POST", Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" }, Body = HttpService:JSONEncode({ user = lp.Name .. "::" .. lp.DisplayName, msg = "__TYPING__", jobId = game.JobId, hidden = true }) }) end) end
+    end)
+end
+
+function sanitizeChatInput() if chatInput.Text == "TextBox" then chatInput.Text = "" end end
+chatInput:GetPropertyChangedSignal("Text"):Connect(function()
+    sanitizeChatInput(); local txt = chatInput.Text
+    if #txt > 0 then refreshAutoComplete(txt); if not txt:match("^[!/]") then broadcastTypingSignal() end else autoCompleteBar.Visible = false end
+end)
+task.defer(sanitizeChatInput)
+
+chatInput.Focused:Connect(function() sanitizeChatInput(); TweenService:Create(inputStroke, TweenInfo.new(0.25), {Transparency = 0.10, Thickness = 1.5}):Play(); TweenService:Create(iloStroke, TweenInfo.new(0.25), {Color = Colors.Primary, Transparency = 0.15}):Play() end)
+chatInput.FocusLost:Connect(function() task.delay(0.20, function() autoCompleteBar.Visible = false end); TweenService:Create(inputStroke, TweenInfo.new(0.25), {Transparency = 0.45, Thickness = 1.2}):Play(); TweenService:Create(iloStroke, TweenInfo.new(0.25), {Color = Colors.PrimaryDark, Transparency = 0.45}):Play() end)
+
+updateInputBar = function()
+    if privateTarget then
+        dmBadge.Text = "DM: " .. privateTarget .. " X"
+        local w = TextService:GetTextSize(dmBadge.Text, 9.5, Enum.Font.GothamBlack, Vector2.new(1000, 30)).X + 16
+        dmBadge.Size = UDim2.new(0, w, 1, -14); dmBadge.Visible = true
+        chatInput.Position = UDim2.new(0, w + 48, 0, 0); chatInput.Size = UDim2.new(1, -(w + 166), 1, 0)
+    else
+        dmBadge.Visible = false; chatInput.Position = UDim2.new(0, 44, 0, 0); chatInput.Size = UDim2.new(1, -162, 1, 0)
+    end
+end
+dmBadge.MouseButton1Click:Connect(function() privateTarget = nil; updateInputBar() end)
+
+memeBtn = mk("TextButton", inputContainer, { Size = UDim2.fromOffset(36, 28), AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -80, 0.5, 0), BackgroundColor3 = Colors.Background, BackgroundTransparency = 0.30, Text = "GIF", Font = Enum.Font.GothamBlack, TextColor3 = Colors.Primary, TextSize = 9.5, AutoButtonColor = false, ZIndex = 14, Corner = UDim.new(1, 0), Stroke = { Color = Colors.SurfaceHover, Thickness = 1 } })
+crispText(memeBtn, 0.4); applySpringHover(memeBtn)
+
+emojiBtn = mk("TextButton", inputContainer, { Size = UDim2.fromOffset(30, 28), AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -45, 0.5, 0), BackgroundColor3 = Colors.Background, BackgroundTransparency = 0.30, Text = ":)", Font = Enum.Font.GothamBlack, TextColor3 = Colors.Text, TextSize = 11.5, AutoButtonColor = false, ZIndex = 14, Corner = UDim.new(1, 0), Stroke = { Color = Colors.SurfaceHover, Thickness = 1 } })
+crispText(emojiBtn, 0.4); applySpringHover(emojiBtn)
+
+sendBtn = mk("TextButton", inputContainer, { Size = UDim2.fromOffset(34, 34), AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -6, 0.5, 0), BackgroundColor3 = rgb(255, 255, 255), Text = ">", TextColor3 = rgb(8, 10, 16), Font = Enum.Font.GothamBlack, TextSize = 14, AutoButtonColor = false, ZIndex = 14, Corner = UDim.new(1, 0) })
+sendBtnGrad = mk("UIGradient", sendBtn, { Color = ColorSequence.new(Colors.Primary, Colors.Purple), Rotation = 45 })
+applySpringHover(sendBtn)
+
+-- =========================================================
+-- 📱 EMOJI KEYBOARD & MEME DRAWER
+-- =========================================================
+emojiFrame = mk("Frame", mainFrame, { Size = UDim2.new(0, 310, 0, 210), Position = UDim2.new(0.5, -155, 1, -270), BackgroundColor3 = rgb(14, 19, 30), BackgroundTransparency = 0.04, Visible = false, ZIndex = 60, Corner = UDim.new(0, 14), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.2, Transparency = 0.35 } })
+emojiCatHeader = mk("TextLabel", emojiFrame, { Size = UDim2.new(1, -16, 0, 22), Position = UDim2.fromOffset(10, 4), BackgroundTransparency = 1, Text = "POPULAR & HYPE", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 9.5, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 61 })
+
+emojiScroll = mk("ScrollingFrame", emojiFrame, { Size = UDim2.new(1, -12, 1, -60), Position = UDim2.fromOffset(6, 26), BackgroundTransparency = 1, ScrollBarThickness = 2, ScrollBarImageColor3 = Colors.Primary, AutomaticCanvasSize = Enum.AutomaticSize.Y, CanvasSize = UDim2.new(0, 0, 0, 0), ZIndex = 61 })
+mk("UIGridLayout", emojiScroll, { CellSize = UDim2.new(0, 32, 0, 32), CellPadding = UDim2.new(0, 4, 0, 4) })
+
+emojiTabBar = mk("Frame", emojiFrame, { Size = UDim2.new(1, -12, 0, 28), Position = UDim2.new(0, 6, 1, -31), BackgroundColor3 = Colors.Background, BackgroundTransparency = 0.30, ZIndex = 61, Corner = UDim.new(0, 8) })
+mk("UIListLayout", emojiTabBar, { FillDirection = Enum.FillDirection.Horizontal, HorizontalAlignment = Enum.HorizontalAlignment.Center, VerticalAlignment = Enum.VerticalAlignment.Center, Padding = UDim.new(0, 4) })
+
+emojiTabBtns = {}
+function loadEmojiCategory(catIdx)
+    local cat = EmojiCategories[catIdx]
+    if not cat then return end
+    emojiCatHeader.Text = cat.title
+    for idx, b in ipairs(emojiTabBtns) do b.BackgroundTransparency = (idx == catIdx) and 0.15 or 1 end
+    for _, c in ipairs(emojiScroll:GetChildren()) do if c:IsA("TextButton") then c:Destroy() end end
+    if utf8 and utf8.graphemes then
+        for p, c in utf8.graphemes(cat.list) do
+            local em = string.sub(cat.list, p, c)
+            if em ~= " " and em ~= "" then
+                local btn = mk("TextButton", emojiScroll, { Text = em, Font = Enum.Font.SourceSans, TextSize = 22, BackgroundColor3 = Colors.Surface, BackgroundTransparency = 0.55, AutoButtonColor = false, ZIndex = 62, Corner = UDim.new(0, 6) })
+                btn.MouseButton1Click:Connect(function()
+                    if emojiTargetMode == "reaction" and activeReactionCallback then
+                        activeReactionCallback(em); emojiFrame.Visible = false; emojiTargetMode = "chat"
+                    else chatInput.Text = chatInput.Text .. em; task.defer(function() chatInput.CursorPosition = #chatInput.Text + 1; chatInput:CaptureFocus() end) end
+                end)
+            end
+        end
+    end
+    emojiScroll.CanvasPosition = Vector2.new(0, 0)
+end
+
+for idx, cat in ipairs(EmojiCategories) do
+    local tBtn = mk("TextButton", emojiTabBar, { Size = UDim2.fromOffset(36, 22), BackgroundColor3 = Colors.ActiveTint, BackgroundTransparency = (idx == 1) and 0.15 or 1, Text = cat.tab, Font = Enum.Font.SourceSans, TextSize = 16, AutoButtonColor = false, ZIndex = 62, Corner = UDim.new(0, 6) })
+    table.insert(emojiTabBtns, tBtn)
+    tBtn.MouseButton1Click:Connect(function() loadEmojiCategory(idx) end)
+end
+loadEmojiCategory(1)
+
+emojiBtn.MouseButton1Click:Connect(function() emojiTargetMode = "chat"; emojiFrame.Visible = not emojiFrame.Visible; if memeFrame then memeFrame.Visible = false end; if badgeSelectorModal then isBadgeModalOpen = false; badgeSelectorModal:FindFirstChildOfClass("UIScale").Scale = 0; badgeSelectorModal.Visible = false end end)
+
+memeFrame = mk("Frame", mainFrame, { Size = UDim2.new(0, 280, 0, 190), Position = UDim2.new(0.5, -140, 0.5, -95), BackgroundColor3 = Colors.Surface, BackgroundTransparency = 0.06, Visible = false, ZIndex = 60, Corner = UDim.new(0, 12), Stroke = { Color = Colors.Purple, Thickness = 1.2, Transparency = 0.4 } })
+mk("TextLabel", memeFrame, { Size = UDim2.new(1, 0, 0, 24), BackgroundTransparency = 1, Text = "MEME STICKERS", TextColor3 = Colors.Purple, Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 61 })
+memeScroll = mk("ScrollingFrame", memeFrame, { Size = UDim2.new(1, -8, 1, -28), Position = UDim2.fromOffset(4, 24), BackgroundTransparency = 1, ScrollBarThickness = 2, CanvasSize = UDim2.new(0, 0, 0, 0), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 61 })
+mk("UIGridLayout", memeScroll, { CellSize = UDim2.new(0, 60, 0, 60), CellPadding = UDim2.new(0, 6, 0, 6) })
+
+for _, mData in ipairs(MemeLibrary) do
+    local mItem = mk("ImageButton", memeScroll, { BackgroundColor3 = Colors.Background, Image = getAssetThumb(mData.id), ScaleType = Enum.ScaleType.Fit, ZIndex = 62, Corner = UDim.new(0, 8), Stroke = { Color = Colors.PrimaryDark, Thickness = 1, Transparency = 0.6 } })
+    applySpringHover(mItem)
+    mItem.MouseButton1Click:Connect(function() memeFrame.Visible = false; if sendMessageFunc then sendMessageFunc(string.format("[MEME:%d]", mData.id)) end end)
+end
+
+memeBtn.MouseButton1Click:Connect(function() memeFrame.Visible = not memeFrame.Visible; if emojiFrame then emojiFrame.Visible = false end; if badgeSelectorModal then isBadgeModalOpen = false; badgeSelectorModal:FindFirstChildOfClass("UIScale").Scale = 0; badgeSelectorModal.Visible = false end end)
+
+-- =========================================================
+-- 🚀 MULTI-TOUCH SAFE DRAG ENGINE
+-- =========================================================
+function makeDraggable(frame, handlesList, ghostAura, isOrb)
     local dragging, activeDragInput, dragStart, startPos, dragLoop = false, nil, nil, nil, nil
     local targetPos, velocity, lastInputPos = frame.Position, Vector2.new(0, 0), Vector2.new(0, 0)
 
@@ -1451,6 +1573,45 @@ end
 makeDraggable(mainFrame, {header, mainFrame, channelFrame}, aura, false)
 makeDraggable(openBtnContainer, {openBtn}, nil, true)
 
+openBtn.MouseButton1Down:Connect(function() TweenService:Create(openBtnScale, TweenInfo.new(0.12, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {Scale = 0.85}):Play() end)
+openBtn.MouseButton1Up:Connect(function() TweenService:Create(openBtnScale, TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out, 0, false, 0.2), {Scale = 1.05}):Play() end)
+
+openBtn.MouseButton1Click:Connect(function()
+    if dragThresholdMet then dragThresholdMet = false; return end
+    ghostDebounce = true; task.delay(0.5, function() ghostDebounce = false end)
+    TweenService:Create(openBtnScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play()
+    task.wait(0.25)
+    openBtnContainer.Visible = false; mainFrame.Visible = true; aura.Visible = true; shadow.Visible = true
+    mainScale.Scale, auraScale.Scale, shadowScale.Scale = 0.8, 0.8, 0.8
+    unreadCount = 0; unreadBadge.Visible = false
+    local tInfo2 = TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+    local tInfo3 = TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+    TweenService:Create(mainScale, tInfo2, {Scale = 1}):Play()
+    TweenService:Create(auraScale, tInfo2, {Scale = 1}):Play()
+    TweenService:Create(shadowScale, tInfo2, {Scale = 1}):Play()
+    TweenService:Create(mainFrame, tInfo3, {BackgroundTransparency = isGhostMode and 0.62 or 0.08}):Play()
+    TweenService:Create(aura, tInfo3, {ImageTransparency = isGhostMode and 0.90 or 0.68}):Play()
+    TweenService:Create(shadow, tInfo3, {ImageTransparency = isGhostMode and 0.55 or 0.25}):Play()
+end)
+
+UserInputService.InputBegan:Connect(function(input, gp)
+    if gp then return end
+    if input.KeyCode == Enum.KeyCode.RightShift then
+        if mainFrame.Visible then
+            mainFrame.Visible = false; aura.Visible = false; shadow.Visible = false
+            openBtnContainer.Visible = true; openBtnScale.Scale = 1
+        else
+            openBtnContainer.Visible = false; mainFrame.Visible = true; aura.Visible = true; shadow.Visible = true
+            mainScale.Scale, auraScale.Scale, shadowScale.Scale = 1, 1, 1
+            mainFrame.BackgroundTransparency = isGhostMode and 0.62 or 0.08
+            aura.ImageTransparency = isGhostMode and 0.90 or 0.68
+            shadow.ImageTransparency = isGhostMode and 0.55 or 0.25
+        end
+    elseif input.KeyCode == Enum.KeyCode.Semicolon or input.KeyCode == Enum.KeyCode.Slash then
+        task.delay(0.05, function() chatInput:CaptureFocus() end)
+    end
+end)
+
 -- =========================================================
 -- ⚡ 60 FPS TAG GLOW & TYPING ENGINE
 -- =========================================================
@@ -1490,7 +1651,8 @@ task.spawn(function()
         if #broadcastGlowCards > 0 then
             for i = #broadcastGlowCards, 1, -1 do
                 local bg = broadcastGlowCards[i]
-                if bg and bg.Parent then bg.Rotation = (t * 85) % 360 else table.remove(broadcastGlowCards, i) end
+                if bg and bg.Parent then bg.Rotation = (t * 85) % 360
+                else table.remove(broadcastGlowCards, i) end
             end
         end
 
@@ -1517,16 +1679,338 @@ task.spawn(function()
                 end
             else liveTypingPill.Visible = false end
         end
+
+        if openBtnContainer.Visible then
+            local targetSpeed = orbHovered and 1.5 or 1
+            currentSpeedMod = currentSpeedMod + (targetSpeed - currentSpeedMod) * dt * 5
+            local targetRadius = orbHovered and 0.6 or 1
+            currentRadiusMod = currentRadiusMod + (targetRadius - currentRadiusMod) * dt * 8
+            local activeT = t * 3 * currentSpeedMod
+            local baseColor1, baseColor2 = Colors.Primary, Colors.Purple
+            local lerpAlpha = (math.sin(activeT * 0.8) + 1) / 2
+            
+            coreGlow.ImageColor3 = baseColor1:Lerp(baseColor2, lerpAlpha)
+            coreGlow.ImageTransparency = 0.4 + (math.sin(activeT) * 0.25)
+            eventGlow.ImageColor3 = baseColor2:Lerp(Color3.new(1,1,1), lerpAlpha)
+            openStroke.Color = baseColor1:Lerp(baseColor2, lerpAlpha)
+            goGrad.Rotation = (activeT * 50) % 360
+            goStroke.Transparency = orbHovered and 0.1 or 0.5
+            
+            local gPulse = 40 + (math.sin(activeT * 2) * 3)
+            gimbals[1].frame.Size = UDim2.fromOffset(gPulse * math.abs(math.cos(activeT * 0.8)), gPulse); gimbals[1].frame.Rotation = (activeT * 20) % 360; gimbals[1].stroke.Color = baseColor1
+            gimbals[2].frame.Size = UDim2.fromOffset(gPulse, gPulse * math.abs(math.sin(activeT * 0.9))); gimbals[2].frame.Rotation = -(activeT * 25) % 360; gimbals[2].stroke.Color = baseColor2
+            gimbals[3].frame.Size = UDim2.fromOffset(gPulse * math.abs(math.cos(activeT * 1.1)), gPulse); gimbals[3].frame.Rotation = 45 + (activeT * 15) % 360; gimbals[3].stroke.Color = baseColor1:Lerp(Color3.new(1,1,1), 0.5)
+            gimbals[4].frame.Size = UDim2.fromOffset(gPulse, gPulse * math.abs(math.sin(activeT * 1.2))); gimbals[4].frame.Rotation = -45 - (activeT * 15) % 360; gimbals[4].stroke.Color = baseColor2:Lerp(Color3.new(1,1,1), 0.5)
+            
+            for i, d in ipairs(diamonds) do
+                local breath = math.sin(activeT * 2 + (i * math.pi / 2)) * 4
+                d.frame.Size = UDim2.fromOffset(24 + breath, 24 - breath)
+                d.frame.Rotation = (activeT * 40) * (i % 2 == 0 and 1 or -1) + (i * 22.5)
+                d.stroke.Color = (i % 2 == 0) and baseColor1 or baseColor2
+            end
+            
+            crosshair.Rotation = -(activeT * 60) % 360; crosshair.ImageColor3 = baseColor1
+            centerCore.BackgroundColor3 = baseColor1:Lerp(Color3.new(1,1,1), lerpAlpha * 0.5); coreStroke.Color = baseColor2
+
+            local rBase = 32 * currentRadiusMod
+            for i = 1, 12 do
+                local offset = (i - 1) * (math.pi * 2 / 4)
+                local orb = orbs[i]
+                if i <= 4 then
+                    local a = activeT * 1.5 + offset; local depth = math.sin(a)
+                    orb.Position = UDim2.new(0.5, math.cos(a) * rBase, 0.5, depth * (rBase * 0.2))
+                    orb.Size = UDim2.fromOffset(3.5 + (depth * 2.5), 3.5 + (depth * 2.5))
+                    orb.ZIndex = depth > 0 and 106 or 102; orb.BackgroundColor3 = baseColor1
+                elseif i <= 8 then
+                    local a = -activeT * 1.8 + offset; local depth = math.cos(a)
+                    orb.Position = UDim2.new(0.5, math.cos(a) * (rBase * 0.2), 0.5, math.sin(a) * rBase)
+                    orb.Size = UDim2.fromOffset(3.5 + (depth * 2.5), 3.5 + (depth * 2.5))
+                    orb.ZIndex = depth > 0 and 106 or 102; orb.BackgroundColor3 = baseColor2
+                else
+                    local a = activeT * 2.5 + offset; local depth = math.sin(a + math.pi / 4)
+                    orb.Position = UDim2.new(0.5, math.sin(a) * rBase, 0.5, math.sin(a * 2) * (rBase * 0.5))
+                    orb.Size = UDim2.fromOffset(4 + (depth * 2), 4 + (depth * 2))
+                    orb.ZIndex = 107; orb.BackgroundColor3 = Color3.new(1,1,1)
+                end
+            end
+
+            local mouseLoc = UserInputService:GetMouseLocation()
+            local btnAbsCenter = openBtnContainer.AbsolutePosition + (openBtnContainer.AbsoluteSize / 2)
+            local mPos = Vector2.new(mouseLoc.X, mouseLoc.Y)
+            local mDist = (mPos - btnAbsCenter).Magnitude
+            if orbHovered and mDist < 150 and not isDraggingOrb then
+                local pullStr = 1 - (mDist / 150)
+                local offsetX, offsetY = (mPos.X - btnAbsCenter.X) * 0.25 * pullStr, (mPos.Y - btnAbsCenter.Y) * 0.25 * pullStr
+                openBtn.Size = openBtn.Size:Lerp(UDim2.fromScale(0.85 + (math.abs(offsetX) / 200), 0.85 + (math.abs(offsetY) / 200)), dt * 12)
+                openBtn.Position = openBtn.Position:Lerp(UDim2.new(0.5, offsetX, 0.5, offsetY), dt * 10)
+                eventGlow.Position = eventGlow.Position:Lerp(UDim2.new(0.5, offsetX * 0.4, 0.5, offsetY * 0.4), dt * 10)
+                crosshair.Position = crosshair.Position:Lerp(UDim2.new(0.5, offsetX * 0.7, 0.5, offsetY * 0.7), dt * 12)
+                centerCore.Position = centerCore.Position:Lerp(UDim2.new(0.5, offsetX * 1.2, 0.5, offsetY * 1.2), dt * 15)
+                eventGlow.ImageTransparency = 0.1 + (math.sin(activeT * 10) * 0.05)
+            else
+                openBtn.Size = openBtn.Size:Lerp(baseOrbScale, dt * 12)
+                openBtn.Position = openBtn.Position:Lerp(baseCenterPos, dt * 12)
+                eventGlow.Position = eventGlow.Position:Lerp(baseCenterPos, dt * 12)
+                crosshair.Position = crosshair.Position:Lerp(baseCenterPos, dt * 12)
+                centerCore.Position = centerCore.Position:Lerp(baseCenterPos, dt * 12)
+                eventGlow.ImageTransparency = 0.3 + (math.cos(activeT * 2) * 0.3)
+            end
+
+            sonarTimer = sonarTimer + dt
+            if sonarTimer >= 1.0 then sonarTimer = 0; spawnSonar(baseColor1) end
+        end
     end)
 end)
 
--- Handshake
+-- =========================================================
+-- 📡 SEND MESSAGE (WITH GLOBAL PERSISTENCE & SWIPE QUOTE)
+-- =========================================================
+lastSendTick = 0
+sendMessageFunc = function(overrideText)
+    local text = overrideText or chatInput.Text
+    if not text then return end
+    if text == "TextBox" then text = "" end
+    text = text:gsub("^%s+", ""):gsub("%s+$", "")
+    
+    if text == "" or (tick() - lastSendTick < 0.15) then return end
+    lastSendTick = tick()
+    autoCompleteBar.Visible = false
+
+    local pMatch = text:match("^!p%s+(%w+)")
+    if pMatch then
+        chatInput.Text = ""; privateTarget = pMatch; updateInputBar()
+        addMessageToFeed("System::TXR // AI", "Direct DM link locked with " .. pMatch, nil, false, game.JobId, chatMode)
+        return
+    end
+
+    if text:lower() == "/help" then
+        chatInput.Text = ""
+        addMessageToFeed("System::TXR // AI", "Commands: '@all' for Global Mention | '!p <user>' for Private DM.", nil, false, game.JobId, chatMode)
+        return
+    end
+
+    if activeEditData then
+        local formattedBody = sanitizeXml(text)
+        formattedBody = formattedBody:gsub("(@%w+)", "<font color='#FFCD46'><b>%1</b></font>")
+        activeEditData.label.Text = formattedBody .. "  <font color='#8A9AB5' size='9'><i>(edited)</i></font>"
+        clearReplyBanner()
+        chatInput.Text = ""
+        playSFX("default")
+        return
+    end
+
+    local payloadBodyText = text
+    if activeReplyData then
+        payloadBodyText = string.format("[REP:%s|%s] %s", activeReplyData.disp, activeReplyData.text, text)
+        clearReplyBanner()
+    end
+
+    local finalMsg = payloadBodyText
+    local currentScope = chatMode
+
+    if privateTarget then
+        finalMsg = "( 🔐 " .. lp.Name .. " Private " .. privateTarget .. ") " .. payloadBodyText
+    else
+        finalMsg = (currentScope == "server") and ("[SRV:" .. tostring(game.JobId) .. "] " .. payloadBodyText) or ("[GLB] " .. payloadBodyText)
+    end
+
+    if not overrideText then chatInput.Text = "" end
+    local encodedUserTag = lp.Name .. "::" .. lp.DisplayName
+
+    if privateTarget then
+        addMessageToFeed(encodedUserTag, payloadBodyText, privateTarget, true, game.JobId, currentScope)
+    else
+        addMessageToFeed(encodedUserTag, payloadBodyText, nil, false, game.JobId, currentScope)
+        if currentScope == "global" then saveGlobalMessageToDisk(encodedUserTag, payloadBodyText, encodedUserTag .. "_" .. tostring(math.floor(tick())) .. "_" .. payloadBodyText) end
+    end
+    displayBubble(lp.Name, text)
+
+    recentLocalSentMap[string.lower(finalMsg)] = tick()
+    recentLocalSentMap[string.lower(payloadBodyText)] = tick()
+    recentLocalSentMap[string.lower(text)] = tick()
+
+    task.spawn(function()
+        local fn = (syn and syn.request) or (http and http.request) or http_request or request
+        if fn then
+            local payload = HttpService:JSONEncode({ user = encodedUserTag, msg = finalMsg, jobId = game.JobId })
+            pcall(function() fn({Url = SERVER_URL .. "/send", Method = "POST", Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" }, Body = payload}) end)
+        end
+    end)
+end
+
+sendBtn.MouseButton1Click:Connect(function() sendMessageFunc() end)
+chatInput.FocusLost:Connect(function(enterPressed) if enterPressed then sendMessageFunc() end end)
+
+-- =========================================================
+-- 📢 HAR 5 MINUTE AUTOMATIC ANNOUNCEMENT SYSTEM
+-- =========================================================
+autoAnnouncements = {
+    "📢 Join our official Discord community for early script updates, executor keys, and custom tags! discord.gg/yelelode",
+    "⚡ Pro Tip: Type '@all' anytime to ping the whole network!",
+    "🛡️ TXR Titan Apex v30.0 is online. Clean UI, ghost mode & zero lag enabled."
+}
+task.spawn(function()
+    local annIndex = 1
+    while _G.TXR_ChatInstanceID == currentExecutionID do
+        task.wait(300)
+        local chosenAnn = autoAnnouncements[annIndex]
+        annIndex = (annIndex % #autoAnnouncements) + 1
+        addMessageToFeed("System::TXR // AI", chosenAnn, nil, false, game.JobId, "global")
+    end
+end)
+
+-- =========================================================
+-- 📥 POLLING ENGINE (GLOBAL PERMANENT SAVE / SERVER AUTO-RESET)
+-- =========================================================
+for _, item in ipairs(_G.TXR_GlobalHistoryCache) do
+    if item.user and item.msg then
+        if item.key then processedServerMessageMap[item.key] = true end
+        addMessageToFeed(item.user, item.msg, nil, false, game.JobId, "global", item.t)
+    end
+end
+
+task.spawn(function()
+    while _G.TXR_IsPolling and (_G.TXR_ChatInstanceID == currentExecutionID) and task.wait(0.4) do
+        if tostring(game.JobId) ~= CURRENT_SESSION_JOB then filterFeedMode() end
+
+        local fn = (syn and syn.request) or (http and http.request) or http_request or request
+        if fn then
+            local success, res = pcall(function()
+                return fn({
+                    Url = SERVER_URL .. "/messages?since=" .. tostring(lastSyncTime),
+                    Method = "GET", Headers = { ["User-Agent"] = "Roblox/WinInet" }
+                })
+            end)
+
+            if success and res and (res.StatusCode == 200 or res.Status == 200) then
+                local decodeSuccess, data = pcall(function() return HttpService:JSONDecode(res.Body) end)
+
+                if decodeSuccess and type(data) == "table" then
+                    if isInitialSync then
+                        isInitialSync = false
+                        if #data > 0 then
+                            local startIndex = math.max(1, #data - 45)
+                            for i = startIndex, #data do
+                                local m = data[i]
+                                if not m.hidden and m.msg ~= "Joined" and m.msg ~= "__TYPING__" then
+                                    local initKey = (m.id and tostring(m.id)) or (m.user .. "_" .. tostring(m.time) .. "_" .. m.msg)
+                                    local srvJob, cleanSrvMsg = m.msg:match("^%[SRV:(.-)%]%s*(.*)$")
+                                    local cleanGlbMsg = m.msg:match("^%[GLB%]%s*(.*)$")
+
+                                    if srvJob then
+                                        processedServerMessageMap[initKey] = true
+                                    else
+                                        local parsedMsg = cleanGlbMsg or m.msg
+                                        if not processedServerMessageMap[initKey] then
+                                            processedServerMessageMap[initKey] = true
+                                            addMessageToFeed(m.user, parsedMsg, nil, false, m.jobId, "global")
+                                            saveGlobalMessageToDisk(m.user, parsedMsg, initKey)
+                                        end
+                                    end
+                                    local rawU, rawD = m.user:match("^(.-)::(.*)$")
+                                    updateLiveCounter(rawU or m.user, rawD or m.user)
+                                end
+                            end
+                            lastSyncTime = data[#data].time
+                        end
+                        continue
+                    end
+
+                    for _, m in ipairs(data) do
+                        local uniqueMsgKey = (m.id and tostring(m.id)) or (m.user .. "_" .. tostring(m.time) .. "_" .. m.msg)
+                        if processedServerMessageMap[uniqueMsgKey] then continue end
+
+                        if m.time >= lastSyncTime then
+                            lastSyncTime = m.time
+                            local rawU, rawD = m.user:match("^(.-)::(.*)$")
+                            local rawUsernameOnly = rawU or m.user
+                            local rawDispOnly = rawD or rawUsernameOnly
+                            knownUsers[rawUsernameOnly:lower()] = rawUsernameOnly
+                            updateLiveCounter(rawUsernameOnly, rawDispOnly)
+
+                            if m.msg == "__TYPING__" then
+                                processedServerMessageMap[uniqueMsgKey] = true
+                                if rawUsernameOnly:lower() ~= lp.Name:lower() then remoteTypers[rawDispOnly] = tick() + 3.6 end
+                                continue
+                            end
+
+                            if m.msg == "Joined" then
+                                processedServerMessageMap[uniqueMsgKey] = true
+                                if rawUsernameOnly ~= lp.Name then addJoinNotice(rawDispOnly); playSFX("default") end
+                                continue
+                            end
+
+                            if m.hidden then processedServerMessageMap[uniqueMsgKey] = true; continue end
+                            remoteTypers[rawDispOnly] = nil
+
+                            if rawUsernameOnly:lower() == lp.Name:lower() then
+                                local lowMsg, isEcho = string.lower(m.msg), false
+                                for sentText, sentTime in pairs(recentLocalSentMap) do
+                                    if (sentText == lowMsg or lowMsg:find(sentText, 1, true)) and (tick() - sentTime <= 60) then
+                                        isEcho = true; recentLocalSentMap[sentText] = nil; break
+                                    end
+                                end
+                                if isEcho then processedServerMessageMap[uniqueMsgKey] = true; continue end
+                            end
+
+                            processedServerMessageMap[uniqueMsgKey] = true
+                            local srvJob, cleanSrvMsg = m.msg:match("^%[SRV:(.-)%]%s*(.*)$")
+                            local cleanGlbMsg = m.msg:match("^%[GLB%]%s*(.*)$")
+                            local scope, effectiveMsg = "global", m.msg
+
+                            if srvJob then
+                                scope, effectiveMsg = "server", cleanSrvMsg
+                                if tostring(srvJob) ~= tostring(game.JobId) then continue end
+                            elseif cleanGlbMsg then
+                                scope, effectiveMsg = "global", cleanGlbMsg
+                            end
+
+                            local pSender, pTarget, pMsg = string.match(effectiveMsg, "^%( 🔐 ([%w_]+) Private ([%w_]+)%) (.*)$")
+                            if pSender and pTarget then
+                                if lp.Name == pSender then
+                                    addMessageToFeed(m.user, pMsg, pTarget, true, m.jobId, scope)
+                                elseif lp.Name == pTarget then
+                                    addMessageToFeed(m.user, pMsg, pSender, false, m.jobId, scope)
+                                    local _, _, strippedBubble = pMsg:match("^%[REP:([^|]+)|([^%]]+)%]%s*(.*)$")
+                                    displayBubble(rawUsernameOnly, strippedBubble or pMsg); playSFX("dm")
+                                    if not mainFrame.Visible then
+                                        unreadCount = unreadCount + 1; unreadTxt.Text = tostring(unreadCount); unreadBadge.Visible = true
+                                    end
+                                end
+                                continue
+                            end
+
+                            addMessageToFeed(m.user, effectiveMsg, nil, false, m.jobId, scope)
+                            if scope == "global" then saveGlobalMessageToDisk(m.user, effectiveMsg, uniqueMsgKey) end
+
+                            if rawUsernameOnly ~= lp.Name then
+                                local _, _, strippedBubble = effectiveMsg:match("^%[REP:([^|]+)|([^%]]+)%]%s*(.*)$")
+                                displayBubble(rawUsernameOnly, strippedBubble or effectiveMsg); playSFX("default")
+                                if not mainFrame.Visible then
+                                    unreadCount = unreadCount + 1; unreadTxt.Text = tostring(unreadCount); unreadBadge.Visible = true
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
 task.spawn(function()
     local fn = (syn and syn.request) or (http and http.request) or http_request or request
     if fn then
         pcall(function()
-            fn({Url = SERVER_URL .. "/send", Method = "POST", Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" }, Body = HttpService:JSONEncode({ user = lp.Name .. "::" .. lp.DisplayName, msg = "Joined", jobId = game.JobId, hidden = false })})
+            fn({
+                Url = SERVER_URL .. "/send", Method = "POST",
+                Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" },
+                Body = HttpService:JSONEncode({ user = lp.Name .. "::" .. lp.DisplayName, msg = "Joined", jobId = game.JobId, hidden = false })
+            })
         end)
     end
     addMessageToFeed("System::TXR // AI", "TXR Cyber Titan online hai! Chat box ekdum clean aur smooth optimized hai.", nil, false, game.JobId, "server")
+    if #_G.TXR_GlobalHistoryCache == 0 then
+        addMessageToFeed("System::TXR // AI", "Global Network Synchronized! Permanent chat storage online.", nil, false, game.JobId, "global")
+    end
 end)
