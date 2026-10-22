@@ -94,6 +94,18 @@ local Colors = {
 }
 
 -- =========================================================
+-- 📸 CUSTOM AVATAR LIST (Baad me IDs yahan dalna)
+-- =========================================================
+local CustomAvatarsList = {
+    "rbxassetid://0", -- Image 1 Placeholder
+    "rbxassetid://0", -- Image 2 Placeholder
+    "rbxassetid://0", -- Image 3 Placeholder
+    "rbxassetid://0", -- Image 4 Placeholder
+    "rbxassetid://0", -- Image 5 Placeholder
+    "rbxassetid://0", -- Image 6 Placeholder
+}
+
+-- =========================================================
 -- 👑 16 SILK-SMOOTH BALANCED BADGE PRESETS (+ AI CORE)
 -- =========================================================
 local BadgePresets = {
@@ -169,24 +181,6 @@ local function applySpringHover(btn)
     btn.MouseButton1Up:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.3, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1.05}):Play() end)
 end
 
--- 🔥 TACTILE RIPPLE EFFECT ENGINE 🔥
-local function createRipple(parent)
-    task.spawn(function()
-        local rip = Instance.new("Frame", parent)
-        rip.AnchorPoint = Vector2.new(0.5, 0.5)
-        rip.Position = UDim2.fromScale(0.5, 0.5)
-        rip.Size = UDim2.fromScale(0, 0)
-        rip.BackgroundColor3 = Color3.new(1,1,1)
-        rip.BackgroundTransparency = 0.4
-        rip.ZIndex = parent.ZIndex + 1
-        local uic = Instance.new("UICorner", rip)
-        uic.CornerRadius = UDim.new(1, 0)
-        TweenService:Create(rip, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.fromScale(2.5, 2.5), BackgroundTransparency = 1}):Play()
-        task.wait(0.4)
-        rip:Destroy()
-    end)
-end
-
 local function playSFX(soundType)
     task.spawn(function()
         pcall(function()
@@ -214,21 +208,8 @@ local knownUsers, activeUsersTable, remoteTypers = {}, {}, {}
 local unreadCount, isGhostMode, ghostDebounce = 0, false, false
 local userIdCache, activeBadgesList, activeAICoresList, modalSelectionIndicators, broadcastGlowCards = {}, {}, {}, {}, {}
 local processedServerMessageMap, recentLocalSentMap = {}, {}
-local customUserBios = {} -- Store user edited bios locally
-
--- =========================================================
--- 🖼️ CUSTOM AVATARS & BANNERS (ASSET IDs)
--- =========================================================
-local customAvatars = {
-    ["kausarali2"] = "rbxassetid://0000000",
-    ["cutie143198"] = "rbxassetid://0000000",
-    ["YourUsername"] = "rbxassetid://0000000" 
-}
-local customBanners = {
-    ["kausarali2"] = "rbxassetid://0000000",
-    ["cutie143198"] = "rbxassetid://0000000",
-    ["YourUsername"] = "rbxassetid://0000000"
-}
+local customUserBios = {} 
+local customUserAvatars = {} -- Store user custom avatars locally
 
 _G.TXR_GlobalHistoryCache = _G.TXR_GlobalHistoryCache or {}
 pcall(function()
@@ -428,6 +409,7 @@ local function createHeaderBtn(text, onClick)
 end
 
 local badgeSelectorModal
+local avatarSelectorModal -- Declare early
 local isBadgeModalOpen = false
 if Admin[lp.Name:lower()] then
     createHeaderBtn("TAG", function()
@@ -502,6 +484,7 @@ createHeaderBtn("-", function()
     if memeFrame then memeFrame.Visible = false end
     if emojiFrame then emojiFrame.Visible = false end
     if profileModal then profileModal.Visible = false; pmScale.Scale = 0 end
+    if avatarSelectorModal then avatarSelectorModal.Visible = false; avatarSelectorModal:FindFirstChildOfClass("UIScale").Scale = 0 end
     if badgeSelectorModal then isBadgeModalOpen = false; badgeSelectorModal:FindFirstChildOfClass("UIScale").Scale = 0; badgeSelectorModal.Visible = false end
     local tInfo1 = TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.In)
     local tInfo2 = TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.In)
@@ -658,7 +641,7 @@ local function createActionBtn(text, color, onClick)
 end
 
 -- =========================================================
--- 🪪 DISCORD-STYLE COMPACT PROFILE MODAL (+ CUSTOM BIO, AVATAR & BANNER)
+-- 🪪 DISCORD-STYLE COMPACT PROFILE MODAL (+ CUSTOM BIO)
 -- =========================================================
 profileModal = mk("Frame", mainFrame, {
     Size = UDim2.fromOffset(255, 335),
@@ -673,14 +656,17 @@ profileModal = mk("Frame", mainFrame, {
 })
 pmScale = mk("UIScale", profileModal, {Scale = 0})
 
-local pBanner = mk("Frame", profileModal, { Size = UDim2.new(1, 0, 0, 75), BackgroundColor3 = Colors.Primary, ZIndex = 301, Corner = UDim.new(0, 14), ClipsDescendants = true })
-local pBannerImage = mk("ImageLabel", pBanner, { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Image = "", ScaleType = Enum.ScaleType.Crop, ZIndex = 301, Visible = false })
+local pBanner = mk("Frame", profileModal, { Size = UDim2.new(1, 0, 0, 75), BackgroundColor3 = Colors.Primary, ZIndex = 301, Corner = UDim.new(0, 14) })
 mk("Frame", pBanner, {Size = UDim2.new(1,0,0,14), Position = UDim2.new(0,0,1,-14), BorderSizePixel=0, BackgroundColor3=Colors.Primary, ZIndex=301})
 local pBannerGrad = mk("UIGradient", pBanner, { Color = ColorSequence.new(Colors.Primary, Colors.Purple), Rotation = 25 })
 
 local pAvatarContainer = mk("Frame", profileModal, { Size = UDim2.fromOffset(76, 76), Position = UDim2.fromOffset(14, 34), BackgroundColor3 = rgb(15, 18, 26), ZIndex = 302, Corner = UDim.new(1, 0) })
-local pAvatar = mk("ImageLabel", pAvatarContainer, { Size = UDim2.fromOffset(66, 66), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), BackgroundColor3 = Colors.Background, ZIndex = 303, Corner = UDim.new(1, 0) })
+local pAvatar = mk("ImageLabel", pAvatarContainer, { Size = UDim2.fromOffset(66, 66), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), BackgroundColor3 = Colors.Background, ScaleType = Enum.ScaleType.Crop, ZIndex = 303, Corner = UDim.new(1, 0) })
 local pStatus = mk("Frame", pAvatarContainer, { Size = UDim2.fromOffset(18, 18), AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, -2, 1, -2), BackgroundColor3 = Colors.OnlineGreen, ZIndex = 304, Corner = UDim.new(1, 0), Stroke = {Color = rgb(15, 18, 26), Thickness = 3.5} })
+
+-- 🖼️ Custom Avatar Edit Button (Visible only to self)
+local pAvatarEditBtn = mk("TextButton", pAvatarContainer, { Size = UDim2.fromOffset(22, 22), AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, 5, 1, 5), BackgroundColor3 = Colors.Primary, Text = "🖼️", TextColor3 = rgb(0,0,0), Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 305, Corner = UDim.new(1, 0), Visible = false, Stroke = {Color = rgb(15, 18, 26), Thickness = 2.5} })
+applySpringHover(pAvatarEditBtn)
 
 local pName = mk("TextLabel", profileModal, { Size = UDim2.new(1, -28, 0, 24), Position = UDim2.fromOffset(14, 116), BackgroundTransparency = 1, Text = "DisplayName", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 16, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 302 })
 crispText(pName, 0.6)
@@ -718,38 +704,88 @@ applySpringHover(pMessageBtn)
 local pCloseBtn = mk("TextButton", profileModal, { Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, -10, 0, 8), AnchorPoint = Vector2.new(1, 0), BackgroundColor3 = rgb(0,0,0), BackgroundTransparency = 0.6, Text = "X", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 305, Corner = UDim.new(1, 0) })
 applySpringHover(pCloseBtn)
 
+
+-- =========================================================
+-- 🖼️ CUSTOM AVATAR SELECTOR MODAL
+-- =========================================================
+avatarSelectorModal = mk("Frame", mainFrame, {
+    Size = UDim2.fromOffset(250, 260),
+    Position = UDim2.new(0.5, -125, 0.5, -130),
+    BackgroundColor3 = rgb(11, 15, 24),
+    BackgroundTransparency = 0.04,
+    Visible = false,
+    ZIndex = 310,
+    Corner = UDim.new(0, 12),
+    Stroke = { Color = Colors.PrimaryDark, Thickness = 1.3, Transparency = 0.35 }
+})
+local asmScale = mk("UIScale", avatarSelectorModal, { Scale = 0 })
+mk("TextLabel", avatarSelectorModal, { Size = UDim2.new(1, 0, 0, 28), BackgroundTransparency = 1, Text = "SELECT CUSTOM AVATAR", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 311 })
+local asCloseBtn = mk("TextButton", avatarSelectorModal, { Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, -6, 0, 2), AnchorPoint = Vector2.new(1, 0), BackgroundTransparency = 1, Text = "X", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 312 })
+
+local asScroll = mk("ScrollingFrame", avatarSelectorModal, { Size = UDim2.new(1, -10, 1, -34), Position = UDim2.fromOffset(5, 28), BackgroundTransparency = 1, ScrollBarThickness = 2, ScrollBarImageColor3 = Colors.Primary, AutomaticCanvasSize = Enum.AutomaticSize.Y, CanvasSize = UDim2.new(0, 0, 0, 0), ZIndex = 311 })
+mk("UIGridLayout", asScroll, { CellSize = UDim2.new(0, 65, 0, 65), CellPadding = UDim2.new(0, 8, 0, 8), HorizontalAlignment = Enum.HorizontalAlignment.Center })
+
 local activeProfileUser = nil
+
+for i, imgId in ipairs(CustomAvatarsList) do
+    local aBtn = mk("ImageButton", asScroll, { BackgroundColor3 = Colors.Surface, BackgroundTransparency = 0.2, Image = imgId, ScaleType = Enum.ScaleType.Crop, ZIndex = 312, Corner = UDim.new(1, 0), Stroke = {Color = Colors.PrimaryDark, Thickness = 1} })
+    applySpringHover(aBtn)
+    aBtn.MouseButton1Click:Connect(function()
+        customUserAvatars[lp.Name] = imgId
+        if activeProfileUser == lp.Name then
+            pAvatar.Image = imgId
+        end
+        TweenService:Create(asmScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
+        task.delay(0.2, function() avatarSelectorModal.Visible = false end)
+        playSFX("default")
+    end)
+end
+
+-- Reset Button in Avatar Selector
+local resetAvatarBtn = mk("TextButton", asScroll, { BackgroundColor3 = Colors.Danger, BackgroundTransparency = 0.5, Text = "RESET", TextColor3 = Color3.new(1,1,1), Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 312, Corner = UDim.new(1, 0) })
+resetAvatarBtn.MouseButton1Click:Connect(function()
+    customUserAvatars[lp.Name] = nil
+    if activeProfileUser == lp.Name then
+        pAvatar.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=150&h=150", lp.UserId)
+    end
+    TweenService:Create(asmScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
+    task.delay(0.2, function() avatarSelectorModal.Visible = false end)
+    playSFX("default")
+end)
+
+asCloseBtn.MouseButton1Click:Connect(function()
+    TweenService:Create(asmScale, TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {Scale = 0}):Play()
+    task.delay(0.2, function() avatarSelectorModal.Visible = false end)
+end)
+
+pAvatarEditBtn.MouseButton1Click:Connect(function()
+    avatarSelectorModal.Visible = true
+    TweenService:Create(asmScale, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
+    playSFX("default")
+end)
+
+
 openProfile = function(username, dispName, uId, isAdmin, isAI)
     activeProfileUser = username
     pName.Text = dispName
     pUser.Text = "@" .. username
     
-    -- 🔥 CUSTOM BANNER LOGIC 🔥
-    if customBanners[username] and customBanners[username] ~= "" and customBanners[username] ~= "rbxassetid://0000000" then
-        pBannerImage.Image = customBanners[username]
-        pBannerImage.Visible = true
-        pBannerGrad.Enabled = false
-    else
-        pBannerImage.Visible = false
-        pBannerGrad.Enabled = true
-        if isAI then
-            pBannerGrad.Color = ColorSequence.new(Colors.Purple, rgb(80, 40, 120))
-        elseif isAdmin then
-            pBannerGrad.Color = ColorSequence.new(Colors.Primary, Colors.MentionGold)
-        else
-            pBannerGrad.Color = ColorSequence.new(Colors.Primary, Colors.Purple)
-        end
-    end
-    
-    -- 🔥 CUSTOM AVATAR LOGIC 🔥
-    if customAvatars[username] and customAvatars[username] ~= "" and customAvatars[username] ~= "rbxassetid://0000000" then
-        pAvatar.Image = customAvatars[username]
-        pAvatar.BackgroundColor3 = Colors.Background
-    elseif isAI then
+    if isAI then
+        pBannerGrad.Color = ColorSequence.new(Colors.Purple, rgb(80, 40, 120))
         pAvatar.Image = ""
         pAvatar.BackgroundColor3 = rgb(14, 18, 30)
-    elseif not isAI and uId then
-        pAvatar.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=150&h=150", uId)
+    elseif isAdmin then
+        pBannerGrad.Color = ColorSequence.new(Colors.Primary, Colors.MentionGold)
+    else
+        pBannerGrad.Color = ColorSequence.new(Colors.Primary, Colors.Purple)
+    end
+    
+    if not isAI and uId then
+        if customUserAvatars[username] then
+            pAvatar.Image = customUserAvatars[username]
+        else
+            pAvatar.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=150&h=150", uId)
+        end
         pAvatar.BackgroundColor3 = Colors.Background
     elseif not isAI then
         pAvatar.Image = ""
@@ -764,11 +800,13 @@ openProfile = function(username, dispName, uId, isAdmin, isAI)
     
     if username == lp.Name then
         pBioEditBtn.Visible = true
+        pAvatarEditBtn.Visible = true
         pMessageBtn.Text = "Your Profile (Edit Bio Above)"
         pMessageBtn.BackgroundColor3 = Colors.SurfaceHover
         pMessageBtn.TextColor3 = Colors.SubText
     else
         pBioEditBtn.Visible = false
+        pAvatarEditBtn.Visible = false
         pMessageBtn.Text = "Direct Message"
         pMessageBtn.BackgroundColor3 = isAI and Colors.Purple or Colors.Primary
         pMessageBtn.TextColor3 = rgb(10, 14, 22)
@@ -1000,18 +1038,20 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
             if openProfile then openProfile("System", "TXR // AI", nil, true, true) end
         end)
     else
-        local avatarImg = mk("ImageButton", card, { Size = UDim2.fromOffset(32, 32), Position = UDim2.fromOffset(14, 9), BackgroundColor3 = Colors.Background, BackgroundTransparency = 0.15, AutoButtonColor = false, ZIndex = 12, Corner = UDim.new(1, 0), Stroke = { Thickness = 1.3, Transparency = 0.25, Color = isAdminUser and Colors.Primary or Colors.SurfaceHover } })
+        local avatarImg = mk("ImageButton", card, { Size = UDim2.fromOffset(32, 32), Position = UDim2.fromOffset(14, 9), BackgroundColor3 = Colors.Background, BackgroundTransparency = 0.15, ScaleType = Enum.ScaleType.Crop, AutoButtonColor = false, ZIndex = 12, Corner = UDim.new(1, 0), Stroke = { Thickness = 1.3, Transparency = 0.25, Color = isAdminUser and Colors.Primary or Colors.SurfaceHover } })
         mk("Frame", avatarImg, { Size = UDim2.fromOffset(8, 8), AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, 0, 1, 0), BackgroundColor3 = Colors.OnlineGreen, ZIndex = 14, Corner = UDim.new(1, 0), Stroke = { Color = Colors.Background, Thickness = 1.5 } })
+        
         task.spawn(function()
             local targetPlr = Players:FindFirstChild(actualUsername)
             local uId = targetPlr and targetPlr.UserId or userIdCache[actualUsername:lower()]
             if not uId then pcall(function() uId = Players:GetUserIdFromNameAsync(actualUsername); userIdCache[actualUsername:lower()] = uId end) end
             
-            -- 🔥 CUSTOM AVATAR CHECK FOR CARD 🔥
-            if customAvatars[actualUsername] and customAvatars[actualUsername] ~= "" and customAvatars[actualUsername] ~= "rbxassetid://0000000" then
-                if avatarImg and avatarImg.Parent then avatarImg.Image = customAvatars[actualUsername] end
-            else
-                if uId and avatarImg and avatarImg.Parent then avatarImg.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=48&h=48", uId) end
+            if avatarImg and avatarImg.Parent then
+                if customUserAvatars[actualUsername] then
+                    avatarImg.Image = customUserAvatars[actualUsername]
+                elseif uId then 
+                    avatarImg.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=48&h=48", uId) 
+                end
             end
         end)
         
@@ -1739,6 +1779,7 @@ emojiBtn.MouseButton1Click:Connect(function()
     emojiTargetMode = "chat"
     emojiFrame.Visible = not emojiFrame.Visible
     if memeFrame then memeFrame.Visible = false end
+    if avatarSelectorModal then avatarSelectorModal.Visible = false; avatarSelectorModal:FindFirstChildOfClass("UIScale").Scale = 0 end
     if badgeSelectorModal then isBadgeModalOpen = false; badgeSelectorModal:FindFirstChildOfClass("UIScale").Scale = 0; badgeSelectorModal.Visible = false end
 end)
 
@@ -1759,6 +1800,7 @@ end
 memeBtn.MouseButton1Click:Connect(function()
     memeFrame.Visible = not memeFrame.Visible
     if emojiFrame then emojiFrame.Visible = false end
+    if avatarSelectorModal then avatarSelectorModal.Visible = false; avatarSelectorModal:FindFirstChildOfClass("UIScale").Scale = 0 end
     if badgeSelectorModal then isBadgeModalOpen = false; badgeSelectorModal:FindFirstChildOfClass("UIScale").Scale = 0; badgeSelectorModal.Visible = false end
 end)
 
@@ -1966,7 +2008,7 @@ task.spawn(function()
             local lerpAlpha = (math.sin(activeT * 0.8) + 1) / 2
             
             coreGlow.ImageColor3 = baseColor1:Lerp(baseColor2, lerpAlpha)
-            coreGlow.ImageTransparency = 0.4 + (math.sin(activeT * 0.25))
+            coreGlow.ImageTransparency = 0.4 + (math.sin(activeT) * 0.25)
             eventGlow.ImageColor3 = baseColor2:Lerp(Color3.new(1,1,1), lerpAlpha)
             openStroke.Color = baseColor1:Lerp(baseColor2, lerpAlpha)
             goGrad.Rotation = (activeT * 50) % 360
