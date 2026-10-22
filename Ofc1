@@ -26,7 +26,7 @@ _G.TXR_CustomAvatarID = _G.TXR_CustomAvatarID or nil -- Isko change mat karna
 -- 👆 ---------------------------------------------------- 👆
 
 -- =========================================================
--- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V30.0 ULTIMATE PRO) 👑
+-- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V31.0 SOCIAL PRO) 👑
 -- =========================================================
 currentExecutionID = tick()
 _G.TXR_ChatInstanceID = currentExecutionID
@@ -55,7 +55,8 @@ isF = isfile or function() return false end
 
 targetGuiParent = nil
 pcall(function() targetGuiParent = game:GetService("CoreGui") end)
-if gethui then pcall(function() targetGuiParent = gethui() end) end
+local gh = (getgenv and getgenv().gethui) or gethui
+if gh then pcall(function() targetGuiParent = gh() end) end
 if not targetGuiParent then targetGuiParent = lp:WaitForChild("PlayerGui") end
 
 for _, v in pairs(targetGuiParent:GetChildren()) do
@@ -148,7 +149,7 @@ EmojiCategories = {
     { tab = "😀", title = "SMILEYS & FACES", list = "😀😃😄😁😆😅😂🤣🥲🥹☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🥸🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🫣🤭🫢🫡🤫🫠🤥😶😐😑😬🙄😯😦😧😮😲🥱😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾" },
     { tab = "👋", title = "HANDS & PEOPLE", list = "👋🤚🖐️✋🖖👌🤌🤏✌️🤞🫰🤟🤘🤙👈👉👆🖕👇☝️🫵👍👎✊👊🤛🤜👏🙌🫶👐🤲🤝🙏✍️💅🤳💪🦾🦵🦶👂👃🧠🫀🫁🦷🦴👀👁️👅👄🫦👶🧒👦👧🧑👱👨🧔👩🧓👴👵🙍🙎🙅🙆💁🙋🧏🙇🤦🤷👮🕵️💂🥷👷🫅🤴👸👳👲🧕🤵👰🤰👼🎅🤶🦸🦹🧙🧚🧛🧜🧝🧞🧟🧌💆💇🚶🧍🧎🏃💃🕺👯🧘" },
     { tab = "❤️", title = "HEARTS & LOVE", list = "❤️🧡💛💚💙💜🖤🤍🤎💔❤️‍🔥❤️‍🩹❣️💕💞💓💗💖💘💝💟💌💋💍💎💐🌹🥀🌷🌺🌸🌼🌻💒💓" },
-    { tab = "🎉", title = "FLEX, GAMES & ANIMALS", list = "🏆🥇🥈🥉🏅🎖️👑💎💰💵💴💶💷💸💳🪙🎮🕹️🎲🎯🎳🎸🎹🎺🎻🥁🎬🎤🎧🎨🎭🎪🎟️⚽🏀🏈⚾🎾🏐🎱🏓🏸🥊🥋🥅⛳🎣🤿🎽🛹🛼🛷⛸️🐶🐱🐭🐹🐰🦊🐻🐼🐻‍❄️🐨🐯🦁🐮🐷🐸🐵🙈🙉🙊🐒🐔🐧🐦🐤🐣🐥🦆🦅🦉🦇🐺🐗🐴🦄🐝🪱🐛🦋🐌🐞🐜🪰🪲🪳🦟🦗🕷️🦂🐢🐍🦎🦖🦕🐙🦑🦐🦞🦀🐡🐠🐟🐬🐳🐋🦈🐊🐅🐆🦓🦍🦧🐘🦛🦏🐪🐫🦒🦘🦬🐃🐂🐄🐎🐖🐏🐑🦙🐐🦌🐕🐩🦮🐈🐓🦃🦤🦚🦜🦢🦩🕊️🐇🦝🦨🦡🦫🦦🦥🐁🐀🐿️🦔🐾🐉🐲" },
+    { tab = "🎉", title = "FLEX, GAMES & ANIMALS", list = "🏆🥇🥈🥉🏅🎖️👑💎💰💵💴💶💷💸💳🪙🎮🕹️🎲🎯🎳🎸🎹🎺🎻🥁🎬🎤🎧🎨🎭🎪🎟️⚽🏀🏈⚾🎾🏐🎱🏓🏸🥊🥋🥅⛳🎣🤿🎽🛹🛼🛷⛸️🐶🐱🐭🐹🐰🦊🐻🐼🐻‍❄️🐨🐯🦁🐮🐷🐸🐵🙈🙉🙊🐒🐔🐧🐦🐤🐣🐥🦆🦅🦉🦇🐺🐗🐴🦄🐝🪱🐛🦋🐌🐞🐜🪰🪲🪳🦟🦗🕷️🦂🐢🐍🦎🦖🦕🐙🦑🦐🦞🦀🐡🐠🐟🐬🐳🐋🦈🐊🐅🐆🦓🦍🦧🐘🦛🦏🐪🐫🦒🦘🦬🐃🐂🐄🐎🐖🐏🐑🦙🐐🦌🐕🐩🦮🐈🐓🦃🦤🦚去🦚🦜🦢🦩🕊️🐇🦝🦨🦡🦫🦦🦥🐁🐀🐿️🦔🐾🐉🐲" },
     { tab = "🍕", title = "FOOD & DRINKS", list = "🍏🍎🍐🍊🍋🍌🍉🍇🍓🫐🍈🍒🍑🥭🍍🥥🥝🍅🍆🥑🥦🥬🥒🌶️🫑🌽🥕🫒🧄🧅🥔🍠🥐🥯🍞🥖🥨🧀🥚🍳🧈🥞🧇🥓🥩🍗🍖🦴🌭🍔🍟🍕🫓🥪🥙🧆🌮🌯🫔🥗🥘🫕🥫🍝🍜🍲🍛🍣🍱🥟🦪🍤🍙🍚🍘🍥🥠🥮🍢🍡🍧🍨🍦🥧🧁🍰🎂🍮🍭🍬🍫🍿🍩🍪🌰🥜🍯🥛🍼🫖☕🍵🧃🥤🧋🍶🍺🍻🥂🍷🥃🍸🍹🧉🍾🧊🥄🍴🍽️🥣🥡🥢🧂" },
     { tab = "⚡", title = "SYMBOLS & WEATHER", list = "☀️🌤️⛅🌥️☁️🌦️🌧️⛈️🌩️🌨️❄️☃️⛄🌬️💨💧💦☔☂️🌊🌫️🌪️🌈⭐🌟✨⚡☄️💥🔥🌙🪐🌍🌎🌏🌌⏰⏱️🧭🚀🛸🚁🛶⛵🚤🛥️🛳️⛴️🚢✈️🛩️🛫🛬🪂💺🛰️🚨🚓🚍🚘🚖🚡🚠🚟🚃🚋🚞🚝🚄🚅🚈🚂🚆🚇🚊🚉⬆️↗️➡️↘️⬇️↙️⬅️↖️↕️↔️↩️↪️⤴️⤵️🔃🔄🔙🔚🔛🔜🔝✅☑️✔️✖️❌❎➕➖➗➰➿〽️✳️✴️❇️‼️⁉️❓❔❕❗⭕💯🔱⚜️🔰♻️⚠️🚸⛔🚫🚳🚭🚯🚱🚷📵🔞☢️☣️" }
 }
@@ -476,15 +477,15 @@ closeBtn = createHeaderBtn("X", function() _G.TXR_IsPolling = false; _G.TXR_Chat
 closeBtn.TextColor3 = Colors.Danger
 
 -- 🎨 SOCIAL MEDIA STYLE: MINI PROFILE PICTURE BUTTON
-avtBtn = mk("ImageButton", headerRightCluster, {
+topProfileBtn = mk("ImageButton", headerRightCluster, {
     Size = UDim2.fromOffset(26, 26), BackgroundColor3 = Colors.Surface,
     Image = _G.TXR_CustomAvatarID or string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=150&h=150", lp.UserId),
     Corner = UDim.new(1, 0), ZIndex = 15, Stroke = { Thickness = 1.5, Color = Colors.Primary }
 })
-avtBtn.LayoutOrder = -1 
-applySpringHover(avtBtn)
+topProfileBtn.LayoutOrder = -1 
+applySpringHover(topProfileBtn)
 
-avtBtn.MouseButton1Click:Connect(function()
+topProfileBtn.MouseButton1Click:Connect(function()
     if customProfileFrame then
         customProfileFrame.Visible = not customProfileFrame.Visible
         if customProfileFrame.Visible then
@@ -760,6 +761,7 @@ cpCloseBtn2 = mk("TextButton", customProfileFrame, { Size = UDim2.fromOffset(26,
 cpCloseBtn2.MouseButton1Click:Connect(function() customProfileFrame.Visible = false end)
 
 cpScroll = mk("ScrollingFrame", customProfileFrame, { Size = UDim2.new(1, -20, 1, -50), Position = UDim2.fromOffset(10, 40), BackgroundTransparency = 1, ScrollBarThickness = 2, CanvasSize = UDim2.new(0, 0, 0, 0), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 351 })
+-- Circular Layout Grid
 mk("UIGridLayout", cpScroll, { CellSize = UDim2.new(0, 60, 0, 60), CellPadding = UDim2.new(0, 12, 0, 12), HorizontalAlignment = Enum.HorizontalAlignment.Center })
 
 for _, imgLink in ipairs(CustomAvatarLinks) do
@@ -767,7 +769,7 @@ for _, imgLink in ipairs(CustomAvatarLinks) do
     applySpringHover(imgBtn)
     imgBtn.MouseButton1Click:Connect(function()
         _G.TXR_CustomAvatarID = imgLink
-        if avtBtn then avtBtn.Image = imgLink end
+        topProfileBtn.Image = imgLink
         if activeProfileUser == lp.Name and pAvatar then pAvatar.Image = imgLink end
         customProfileFrame.Visible = false
         playSFX("default")
@@ -775,7 +777,7 @@ for _, imgLink in ipairs(CustomAvatarLinks) do
 end
 
 -- =========================================================
--- 💬 MICRO-PERFECT MESSAGE PIPELINE (CLEAN UNIFIED POLISHED CARDS)
+-- 💬 MICRO-PERFECT MESSAGE PIPELINE
 -- =========================================================
 function updateLiveCounter(username, dispName)
     activeUsersTable[username:lower()] = { time = os.time(), disp = dispName or username, user = username }
@@ -1396,16 +1398,13 @@ function makeDraggable(frame, handlesList, ghostAura, isOrb)
         if parentSize.X <= 0 or parentSize.Y <= 0 then return UDim2.new(newXScale, newXOffset, newYScale, newYOffset) end
         local absX, absY = (newXScale * parentSize.X) + newXOffset, (newYScale * parentSize.Y) + newYOffset
         local minX, maxX, minY, maxY
-        if isOrb then
-            minX, maxX = frameSize.X * anchor.X, parentSize.X - (frameSize.X * (1 - anchor.X))
-            minY, maxY = frameSize.Y * anchor.Y, parentSize.Y - (frameSize.Y * (1 - anchor.Y))
+        if isOrb then minX, maxX = frameSize.X * anchor.X, parentSize.X - (frameSize.X * (1 - anchor.X)); minY, maxY = frameSize.Y * anchor.Y, parentSize.Y - (frameSize.Y * (1 - anchor.Y))
         else
             local vw, vh = frameSize.X * 0.25, frameSize.Y * 0.25
             minX, maxX = (frameSize.X * anchor.X) - (frameSize.X - vw), parentSize.X - (frameSize.X * (1 - anchor.X)) + (frameSize.X - vw)
             minY, maxY = (frameSize.Y * anchor.Y) - (frameSize.Y - vh), parentSize.Y - (frameSize.Y * (1 - anchor.Y)) + (frameSize.Y - vh)
         end
-        if minX > maxX then minX, maxX = maxX, minX end
-        if minY > maxY then minY, maxY = maxY, minY end
+        if minX > maxX then minX, maxX = maxX, minX end; if minY > maxY then minY, maxY = maxY, minY end
         return UDim2.new(newXScale, math.clamp(absX, minX, maxX) - (newXScale * parentSize.X), newYScale, math.clamp(absY, minY, maxY) - (newYScale * parentSize.Y))
     end
 
@@ -1421,9 +1420,7 @@ function makeDraggable(frame, handlesList, ghostAura, isOrb)
                     if _G.TXR_ChatInstanceID ~= currentExecutionID then dragLoop:Disconnect(); return end
                     if dragging then frame.Position = frame.Position:Lerp(targetPos, math.clamp(dt * 28, 0, 1))
                     else
-                        if velocity.Magnitude > 0.5 then
-                            velocity = velocity * 0.88; targetPos = getClampedTarget(targetPos.X.Scale, targetPos.X.Offset + velocity.X, targetPos.Y.Scale, targetPos.Y.Offset + velocity.Y)
-                            frame.Position = frame.Position:Lerp(targetPos, math.clamp(dt * 16, 0, 1))
+                        if velocity.Magnitude > 0.5 then velocity = velocity * 0.88; targetPos = getClampedTarget(targetPos.X.Scale, targetPos.X.Offset + velocity.X, targetPos.Y.Scale, targetPos.Y.Offset + velocity.Y); frame.Position = frame.Position:Lerp(targetPos, math.clamp(dt * 16, 0, 1))
                         else dragLoop:Disconnect(); dragLoop = nil end
                     end
                     if ghostAura then ghostAura.Position = frame.Position; shadow.Position = frame.Position end
@@ -1451,8 +1448,7 @@ function makeDraggable(frame, handlesList, ghostAura, isOrb)
     end)
 end
 
-makeDraggable(mainFrame, {header, mainFrame, channelFrame}, aura, false)
-makeDraggable(openBtnContainer, {openBtn}, nil, true)
+makeDraggable(mainFrame, {header, mainFrame, channelFrame}, aura, false); makeDraggable(openBtnContainer, {openBtn}, nil, true)
 
 openBtn.MouseButton1Down:Connect(function() TweenService:Create(openBtnScale, TweenInfo.new(0.12, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {Scale = 0.85}):Play() end)
 openBtn.MouseButton1Up:Connect(function() TweenService:Create(openBtnScale, TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out, 0, false, 0.2), {Scale = 1.05}):Play() end)
@@ -1460,37 +1456,20 @@ openBtn.MouseButton1Up:Connect(function() TweenService:Create(openBtnScale, Twee
 openBtn.MouseButton1Click:Connect(function()
     if dragThresholdMet then dragThresholdMet = false; return end
     ghostDebounce = true; task.delay(0.5, function() ghostDebounce = false end)
-    TweenService:Create(openBtnScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play()
-    task.wait(0.25)
+    TweenService:Create(openBtnScale, TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Scale = 0}):Play(); task.wait(0.25)
     openBtnContainer.Visible = false; mainFrame.Visible = true; aura.Visible = true; shadow.Visible = true
-    mainScale.Scale, auraScale.Scale, shadowScale.Scale = 0.8, 0.8, 0.8
-    unreadCount = 0; unreadBadge.Visible = false
-    local tInfo2 = TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
-    local tInfo3 = TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-    TweenService:Create(mainScale, tInfo2, {Scale = 1}):Play()
-    TweenService:Create(auraScale, tInfo2, {Scale = 1}):Play()
-    TweenService:Create(shadowScale, tInfo2, {Scale = 1}):Play()
-    TweenService:Create(mainFrame, tInfo3, {BackgroundTransparency = isGhostMode and 0.62 or 0.08}):Play()
-    TweenService:Create(aura, tInfo3, {ImageTransparency = isGhostMode and 0.90 or 0.68}):Play()
-    TweenService:Create(shadow, tInfo3, {ImageTransparency = isGhostMode and 0.55 or 0.25}):Play()
+    mainScale.Scale, auraScale.Scale, shadowScale.Scale = 0.8, 0.8, 0.8; unreadCount = 0; unreadBadge.Visible = false
+    local tInfo2 = TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out); local tInfo3 = TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+    TweenService:Create(mainScale, tInfo2, {Scale = 1}):Play(); TweenService:Create(auraScale, tInfo2, {Scale = 1}):Play(); TweenService:Create(shadowScale, tInfo2, {Scale = 1}):Play()
+    TweenService:Create(mainFrame, tInfo3, {BackgroundTransparency = isGhostMode and 0.62 or 0.08}):Play(); TweenService:Create(aura, tInfo3, {ImageTransparency = isGhostMode and 0.90 or 0.68}):Play(); TweenService:Create(shadow, tInfo3, {ImageTransparency = isGhostMode and 0.55 or 0.25}):Play()
 end)
 
 UserInputService.InputBegan:Connect(function(input, gp)
     if gp then return end
     if input.KeyCode == Enum.KeyCode.RightShift then
-        if mainFrame.Visible then
-            mainFrame.Visible = false; aura.Visible = false; shadow.Visible = false
-            openBtnContainer.Visible = true; openBtnScale.Scale = 1
-        else
-            openBtnContainer.Visible = false; mainFrame.Visible = true; aura.Visible = true; shadow.Visible = true
-            mainScale.Scale, auraScale.Scale, shadowScale.Scale = 1, 1, 1
-            mainFrame.BackgroundTransparency = isGhostMode and 0.62 or 0.08
-            aura.ImageTransparency = isGhostMode and 0.90 or 0.68
-            shadow.ImageTransparency = isGhostMode and 0.55 or 0.25
-        end
-    elseif input.KeyCode == Enum.KeyCode.Semicolon or input.KeyCode == Enum.KeyCode.Slash then
-        task.delay(0.05, function() chatInput:CaptureFocus() end)
-    end
+        if mainFrame.Visible then mainFrame.Visible = false; aura.Visible = false; shadow.Visible = false; openBtnContainer.Visible = true; openBtnScale.Scale = 1
+        else openBtnContainer.Visible = false; mainFrame.Visible = true; aura.Visible = true; shadow.Visible = true; mainScale.Scale, auraScale.Scale, shadowScale.Scale = 1, 1, 1; mainFrame.BackgroundTransparency = isGhostMode and 0.62 or 0.08; aura.ImageTransparency = isGhostMode and 0.90 or 0.68; shadow.ImageTransparency = isGhostMode and 0.55 or 0.25 end
+    elseif input.KeyCode == Enum.KeyCode.Semicolon or input.KeyCode == Enum.KeyCode.Slash then task.delay(0.05, function() chatInput:CaptureFocus() end) end
 end)
 
 -- =========================================================
@@ -1506,11 +1485,8 @@ task.spawn(function()
             for i = #activeBadgesList, 1, -1 do
                 local item = activeBadgesList[i]
                 if item.textGrad and item.textGrad.Parent and item.glowGrad and item.glowGrad.Parent then
-                    local sSpeed = item.speed or 1.15
-                    local continuousRotation = (t * 58 * sSpeed) % 360
-                    local waveOffset = math.sin(t * 1.6 * sSpeed) * 0.35
-                    item.textGrad.Rotation = continuousRotation; item.textGrad.Offset = Vector2.new(waveOffset, 0)
-                    item.glowGrad.Rotation = continuousRotation; item.glowGrad.Offset = Vector2.new(-waveOffset, 0)
+                    local sSpeed = item.speed or 1.15; local continuousRotation = (t * 58 * sSpeed) % 360; local waveOffset = math.sin(t * 1.6 * sSpeed) * 0.35
+                    item.textGrad.Rotation = continuousRotation; item.textGrad.Offset = Vector2.new(waveOffset, 0); item.glowGrad.Rotation = continuousRotation; item.glowGrad.Offset = Vector2.new(-waveOffset, 0)
                     if item.strokeGradGlow and item.strokeGradGlow.Parent then item.strokeGradGlow.Rotation = (continuousRotation + 180) % 360 end
                     if item.shineGrad and item.shineGrad.Parent then item.shineGrad.Offset = Vector2.new(((t * 0.8 * sSpeed) % 3.4) - 1.7, 0) end
                     local breathPulse = (math.sin(t * 2.4 * sSpeed) + 1) / 2
@@ -1520,62 +1496,31 @@ task.spawn(function()
             end
         end
 
-        if #activeAICoresList > 0 then
-            for i = #activeAICoresList, 1, -1 do
-                local ai = activeAICoresList[i]
-                if ai.grad and ai.grad.Parent and ai.ring and ai.ring.Parent then
-                    ai.grad.Rotation = (t * 95) % 360; ai.ring.Rotation = -(t * 60) % 360; ai.icon.Rotation = 45 + math.sin(t * 3) * 20
-                else table.remove(activeAICoresList, i) end
-            end
-        end
-
-        if #broadcastGlowCards > 0 then
-            for i = #broadcastGlowCards, 1, -1 do
-                local bg = broadcastGlowCards[i]
-                if bg and bg.Parent then bg.Rotation = (t * 85) % 360
-                else table.remove(broadcastGlowCards, i) end
-            end
-        end
+        if #activeAICoresList > 0 then for i = #activeAICoresList, 1, -1 do local ai = activeAICoresList[i]; if ai.grad and ai.grad.Parent and ai.ring and ai.ring.Parent then ai.grad.Rotation = (t * 95) % 360; ai.ring.Rotation = -(t * 60) % 360; ai.icon.Rotation = 45 + math.sin(t * 3) * 20 else table.remove(activeAICoresList, i) end end end
+        if #broadcastGlowCards > 0 then for i = #broadcastGlowCards, 1, -1 do local bg = broadcastGlowCards[i]; if bg and bg.Parent then bg.Rotation = (t * 85) % 360 else table.remove(broadcastGlowCards, i) end end end
 
         if mainFrame.Visible then
-            strokeGrad.Rotation = (t * 35) % 360
-            inputFocusGrad.Rotation = (t * 65) % 360
-            inputDiamondCore.Rotation = 45 + math.sin(t * 3) * 20
-            local breath = (math.sin(t * 2.5) + 1) / 2
-            aura.ImageTransparency = isGhostMode and 0.90 or (0.68 + (breath * 0.08))
-            ledDot.BackgroundTransparency = 0.1 + (((math.sin(t * 4) + 1) / 2) * 0.5)
+            strokeGrad.Rotation = (t * 35) % 360; inputFocusGrad.Rotation = (t * 65) % 360; inputDiamondCore.Rotation = 45 + math.sin(t * 3) * 20
+            local breath = (math.sin(t * 2.5) + 1) / 2; aura.ImageTransparency = isGhostMode and 0.90 or (0.68 + (breath * 0.08)); ledDot.BackgroundTransparency = 0.1 + (((math.sin(t * 4) + 1) / 2) * 0.5)
 
             local activeTyperNames, nowTick = {}, tick()
-            for dName, expTick in pairs(remoteTypers) do
-                if nowTick < expTick then table.insert(activeTyperNames, dName) else remoteTypers[dName] = nil end
-            end
+            for dName, expTick in pairs(remoteTypers) do if nowTick < expTick then table.insert(activeTyperNames, dName) else remoteTypers[dName] = nil end end
 
             if #activeTyperNames > 0 and not replyBanner.Visible and not autoCompleteBar.Visible then
                 liveTypingPill.Visible = true
                 if remoteTypers["TXR // AI"] then ltpLabel.Text = "TXR // AI is thinking..." else ltpLabel.Text = (#activeTyperNames == 1) and (activeTyperNames[1] .. " is typing...") or (#activeTyperNames .. " people are typing...") end
                 for idx, dot in ipairs(typingDots) do
                     local bounce = math.sin(t * 9 - (idx * 1.1))
-                    dot.Position = UDim2.new(0, (idx - 1) * 7 + 4, 0.5, bounce * 2.5)
-                    dot.BackgroundColor3 = Colors.Primary:Lerp(Colors.Purple, (bounce + 1) / 2)
+                    dot.Position = UDim2.new(0, (idx - 1) * 7 + 4, 0.5, bounce * 2.5); dot.BackgroundColor3 = Colors.Primary:Lerp(Colors.Purple, (bounce + 1) / 2)
                 end
             else liveTypingPill.Visible = false end
         end
 
         if openBtnContainer.Visible then
-            local targetSpeed = orbHovered and 1.5 or 1
-            currentSpeedMod = currentSpeedMod + (targetSpeed - currentSpeedMod) * dt * 5
-            local targetRadius = orbHovered and 0.6 or 1
-            currentRadiusMod = currentRadiusMod + (targetRadius - currentRadiusMod) * dt * 8
-            local activeT = t * 3 * currentSpeedMod
-            local baseColor1, baseColor2 = Colors.Primary, Colors.Purple
-            local lerpAlpha = (math.sin(activeT * 0.8) + 1) / 2
+            local targetSpeed = orbHovered and 1.5 or 1; currentSpeedMod = currentSpeedMod + (targetSpeed - currentSpeedMod) * dt * 5; local targetRadius = orbHovered and 0.6 or 1; currentRadiusMod = currentRadiusMod + (targetRadius - currentRadiusMod) * dt * 8
+            local activeT = t * 3 * currentSpeedMod; local baseColor1, baseColor2 = Colors.Primary, Colors.Purple; local lerpAlpha = (math.sin(activeT * 0.8) + 1) / 2
             
-            coreGlow.ImageColor3 = baseColor1:Lerp(baseColor2, lerpAlpha)
-            coreGlow.ImageTransparency = 0.4 + (math.sin(activeT) * 0.25)
-            eventGlow.ImageColor3 = baseColor2:Lerp(Color3.new(1,1,1), lerpAlpha)
-            openStroke.Color = baseColor1:Lerp(baseColor2, lerpAlpha)
-            goGrad.Rotation = (activeT * 50) % 360
-            goStroke.Transparency = orbHovered and 0.1 or 0.5
+            coreGlow.ImageColor3 = baseColor1:Lerp(baseColor2, lerpAlpha); coreGlow.ImageTransparency = 0.4 + (math.sin(activeT) * 0.25); eventGlow.ImageColor3 = baseColor2:Lerp(Color3.new(1,1,1), lerpAlpha); openStroke.Color = baseColor1:Lerp(baseColor2, lerpAlpha); goGrad.Rotation = (activeT * 50) % 360; goStroke.Transparency = orbHovered and 0.1 or 0.5
             
             local gPulse = 40 + (math.sin(activeT * 2) * 3)
             gimbals[1].frame.Size = UDim2.fromOffset(gPulse * math.abs(math.cos(activeT * 0.8)), gPulse); gimbals[1].frame.Rotation = (activeT * 20) % 360; gimbals[1].stroke.Color = baseColor1
@@ -1583,64 +1528,31 @@ task.spawn(function()
             gimbals[3].frame.Size = UDim2.fromOffset(gPulse * math.abs(math.cos(activeT * 1.1)), gPulse); gimbals[3].frame.Rotation = 45 + (activeT * 15) % 360; gimbals[3].stroke.Color = baseColor1:Lerp(Color3.new(1,1,1), 0.5)
             gimbals[4].frame.Size = UDim2.fromOffset(gPulse, gPulse * math.abs(math.sin(activeT * 1.2))); gimbals[4].frame.Rotation = -45 - (activeT * 15) % 360; gimbals[4].stroke.Color = baseColor2:Lerp(Color3.new(1,1,1), 0.5)
             
-            for i, d in ipairs(diamonds) do
-                local breath = math.sin(activeT * 2 + (i * math.pi / 2)) * 4
-                d.frame.Size = UDim2.fromOffset(24 + breath, 24 - breath)
-                d.frame.Rotation = (activeT * 40) * (i % 2 == 0 and 1 or -1) + (i * 22.5)
-                d.stroke.Color = (i % 2 == 0) and baseColor1 or baseColor2
-            end
-            
-            crosshair.Rotation = -(activeT * 60) % 360; crosshair.ImageColor3 = baseColor1
-            centerCore.BackgroundColor3 = baseColor1:Lerp(Color3.new(1,1,1), lerpAlpha * 0.5); coreStroke.Color = baseColor2
+            for i, d in ipairs(diamonds) do local breath = math.sin(activeT * 2 + (i * math.pi / 2)) * 4; d.frame.Size = UDim2.fromOffset(24 + breath, 24 - breath); d.frame.Rotation = (activeT * 40) * (i % 2 == 0 and 1 or -1) + (i * 22.5); d.stroke.Color = (i % 2 == 0) and baseColor1 or baseColor2 end
+            crosshair.Rotation = -(activeT * 60) % 360; crosshair.ImageColor3 = baseColor1; centerCore.BackgroundColor3 = baseColor1:Lerp(Color3.new(1,1,1), lerpAlpha * 0.5); coreStroke.Color = baseColor2
 
             local rBase = 32 * currentRadiusMod
             for i = 1, 12 do
-                local offset = (i - 1) * (math.pi * 2 / 4)
-                local orb = orbs[i]
-                if i <= 4 then
-                    local a = activeT * 1.5 + offset; local depth = math.sin(a)
-                    orb.Position = UDim2.new(0.5, math.cos(a) * rBase, 0.5, depth * (rBase * 0.2))
-                    orb.Size = UDim2.fromOffset(3.5 + (depth * 2.5), 3.5 + (depth * 2.5))
-                    orb.ZIndex = depth > 0 and 106 or 102; orb.BackgroundColor3 = baseColor1
-                elseif i <= 8 then
-                    local a = -activeT * 1.8 + offset; local depth = math.cos(a)
-                    orb.Position = UDim2.new(0.5, math.cos(a) * (rBase * 0.2), 0.5, math.sin(a) * rBase)
-                    orb.Size = UDim2.fromOffset(3.5 + (depth * 2.5), 3.5 + (depth * 2.5))
-                    orb.ZIndex = depth > 0 and 106 or 102; orb.BackgroundColor3 = baseColor2
-                else
-                    local a = activeT * 2.5 + offset; local depth = math.sin(a + math.pi / 4)
-                    orb.Position = UDim2.new(0.5, math.sin(a) * rBase, 0.5, math.sin(a * 2) * (rBase * 0.5))
-                    orb.Size = UDim2.fromOffset(4 + (depth * 2), 4 + (depth * 2))
-                    orb.ZIndex = 107; orb.BackgroundColor3 = Color3.new(1,1,1)
-                end
+                local offset = (i - 1) * (math.pi * 2 / 4); local orb = orbs[i]
+                if i <= 4 then local a = activeT * 1.5 + offset; local depth = math.sin(a); orb.Position = UDim2.new(0.5, math.cos(a) * rBase, 0.5, depth * (rBase * 0.2)); orb.Size = UDim2.fromOffset(3.5 + (depth * 2.5), 3.5 + (depth * 2.5)); orb.ZIndex = depth > 0 and 106 or 102; orb.BackgroundColor3 = baseColor1
+                elseif i <= 8 then local a = -activeT * 1.8 + offset; local depth = math.cos(a); orb.Position = UDim2.new(0.5, math.cos(a) * (rBase * 0.2), 0.5, math.sin(a) * rBase); orb.Size = UDim2.fromOffset(3.5 + (depth * 2.5), 3.5 + (depth * 2.5)); orb.ZIndex = depth > 0 and 106 or 102; orb.BackgroundColor3 = baseColor2
+                else local a = activeT * 2.5 + offset; local depth = math.sin(a + math.pi / 4); orb.Position = UDim2.new(0.5, math.sin(a) * rBase, 0.5, math.sin(a * 2) * (rBase * 0.5)); orb.Size = UDim2.fromOffset(4 + (depth * 2), 4 + (depth * 2)); orb.ZIndex = 107; orb.BackgroundColor3 = Color3.new(1,1,1) end
             end
 
-            local mouseLoc = UserInputService:GetMouseLocation()
-            local btnAbsCenter = openBtnContainer.AbsolutePosition + (openBtnContainer.AbsoluteSize / 2)
-            local mPos = Vector2.new(mouseLoc.X, mouseLoc.Y)
-            local mDist = (mPos - btnAbsCenter).Magnitude
+            local mouseLoc = UserInputService:GetMouseLocation(); local btnAbsCenter = openBtnContainer.AbsolutePosition + (openBtnContainer.AbsoluteSize / 2); local mPos = Vector2.new(mouseLoc.X, mouseLoc.Y); local mDist = (mPos - btnAbsCenter).Magnitude
             if orbHovered and mDist < 150 and not isDraggingOrb then
-                local pullStr = 1 - (mDist / 150)
-                local offsetX, offsetY = (mPos.X - btnAbsCenter.X) * 0.25 * pullStr, (mPos.Y - btnAbsCenter.Y) * 0.25 * pullStr
-                openBtn.Size = openBtn.Size:Lerp(UDim2.fromScale(0.85 + (math.abs(offsetX) / 200), 0.85 + (math.abs(offsetY) / 200)), dt * 12)
-                openBtn.Position = openBtn.Position:Lerp(UDim2.new(0.5, offsetX, 0.5, offsetY), dt * 10)
-                eventGlow.Position = eventGlow.Position:Lerp(UDim2.new(0.5, offsetX * 0.4, 0.5, offsetY * 0.4), dt * 10)
-                crosshair.Position = crosshair.Position:Lerp(UDim2.new(0.5, offsetX * 0.7, 0.5, offsetY * 0.7), dt * 12)
-                centerCore.Position = centerCore.Position:Lerp(UDim2.new(0.5, offsetX * 1.2, 0.5, offsetY * 1.2), dt * 15)
-                eventGlow.ImageTransparency = 0.1 + (math.sin(activeT * 10) * 0.05)
-            else
-                openBtn.Size = openBtn.Size:Lerp(baseOrbScale, dt * 12)
-                openBtn.Position = openBtn.Position:Lerp(baseCenterPos, dt * 12)
-                eventGlow.Position = eventGlow.Position:Lerp(baseCenterPos, dt * 12)
-                crosshair.Position = crosshair.Position:Lerp(baseCenterPos, dt * 12)
-                centerCore.Position = centerCore.Position:Lerp(baseCenterPos, dt * 12)
-                eventGlow.ImageTransparency = 0.3 + (math.cos(activeT * 2) * 0.3)
-            end
+                local pullStr = 1 - (mDist / 150); local offsetX, offsetY = (mPos.X - btnAbsCenter.X) * 0.25 * pullStr, (mPos.Y - btnAbsCenter.Y) * 0.25 * pullStr; openBtn.Size = openBtn.Size:Lerp(UDim2.fromScale(0.85 + (math.abs(offsetX) / 200), 0.85 + (math.abs(offsetY) / 200)), dt * 12); openBtn.Position = openBtn.Position:Lerp(UDim2.new(0.5, offsetX, 0.5, offsetY), dt * 10); eventGlow.Position = eventGlow.Position:Lerp(UDim2.new(0.5, offsetX * 0.4, 0.5, offsetY * 0.4), dt * 10); crosshair.Position = crosshair.Position:Lerp(UDim2.new(0.5, offsetX * 0.7, 0.5, offsetY * 0.7), dt * 12); centerCore.Position = centerCore.Position:Lerp(UDim2.new(0.5, offsetX * 1.2, 0.5, offsetY * 1.2), dt * 15); eventGlow.ImageTransparency = 0.1 + (math.sin(activeT * 10) * 0.05)
+            else openBtn.Size = openBtn.Size:Lerp(baseOrbScale, dt * 12); openBtn.Position = openBtn.Position:Lerp(baseCenterPos, dt * 12); eventGlow.Position = eventGlow.Position:Lerp(baseCenterPos, dt * 12); crosshair.Position = crosshair.Position:Lerp(baseCenterPos, dt * 12); centerCore.Position = centerCore.Position:Lerp(baseCenterPos, dt * 12); eventGlow.ImageTransparency = 0.3 + (math.cos(activeT * 2) * 0.3) end
 
-            sonarTimer = sonarTimer + dt
-            if sonarTimer >= 1.0 then sonarTimer = 0; spawnSonar(baseColor1) end
+            sonarTimer = sonarTimer + dt; if sonarTimer >= 1.0 then sonarTimer = 0; spawnSonar(baseColor1) end
         end
     end)
+end)
+
+task.spawn(function()
+    local fn = (syn and syn.request) or (http and http.request) or http_request or request
+    if fn then pcall(function() fn({Url = SERVER_URL .. "/send", Method = "POST", Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" }, Body = HttpService:JSONEncode({ user = lp.Name .. "::" .. lp.DisplayName, msg = "Joined", jobId = game.JobId, hidden = false })}) end) end
+    addMessageToFeed("System::TXR // AI", "TXR Cyber Titan online hai! Chat box ekdum clean aur smooth optimized hai.", nil, false, game.JobId, "server")
 end)
 
 -- =========================================================
@@ -1774,7 +1686,7 @@ task.spawn(function()
                             for i = startIndex, #data do
                                 local m = data[i]
                                 if not m.hidden and m.msg ~= "Joined" and m.msg ~= "__TYPING__" then
-                                    local initKey = (m.id and tostring(m.id)) or (m.user .. "_" .. tostring(m.time) .. "_" m.msg)
+                                    local initKey = (m.id and tostring(m.id)) or (m.user .. "_" .. tostring(m.time) .. "_" .. m.msg)
                                     local srvJob, cleanSrvMsg = m.msg:match("^%[SRV:(.-)%]%s*(.*)$")
                                     local cleanGlbMsg = m.msg:match("^%[GLB%]%s*(.*)$")
 
@@ -1876,22 +1788,5 @@ task.spawn(function()
                 end
             end
         end
-    end
-end)
-
-task.spawn(function()
-    local fn = (syn and syn.request) or (http and http.request) or http_request or request
-    if fn then
-        pcall(function()
-            fn({
-                Url = SERVER_URL .. "/send", Method = "POST",
-                Headers = { ["Content-Type"] = "application/json", ["User-Agent"] = "Roblox/WinInet" },
-                Body = HttpService:JSONEncode({ user = lp.Name .. "::" .. lp.DisplayName, msg = "Joined", jobId = game.JobId, hidden = false })
-            })
-        end)
-    end
-    addMessageToFeed("System::TXR // AI", "TXR Cyber Titan online hai! Chat box ekdum clean aur smooth optimized hai.", nil, false, game.JobId, "server")
-    if #_G.TXR_GlobalHistoryCache == 0 then
-        addMessageToFeed("System::TXR // AI", "Global Network Synchronized! Permanent chat storage online.", nil, false, game.JobId, "global")
     end
 end)
