@@ -1,14 +1,19 @@
 -- ==========================================
--- 🎨 TXR CYBER TITAN - PROFILE ADDON MODULE 
+-- 🎨 TXR CYBER TITAN - STANDALONE AVATAR ADDON 
 -- ==========================================
 
--- 👇 YAHAN DAALNE HAIN APNE PHOTOS / AVATAR KE CODES 👇
+-- 👇 YAHAN DAALNE HAIN APNE PHOTOS KE CODES 👇
 local CustomAvatarIDs = {
-    "1316045217",  -- Matrix Rain Background
-    "10470601783", -- Purple Glow Orb
+    "1316045217",  -- Matrix Rain
+    "10470601783", -- Purple Orb
     "13110903323", -- Crosshair
     "9114223177",  -- Example ID
 }
+-- 👆 ------------------------------------- 👆
+
+local lp = game:GetService("Players").LocalPlayer
+local rgb = Color3.fromRGB
+local Colors = { Primary = rgb(0, 230, 195), PrimaryDark = rgb(0, 150, 130), Background = rgb(9, 13, 20), Surface = rgb(16, 22, 34), Text = rgb(240, 246, 255) }
 
 local function mk(class, parent, props)
     local inst = Instance.new(class)
@@ -25,16 +30,12 @@ local function mk(class, parent, props)
     return inst
 end
 
-local rgb = Color3.fromRGB
-local Colors = { Primary = rgb(0, 230, 195), PrimaryDark = rgb(0, 150, 130), Background = rgb(9, 13, 20), Surface = rgb(16, 22, 34) }
-local lp = game:GetService("Players").LocalPlayer
-
--- 1. BULLETPROOF DELTA GUI BYPASS
+-- 1. DELTA BYPASS & FIND MAIN UI
 local g = (getgenv and getgenv()) or _G or shared
 local targetGuis = {game:GetService("CoreGui"), lp:WaitForChild("PlayerGui")}
 if g.gethui then pcall(function() table.insert(targetGuis, g.gethui()) end) end
 
-local gui, mainFrame, profileModal, pAvatarContainer, pUserLabel
+local gui, mainFrame, headerRight
 for _, parent in ipairs(targetGuis) do
     if parent then
         for _, v in pairs(parent:GetChildren()) do
@@ -46,34 +47,35 @@ end
 
 if gui then
     for _, c in ipairs(gui:GetChildren()) do
-        if c:IsA("Frame") and c.Size == UDim2.new(0, 460, 0, 374) then mainFrame = c; break end
-    end
-end
-
-if mainFrame then
-    for _, c in ipairs(mainFrame:GetChildren()) do
-        if c.Size == UDim2.fromOffset(255, 335) then 
-            profileModal = c
-            for _, ac in ipairs(profileModal:GetChildren()) do
-                if ac.Size == UDim2.fromOffset(76, 76) then pAvatarContainer = ac end
-            end
-            for _, lbl in ipairs(profileModal:GetChildren()) do
-                if lbl:IsA("TextLabel") and lbl.Size == UDim2.new(1, -28, 0, 16) then pUserLabel = lbl end
+        if c:IsA("Frame") and c.Size == UDim2.new(0, 460, 0, 374) then 
+            mainFrame = c
+            -- Find the Top Header Right Cluster (Jahan CLR, GST, X hain)
+            for _, h in ipairs(mainFrame:GetChildren()) do
+                if h.Size == UDim2.new(1, 0, 0, 46) then
+                    for _, hc in ipairs(h:GetChildren()) do
+                        if hc.Size == UDim2.new(0, 180, 0, 24) then headerRight = hc end
+                    end
+                end
             end
             break 
         end
     end
 end
 
-if not mainFrame or not profileModal or not pAvatarContainer then 
-    warn("TXR ADDON: Chat UI not found!")
+if not mainFrame or not headerRight then 
+    warn("TXR AVATAR ADDON: Main UI not found!")
     return 
 end
-if mainFrame:FindFirstChild("TXR_CustomProfileFrame") then return end
 
--- 2. CUSTOM PROFILE SELECTOR UI
+if mainFrame:FindFirstChild("TXR_AvatarAddonLoaded") then return end
+
+-- Anti-Double Load Marker
+local marker = Instance.new("BoolValue", mainFrame)
+marker.Name = "TXR_AvatarAddonLoaded"
+
+-- 2. CREATE AVATAR SELECTOR UI
 local customProfileFrame = mk("Frame", mainFrame, { Name = "TXR_CustomProfileFrame", Size = UDim2.new(0, 290, 0, 220), Position = UDim2.new(0.5, -145, 0.5, -110), BackgroundColor3 = rgb(15, 18, 26), BackgroundTransparency = 0.05, Visible = false, ZIndex = 350, Corner = UDim.new(0, 14), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.2, Transparency = 0.3 } })
-mk("TextLabel", customProfileFrame, { Size = UDim2.new(1, 0, 0, 30), BackgroundTransparency = 1, Text = "CUSTOM AVATAR SELECTOR", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 351 })
+mk("TextLabel", customProfileFrame, { Size = UDim2.new(1, 0, 0, 30), BackgroundTransparency = 1, Text = "CHOOSE AVATAR PHOTO", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 351 })
 
 local cpCloseBtn = mk("TextButton", customProfileFrame, { Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, -10, 0, 8), AnchorPoint = Vector2.new(1, 0), BackgroundColor3 = rgb(0,0,0), BackgroundTransparency = 0.6, Text = "X", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 355, Corner = UDim.new(1, 0) })
 cpCloseBtn.MouseButton1Click:Connect(function() customProfileFrame.Visible = false end)
@@ -81,53 +83,63 @@ cpCloseBtn.MouseButton1Click:Connect(function() customProfileFrame.Visible = fal
 local cpScroll = mk("ScrollingFrame", customProfileFrame, { Size = UDim2.new(1, -12, 1, -40), Position = UDim2.fromOffset(6, 34), BackgroundTransparency = 1, ScrollBarThickness = 2, CanvasSize = UDim2.new(0, 0, 0, 0), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 351 })
 mk("UIGridLayout", cpScroll, { CellSize = UDim2.new(0, 65, 0, 65), CellPadding = UDim2.new(0, 6, 0, 6) })
 
--- Load Images into Grid
+-- 3. ADD "AVT" BUTTON TO TOP HEADER
+local avtBtn = mk("TextButton", headerRight, { Size = UDim2.fromOffset(30, 24), BackgroundColor3 = Colors.Surface, BackgroundTransparency = 0.25, Text = "AVT", TextColor3 = Colors.Text, Font = Enum.Font.GothamBlack, TextSize = 9.5, AutoButtonColor = false, ZIndex = 15, Corner = UDim.new(0, 7), Stroke = { Thickness = 1, Color = Colors.PrimaryDark, Transparency = 0.55 } })
+avtBtn.LayoutOrder = -1 -- Sabse left mein dikhane ke liye
+
+-- Text Crisp Outline
+local crispStroke = Instance.new("UIStroke", avtBtn)
+crispStroke.Color = Color3.new(0,0,0); crispStroke.Transparency = 0.35; crispStroke.Thickness = 1.0
+
+-- Button Click Sound & Animation
+avtBtn.MouseButton1Click:Connect(function()
+    customProfileFrame.Visible = not customProfileFrame.Visible
+    pcall(function() local s=Instance.new("Sound", game:GetService("SoundService")); s.SoundId="rbxassetid://6518811702"; s.Volume=0.35; s:Play(); game.Debris:AddItem(s, 2) end)
+end)
+
+-- 4. LOAD IMAGES INTO GRID & SET GLOBAL ID
+_G.TXR_CustomAvatarID = nil
+
 for _, imgId in ipairs(CustomAvatarIDs) do
-    local imgBtn = mk("ImageButton", cpScroll, {
-        BackgroundColor3 = Colors.Surface,
-        Image = "rbxassetid://" .. imgId,
-        ScaleType = Enum.ScaleType.Crop,
-        ZIndex = 352,
-        Corner = UDim.new(0, 8),
-        Stroke = { Color = Colors.PrimaryDark, Thickness = 1, Transparency = 0.5 }
-    })
+    local imgBtn = mk("ImageButton", cpScroll, { BackgroundColor3 = Colors.Surface, Image = "rbxassetid://" .. imgId, ScaleType = Enum.ScaleType.Crop, ZIndex = 352, Corner = UDim.new(0, 8), Stroke = { Color = Colors.PrimaryDark, Thickness = 1, Transparency = 0.5 } })
     
     imgBtn.MouseButton1Click:Connect(function()
-        local actualAvatarImg = pAvatarContainer:FindFirstChildOfClass("ImageLabel")
-        if actualAvatarImg then actualAvatarImg.Image = "rbxassetid://" .. imgId end
+        _G.TXR_CustomAvatarID = "rbxassetid://" .. imgId
         customProfileFrame.Visible = false
-        pcall(function() local s = Instance.new("Sound", game:GetService("SoundService")); s.SoundId = "rbxassetid://6895079853"; s.Volume = 0.5; s:Play(); game.Debris:AddItem(s, 2) end)
+        pcall(function() local s=Instance.new("Sound", game:GetService("SoundService")); s.SoundId="rbxassetid://6895079853"; s.Volume=0.5; s:Play(); game.Debris:AddItem(s, 2) end)
     end)
 end
 
--- 3. EDIT PENCIL BUTTON ON AVATAR
-pAvatarContainer.ClipsDescendants = false
-local pAvatarEditBtn = mk("TextButton", pAvatarContainer, { Name = "EditProfileBtn", Size = UDim2.fromOffset(26, 26), Position = UDim2.new(1, 0, 1, -22), AnchorPoint = Vector2.new(1, 1), BackgroundColor3 = Colors.Background, Text = "✏️", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 12, Visible = false, ZIndex = 310, Corner = UDim.new(1, 0), Stroke = {Color = Colors.PrimaryDark, Thickness = 1.5} })
-
-pAvatarEditBtn.MouseButton1Click:Connect(function() 
-    customProfileFrame.Visible = not customProfileFrame.Visible 
-    pcall(function() local s = Instance.new("Sound", game:GetService("SoundService")); s.SoundId = "rbxassetid://6518811702"; s.Volume = 0.35; s:Play(); game.Debris:AddItem(s, 2) end)
-end)
-
--- 4. PERFECT VISIBILITY LOGIC
-local function updatePencilVis()
-    if pUserLabel and pUserLabel.Text == "@" .. lp.Name then
-        pAvatarEditBtn.Visible = true
-    else
-        pAvatarEditBtn.Visible = false
-        customProfileFrame.Visible = false
+-- 5. LIVE PROFILE AVATAR OVERRIDER
+task.spawn(function()
+    local profileModal, pAvatarImg, pUserLabel
+    for _, c in ipairs(mainFrame:GetChildren()) do
+        if c.Size == UDim2.fromOffset(255, 335) then 
+            profileModal = c
+            for _, ac in ipairs(profileModal:GetChildren()) do
+                if ac.Size == UDim2.fromOffset(76, 76) then pAvatarImg = ac:FindFirstChildOfClass("ImageLabel") end
+            end
+            for _, lbl in ipairs(profileModal:GetChildren()) do
+                if lbl:IsA("TextLabel") and lbl.Size == UDim2.new(1, -28, 0, 16) then pUserLabel = lbl end
+            end
+            break 
+        end
     end
-end
 
-if pUserLabel then pUserLabel:GetPropertyChangedSignal("Text"):Connect(updatePencilVis) end
-profileModal:GetPropertyChangedSignal("Visible"):Connect(function()
-    if profileModal.Visible then updatePencilVis() else customProfileFrame.Visible = false end
+    if profileModal and pAvatarImg and pUserLabel then
+        game:GetService("RunService").RenderStepped:Connect(function()
+            -- Agar profile modal khula hai, aur tumhari khud ki profile hai, aur custom photo select ki hui hai:
+            if profileModal.Visible and _G.TXR_CustomAvatarID and pUserLabel.Text == "@" .. lp.Name then
+                if pAvatarImg.Image ~= _G.TXR_CustomAvatarID then
+                    pAvatarImg.Image = _G.TXR_CustomAvatarID
+                end
+            end
+        end)
+    end
 end)
-updatePencilVis() -- Force run immediately
 
--- Success Sound
+-- Success Alert Sound
 pcall(function()
     local s = Instance.new("Sound", game:GetService("SoundService"))
-    s.SoundId = "rbxassetid://8503529139"; s.Volume = 0.5; s:Play()
-    game.Debris:AddItem(s, 2)
+    s.SoundId = "rbxassetid://8503529139"; s.Volume = 0.5; s:Play(); game.Debris:AddItem(s, 2)
 end)
