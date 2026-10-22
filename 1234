@@ -2264,5 +2264,3 @@ task.spawn(function()
         addMessageToFeed("System::TXR // AI", "Global Network Synchronized! Permanent chat storage online.", nil, false, game.JobId, "global")
     end
 end)
-
-Ye hi perfect load hota tha ab ek kam kr aalag repo banane ke liye code de uska load string banake mix kr denge wahan se profile laga denge chat ki profile me
