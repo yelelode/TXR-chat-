@@ -139,7 +139,7 @@ local EmojiCategories = {
     { tab = "❤️", title = "HEARTS & LOVE", list = "❤️🧡💛💚💙💜🖤🤍🤎💔❤️‍🔥❤️‍🩹❣️💕💞💓💗💖💘💝💟💌💋💍💎💐🌹🥀🌷🌺🌸🌼🌻💒💓" },
     { tab = "🎉", title = "FLEX, GAMES & ANIMALS", list = "🏆🥇🥈🥉🏅🎖️👑💎💰💵💴💶💷💸💳🪙🎮🕹️🎲🎯🎳🎸🎹🎺🎻🥁🎬🎤🎧🎨🎭🎪🎟️⚽🏀🏈⚾🎾🏐🎱🏓🏸🥊🥋🥅⛳🎣🤿🎽🛹🛼🛷⛸️🐶🐱🐭🐹🐰🦊🐻🐼🐻‍❄️🐨🐯🦁🐮🐷🐸🐵🙈🙉🙊🐒🐔🐧🐦🐤🐣🐥🦆🦅🦉🦇🐺🐗🐴🦄🐝🪱🐛🦋🐌🐞🐜🪰🪲🪳🦟🦗🕷️🦂🐢🐍🦎🦖🦕🐙🦑🦐🦞🦀🐡🐠🐟🐬🐳🐋🦈🐊🐅🐆🦓🦍🦧🐘🦛🦏🐪🐫🦒🦘🦬🐃🐂🐄🐎🐖🐏🐑🦙🐐🦌🐕🐩🦮🐈🐓🦃🦤🦚🦜🦢🦩🕊️🐇🦝🦨🦡🦫🦦🦥🐁🐀🐿️🦔🐾🐉🐲" },
     { tab = "🍕", title = "FOOD & DRINKS", list = "🍏🍎🍐🍊🍋🍌🍉🍇🍓🫐🍈🍒🍑🥭🍍🥥🥝🍅🍆🥑🥦🥬🥒🌶️🫑🌽🥕🫒🧄🧅🥔🍠🥐🥯🍞🥖🥨🧀🥚🍳🧈🥞🧇🥓🥩🍗🍖🦴🌭🍔🍟🍕🫓🥪🥙🧆🌮🌯🫔🥗🥘🫕🥫🍝🍜🍲🍛🍣🍱🥟🦪🍤🍙🍚🍘🍥🥠🥮🍢🍡🍧🍨🍦🥧🧁🍰🎂🍮🍭🍬🍫🍿🍩🍪🌰🥜🍯🥛🍼🫖☕🍵🧃🥤🧋🍶🍺🍻🥂🍷🥃🍸🍹🧉🍾🧊🥄🍴🍽️🥣🥡🥢🧂" },
-    { tab = "⚡", title = "SYMBOLS & WEATHER", list = "☀️🌤️⛅🌥️☁️🌦️🌧️⛈️🌩️🌨️❄️☃️⛄🌬️💨💧💦☔☂️🌊🌫️🌪️🌈⭐🌟✨⚡☄️💥🔥🌙🪐🌍🌎🌏🌌⏰⏱️🧭🚀🛸🚁🛶⛵🚤🛥️🛳️⛴️🚢✈️🛩️🛫🛬🪂💺🛰️🚨🚓🚍🚘🚖🚡🚠🚟🚃🚋🚞🚝🚄🚅🚈🚂🚆🚇🚊🚉⬆️↗️➡️↘️⬇️↙️⬅️↖️↕️↔️↩️↪️⤴️⤵️🔃🔄🔙🔚🔛🔜🔝✅☑️✔️✖️❌❎➕➖➗➰➿〽️✳️✴️❇️‼️⁉️❓❔❕❗⭕💯🔱⚜️🔰♻️⚠️🚸⛔🚫🚳🚭🚯🚱🚷📵🔞☢️☣️" }
+    { tab = "⚡", title = "SYMBOLS & WEATHER", list = "☀️🌤️⛅🌥️☁️🌦️🌧️⛈️🌩️🌨️❄️☃️⛄🌬️💨💧💦☔☂️🌊🌫️🌪️🌈⭐🌟✨⚡☄️💥🔥🌙🪐🌍🌎🌏🌌⏰⏱️🧭🚀🛸🚁🛶⛵🚤🛥️🛳️⛴️🚢✈️🛩️🛫🛬🪂💺🛰️🚨🚓🚍🚘🚖🚡🚠🚟🚃ূপ🚟🚃🚋🚞🚝🚄🚅🚈🚂🚆🚇🚊🚉⬆️↗️➡️↘️⬇️↙️⬅️↖️↕️↔️↩️↪️⤴️⤵️🔃🔄🔙🔚🔛🔜🔝✅☑️✔️✖️❌❎➕➖➗➰➿〽️✳️✴️❇️‼️⁉️❓❔❕❗⭕💯🔱⚜️🔰♻️⚠️🚸⛔🚫🚳🚭🚯🚱🚷📵🔞☢️☣️" }
 }
 
 local function getAssetThumb(id) return string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", tostring(id)) end
@@ -2269,7 +2269,7 @@ end)
 -- 🚀 AUTO-LOAD CUSTOM PROFILE ADDON
 -- =========================================================
 task.spawn(function()
-    task.wait(3) -- Wait for main UI to fully initialize
+    task.wait(3.5) -- Delta Rendering Wait Time
     local success, err = pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/yelelode/TXR-chat-/refs/heads/main/Profile?t=" .. tostring(tick())))()
     end)
