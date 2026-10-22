@@ -11,6 +11,16 @@ pcall(function()
     end
 end)
 
+-- 👇 YAHAN DAALNE HAIN APNE PHOTOS / AVATAR KE CODES 👇
+local CustomAvatarIDs = {
+    "1316045217",  -- Matrix Rain Background
+    "10470601783", -- Purple Glow Orb
+    "13110903323", -- Crosshair
+    "9114223177",  -- Example ID
+}
+_G.TXR_CustomAvatarID = nil -- Isko change mat karna
+-- 👆 ----------------------------------------------- 👆
+
 -- =========================================================
 -- 👑 TXR GLOBAL CHAT: CYBER-TITAN APEX (V30.0 ULTIMATE PRO) 👑
 -- =========================================================
@@ -48,7 +58,7 @@ for _, v in pairs(targetGuiParent:GetChildren()) do
     if v.Name:find("TXR_OnyxChat") or v.Name:find("HiddenChatUI") then v:Destroy() end
 end
 
--- ⚡ COMPACT UI BUILDER ENGINE (Prevents Token Overflow & Crashes)
+-- ⚡ COMPACT UI BUILDER ENGINE
 local function mk(class, parent, props)
     local inst = Instance.new(class)
     if props then
@@ -139,7 +149,7 @@ local EmojiCategories = {
     { tab = "❤️", title = "HEARTS & LOVE", list = "❤️🧡💛💚💙💜🖤🤍🤎💔❤️‍🔥❤️‍🩹❣️💕💞💓💗💖💘💝💟💌💋💍💎💐🌹🥀🌷🌺🌸🌼🌻💒💓" },
     { tab = "🎉", title = "FLEX, GAMES & ANIMALS", list = "🏆🥇🥈🥉🏅🎖️👑💎💰💵💴💶💷💸💳🪙🎮🕹️🎲🎯🎳🎸🎹🎺🎻🥁🎬🎤🎧🎨🎭🎪🎟️⚽🏀🏈⚾🎾🏐🎱🏓🏸🥊🥋🥅⛳🎣🤿🎽🛹🛼🛷⛸️🐶🐱🐭🐹🐰🦊🐻🐼🐻‍❄️🐨🐯🦁🐮🐷🐸🐵🙈🙉🙊🐒🐔🐧🐦🐤🐣🐥🦆🦅🦉🦇🐺🐗🐴🦄🐝🪱🐛🦋🐌🐞🐜🪰🪲🪳🦟🦗🕷️🦂🐢🐍🦎🦖🦕🐙🦑🦐🦞🦀🐡🐠🐟🐬🐳🐋🦈🐊🐅🐆🦓🦍🦧🐘🦛🦏🐪🐫🦒🦘🦬🐃🐂🐄🐎🐖🐏🐑🦙🐐🦌🐕🐩🦮🐈🐓🦃🦤🦚🦜🦢🦩🕊️🐇🦝🦨🦡🦫🦦🦥🐁🐀🐿️🦔🐾🐉🐲" },
     { tab = "🍕", title = "FOOD & DRINKS", list = "🍏🍎🍐🍊🍋🍌🍉🍇🍓🫐🍈🍒🍑🥭🍍🥥🥝🍅🍆🥑🥦🥬🥒🌶️🫑🌽🥕🫒🧄🧅🥔🍠🥐🥯🍞🥖🥨🧀🥚🍳🧈🥞🧇🥓🥩🍗🍖🦴🌭🍔🍟🍕🫓🥪🥙🧆🌮🌯🫔🥗🥘🫕🥫🍝🍜🍲🍛🍣🍱🥟🦪🍤🍙🍚🍘🍥🥠🥮🍢🍡🍧🍨🍦🥧🧁🍰🎂🍮🍭🍬🍫🍿🍩🍪🌰🥜🍯🥛🍼🫖☕🍵🧃🥤🧋🍶🍺🍻🥂🍷🥃🍸🍹🧉🍾🧊🥄🍴🍽️🥣🥡🥢🧂" },
-    { tab = "⚡", title = "SYMBOLS & WEATHER", list = "☀️🌤️⛅🌥️☁️🌦️🌧️⛈️🌩️🌨️❄️☃️⛄🌬️💨💧💦☔☂️🌊🌫️🌪️🌈⭐🌟✨⚡☄️💥🔥🌙🪐🌍🌎🌏🌌⏰⏱️🧭🚀🛸🚁🛶⛵🚤🛥️🛳️⛴️🚢✈️🛩️🛫🛬🪂💺🛰️🚨🚓🚍🚘🚖🚡🚠🚟🚃ূপ🚟🚃🚋🚞🚝🚄🚅🚈🚂🚆🚇🚊🚉⬆️↗️➡️↘️⬇️↙️⬅️↖️↕️↔️↩️↪️⤴️⤵️🔃🔄🔙🔚🔛🔜🔝✅☑️✔️✖️❌❎➕➖➗➰➿〽️✳️✴️❇️‼️⁉️❓❔❕❗⭕💯🔱⚜️🔰♻️⚠️🚸⛔🚫🚳🚭🚯🚱🚷📵🔞☢️☣️" }
+    { tab = "⚡", title = "SYMBOLS & WEATHER", list = "☀️🌤️⛅🌥️☁️🌦️🌧️⛈️🌩️🌨️❄️☃️⛄🌬️💨💧💦☔☂️🌊🌫️🌪️🌈⭐🌟✨⚡☄️💥🔥🌙🪐🌍🌎🌏🌌⏰⏱️🧭🚀🛸🚁🛶⛵🚤🛥️🛳️⛴️🚢✈️🛩️🛫🛬🪂💺🛰️🚨🚓🚍🚘🚖🚡🚠🚟🚃🚋🚞🚝🚄🚅🚈🚂🚆🚇🚊🚉⬆️↗️➡️↘️⬇️↙️⬅️↖️↕️↔️↩️↪️⤴️⤵️🔃🔄🔙🔚🔛🔜🔝✅☑️✔️✖️❌❎➕➖➗➰➿〽️✳️✴️❇️‼️⁉️❓❔❕❗⭕💯🔱⚜️🔰♻️⚠️🚸⛔🚫🚳🚭🚯🚱🚷📵🔞☢️☣️" }
 }
 
 local function getAssetThumb(id) return string.format("rbxthumb://type=Asset&id=%s&w=420&h=420", tostring(id)) end
@@ -167,24 +177,6 @@ local function applySpringHover(btn)
     end)
     btn.MouseButton1Down:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.1, Enum.EasingStyle.Sine), {Scale = 0.94}):Play() end)
     btn.MouseButton1Up:Connect(function() TweenService:Create(btnScale, TweenInfo.new(0.3, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1.05}):Play() end)
-end
-
--- 🔥 TACTILE RIPPLE EFFECT ENGINE 🔥
-local function createRipple(parent)
-    task.spawn(function()
-        local rip = Instance.new("Frame", parent)
-        rip.AnchorPoint = Vector2.new(0.5, 0.5)
-        rip.Position = UDim2.fromScale(0.5, 0.5)
-        rip.Size = UDim2.fromScale(0, 0)
-        rip.BackgroundColor3 = Color3.new(1,1,1)
-        rip.BackgroundTransparency = 0.4
-        rip.ZIndex = parent.ZIndex + 1
-        local uic = Instance.new("UICorner", rip)
-        uic.CornerRadius = UDim.new(1, 0)
-        TweenService:Create(rip, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.fromScale(2.5, 2.5), BackgroundTransparency = 1}):Play()
-        task.wait(0.4)
-        rip:Destroy()
-    end)
 end
 
 local function playSFX(soundType)
@@ -353,7 +345,7 @@ openBtnContainer:GetPropertyChangedSignal("Visible"):Connect(function()
 end)
 
 -- =========================================================
--- 👥 ONLINE ACTIVE ROSTER (ZERO-BOX UI DOT DRAWER)
+-- 👥 ONLINE ACTIVE ROSTER
 -- =========================================================
 local rosterFrame = mk("Frame", mainFrame, { Size = UDim2.new(0, 152, 1, -50), Position = UDim2.new(1, 10, 0, 46), BackgroundColor3 = Colors.Surface, BackgroundTransparency = 0.05, Visible = false, ZIndex = 40, Corner = UDim.new(0, 12), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.2, Transparency = 0.40 } })
 mk("TextLabel", rosterFrame, { Size = UDim2.new(1, 0, 0, 26), BackgroundTransparency = 1, Text = "ONLINE PLAYERS", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 9.5, ZIndex = 41 })
@@ -379,7 +371,7 @@ local function refreshRosterUI()
 end
 
 -- =========================================================
--- 🌟 HEADER BAR, GRAB HANDLE & BALANCED CONTROLS
+-- 🌟 HEADER BAR & CONTROLS
 -- =========================================================
 local header = mk("Frame", mainFrame, { Size = UDim2.new(1, 0, 0, 46), BackgroundTransparency = 1, Active = true, ZIndex = 10 })
 local dragPill = mk("Frame", header, { Size = UDim2.fromOffset(40, 3), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 4), BackgroundColor3 = Colors.Primary, BackgroundTransparency = 0.55, BorderSizePixel = 0, ZIndex = 12, Corner = UDim.new(1, 0) })
@@ -480,13 +472,14 @@ ghostBtn = createHeaderBtn("GST", function()
     end
 end)
 
-local actionMenu, memeFrame, emojiFrame
+local actionMenu, memeFrame, emojiFrame, customProfileFrame
 local profileModal, pmScale, openProfile
 createHeaderBtn("-", function()
     if actionMenu then actionMenu.Visible = false end
     if rosterFrame then rosterFrame.Visible = false end
     if memeFrame then memeFrame.Visible = false end
     if emojiFrame then emojiFrame.Visible = false end
+    if customProfileFrame then customProfileFrame.Visible = false end
     if profileModal then profileModal.Visible = false; pmScale.Scale = 0 end
     if badgeSelectorModal then isBadgeModalOpen = false; badgeSelectorModal:FindFirstChildOfClass("UIScale").Scale = 0; badgeSelectorModal.Visible = false end
     local tInfo1 = TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.In)
@@ -505,6 +498,21 @@ end)
 
 local closeBtn = createHeaderBtn("X", function() _G.TXR_IsPolling = false; _G.TXR_ChatInstanceID = nil; gui:Destroy() end)
 closeBtn.TextColor3 = Colors.Danger
+
+-- 🎨 AVATAR BUTTON IN MAIN HEADER
+local avtBtn = createHeaderBtn("AVT", function()
+    if customProfileFrame then
+        customProfileFrame.Visible = not customProfileFrame.Visible
+        if customProfileFrame.Visible then
+            if profileModal then profileModal.Visible = false; pmScale.Scale = 0 end
+            if badgeSelectorModal then badgeSelectorModal.Visible = false; badgeSelectorModal:FindFirstChildOfClass("UIScale").Scale = 0 end
+            if memeFrame then memeFrame.Visible = false end
+            if emojiFrame then emojiFrame.Visible = false end
+        end
+    end
+end)
+avtBtn.LayoutOrder = -1 -- Move to far left
+
 mk("Frame", header, { Size = UDim2.new(1, -24, 0, 1), Position = UDim2.new(0, 12, 1, 0), BorderSizePixel = 0, BackgroundColor3 = rgb(34, 44, 64), BackgroundTransparency = 0.45, ZIndex = 12 })
 
 -- =========================================================
@@ -719,7 +727,10 @@ openProfile = function(username, dispName, uId, isAdmin, isAI)
         pBannerGrad.Color = ColorSequence.new(Colors.Primary, Colors.Purple)
     end
     
-    if not isAI and uId then
+    if username == lp.Name and _G.TXR_CustomAvatarID then
+        pAvatar.Image = _G.TXR_CustomAvatarID
+        pAvatar.BackgroundColor3 = Colors.Surface
+    elseif not isAI and uId then
         pAvatar.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=150&h=150", uId)
         pAvatar.BackgroundColor3 = Colors.Background
     elseif not isAI then
@@ -767,6 +778,28 @@ pMessageBtn.MouseButton1Click:Connect(function()
     end
 end)
 
+-- =========================================================
+-- 🎨 CUSTOM PROFILE AVATAR GRID (BUILT-IN)
+-- =========================================================
+customProfileFrame = mk("Frame", mainFrame, { Name = "TXR_CustomProfileFrame", Size = UDim2.new(0, 290, 0, 220), Position = UDim2.new(0.5, -145, 0.5, -110), BackgroundColor3 = rgb(15, 18, 26), BackgroundTransparency = 0.05, Visible = false, ZIndex = 350, Corner = UDim.new(0, 14), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.2, Transparency = 0.3 } })
+mk("TextLabel", customProfileFrame, { Size = UDim2.new(1, 0, 0, 30), BackgroundTransparency = 1, Text = "CHOOSE AVATAR PHOTO", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 351 })
+
+local cpCloseBtn2 = mk("TextButton", customProfileFrame, { Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, -10, 0, 8), AnchorPoint = Vector2.new(1, 0), BackgroundColor3 = rgb(0,0,0), BackgroundTransparency = 0.6, Text = "X", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 355, Corner = UDim.new(1, 0) })
+cpCloseBtn2.MouseButton1Click:Connect(function() customProfileFrame.Visible = false end)
+
+local cpScroll = mk("ScrollingFrame", customProfileFrame, { Size = UDim2.new(1, -12, 1, -40), Position = UDim2.fromOffset(6, 34), BackgroundTransparency = 1, ScrollBarThickness = 2, CanvasSize = UDim2.new(0, 0, 0, 0), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 351 })
+mk("UIGridLayout", cpScroll, { CellSize = UDim2.new(0, 65, 0, 65), CellPadding = UDim2.new(0, 6, 0, 6) })
+
+for _, imgId in ipairs(CustomAvatarIDs) do
+    local imgBtn = mk("ImageButton", cpScroll, { BackgroundColor3 = Colors.Surface, Image = "rbxassetid://" .. imgId, ScaleType = Enum.ScaleType.Crop, ZIndex = 352, Corner = UDim.new(0, 8), Stroke = { Color = Colors.PrimaryDark, Thickness = 1, Transparency = 0.5 } })
+    applySpringHover(imgBtn)
+    imgBtn.MouseButton1Click:Connect(function()
+        _G.TXR_CustomAvatarID = "rbxassetid://" .. imgId
+        if activeProfileUser == lp.Name then pAvatar.Image = _G.TXR_CustomAvatarID end
+        customProfileFrame.Visible = false
+        playSFX("default")
+    end)
+end
 
 -- =========================================================
 -- 💬 MICRO-PERFECT MESSAGE PIPELINE (CLEAN UNIFIED POLISHED CARDS)
@@ -974,10 +1007,14 @@ local function addMessageToFeed(rawUserName, msg, privateUserTarget, isPrivateSe
         local avatarImg = mk("ImageButton", card, { Size = UDim2.fromOffset(32, 32), Position = UDim2.fromOffset(14, 9), BackgroundColor3 = Colors.Background, BackgroundTransparency = 0.15, AutoButtonColor = false, ZIndex = 12, Corner = UDim.new(1, 0), Stroke = { Thickness = 1.3, Transparency = 0.25, Color = isAdminUser and Colors.Primary or Colors.SurfaceHover } })
         mk("Frame", avatarImg, { Size = UDim2.fromOffset(8, 8), AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, 0, 1, 0), BackgroundColor3 = Colors.OnlineGreen, ZIndex = 14, Corner = UDim.new(1, 0), Stroke = { Color = Colors.Background, Thickness = 1.5 } })
         task.spawn(function()
-            local targetPlr = Players:FindFirstChild(actualUsername)
-            local uId = targetPlr and targetPlr.UserId or userIdCache[actualUsername:lower()]
-            if not uId then pcall(function() uId = Players:GetUserIdFromNameAsync(actualUsername); userIdCache[actualUsername:lower()] = uId end) end
-            if uId and avatarImg and avatarImg.Parent then avatarImg.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=48&h=48", uId) end
+            if isSelf and _G.TXR_CustomAvatarID then
+                avatarImg.Image = _G.TXR_CustomAvatarID
+            else
+                local targetPlr = Players:FindFirstChild(actualUsername)
+                local uId = targetPlr and targetPlr.UserId or userIdCache[actualUsername:lower()]
+                if not uId then pcall(function() uId = Players:GetUserIdFromNameAsync(actualUsername); userIdCache[actualUsername:lower()] = uId end) end
+                if uId and avatarImg and avatarImg.Parent then avatarImg.Image = string.format("rbxthumb://type=AvatarHeadShot&id=%d&w=48&h=48", uId) end
+            end
         end)
         
         avatarImg.MouseButton1Click:Connect(function()
@@ -2262,18 +2299,5 @@ task.spawn(function()
     addMessageToFeed("System::TXR // AI", "TXR Cyber Titan online hai! Chat box ekdum clean aur smooth optimized hai.", nil, false, game.JobId, "server")
     if #_G.TXR_GlobalHistoryCache == 0 then
         addMessageToFeed("System::TXR // AI", "Global Network Synchronized! Permanent chat storage online.", nil, false, game.JobId, "global")
-    end
-end)
-
--- =========================================================
--- 🚀 AUTO-LOAD CUSTOM PROFILE ADDON
--- =========================================================
-task.spawn(function()
-    task.wait(3.5) -- Delta Rendering Wait Time
-    local success, err = pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/yelelode/TXR-chat-/refs/heads/main/Profile?t=" .. tostring(tick())))()
-    end)
-    if not success then
-        warn("TXR Profile Addon Failed to Load: " .. tostring(err))
     end
 end)
