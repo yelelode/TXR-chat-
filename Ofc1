@@ -2264,3 +2264,91 @@ task.spawn(function()
         addMessageToFeed("System::TXR // AI", "Global Network Synchronized! Permanent chat storage online.", nil, false, game.JobId, "global")
     end
 end)
+-- ==========================================
+-- 🎨 TXR CYBER TITAN - PROFILE ADDON MODULE
+-- ==========================================
+local function mk(class, parent, props)
+    local inst = Instance.new(class)
+    if props then
+        for k, v in pairs(props) do
+            if k == "Corner" then Instance.new("UICorner", inst).CornerRadius = v
+            elseif k == "Stroke" then
+                local s = Instance.new("UIStroke", inst)
+                for sk, sv in pairs(v) do s[sk] = sv end
+            else inst[k] = v end
+        end
+    end
+    if parent then inst.Parent = parent end
+    return inst
+end
+
+local rgb = Color3.fromRGB
+local Colors = { Primary = rgb(0, 230, 195), PrimaryDark = rgb(0, 150, 130), Background = rgb(9, 13, 20) }
+local lp = game:GetService("Players").LocalPlayer
+
+-- 1. Original Chat UI ko dhoondhna
+local targetGuiParent = game:GetService("CoreGui")
+pcall(function() local _ = targetGuiParent:GetChildren() end)
+if not targetGuiParent then targetGuiParent = lp:WaitForChild("PlayerGui") end
+
+local gui, mainFrame, profileModal, pAvatarContainer, pUserLabel
+for _, v in pairs(targetGuiParent:GetChildren()) do
+    if v.Name:find("TXR_OnyxChat") then gui = v; break end
+end
+
+if gui then
+    for _, c in ipairs(gui:GetChildren()) do
+        if c:IsA("Frame") and c.Size == UDim2.new(0, 460, 0, 374) then mainFrame = c; break end
+    end
+end
+
+if mainFrame then
+    for _, c in ipairs(mainFrame:GetChildren()) do
+        if c.Size == UDim2.fromOffset(255, 335) then 
+            profileModal = c
+            -- Avatar Container dhundho
+            for _, ac in ipairs(profileModal:GetChildren()) do
+                if ac.Size == UDim2.fromOffset(76, 76) then pAvatarContainer = ac end
+            end
+            -- Username Label dhundho (Taaki dusro ki profile pe Edit button na dikhe)
+            for _, lbl in ipairs(profileModal:GetChildren()) do
+                if lbl:IsA("TextLabel") and lbl.Size == UDim2.new(1, -28, 0, 16) then pUserLabel = lbl end
+            end
+            break 
+        end
+    end
+end
+
+if not mainFrame or not profileModal or not pAvatarContainer then return end
+if mainFrame:FindFirstChild("TXR_CustomProfileFrame") then return end -- Double load rokne ke liye
+
+-- 2. Custom Profile UI UI banana
+local customProfileFrame = mk("Frame", mainFrame, { Name = "TXR_CustomProfileFrame", Size = UDim2.new(0, 290, 0, 220), Position = UDim2.new(0.5, -145, 0.5, -110), BackgroundColor3 = rgb(15, 18, 26), BackgroundTransparency = 0.05, Visible = false, ZIndex = 350, Corner = UDim.new(0, 14), Stroke = { Color = Colors.PrimaryDark, Thickness = 1.2, Transparency = 0.3 } })
+mk("TextLabel", customProfileFrame, { Size = UDim2.new(1, 0, 0, 30), BackgroundTransparency = 1, Text = "CUSTOM AVATAR SELECTOR", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 351 })
+
+local cpCloseBtn = mk("TextButton", customProfileFrame, { Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, -10, 0, 8), AnchorPoint = Vector2.new(1, 0), BackgroundColor3 = rgb(0,0,0), BackgroundTransparency = 0.6, Text = "X", TextColor3 = rgb(255, 255, 255), Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 355, Corner = UDim.new(1, 0) })
+cpCloseBtn.MouseButton1Click:Connect(function() customProfileFrame.Visible = false end)
+
+local cpScroll = mk("ScrollingFrame", customProfileFrame, { Size = UDim2.new(1, -12, 1, -40), Position = UDim2.fromOffset(6, 34), BackgroundTransparency = 1, ScrollBarThickness = 2, CanvasSize = UDim2.new(0, 0, 0, 0), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 351 })
+mk("UIGridLayout", cpScroll, { CellSize = UDim2.new(0, 65, 0, 65), CellPadding = UDim2.new(0, 6, 0, 6) })
+
+-- 3. Edit Avatar Button chipkana
+local pAvatarEditBtn = mk("TextButton", pAvatarContainer, { Name = "EditProfileBtn", Size = UDim2.fromOffset(24, 24), Position = UDim2.new(1, 4, 1, -20), AnchorPoint = Vector2.new(1, 1), BackgroundColor3 = Colors.Background, Text = "✏️", TextColor3 = Colors.Primary, Font = Enum.Font.GothamBlack, TextSize = 10, Visible = false, ZIndex = 310, Corner = UDim.new(1, 0), Stroke = {Color = Colors.PrimaryDark, Thickness = 1} })
+
+pAvatarEditBtn.MouseButton1Click:Connect(function() 
+    customProfileFrame.Visible = not customProfileFrame.Visible 
+    -- Sound Effect
+    pcall(function() local s = Instance.new("Sound", game:GetService("SoundService")); s.SoundId = "rbxassetid://6518811702"; s.Volume = 0.35; s:Play(); game.Debris:AddItem(s, 2) end)
+end)
+
+-- 4. Smart Visibility Logic (Sirf apni profile par dikhega)
+if pUserLabel then
+    pUserLabel:GetPropertyChangedSignal("Text"):Connect(function()
+        pAvatarEditBtn.Visible = (pUserLabel.Text == "@" .. lp.Name)
+    end)
+end
+
+-- Jab main profile band ho, toh isko bhi band kar do
+profileModal:GetPropertyChangedSignal("Visible"):Connect(function()
+    if not profileModal.Visible then customProfileFrame.Visible = false end
+end)
